@@ -17,3 +17,15 @@ Settled choices and deviations from the original spec. Add a dated entry when yo
 - **Dev sign-in stub allowed from Phase 1.** A credentials-style sign-in that exists only when `NODE_ENV !== "production"` and `DEV_AUTH=true`, so phases 3 to 8 can be verified without Google credentials. It must be compiled out or throw in production builds, and a test must assert that. Real Google flow is still the checkpoint for Phase 1.
 - **Open-item defaults ship as flagged guesses**: honors science credits 5 (entry credits override), American Studies 5 plus 5, arts and life-careers tags provisional, example dates for timelines. Flag them in the UI where they affect totals.
 - **Phase 1 may start before the owner approves `/styleguide`.** Token or component tweaks after review are cheap. Do not build large UI on top of unreviewed tokens beyond the app shell.
+
+## 2026-10-28 (Phase 1)
+
+- **`ADMIN_EMAILS` is trusted and exempt from the `@pascack.org` rule.** It is set by the operator, who may not have a school address. It bootstraps an admin when the user is new, or when no admin exists at all. It never re-promotes after an admin changes that role. Staff roles through grants and the admin UI still require `@pascack.org`.
+- **A student grant is the invite.** In `INVITE_ONLY` mode a `RoleGrant` with role `STUDENT` or `INCOMING` (any email domain) lets that person sign up. Staff grants are limited to `@pascack.org`.
+- **Grants apply once.** A grant with `appliedAt` set no longer changes roles, so later admin changes are not overwritten at sign-in.
+- **Link-second-email flow.** `startLinkEmail` sets a signed 10 minute cookie, then sends the user to Google's account chooser. Auth.js links any new Google account to a signed-in user on its own, so `decideSignIn` denies that unless the cookie is valid, the email is verified, and the email belongs to nobody else. `events.linkAccount` stores the `LinkedEmail`. `allowDangerousEmailAccountLinking` is on for Google only, and our adapter's `getUserByEmail` also searches `LinkedEmail`.
+- **Session reads call `connection()` first** in `getCurrentUser` (Auth.js uses `crypto.getRandomValues` before reading request data, which `cacheComponents` rejects during prerender).
+- **Authed pages export `instant = false`.** Layout level is not enough, each page needs it. Remove it from a page only if that page can stream behind its own Suspense.
+- **Unauthorized pages stream a 404 body with HTTP 200** because the role check runs behind Suspense. No admin data is sent (verified). API and server actions throw proper errors.
+- **Baseline CSP uses `'unsafe-inline'` for scripts** (no nonces, so static shells still work). Phase 11 tightens it with SRI or nonces.
+- **Dev login** is `GET /api/dev-login?email=&role=&dept=`, only when `NODE_ENV` is development or test and `DEV_AUTH=true`. It creates a database session directly.
