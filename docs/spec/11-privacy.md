@@ -1,0 +1,8 @@
+# 11 Privacy, terms, and data rights
+
+- `/privacy` and `/terms`, versioned in `PolicyDocument` and accepted via `PolicyAcceptance`. Draft both. Use placeholders for the operator name and contact email. State clearly that they are drafts and should be reviewed by a teacher or the school before real students use the app (this is not legal advice).
+- Privacy policy covers: what is collected (Google name and email, plan, courses and grades, appeal answers, 8th-grade snapshot, push endpoints, role), what is not collected (birthdate, student ID, state ID, parent info, transcript files), processors (Google sign-in, Resend, the host, push services), retention, deletion, no ads, no sale of data, and a guardian contact for deletion requests on behalf of a minor.
+- Terms cover: unofficial and not affiliated with the district, plans and appeal outcomes are not official placements and course selection still goes through the school, acceptable use, termination, and the 13+ age requirement.
+- **Delete my data.** Self-serve in Settings. Flow: request, confirmation email, 14-day grace period (cancelable), then delete. Deleted: user, profile, plans, entries, appeals and answers, snapshot, linked emails, sessions, accounts, push subscriptions, preferences. Kept but anonymized: `AuditLog` rows and supervisor decisions on appeals, with the person replaced by "deleted user". Deleting a staff member reassigns or anonymizes their review history. `DeletionRequest` keeps only a hash of the email. Admins see pending requests.
+- **Download my data**: JSON export of everything stored about the user.
+- Show a short in-app privacy notice on the 8th-grade snapshot step.
