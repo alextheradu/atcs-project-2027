@@ -1,26 +1,248 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  color-scheme: dark;
+  --bg: #0a0a0a;
+  --bg-raised: #141414;
+  --bg-elevated: #1c1c1c;
+  --line: #2b2b2b;
+  --line-strong: #3d3d3d;
+  --fg: #ededed;
+  --muted: #a1a1a1;
+
+  --accent: #338eda;
+  --accent-hover: #4a9fe6;
+  --accent-lip: #1f5b94;
+  --accent-fg: #0a0a0a;
+
+  --green: #33d6a6;
+  --yellow: #f1c40f;
+  --orange: #ff8c37;
+  --red: #ec3750;
+
+  --radius-card: 12px;
+  --radius-pill: 999px;
+  --spring: cubic-bezier(0.3, 1.6, 0.6, 1);
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
+  --color-bg: var(--bg);
+  --color-raised: var(--bg-raised);
+  --color-elevated: var(--bg-elevated);
+  --color-line: var(--line);
+  --color-line-strong: var(--line-strong);
+  --color-fg: var(--fg);
+  --color-muted: var(--muted);
+  --color-accent: var(--accent);
+  --color-accent-hover: var(--accent-hover);
+  --color-green: var(--green);
+  --color-yellow: var(--yellow);
+  --color-orange: var(--orange);
+  --color-red: var(--red);
+  --radius-card: var(--radius-card);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+html {
+  font-size: 14px;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--bg);
+  color: var(--fg);
+  font-family: var(--font-geist-sans), system-ui, sans-serif;
+  letter-spacing: -0.005em;
+}
+
+::selection {
+  background: rgb(51 142 218 / 0.35);
+}
+
+:is(a, button, input, select, textarea, [tabindex]):focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 2px var(--bg), 0 0 0 4px var(--accent);
+}
+
+@layer components {
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    height: 36px;
+    padding: 0 16px;
+    border-radius: var(--radius-pill);
+    border: 1px solid var(--line);
+    background: var(--bg-raised);
+    color: var(--fg);
+    font-size: 13px;
+    font-weight: 500;
+    white-space: nowrap;
+    cursor: pointer;
+    box-shadow: 0 3px 0 rgb(0 0 0 / 0.55);
+    transition:
+      transform 0.2s var(--spring),
+      box-shadow 0.2s,
+      background 0.15s,
+      border-color 0.15s;
+  }
+  @media (hover: hover) {
+    .btn:hover:not(:disabled) {
+      transform: translateY(-2px);
+      box-shadow: 0 5px 0 rgb(0 0 0 / 0.55);
+      border-color: var(--line-strong);
+    }
+  }
+  .btn:active:not(:disabled) {
+    transform: translateY(2px);
+    box-shadow: 0 1px 0 rgb(0 0 0 / 0.55);
+  }
+  .btn:disabled {
+    opacity: 0.55;
+    cursor: not-allowed;
+  }
+  .btn-sm {
+    height: 30px;
+    padding: 0 12px;
+    font-size: 12px;
+  }
+  .btn-lg {
+    height: 42px;
+    padding: 0 22px;
+    font-size: 14px;
+  }
+  .btn-icon {
+    width: 36px;
+    padding: 0;
+  }
+
+  .btn-primary {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: var(--accent-fg);
+    box-shadow: 0 3px 0 var(--accent-lip);
+  }
+  @media (hover: hover) {
+    .btn-primary:hover:not(:disabled) {
+      background: var(--accent-hover);
+      border-color: var(--accent-hover);
+      box-shadow: 0 5px 0 var(--accent-lip);
+    }
+  }
+  .btn-primary:active:not(:disabled) {
+    box-shadow: 0 1px 0 var(--accent-lip);
+  }
+
+  .btn-ghost {
+    background: transparent;
+    border-color: transparent;
+    box-shadow: none;
+    color: var(--muted);
+  }
+  @media (hover: hover) {
+    .btn-ghost:hover:not(:disabled) {
+      background: var(--bg-elevated);
+      color: var(--fg);
+      box-shadow: none;
+      transform: none;
+      border-color: transparent;
+    }
+  }
+  .btn-ghost:active:not(:disabled) {
+    transform: none;
+    box-shadow: none;
+  }
+
+  .btn-danger {
+    color: var(--red);
+  }
+  @media (hover: hover) {
+    .btn-danger:hover:not(:disabled) {
+      border-color: rgb(236 55 80 / 0.6);
+      background: rgb(236 55 80 / 0.1);
+    }
+  }
+
+  .card {
+    background: var(--bg-raised);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-card);
+  }
+  .card-selected {
+    background: var(--bg-elevated);
+    box-shadow: inset 2px 0 0 var(--accent);
+  }
+
+  .input {
+    height: 36px;
+    width: 100%;
+    padding: 0 12px;
+    border-radius: 8px;
+    border: 1px solid var(--line);
+    background: var(--bg-raised);
+    color: var(--fg);
+    font-size: 14px;
+  }
+  .input::placeholder {
+    color: var(--muted);
+  }
+  .input:hover {
+    border-color: var(--line-strong);
+  }
+
+  /* Sign-in and onboarding only */
+  .auth-texture {
+    background:
+      repeating-conic-gradient(rgb(255 255 255 / 0.035) 0 25%, transparent 0 50%) 0 0 / 8px 8px,
+      rgb(20 20 20 / 0.7);
+    backdrop-filter: blur(8px);
+  }
+
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    height: 22px;
+    padding: 0 10px;
+    border-radius: var(--radius-pill);
+    border: 1px solid var(--badge-c, var(--line));
+    color: var(--badge-c, var(--muted));
+    background: color-mix(in srgb, var(--badge-c, var(--muted)) 10%, transparent);
+    font-size: 12px;
+    font-weight: 500;
+  }
+  .badge-eligible { --badge-c: var(--green); }
+  .badge-warning { --badge-c: var(--yellow); }
+  .badge-appeal { --badge-c: var(--orange); }
+  .badge-locked { --badge-c: var(--red); }
+  .badge-review { --badge-c: var(--accent); }
+
+  .star-border {
+    position: relative;
+    display: inline-block;
+    border-radius: var(--radius-pill);
+    overflow: hidden;
+    padding: 1px;
+  }
+  .star-border::before {
+    content: "";
+    position: absolute;
+    inset: -150%;
+    background: conic-gradient(from 0deg, transparent 0 80%, rgb(255 255 255 / 0.9) 92%, transparent 100%);
+    animation: star-spin 3.5s linear infinite;
+  }
+  .star-border > .btn {
+    position: relative;
+  }
+}
+
+@keyframes star-spin {
+  to { transform: rotate(360deg); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .btn { transition: none; }
+  .btn:hover, .btn:active { transform: none; }
+  .star-border::before { animation: none; }
 }
