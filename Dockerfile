@@ -15,6 +15,9 @@ COPY . .
 # prisma generate only reads the schema, it does not connect. The URL just has to parse.
 RUN DATABASE_URL="postgresql://build:build@localhost:5432/build" npx prisma generate
 RUN npm run build
+# Bundle the seed into one file so the runtime image can load reference data without tsx or the
+# full node_modules (the standalone output does not include the Prisma driver adapter).
+RUN npx esbuild prisma/seed.ts --bundle --platform=node --format=esm --tsconfig=tsconfig.json --external:pg-native --banner:js="import { createRequire as __cr } from 'module'; const require = __cr(import.meta.url);" --outfile=seed.mjs
 
 # ---- migrator tooling: Prisma CLI only, kept out of the app bundle ----
 FROM node:22-bookworm-slim AS migrator
@@ -40,6 +43,8 @@ RUN groupadd --system --gid 1001 nodejs && useradd --system --uid 1001 --gid nod
 COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
 COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
 COPY --from=builder --chown=nextjs:nodejs /app/public ./public
+COPY --from=builder --chown=nextjs:nodejs /app/seed.mjs ./seed.mjs
+COPY --from=builder --chown=nextjs:nodejs /app/prisma/seed ./prisma/seed
 COPY --from=migrator --chown=nextjs:nodejs /opt/migrate /opt/migrate
 COPY --from=migrator --chown=nextjs:nodejs /root/.cache /home/nextjs/.cache
 COPY --chown=nextjs:nodejs docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh

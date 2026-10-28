@@ -1,0 +1,66 @@
+[
+  {
+    "alias": "physical education health 9",
+    "courseSlug": "physical-education-health-9"
+  },
+  {
+    "alias": "physical education driver ed 10",
+    "courseSlug": "physical-education-driver-ed-10"
+  },
+  {
+    "alias": "physical education health 11",
+    "courseSlug": "physical-education-health-11"
+  },
+  {
+    "alias": "physical education health 12",
+    "courseSlug": "physical-education-health-12"
+  },
+  {
+    "alias": "us history i",
+    "courseSlug": "u-s-history-i"
+  },
+  {
+    "alias": "us history ii",
+    "courseSlug": "u-s-history-ii"
+  },
+  {
+    "alias": "honors us history i",
+    "courseSlug": "honors-u-s-history-i"
+  },
+  {
+    "alias": "honors us history ii",
+    "courseSlug": "honors-u-s-history-ii"
+  },
+  {
+    "alias": "ap us history i",
+    "courseSlug": "ap-u-s-history-i"
+  },
+  {
+    "alias": "ap computer science a",
+    "courseSlug": "ap-computer-science-a"
+  },
+  {
+    "alias": "algebra ii w trigonometry",
+    "courseSlug": "algebra-ii-with-trigonometry"
+  },
+  {
+    "alias": "algebra 2",
+    "courseSlug": "algebra-ii"
+  },
+  {
+    "alias": "pre calculus",
+    "courseSlug": "pre-calculus"
+  },
+  {
+    "alias": "precalculus",
+    "courseSlug": "pre-calculus"
+  },
+  {
+    "alias": "intro to computer science and app development",
+    "courseSlug": "introduction-to-computer-science-and-app-development"
+  },
+  {
+    "alias": "intro to computer science",
+    "courseSlug": "introduction-to-computer-science-and-app-development"
+  }
+]

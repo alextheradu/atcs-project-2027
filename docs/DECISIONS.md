@@ -34,5 +34,18 @@ Settled choices and deviations from the original spec. Add a dated entry when yo
 
 - **Dockerfile is in and tested** (build, boot against an empty database, migrations applied, `/api/health` ok, runs as non-root uid 1001, dev-login returns 404). Stages: deps, builder, migrator, runner. Base `node:22-bookworm-slim` (Debian, not Alpine, so Prisma's engines just work).
 - **Migrations run in `docker-entrypoint.sh`** using a separate Prisma CLI install in `/opt/migrate` (pinned 7.10.1, same as the app) so the CLI stays out of the standalone bundle. If you bump Prisma, bump it in the `migrator` stage too.
-- **No seed runs in the container yet.** In production, `signupMode` falls back to `SIGNUP_MODE_DEFAULT` and the `pascack.org` allowed domain does not exist until it is added in `/admin/settings` or a production seed is written (Phase 2). The first admin comes from `ADMIN_EMAILS`.
+- **The container seeds reference data on boot.** The seed is bundled with esbuild into `seed.mjs` (self-contained, no tsx) and run by the entrypoint after migrations. It is create-only, so restarts and admin edits are safe. `RUN_SEED=false` skips it. The first admin still comes from `ADMIN_EMAILS`.
 - **Container listens on 3000 internally.** Dokploy routes the domain to it. Set `AUTH_URL` to the public https URL and `AUTH_TRUST_HOST=true`.
+
+## 2026-10-28 (Phase 2, catalog)
+
+- **226 course rows, not about 150.** Level variants (CP, Enhanced, Honors) and per-language levels are separate rows because transcripts list them separately. Four languages times levels I to V, honors II to IV and AP account for 41 of them.
+- **Extraction is a script plus a hand-reviewed build.** `scripts/extract-catalog.ts` reads `docs/source/pages/NN.txt` (from `pdftotext -layout`) into `prisma/seed/courses.draft.json`. `scripts/build-catalog.ts` is the review: every mapping, tag and judgment call is in that file. Re-run both to regenerate the seed JSON. Never edit `courses.json` by hand.
+- **Requirement tags live inside each course** in `courses.json` (a `requirements` array) instead of a separate `course-requirements.json`.
+- **Seeds are create-only.** Re-seeding never overwrites a counselor's edits. To reset a course, delete it in the admin and re-seed, or use CSV import.
+- **Catalog names use "AP", "Honors", "U.S."** and slugs drop apostrophes. `normalizeTitle` (in `src/lib/catalog/normalize.ts`) maps transcript spellings such as "Advanced Placement" and "United States" onto the same normalized form. Phase 6 matching must use it.
+- **English electives do not count as English.** The PDF has an ELECTIVES heading starting at 21st Century Journalism, and AP Capstone: Research says it does not count for English credit. Tagged accordingly.
+- **Dual enrollment is a note, never a level.** Courses keep their base level and carry `dualEnrollmentNote`.
+- **Applied Physics & Engineering is one row** (the PDF lists it twice with different prerequisites, Algebra I in Science and Chemistry in Technology). Both statements are kept in `prereqText`. Credits are 10, with 5 counted toward physics.
+- **Authorization:** counselors and admins edit the catalog. Hard delete is blocked if any plan entry or appeal references the course.
+- **Do not run `next build` while `next dev` is running.** It leaves dev in a state where pages reload forever. Stop dev, delete `.next/dev`, and restart if that happens.

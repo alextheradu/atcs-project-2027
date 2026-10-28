@@ -1,0 +1,68 @@
+[
+  {
+    "kind": "ENGLISH",
+    "label": "English",
+    "requiredCredits": 20,
+    "notes": "4 years of English"
+  },
+  {
+    "kind": "PE_HEALTH",
+    "label": "Physical Education and Health",
+    "requiredCredits": 20,
+    "notes": "4 years of Physical Education and Health Education"
+  },
+  {
+    "kind": "MATH",
+    "label": "Mathematics",
+    "requiredCredits": 15,
+    "notes": "3 years of Mathematics"
+  },
+  {
+    "kind": "SCI_BIO",
+    "label": "Biology",
+    "requiredCredits": 5,
+    "notes": "Biology"
+  },
+  {
+    "kind": "SCI_CHEM",
+    "label": "Chemistry",
+    "requiredCredits": 5,
+    "notes": "Chemistry"
+  },
+  {
+    "kind": "SCI_PHYS",
+    "label": "Physics",
+    "requiredCredits": 5,
+    "notes": "Physics. Applied Physics & Engineering and Honors Engineering Design II also count."
+  },
+  {
+    "kind": "SOCIAL_STUDIES",
+    "label": "Social Studies",
+    "requiredCredits": 15,
+    "notes": "World History, U.S. History I and II"
+  },
+  {
+    "kind": "ARTS",
+    "label": "Visual/Performing Arts",
+    "requiredCredits": 5,
+    "notes": "1 year. Course list is provisional until a counselor confirms it."
+  },
+  {
+    "kind": "LIFE_CAREERS",
+    "label": "21st Century Life and Careers",
+    "requiredCredits": 5,
+    "notes": "1 year. Course list is provisional until a counselor confirms it."
+  },
+  {
+    "kind": "FIN_LIT",
+    "label": "Financial Literacy",
+    "requiredCredits": 2.5,
+    "notes": "Half year"
+  },
+  {
+    "kind": "WORLD_LANG",
+    "label": "World Language",
+    "requiredCredits": 10,
+    "notes": "2 years of a World Language"
+  }
+]
