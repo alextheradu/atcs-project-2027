@@ -1,0 +1,19 @@
+# 04 Catalog
+
+Seed the catalog from the Program of Studies PDF into `prisma/seed/courses.json`, loaded by `prisma/seed.ts`. Write an extraction script under `scripts/` that you run once, then hand-review the output. Expect roughly 150 courses.
+
+Per course: `slug`, `name`, `department`, `level` (CP, ENHANCED, HONORS, AP, DUAL_ENROLLMENT, MIDDLE_SCHOOL), `duration` (FULL or HALF), `credits`, `gradesOffered`, `description`, `prereqText` (verbatim from the PDF), structured `rules` (see `06-eligibility-pathways.md`), requirement tags, interest tags, `hasApExam`, dual enrollment note, `sourcePage`.
+
+## Data rules and pitfalls found in the PDF and a real transcript
+
+- Credits: 5 for full-year, 2.5 for half-year. Special cases: Applied Physics & Engineering is 10 credits (two periods), Career Exploration (Internship) is 15. A real transcript shows 6.000 credits for Honors Biology and Honors Chemistry, while the catalog gives no number. Default catalog credits to 5 and let `PlanEntry.credits` hold the actual earned credits. Flag this as an open question for counselors.
+- Half-year courses include Financial Literacy, Principles of Business, Marketing, Public Speaking, Sociology, AP Microeconomics, AP Macroeconomics, Constitutional Law, Religion in America, Critical Analysis of History Through Film, One World One Community, Astronomy, Earth's Natural Disasters, Financial Investment, Management and Leadership, 21st Century Life Skills, and others. Read each course's "Half-year elective" label.
+- AP Microeconomics requires also taking AP Macroeconomics. AP American Government and Politics and "An Introduction to the Analysis of Public Policy" (Syracuse Project Advance) must be taken together. Model these as `coreq` rules and show them as warnings.
+- Honors and AP variants: the transcript shows titles like "Honors United States History I" while the catalog describes US History I with honors placement in prose. Create separate honors rows where the transcript or placement rules need them, and use `CourseAlias` to map transcript titles.
+- Per-grade PE rows are not individual catalog entries (the transcript shows "Physical Education/Health 9", "Physical Education/Driver Ed 10", "Physical Education/Health 11"). Seed them by hand, including 12.
+- Middle school pseudo-courses (`level: MIDDLE_SCHOOL`, `plannable: false`): Math 8, Algebra I (8th grade), Pre-Algebra (8th grade), so the eligibility engine can reference them.
+- "Honors Engineering Design II" and "Applied Physics & Engineering" are described as fulfilling the physics graduation requirement. Model that with a requirement tag.
+- American Studies replaces both US History II and English III. Tag it with both `SOCIAL_STUDIES` and `ENGLISH` (assume 5 credits toward each, 10 total, and flag as unverified).
+- AP Art History does **not** satisfy the Visual/Performing Arts requirement.
+- Tag the Visual/Performing Arts and 21st Century Life and Careers requirements by department as **provisional** (Art and Music departments, Theater Arts, Communication Design for arts; Business, Family and Consumer Sciences, and Technology Education for Life and Careers), with `CourseRequirement.provisional = true`. Show these in the admin UI as "needs counselor review". The PDF does not list the exact courses, so do not present them as authoritative.
+- Dual enrollment partners: Seton Hall (language IV/V/AP, Concert Band, Music Technology, Chamber Choir, AP Music Theory, Honors Language Myth and Culture), Kean (Honors Literature of the Holocaust), William Paterson (College Algebra, Pre-Calculus, Calculus, Advanced Topics in Calculus, Statistics, Discrete Math), Syracuse (Public Policy, Honors Forensic Science), Ramapo (Honors Psychology), UT Austin (Honors Engineering Design I). Store as a note, not a rule.
