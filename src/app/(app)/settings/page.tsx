@@ -2,6 +2,7 @@
 export const instant = false;
 
 import { Button } from "@/components/ui/button";
+import { Dl, PageHeader, Section } from "@/components/ui/page";
 import { removeLinkedEmail, startLinkEmail } from "@/lib/account/actions";
 import { requirePageUser } from "@/lib/auth/page";
 import { db } from "@/lib/db";
@@ -19,48 +20,40 @@ export default async function Settings({ searchParams }: { searchParams: Promise
   const linked = await db.linkedEmail.findMany({ where: { userId: user.id }, orderBy: { createdAt: "asc" } });
 
   return (
-    <div className="space-y-10">
-      <header>
-        <h1 className="text-2xl font-semibold tracking-tight">Settings</h1>
-      </header>
+    <div>
+      <PageHeader title="Settings" />
 
-      <section className="space-y-3">
-        <h2 className="text-sm font-medium">Account</h2>
-        <div className="card p-4 text-sm">
-          <div className="font-mono">{user.email}</div>
-          <div className="text-muted">{user.role}</div>
-        </div>
-      </section>
+      <div className="space-y-10">
+        <Section title="Account">
+          <Dl items={[{ label: "Email", value: <span className="num">{user.email}</span> }, { label: "Role", value: <span className="num">{user.role.toLowerCase()}</span> }]} />
+        </Section>
 
-      <section className="space-y-3">
-        <h2 className="text-sm font-medium">Linked emails</h2>
-        <p className="text-sm text-muted">
-          Link a second Google account, for example a personal one from 8th grade. Signing in with either opens the
-          same plans.
-        </p>
-        {link && LINK_MESSAGES[link] && (
-          <p role="status" className={link === "ok" ? "text-sm text-green" : "text-sm text-red"}>
-            {LINK_MESSAGES[link]}
-          </p>
-        )}
-        {linked.length > 0 && (
-          <ul className="card divide-y divide-line">
-            {linked.map((l) => (
-              <li key={l.id} className="flex items-center justify-between px-4 py-2 text-sm">
-                <span className="font-mono">{l.email}</span>
-                <form action={removeLinkedEmail.bind(null, l.id)}>
-                  <Button size="sm" variant="danger" type="submit">
-                    Unlink
-                  </Button>
-                </form>
-              </li>
-            ))}
-          </ul>
-        )}
-        <form action={startLinkEmail}>
-          <Button type="submit">Link another email</Button>
-        </form>
-      </section>
+        <Section
+          title="Linked emails"
+          description="Link a second Google account, for example a personal one from 8th grade. Signing in with either opens the same plans."
+        >
+          {link && LINK_MESSAGES[link] && (
+            <p role="status" className={link === "ok" ? "mb-4 text-[13px] text-green" : "mb-4 text-[13px] text-red"}>
+              {LINK_MESSAGES[link]}
+            </p>
+          )}
+          {linked.length > 0 && (
+            <ul className="list mb-4">
+              {linked.map((l) => (
+                <li key={l.id} className="flex items-center justify-between py-2.5 text-sm">
+                  <span className="num">{l.email}</span>
+                  <form action={removeLinkedEmail.bind(null, l.id)}>
+                    <Button size="sm" variant="danger" type="submit">Unlink</Button>
+                  </form>
+                </li>
+              ))}
+            </ul>
+          )}
+          <form action={startLinkEmail}>
+            <Button type="submit">Link another email</Button>
+          </form>
+        </Section>
+      </div>
     </div>
   );
 }

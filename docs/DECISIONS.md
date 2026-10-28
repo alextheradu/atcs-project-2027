@@ -49,3 +49,8 @@ Settled choices and deviations from the original spec. Add a dated entry when yo
 - **Applied Physics & Engineering is one row** (the PDF lists it twice with different prerequisites, Algebra I in Science and Chemistry in Technology). Both statements are kept in `prereqText`. Credits are 10, with 5 counted toward physics.
 - **Authorization:** counselors and admins edit the catalog. Hard delete is blocked if any plan entry or appeal references the course.
 - **Do not run `next build` while `next dev` is running.** It leaves dev in a state where pages reload forever. Stop dev, delete `.next/dev`, and restart if that happens.
+
+## 2026-10-28 (UI pass)
+
+- **No cards.** The first design used bordered, rounded boxes everywhere and read as generic. Everything is now flat: hairline rules, rows, definition lists, dot-style status badges. Buttons and tokens are unchanged. Rules are in `docs/spec/12-design-system.md`. The `.card` class and `--radius-card` no longer exist, do not reintroduce them.
+- **App shell:** 232px sidebar, 48px top bar with breadcrumbs, content max width 1100px (was 1200), wordmark mark in the sidebar.

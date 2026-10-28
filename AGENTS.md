@@ -42,7 +42,7 @@ Do not run `next build` while `npm run dev` is up (dev starts reloading pages fo
 - Next.js 16 is newer than most training data. Before using a Next API you are unsure about, read `node_modules/next/dist/docs/`. Same for Auth.js, Prisma 7, Tailwind 4: check installed types or docs first.
 - All auth code lives behind `src/lib/auth/` (thin, swappable). Prisma client is `src/lib/db.ts`.
 - Pure logic (eligibility, credit math, requirement tracking, transcript parsing, matching) lives in `src/lib/<name>/` with no framework imports and has vitest tests. Write the tests first for these.
-- Dark theme only, tokens in `src/app/globals.css`, rules in `docs/spec/12-design-system.md`. Backgrounds are neutral (equal R, G, B). Blue only on interactive elements. Use the existing `Button`, `Badge`, `StarBorder`, `.card`, `.input`. Check `/styleguide`.
+- Dark theme only, tokens in `src/app/globals.css`, rules in `docs/spec/12-design-system.md`. Backgrounds are neutral (equal R, G, B). Blue only on interactive elements. No cards: use `PageHeader`, `Section`, `Dl`, `.list` rows, `Badge`, `StarBorder`, `.input` (see the layout language in the design doc). Check `/styleguide`.
 - Geist Mono for course codes, credits, grades, dates.
 - Credits are `Decimal`. Never use floating point for credit math (use a decimal or integer tenths helper).
 - Commit only when the owner asks. Small, focused commits when asked.

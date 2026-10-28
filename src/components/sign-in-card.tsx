@@ -19,11 +19,11 @@ export function SignInCard() {
   const error = useSearchParams().get("error");
 
   return (
-    <div className="auth-texture w-full max-w-sm rounded-xl border border-line p-6">
-      <h2 className="text-lg font-semibold tracking-tight">Sign in</h2>
-      <p className="mt-1 text-sm text-muted">Use your Google account. You must be 13 or older.</p>
+    <div className="w-full max-w-[320px]">
+      <h2 className="text-[15px] font-medium tracking-tight">Sign in</h2>
+      <p className="mt-1 text-[13px] text-muted">Use your Google account.</p>
 
-      <label className="mt-5 flex cursor-pointer items-center gap-3 text-sm">
+      <label className="auth-texture mt-6 flex h-10 cursor-pointer items-center gap-3 rounded-md border border-line px-3 text-[13px] transition-colors hover:border-line-strong">
         <input
           type="checkbox"
           checked={thirteen}
@@ -34,13 +34,13 @@ export function SignInCard() {
       </label>
 
       {error && (
-        <p role="alert" className="mt-4 text-sm text-red">
+        <p role="alert" className="mt-4 text-[13px] text-red">
           {ERRORS[error] ?? "Could not sign you in."}
         </p>
       )}
 
-      <form action={signInWithGoogle} className="mt-5">
-        <Button variant="primary" className="w-full" type="submit" disabled={!thirteen}>
+      <form action={signInWithGoogle} className="mt-4">
+        <Button variant="primary" size="lg" className="w-full" type="submit" disabled={!thirteen}>
           Continue with Google
         </Button>
       </form>

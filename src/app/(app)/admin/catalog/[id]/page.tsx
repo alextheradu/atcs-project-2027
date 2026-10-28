@@ -3,6 +3,7 @@ export const instant = false;
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Badge } from "@/components/ui/badge";
+import { PageHeader } from "@/components/ui/page";
 import { AliasManager } from "@/components/catalog/alias-manager";
 import { CourseForm } from "@/components/catalog/course-form";
 import { requirePageRole } from "@/lib/auth/page";
@@ -19,15 +20,13 @@ export default async function EditCourse({ params }: { params: Promise<{ id: str
   if (!course) notFound();
 
   return (
-    <div className="max-w-4xl space-y-8">
-      <header className="space-y-2">
-        <Link href="/admin/catalog" className="text-sm text-muted hover:text-fg">Back to catalog</Link>
-        <div className="flex flex-wrap items-center gap-3">
-          <h1 className="text-2xl font-semibold tracking-tight">{course.name}</h1>
-          {course.archived && <Badge tone="locked">Archived</Badge>}
-          <Link className="btn btn-sm btn-ghost" href={`/courses/${course.slug}`}>View as student</Link>
-        </div>
-      </header>
+    <div className="max-w-4xl space-y-10">
+      <PageHeader
+        title={course.name}
+        back={{ href: "/admin/catalog", label: "Catalog" }}
+        badge={course.archived ? <Badge tone="locked">Archived</Badge> : undefined}
+        actions={<Link className="btn btn-sm btn-ghost" href={`/courses/${course.slug}`}>View as student</Link>}
+      />
 
       <CourseForm
         mode="edit"

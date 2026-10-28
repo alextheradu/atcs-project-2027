@@ -3,6 +3,7 @@ export const instant = false;
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Badge } from "@/components/ui/badge";
+import { Dl, PageHeader, Section } from "@/components/ui/page";
 import { requirePageUser } from "@/lib/auth/page";
 import { db } from "@/lib/db";
 import { DEPT_LABEL, KIND_LABEL, LEVEL_LABEL, fmtCredits } from "@/lib/catalog/labels";
@@ -19,61 +20,61 @@ export default async function CoursePage({ params }: { params: Promise<{ slug: s
   const canEdit = user.role === "COUNSELOR" || user.role === "ADMIN";
 
   return (
-    <article className="max-w-3xl space-y-6">
-      <header className="space-y-2">
-        <Link href="/courses" className="text-sm text-muted hover:text-fg">Back to courses</Link>
-        <div className="flex flex-wrap items-center gap-3">
-          <h1 className="text-2xl font-semibold tracking-tight">{course.name}</h1>
-          {course.archived && <Badge tone="locked">Archived</Badge>}
+    <article>
+      <PageHeader
+        title={course.name}
+        back={{ href: "/courses", label: "Courses" }}
+        badge={course.archived ? <Badge tone="locked">Archived</Badge> : undefined}
+        actions={canEdit ? <Link className="btn btn-sm" href={`/admin/catalog/${course.id}`}>Edit in catalog</Link> : undefined}
+      />
+
+      <div className="grid gap-12 md:grid-cols-[1fr_280px]">
+        <div className="space-y-8">
+          <p className="max-w-[65ch] leading-relaxed">{course.description}</p>
+
+          {course.prereqText && (
+            <Section title="Requirements from the Program of Studies" description="Automatic checking arrives in a later update. The school decides placement.">
+              <p className="max-w-[65ch] text-sm leading-relaxed">{course.prereqText}</p>
+            </Section>
+          )}
+
+          {course.dualEnrollmentNote && (
+            <Section title="Dual enrollment">
+              <p className="text-sm text-muted">{course.dualEnrollmentNote}</p>
+            </Section>
+          )}
+
+          {course.requirements.length > 0 && (
+            <Section title="Counts toward graduation">
+              <ul className="list">
+                {course.requirements.map((r) => (
+                  <li key={r.id} className="flex items-center justify-between py-2.5 text-sm">
+                    <span>{KIND_LABEL[r.kind]}</span>
+                    <span className="flex items-center gap-3">
+                      {r.provisional && <Badge tone="warning">Needs counselor review</Badge>}
+                      <span className="num">{fmtCredits(r.credits)} cr</span>
+                    </span>
+                  </li>
+                ))}
+              </ul>
+            </Section>
+          )}
         </div>
-        <p className="text-sm text-muted">
-          {DEPT_LABEL[course.department]} · {LEVEL_LABEL[course.level]} · {course.duration === "HALF" ? "Half year" : "Full year"}
-        </p>
-        <div className="flex flex-wrap gap-6 font-mono text-sm">
-          <span>{fmtCredits(course.credits)} credits</span>
-          <span>Grade {course.gradesOffered.join(", ")}</span>
-          {course.sourcePage && <span className="text-muted">PDF p.{course.sourcePage}</span>}
-        </div>
-      </header>
 
-      <p className="leading-relaxed">{course.description}</p>
-
-      {course.prereqText && (
-        <section className="card p-4">
-          <h2 className="text-sm font-medium">Requirements from the Program of Studies</h2>
-          <p className="mt-2 text-sm leading-relaxed">{course.prereqText}</p>
-          <p className="mt-2 text-xs text-muted">Automatic checking arrives in a later update. The school decides placement.</p>
-        </section>
-      )}
-
-      {course.dualEnrollmentNote && (
-        <section className="card p-4 text-sm">
-          <h2 className="font-medium">Dual enrollment</h2>
-          <p className="mt-1 text-muted">{course.dualEnrollmentNote}</p>
-        </section>
-      )}
-
-      {course.requirements.length > 0 && (
-        <section className="space-y-2">
-          <h2 className="text-sm font-medium">Counts toward graduation</h2>
-          <ul className="flex flex-wrap gap-2">
-            {course.requirements.map((r) => (
-              <li key={r.id}>
-                <Badge tone={r.provisional ? "warning" : "eligible"}>
-                  {KIND_LABEL[r.kind]} <span className="font-mono">{fmtCredits(r.credits)}</span>
-                  {r.provisional ? " · needs counselor review" : ""}
-                </Badge>
-              </li>
-            ))}
-          </ul>
-        </section>
-      )}
-
-      {course.interests.length > 0 && (
-        <p className="text-sm text-muted">Related interests: {course.interests.map((i) => i.label).join(", ")}</p>
-      )}
-
-      {canEdit && <Link className="btn btn-sm" href={`/admin/catalog/${course.id}`}>Edit in catalog admin</Link>}
+        <aside>
+          <Dl
+            items={[
+              { label: "Department", value: DEPT_LABEL[course.department] },
+              { label: "Level", value: LEVEL_LABEL[course.level] },
+              { label: "Length", value: course.duration === "HALF" ? "Half year" : "Full year" },
+              { label: "Credits", value: <span className="num">{fmtCredits(course.credits)}</span> },
+              { label: "Grades", value: <span className="num">{course.gradesOffered.join(", ")}</span> },
+              ...(course.sourcePage ? [{ label: "Program of Studies", value: <span className="num">p. {course.sourcePage}</span> }] : []),
+              ...(course.interests.length ? [{ label: "Interests", value: course.interests.map((i) => i.label).join(", ") }] : []),
+            ]}
+          />
+        </aside>
+      </div>
     </article>
   );
 }

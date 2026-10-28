@@ -1,12 +1,12 @@
 export const instant = false;
 
 import Link from "next/link";
-import { Badge } from "@/components/ui/badge";
+import { PageHeader } from "@/components/ui/page";
 import { DEPARTMENTS } from "@/lib/admin/schemas";
 import { requirePageUser } from "@/lib/auth/page";
 import { db } from "@/lib/db";
 import { buildCourseWhere } from "@/lib/catalog/queries";
-import { DEPT_LABEL, LEVEL_LABEL, fmtCredits } from "@/lib/catalog/labels";
+import { DEPT_LABEL, KIND_LABEL, LEVEL_LABEL, fmtCredits } from "@/lib/catalog/labels";
 import { LEVELS, courseFilterSchema } from "@/lib/catalog/schemas";
 
 type Params = Promise<Record<string, string | string[] | undefined>>;
@@ -31,64 +31,62 @@ export default async function Courses({ searchParams }: { searchParams: Params }
     db.interestTag.findMany({ orderBy: { label: "asc" } }),
   ]);
 
+  const sel = "input !w-auto max-w-[11rem]";
   return (
-    <div className="space-y-6">
-      <header>
-        <h1 className="text-2xl font-semibold tracking-tight">Courses</h1>
-        <p className="mt-1 text-muted">From the 2026-2027 Program of Studies. Not every course runs every year.</p>
-      </header>
+    <div>
+      <PageHeader title="Courses" description="From the 2026-2027 Program of Studies. Not every course runs every year." />
 
-      <form className="card grid gap-3 p-4 sm:grid-cols-2 lg:grid-cols-6" action="/courses">
-        <input className="input lg:col-span-2" name="q" defaultValue={filter.q} placeholder="Search courses" aria-label="Search" />
-        <select className="input" name="department" defaultValue={filter.department ?? ""} aria-label="Department">
+      <form className="flex flex-wrap items-center gap-2" action="/courses">
+        <input className="input !w-64" name="q" defaultValue={filter.q} placeholder="Search courses" aria-label="Search" />
+        <select className={sel} name="department" defaultValue={filter.department ?? ""} aria-label="Department">
           <option value="">All departments</option>
           {DEPARTMENTS.map((d) => <option key={d} value={d}>{DEPT_LABEL[d]}</option>)}
         </select>
-        <select className="input" name="level" defaultValue={filter.level ?? ""} aria-label="Level">
+        <select className={sel} name="level" defaultValue={filter.level ?? ""} aria-label="Level">
           <option value="">All levels</option>
           {LEVELS.filter((l) => l !== "MIDDLE_SCHOOL").map((l) => <option key={l} value={l}>{LEVEL_LABEL[l]}</option>)}
         </select>
-        <select className="input" name="grade" defaultValue={filter.grade ?? ""} aria-label="Grade">
+        <select className={sel} name="grade" defaultValue={filter.grade ?? ""} aria-label="Grade">
           <option value="">Any grade</option>
           {[9, 10, 11, 12].map((g) => <option key={g} value={g}>Grade {g}</option>)}
         </select>
-        <select className="input" name="duration" defaultValue={filter.duration ?? ""} aria-label="Length">
+        <select className={sel} name="duration" defaultValue={filter.duration ?? ""} aria-label="Length">
           <option value="">Any length</option>
           <option value="FULL">Full year</option>
           <option value="HALF">Half year</option>
         </select>
-        <select className="input lg:col-span-2" name="interest" defaultValue={filter.interest ?? ""} aria-label="Interest">
+        <select className={sel} name="interest" defaultValue={filter.interest ?? ""} aria-label="Interest">
           <option value="">Any interest</option>
           {interests.map((i) => <option key={i.id} value={i.slug}>{i.label}</option>)}
         </select>
-        <div className="flex gap-2 lg:col-span-2">
-          <button className="btn btn-primary" type="submit">Filter</button>
-          <Link className="btn btn-ghost" href="/courses">Reset</Link>
-        </div>
+        <button className="btn btn-sm btn-primary" type="submit">Filter</button>
+        <Link className="btn btn-sm btn-ghost" href="/courses">Reset</Link>
       </form>
 
-      <p className="font-mono text-xs text-muted">{courses.length} courses</p>
-      <ul className="grid gap-3 md:grid-cols-2">
+      <p className="num mb-3 mt-8 text-muted">{courses.length} courses</p>
+      <ul className="list list-hover">
         {courses.map((c) => (
           <li key={c.id}>
-            <Link href={`/courses/${c.slug}`} className="card block p-4 transition-colors hover:border-line-strong">
-              <div className="flex items-start justify-between gap-3">
-                <div className="font-medium">{c.name}</div>
-                <span className="shrink-0 font-mono text-xs text-muted">{fmtCredits(c.credits)} cr</span>
-              </div>
-              <div className="mt-1 text-xs text-muted">
-                {DEPT_LABEL[c.department]} · {LEVEL_LABEL[c.level]} · Grade {c.gradesOffered.join(", ")}
-              </div>
-              {c.requirements.length > 0 && (
-                <div className="mt-2 flex flex-wrap gap-1.5">
-                  {c.requirements.map((r) => (
-                    <Badge key={r.kind}>{r.kind.replace("_", " ").toLowerCase()}{r.provisional ? " (unconfirmed)" : ""}</Badge>
-                  ))}
-                </div>
-              )}
+            <Link href={`/courses/${c.slug}`} className="flex items-baseline justify-between gap-6 py-3">
+              <span className="min-w-0">
+                <span className="block truncate text-sm font-medium">{c.name}</span>
+                <span className="mt-0.5 block text-[13px] text-muted">
+                  {DEPT_LABEL[c.department]} · {LEVEL_LABEL[c.level]}
+                  {(() => {
+                    // Only say it when it adds information (Theater Arts counts toward Arts, not English).
+                    const kinds = [...new Set(c.requirements.map((r) => KIND_LABEL[r.kind]))].filter((k) => k !== DEPT_LABEL[c.department]);
+                    return kinds.length > 0 ? <> · counts toward {kinds.join(", ")}</> : null;
+                  })()}
+                </span>
+              </span>
+              <span className="num shrink-0 text-right text-muted">
+                <span className="block text-fg">{fmtCredits(c.credits)} cr</span>
+                <span className="block">grade {c.gradesOffered.join(" ")}</span>
+              </span>
             </Link>
           </li>
         ))}
+        {courses.length === 0 && <li className="py-10 text-center text-sm text-muted">No courses match those filters.</li>}
       </ul>
     </div>
   );

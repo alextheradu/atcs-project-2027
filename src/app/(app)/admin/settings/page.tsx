@@ -1,6 +1,7 @@
 // Depends on the signed-in user, so it blocks on the session by design.
 export const instant = false;
 
+import { PageHeader, Section } from "@/components/ui/page";
 import { AddDomainForm, DomainRow, SignupModeForm } from "@/components/admin/settings-forms";
 import { requirePageRole } from "@/lib/auth/page";
 import { getSignupMode } from "@/lib/auth/service";
@@ -11,29 +12,21 @@ export default async function AdminSettings() {
   const [mode, domains] = await Promise.all([getSignupMode(), db.allowedDomain.findMany({ orderBy: { domain: "asc" } })]);
 
   return (
-    <div className="space-y-10">
-      <header>
-        <h1 className="text-2xl font-semibold tracking-tight">Admin settings</h1>
-        <p className="mt-1 text-muted">Who can sign up, and which email domains map to which cohort.</p>
-      </header>
-
-      <section className="space-y-3">
-        <h2 className="text-sm font-medium">Signup mode</h2>
-        <SignupModeForm current={mode} />
-      </section>
-
-      <section className="space-y-3">
-        <h2 className="text-sm font-medium">Allowed domains</h2>
-        <AddDomainForm />
-        <ul className="card divide-y divide-line">
-          {domains.map((d) => (
-            <DomainRow key={d.id} id={d.id} domain={d.domain} cohort={d.cohort} enabled={d.enabled} />
-          ))}
-        </ul>
-        <p className="text-xs text-muted">
-          Add the four sending-district domains here as INCOMING_8 once you have confirmed them.
-        </p>
-      </section>
+    <div>
+      <PageHeader title="Admin settings" description="Who can sign up, and which email domains map to which cohort." />
+      <div className="space-y-10">
+        <Section title="Signup mode">
+          <SignupModeForm current={mode} />
+        </Section>
+        <Section title="Allowed domains" description="Add the four sending-district domains as INCOMING_8 once you have confirmed them.">
+          <AddDomainForm />
+          <ul className="list mt-6">
+            {domains.map((d) => (
+              <DomainRow key={d.id} id={d.id} domain={d.domain} cohort={d.cohort} enabled={d.enabled} />
+            ))}
+          </ul>
+        </Section>
+      </div>
     </div>
   );
 }
