@@ -54,3 +54,14 @@ Settled choices and deviations from the original spec. Add a dated entry when yo
 
 - **No cards.** The first design used bordered, rounded boxes everywhere and read as generic. Everything is now flat: hairline rules, rows, definition lists, dot-style status badges. Buttons and tokens are unchanged. Rules are in `docs/spec/12-design-system.md`. The `.card` class and `--radius-card` no longer exist, do not reintroduce them.
 - **App shell:** 232px sidebar, 48px top bar with breadcrumbs, content max width 1100px (was 1200), wordmark mark in the sidebar.
+
+## 2026-10-28 (design pass 2: impeccable, Emil, command, contd)
+
+- **`PRODUCT.md` and `DESIGN.md` now exist at the repo root** (impeccable's format). Read them before any UI work. `DESIGN.md` is the compact visual source of truth; `docs/spec/12-design-system.md` has the longer rules.
+- **Expressive everywhere, but short.** Sign-in has a staged blur-to-sharp reveal (0.8s, once). In the app, headers, sections and the first rows rise in 6px steps under 300ms total, ease-out. Nothing animates on keyboard actions. Reduced motion keeps a quick fade.
+- **Selected state is a 6px blue dot, not a 2px stripe** (impeccable bans side stripes). Applies to rows and the active nav item. A test fails the build if a colored side stripe returns.
+- **Sticky bars are opaque** (command's Solid Bar Rule). The sign-in pill nav is solid too.
+- **No browser form chrome** (contd): drawn checkboxes and radios (blue when on), one chevron on selects, no number spinners, autofill keeps the surface, thin scrollbars. Fields focus with a blue border and 3px 20% ring.
+- **Phones:** opaque bottom tab bar (Workspace items plus More), 44px inputs at 16px text on touch.
+- **Not taken from contd:** tilt, rotation and sticker styling (the spec bans tilt), and the red accent.
+- **`globals.test.ts`** guards the stylesheet. A slicing edit once deleted the whole components layer (buttons, lists, badges); the test now fails if shared classes disappear or braces unbalance.

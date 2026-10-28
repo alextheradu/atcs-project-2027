@@ -89,14 +89,14 @@ export default function Styleguide() {
           </div>
         </Section>
 
-        <Section title="Rows" description="Lists use hairline rules. A selected row gets a neutral fill and a 2px accent bar.">
+        <Section title="Rows" description="Lists use hairline rules. A selected row gets a neutral fill and a small accent dot. No side stripes.">
           <ul className="list list-hover">
             <li className="flex items-baseline justify-between py-3">
               <span><span className="block text-sm font-medium">Honors Biology</span><span className="block text-[13px] text-muted">Science · Honors</span></span>
               <span className="num text-right text-muted"><span className="block text-fg">5 cr</span>grade 9</span>
             </li>
-            <li className="row-selected flex items-baseline justify-between px-3 py-3">
-              <span><span className="block text-sm font-medium">Selected row</span><span className="block text-[13px] text-muted">Neutral fill, accent bar</span></span>
+            <li className="row-selected flex items-baseline justify-between py-3 pl-7 pr-3">
+              <span><span className="block text-sm font-medium">Selected row</span><span className="block text-[13px] text-muted">Neutral fill, accent dot</span></span>
               <span className="num text-right text-muted"><span className="block text-fg">2.5 cr</span>grade 11</span>
             </li>
             <li className="flex items-baseline justify-between py-3">
