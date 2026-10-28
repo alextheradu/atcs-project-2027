@@ -32,6 +32,7 @@ const securityHeaders = [
 const nextConfig: NextConfig = {
   cacheComponents: true,
   partialPrefetching: true,
+  output: "standalone",
   poweredByHeader: false,
   turbopack: {
     rules: {
