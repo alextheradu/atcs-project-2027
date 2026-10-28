@@ -9,7 +9,7 @@ import { signOutAction } from "@/lib/account/actions";
 import { cn } from "@/lib/utils";
 
 interface ShellProps {
-  nav: { href: string; label: string }[];
+  nav: { href: string; label: string; group: string }[];
   user: { name: string | null; email: string; role: string };
   children: React.ReactNode;
 }
@@ -33,7 +33,8 @@ export function AppShell({ nav, user, children }: ShellProps) {
   const pathname = usePathname();
 
   return (
-    <div className="min-h-screen">
+    <div className="min-h-dvh">
+      <a href="#content" className="skip-link">Skip to content</a>
       <aside
         className={cn(
           "fixed inset-y-0 left-0 z-30 flex w-[232px] flex-col border-r border-line bg-bg transition-transform duration-200 md:translate-x-0",
@@ -51,24 +52,34 @@ export function AppShell({ nav, user, children }: ShellProps) {
             <X size={16} />
           </Button>
         </div>
-        <nav className="flex-1 space-y-0.5 px-2 py-3">
-          {nav.map((item) => {
-            const active = pathname === item.href || pathname.startsWith(`${item.href}/`);
-            return (
-              <Link
-                key={item.href}
-                href={item.href}
-                onClick={() => setOpen(false)}
-                aria-current={active ? "page" : undefined}
-                className={cn(
-                  "flex h-8 items-center rounded-md px-3 text-[13px] text-muted transition-colors hover:bg-raised hover:text-fg",
-                  active && "bg-raised font-medium text-fg shadow-[inset_2px_0_0_var(--accent)]",
-                )}
-              >
-                {item.label}
-              </Link>
-            );
-          })}
+        <nav className="flex-1 space-y-5 overflow-y-auto px-2 py-3" aria-label="Main">
+          {[...new Set(nav.map((n) => n.group))].map((group) => (
+            <div key={group}>
+              <div className="eyebrow px-3 pb-1.5">{group}</div>
+              <div className="space-y-0.5">
+                {nav
+                  .filter((n) => n.group === group)
+                  .map((item) => {
+                    const active = pathname === item.href || pathname.startsWith(`${item.href}/`);
+                    return (
+                      <Link
+                        key={item.href}
+                        href={item.href}
+                        onClick={() => setOpen(false)}
+                        aria-current={active ? "page" : undefined}
+                        className={cn(
+                          "relative flex h-8 items-center rounded-md pl-7 pr-3 text-[13px] text-muted transition-colors duration-150 ease-out hover:bg-raised hover:text-fg",
+                          active && "bg-raised font-medium text-fg",
+                        )}
+                      >
+                        {active && <span aria-hidden className="absolute left-3 size-1.5 rounded-full bg-accent" />}
+                        {item.label}
+                      </Link>
+                    );
+                  })}
+              </div>
+            </div>
+          ))}
         </nav>
         <div className="border-t border-line p-3">
           <div className="flex items-center gap-2.5">
@@ -90,14 +101,48 @@ export function AppShell({ nav, user, children }: ShellProps) {
 
       {open && <div className="fixed inset-0 z-20 bg-black/60 md:hidden" onClick={() => setOpen(false)} aria-hidden />}
 
+
+      <nav
+        aria-label="Primary"
+        className="fixed inset-x-0 bottom-0 z-20 flex border-t border-line bg-bg pb-[env(safe-area-inset-bottom)] md:hidden"
+      >
+        {nav
+          .filter((n) => n.group === "Workspace")
+          .map((item) => {
+            const active = pathname === item.href || pathname.startsWith(`${item.href}/`);
+            return (
+              <Link
+                key={item.href}
+                href={item.href}
+                aria-current={active ? "page" : undefined}
+                className={cn(
+                  "relative flex h-14 flex-1 flex-col items-center justify-center gap-1 text-[12px] transition-colors duration-150 ease-out",
+                  active ? "font-medium text-fg" : "text-muted",
+                )}
+              >
+                <span aria-hidden className={cn("size-1.5 rounded-full transition-colors duration-150", active ? "bg-accent" : "bg-transparent")} />
+                {item.label}
+              </Link>
+            );
+          })}
+        <button
+          type="button"
+          onClick={() => setOpen(true)}
+          className="flex h-14 flex-1 flex-col items-center justify-center gap-1 text-[12px] text-muted"
+        >
+          <span aria-hidden className="size-1.5" />
+          More
+        </button>
+      </nav>
+
       <div className="md:pl-[232px]">
-        <header className="sticky top-0 z-10 flex h-12 items-center gap-3 border-b border-line bg-bg/80 px-4 backdrop-blur md:px-8">
+        <header className="sticky top-0 z-10 flex h-12 items-center gap-3 border-b border-line bg-bg px-4 md:px-8">
           <Button variant="ghost" size="icon" className="md:hidden" aria-label="Open menu" onClick={() => setOpen(true)}>
             <Menu size={16} />
           </Button>
           <Breadcrumbs />
         </header>
-        <main key={pathname} className="page-enter mx-auto max-w-[1100px] px-4 py-10 md:px-8">{children}</main>
+        <main id="content" key={pathname} className="page-enter mx-auto max-w-[1100px] px-4 pb-28 pt-8 md:px-8 md:pb-16 md:pt-10">{children}</main>
       </div>
     </div>
   );

@@ -4,16 +4,17 @@ export interface NavItem {
   href: string;
   label: string;
   roles?: Role[];
+  group: "Workspace" | "Admin";
 }
 
 /** Add an item here in the phase that builds its page. */
 export const NAV: NavItem[] = [
-  { href: "/dashboard", label: "Dashboard" },
-  { href: "/courses", label: "Courses" },
-  { href: "/admin/catalog", label: "Catalog", roles: ["COUNSELOR", "ADMIN"] },
-  { href: "/admin/users", label: "Users", roles: ["ADMIN"] },
-  { href: "/admin/settings", label: "Admin settings", roles: ["ADMIN"] },
-  { href: "/settings", label: "Settings" },
+  { href: "/dashboard", label: "Dashboard", group: "Workspace" },
+  { href: "/courses", label: "Courses", group: "Workspace" },
+  { href: "/admin/catalog", label: "Catalog", roles: ["COUNSELOR", "ADMIN"], group: "Admin" },
+  { href: "/admin/users", label: "Users", roles: ["ADMIN"], group: "Admin" },
+  { href: "/admin/settings", label: "Admin settings", roles: ["ADMIN"], group: "Admin" },
+  { href: "/settings", label: "Settings", group: "Workspace" },
 ];
 
 export function navFor(role: Role): NavItem[] {

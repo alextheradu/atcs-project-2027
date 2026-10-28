@@ -6,7 +6,7 @@ import { navFor } from "@/lib/nav";
 async function Shell({ children }: { children: React.ReactNode }) {
   const user = await requirePageUser();
   return (
-    <AppShell nav={navFor(user.role)} user={{ name: user.name, email: user.email, role: user.role }}>
+    <AppShell nav={navFor(user.role).map(({ href, label, group }) => ({ href, label, group }))} user={{ name: user.name, email: user.email, role: user.role }}>
       {children}
     </AppShell>
   );

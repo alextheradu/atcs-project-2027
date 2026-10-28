@@ -1,6 +1,7 @@
 export const instant = false;
 
 import Link from "next/link";
+import { EmptyState } from "@/components/ui/empty-state";
 import { PageHeader } from "@/components/ui/page";
 import { DEPARTMENTS } from "@/lib/admin/schemas";
 import { requirePageUser } from "@/lib/auth/page";
@@ -86,8 +87,14 @@ export default async function Courses({ searchParams }: { searchParams: Params }
             </Link>
           </li>
         ))}
-        {courses.length === 0 && <li className="py-10 text-center text-sm text-muted">No courses match those filters.</li>}
-      </ul>
+        </ul>
+      {courses.length === 0 && (
+        <EmptyState
+          title="No courses match those filters"
+          description="Try a different department or level, or clear the search."
+          action={<Link className="btn btn-sm" href="/courses">Clear filters</Link>}
+        />
+      )}
     </div>
   );
 }
