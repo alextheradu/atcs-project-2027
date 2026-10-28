@@ -9,6 +9,8 @@ export interface NavItem {
 /** Add an item here in the phase that builds its page. */
 export const NAV: NavItem[] = [
   { href: "/dashboard", label: "Dashboard" },
+  { href: "/courses", label: "Courses" },
+  { href: "/admin/catalog", label: "Catalog", roles: ["COUNSELOR", "ADMIN"] },
   { href: "/admin/users", label: "Users", roles: ["ADMIN"] },
   { href: "/admin/settings", label: "Admin settings", roles: ["ADMIN"] },
   { href: "/settings", label: "Settings" },

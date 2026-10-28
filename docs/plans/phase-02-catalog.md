@@ -26,6 +26,10 @@ Owner reviews the extracted catalog and the provisional requirement tags. Record
 
 ## Done when
 
-- [ ] About 150 courses seeded, all `prereqText` verbatim.
-- [ ] Provisional tags visibly flagged in admin.
-- [ ] CRUD, archive, CSV, audit, authorization tests pass.
+- [x] 226 courses seeded (more than 150 because of level variants), `prereqText` extracted from the PDF and spot checked.
+- [x] Provisional tags visibly flagged in admin.
+- [x] CRUD, archive, CSV, audit, authorization tests pass.
+
+## Remaining for the checkpoint
+
+- [ ] Owner reviews `/admin/catalog?review=1` (courses with unconfirmed tags) and `docs/spec/14-open-items.md`.

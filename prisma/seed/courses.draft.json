@@ -1,0 +1,2372 @@
+{
+  "missing": [],
+  "count": 182,
+  "courses": [
+    {
+      "dept": "ENGLISH",
+      "title": "Honors Courses",
+      "sourcePage": 15,
+      "grades": "9, 10, 11, 12",
+      "prereqText": "Prerequisites for admission",
+      "cues": {
+        "half": false,
+        "credits": null,
+        "dual": false
+      },
+      "description": "Students in the English honors program will be engaged in the intensive analysis of representative works from various genres and periods, while learning to precisely and effectively use written and oral language. Through speaking, listening, writing, and reading, students will learn to recognize and utilize a variety of rhetorical strategies for more effective communication. The courses for the honors program, grades 9, 10, 11, and 12, are designed to meet the needs of the student who has superior ability, a mastery of skills, high self-motivation, and a strong desire to be challenged in the specific area of English. These courses also have the highest degree of difficulty for the particular grade level—the most in quantity of work and assignments, the highest expectations in quality of performance, and a great deal of independent work. Students in honors courses are expected to maintain"
+    },
+    {
+      "dept": "ENGLISH",
+      "title": "English I/Honors English I: Foundations of Literature",
+      "sourcePage": 16,
+      "grades": "9",
+      "prereqText": null,
+      "cues": {
+        "half": false,
+        "credits": null,
+        "dual": false
+      },
+      "description": "This course consists of a study of various texts with a focus on the characteristics of literary genres including poetry, drama, short and long fiction, and nonfiction. Students will practice research, presentation skills and composition, with a focus on the interrelationship of these areas. Instruction in library study skills is provided early in the school year in preparation for research assignments throughout the four years. Vocabulary and language studies are related to literary selections and root study. The study of literature encompasses the analysis of major themes and ideas in contemporary and classic works of fiction and nonfiction. Students will have the opportunity to read a wide range of literature from many periods in many genres in order to build an understanding of the texts, of themselves, and of the cultures of the United States and the world."
+    },
+    {
+      "dept": "ENGLISH",
+      "title": "English II/Honors English II: Frameworks of Literature",
+      "sourcePage": 16,
+      "grades": "10",
+      "prereqText": "Prerequisite: 9th Grade English",
+      "cues": {
+        "half": false,
+        "credits": null,
+        "dual": false
+      },
+      "description": "Activities in English II continue to be focused on the study of language, literature, and writing. Students will examine various archetypes in classical and contemporary works of literature. The essential questions that guide the course are: • What stories have we told and do we continue to tell? Why? • Whose stories are missing and how does that impact society as a whole? Students will recognize conceptual foundations in various literary texts. Both classic and contemporary literature continue to provide insights into human relationships and motivation, building student understanding of the many dimensions of human experience. Writing assignments focus on the precise and effective use of language and the clear organization of thoughts. Vocabulary is studied in conjunction with literary offerings and supplemented by class work on the skills needed for success on the PSAT, SAT and ACT tes"
+    },
+    {
+      "dept": "ENGLISH",
+      "title": "English III/Honors English III: Classic & Contemporary American Literature",
+      "sourcePage": 16,
+      "grades": "11",
+      "prereqText": "Prerequisite: 10th Grade English",
+      "cues": {
+        "half": false,
+        "credits": null,
+        "dual": false
+      },
+      "description": "The Classic and Contemporary Course puts classical texts in conversation with modern texts. With a focus on American literature, the class aims to bridge themes that resonate throughout time and history while opening up conversation for students to relate to texts in an authentic and personal way. Emphasis is placed on composition skills and precise use of language on many levels: formal, informal, colloquial, and dialectical. Vocabulary study is both contextual through literature study and focuses on etymology while preparing students for success on standardized examinations including the SAT and ACT. 16"
+    },
+    {
+      "dept": "ENGLISH",
+      "title": "American Studies/Honors American Studies",
+      "sourcePage": 17,
+      "grades": "11",
+      "prereqText": "Prerequisite: 10th Grade English & History*",
+      "cues": {
+        "half": false,
+        "credits": null,
+        "dual": false
+      },
+      "description": "This course takes the place of 11th grade US History II and English III. Students will fulfill their graduation requirements and credit for both 11th grade American History and 11th grade English. American Studies provides an interdisciplinary examination of the historical, political, social, cultural, and literary heritage of the United States from the industrial era to contemporary times. The course highlights the relationship between historical events and literary trends in America over the past century. The course is taught by both a History and English teacher, who collaborate with each other in order to bring challenging, dynamic, and creative instruction to the classroom. American Studies emphasizes the analysis of primary source materials and literature, the development of critical thinking skills, and the building of learning communities of students working together toward commo"
+    },
+    {
+      "dept": "ENGLISH",
+      "title": "English IV/Honors English IV: World Literature & Culture",
+      "sourcePage": 17,
+      "grades": "12",
+      "prereqText": "Prerequisite: 11th Grade English",
+      "cues": {
+        "half": false,
+        "credits": null,
+        "dual": false
+      },
+      "description": "World Literature/Honors World Literature is a senior-level English course designed to further students' understanding, appreciation, and comprehension of classic and contemporary literature from a variety of authors from around the world. Additionally, students will practice their writing skills in argumentative, narrative, and expository modes. Multiple opportunities are provided for individual and group projects, as well as oral presentations. Other Full-Year English Courses The following are full-year courses; students may select one of these courses to satisfy the requirement for graduation (one year of an English class)."
+    },
+    {
+      "dept": "ENGLISH",
+      "title": "Advanced Placement Capstone: Seminar (Year One of AP Capstone Sequence)",
+      "sourcePage": 17,
+      "grades": "10",
+      "prereqText": "Prerequisite: 9th Grade English",
+      "cues": {
+        "half": false,
+        "credits": null,
+        "dual": false
+      },
+      "description": "This is the first in a required two-course sequence (AP Capstone) that focuses on research skills and argumentation. This interdisciplinary course will prepare students for success in future courses across all content areas and in college. The College Board website describes that students in this course will “develop and practice the skills in research, collaboration, and communication that they’ll need in any academic discipline. The students will investigate topics in a variety of subject areas, write research-based essays, and design and give presentations both individually and as part of a team.” This course is well-suited for the student who may not want to engage in AP-level work in English literary analysis, but who enjoys writing, researching and speaking on topics of interest. This course provides access to AP-level work. The next course in the sequence is AP Capstone: Research,"
+    },
+    {
+      "dept": "ENGLISH",
+      "title": "Advanced Placement Capstone: Research (Year Two of AP Capstone Sequence)",
+      "sourcePage": 18,
+      "grades": "11, 12",
+      "prereqText": "Prerequisite: AP Seminar",
+      "cues": {
+        "half": false,
+        "credits": null,
+        "dual": false
+      },
+      "description": "From the College Board website: “Build on what you learned in AP Seminar to deeply explore an academic topic, problem, or issue of individual interest. Through this exploration, you will design, plan, and conduct a year-long research-based investigation to address a research question.” This course may be taught by a teacher in any content area and students may undertake research projects in any content area."
+    },
+    {
+      "dept": "ENGLISH",
+      "title": "Reading Science Fiction Literature/Honors Reading Science Fiction Literature",
+      "sourcePage": 18,
+      "grades": "11",
+      "prereqText": "Prerequisite: 10th Grade English",
+      "cues": {
+        "half": false,
+        "credits": null,
+        "dual": false
+      },
+      "description": "This course is a junior English course that encourages students to explore humanity's relationships with technology and the natural world. During various units, students will read classic and contemporary texts about artificial intelligence, genetic engineering, space exploration, and the environment. Additionally, students will practice their writing skills in argumentative, narrative, and expository modes. Multiple opportunities are provided for individual and group projects, as well as oral presentations."
+    },
+    {
+      "dept": "ENGLISH",
+      "title": "Language, Myth, and Culture/Honors Language, Myth, and Culture",
+      "sourcePage": 18,
+      "grades": "11, 12",
+      "prereqText": null,
+      "cues": {
+        "half": false,
+        "credits": null,
+        "dual": false
+      },
+      "description": "This course will focus on the types of writing and reading skills needed to excel in college. Students will practice analytical, persuasive, and narrative forms of writing through a writing workshop format. Through comparative analysis of myths, motifs, and symbolism from diverse cultural traditions, the course will examine mythical, historical, theological and scientific knowledge in order to understand modern human culture."
+    },
+    {
+      "dept": "ENGLISH",
+      "title": "Sports and Literature",
+      "sourcePage": 18,
+      "grades": "12",
+      "prereqText": null,
+      "cues": {
+        "half": false,
+        "credits": null,
+        "dual": false
+      },
+      "description": "This multi-media college preparatory course, with a focus on literature, will introduce the history and importance of sports in our society. The students will be introduced to important figures, trends, and developments in sports as well as utilize print and visual media about sports. Students will look to understand the relationship of sport and society, examine the impact that sports have had on society, and understand how this is reflected through literature. Professional/workplace skills such as oral presentation, technical writing, and interview skills will also be emphasized in this course."
+    },
+    {
+      "dept": "ENGLISH",
+      "title": "Philosophy and Literature/Honors Philosophy and Literature",
+      "sourcePage": 18,
+      "grades": "12",
+      "prereqText": null,
+      "cues": {
+        "half": false,
+        "credits": null,
+        "dual": false
+      },
+      "description": "Great literature asks many questions of its readers: What should we do? Why are we here? How should we live? As such, the Philosophy and Literature course asks students to consider the questions that have intrigued, challenged, and bewildered thinkers and writers for millennia. Through an exploration of philosophical texts created by prominent voices in the fields of thought, culture, art, and more, students will consider how they feel and what they think about these eternal questions, while learning about the ways that others have wrestled with these thoughts throughout time. Additionally, students will practice their writing skills in argumentative, narrative, and expository modes. Multiple opportunities are provided for individual and group projects, as well as oral presentations. 18"
+    },
+    {
+      "dept": "ENGLISH",
+      "title": "Honors Drama and Shakespeare",
+      "sourcePage": 19,
+      "grades": "12",
+      "prereqText": null,
+      "cues": {
+        "half": false,
+        "credits": null,
+        "dual": false
+      },
+      "description": "This is a senior-level English course designed to further students' understanding, appreciation, and comprehension of the drama genre. Students will delve into the works of Shakespeare and his contemporaries, texts written by ancient playwrights, and well-known plays from the modern era. Units of study include engaging with drama, history of drama, Shakespearean comedies, tragedies, and history plays, as well as writing units in which students will critically analyze the texts. Written assignments will bring the plays into conversation with modern-day ideas and texts in multiple genres."
+    },
+    {
+      "dept": "ENGLISH",
+      "title": "Literature of the Holocaust/Honors Literature of the Holocaust",
+      "sourcePage": 19,
+      "grades": "12",
+      "prereqText": null,
+      "cues": {
+        "half": false,
+        "credits": null,
+        "dual": true
+      },
+      "description": "This course will expose students to the events of the Holocaust through a wide variety of fiction, drama and poetry written during and after the Holocaust by authors, survivors and witnesses. Readings and discussions will focus on the voices of victims, the testimony of survivors, the accounts of resistance, the stories of rescue and heroism, the German experience, and the aftermath response and reflection, connecting past to present through multiple perspectives. Students will also be tasked with taking their new knowledge forward by teaching underclassmen important lessons about tolerance and respect in a culminating workshop day in the spring. DUAL ENROLLMENT OPTION 11th and 12th Grade students enrolled in Honors Language, Myth, and Human Culture or Honors Literature of the Holocaust have the option of earning college credit for their courses by registering with Seton Hall University "
+    },
+    {
+      "dept": "ENGLISH",
+      "title": "Advanced Placement Language and Composition",
+      "sourcePage": 19,
+      "grades": "11, 12",
+      "prereqText": null,
+      "cues": {
+        "half": false,
+        "credits": null,
+        "dual": false
+      },
+      "description": "This Advanced Placement course may be accepted for college credit at a number of participating colleges and universities upon the student’s successful completion of the College Board’s Advanced Placement Examination in English Language and Composition. Students are highly encouraged to take the Advanced Placement Examination in May. This course is designed to meet the needs of the student who has superior ability, a mastery of skills, self-motivation, and a strong desire to be challenged. As an Advanced Placement course that is equivalent to an entry- level college English class, this course has the highest level of expectations with regard to quality of performance and independent student work ethic. Students will learn to become skilled readers of complex prose written in a variety of periods, disciplines, and rhetorical styles. Emphasis will be placed upon the expository, analytical, "
+    },
+    {
+      "dept": "ENGLISH",
+      "title": "Advanced Placement Literature and Composition",
+      "sourcePage": 20,
+      "grades": "11, 12",
+      "prereqText": null,
+      "cues": {
+        "half": false,
+        "credits": null,
+        "dual": false
+      },
+      "description": "This Advanced Placement course may be accepted for college credit at a number of participating colleges and universities upon the student’s successful completion of the College Board’s Advanced Placement Examination in English Literature and Composition. Students are highly encouraged to take the Advanced Placement Examination in May. This course is designed to meet the needs of the student who has superior ability, a mastery of skills, self-motivation, and a strong desire to be challenged in the specific field of English. As an Advanced Placement course, which is equivalent to an entry-level college English class, this course has the highest level of expectations with regard to quality of performance and independent student work ethic. Students will analyze and interpret literature through careful study and critical reading of selected literary texts. They will engage in an independent "
+    },
+    {
+      "dept": "ENGLISH",
+      "title": "21st Century Journalism & Media",
+      "sourcePage": 20,
+      "grades": "9, 10, 11, 12",
+      "prereqText": null,
+      "cues": {
+        "half": false,
+        "credits": null,
+        "dual": false
+      },
+      "description": "Full-year elective 21st Century Journalism & Media is a full year elective publication course. The emphasis in this course is on desktop publishing (newspapers, magazines, photography, yearbooks, fliers, brochures, ads, etc.). This is a product-based, hands-on class. Students will be involved in the production and distribution of publication materials including advertising, on-line [technology] production as well as the photography, artwork, cartooning, writing, and photographic aspects of publications work."
+    },
+    {
+      "dept": "ENGLISH",
+      "title": "Honors Advanced 21st Century Journalism & Media",
+      "sourcePage": 20,
+      "grades": "11, 12",
+      "prereqText": "Prerequisite for the class is 21st Century Journalism & Media",
+      "cues": {
+        "half": false,
+        "credits": null,
+        "dual": false
+      },
+      "description": "Full-year elective Honors Advanced 21st Century Journalism & Media is an opportunity for students to immerse themselves in an intensive, largely self-directed experience during which they will produce a variety of multimedia content. This class will provide an avenue toward web, broadcast, and print product, and digital tools and alternative storytelling techniques will be emphasized. Students will be expected to reach beyond the building’s walls in pursuing stories and will interact and collaborate to meet team goals. Students will not only be held to high standards with their product but also with their adherence to professional standards, ethics, integrity, and deadlines. Student publications will anchor operations in this class, including its weekly sports and news shows. 20"
+    },
+    {
+      "dept": "ENGLISH",
+      "title": "Honors Advanced 21st Century Journalism & Media II",
+      "sourcePage": 21,
+      "grades": "11, 12",
+      "prereqText": "Prerequisite for the class is Honors Advanced 21st Century Journalism & Media",
+      "cues": {
+        "half": false,
+        "credits": null,
+        "dual": false
+      },
+      "description": "Full-year elective Honors Advanced 21st Century Journalism & Media II offers the student, who has successfully completed Honors Advanced 21st Century Journalism & Media, an opportunity to further develop their writing, reporting, layout, speaking, editing, computer, management, business, and photography skills. Assigned to the same class as the Honors Advanced 21st Century Journalism & Media students, the Honors Advanced 21st Century Journalism & Media II student is required to meet an even more demanding set of criteria. Additionally, the Honors Advanced 21st Century Journalism & Media II student is required to be a member of the Editorial Board and to hold (and meet the requirements of) one of the top positions on the staff on the newspaper. Beyond writing stories focusing on news, features, opinion editorials, sports, and entertainment, and other assigned stories, the Honors Advanced "
+    },
+    {
+      "dept": "ENGLISH",
+      "title": "Film and Literature: Understanding Movies from Script to Screen",
+      "sourcePage": 21,
+      "grades": "9, 10, 11, 12",
+      "prereqText": null,
+      "cues": {
+        "half": false,
+        "credits": null,
+        "dual": false
+      },
+      "description": "Full-year elective This course will provide the opportunity for students to approach film with an understanding of and an appreciation for the techniques employed in the evolution of film from concept to screen. Students will understand that the creation of a film depends on a variety of skilled professionals and will have the opportunity to explore those various roles and responsibilities, including screenwriter, cinematographer, storyboard/art producer, actor, editor and director. The class will highlight the process whereby written texts such as novels or screenplays are translated from the written to the visual and have an opportunity to learn how film critics interpret this art form. Students will also understand the financial and marketing aspect of the film industry and the cultural, political and social influence of Hollywood in American society."
+    },
+    {
+      "dept": "ENGLISH",
+      "title": "Creative Writing",
+      "sourcePage": 21,
+      "grades": "9, 10, 11, 12",
+      "prereqText": null,
+      "cues": {
+        "half": false,
+        "credits": null,
+        "dual": false
+      },
+      "description": "Full-year elective Creative Writing is a full-year, five-credit course designed for students who wish to explore a variety of genres. Readings in multiple genres, lessons in a variety of writing techniques, intense writing practice and self-evaluation are the basis of this course. The class is run in a workshop model, through ongoing writing, sharing, and revising work. Models, mini lessons based on technique, daily writing, and peer and teacher feedback are at the core of the course work. Students will be assessed by portfolio evaluations, daily work completion and assessment, and participation in peer critiques. 21"
+    },
+    {
+      "dept": "ENGLISH",
+      "title": "Theater Arts",
+      "sourcePage": 22,
+      "grades": "9, 10, 11, 12",
+      "prereqText": null,
+      "cues": {
+        "half": false,
+        "credits": null,
+        "dual": false
+      },
+      "description": "Full-year elective Theater Arts I is a full year, five credit elective course for freshmen, sophomores, juniors, or seniors. The course consists of a study of theater as an art form, with special emphasis placed on analysis and practice of the physical and vocal aspects of acting. Acting styles from different periods of theater are explored, and a wide variety of plays and characters are studied. The history of theater from Classical Greece to today is examined, with special emphasis placed on the Greek Theater and the Elizabethan Theater. Theater Arts students will also develop skill in play direction and fully understand the functions of all those people involved in the production of a play, including the set, lighting, and costume designers."
+    },
+    {
+      "dept": "ENGLISH",
+      "title": "Public Speaking",
+      "sourcePage": 22,
+      "grades": "9, 10, 11, 12",
+      "prereqText": null,
+      "cues": {
+        "half": true,
+        "credits": null,
+        "dual": false
+      },
+      "description": "Half-year elective Public speaking is not just about formal presentations. This course will address all the important aspects of public speaking, including but not limited to, audience, content and delivery. Students will be exposed to a variety of effective speeches from literature, history, film and current events. They will deliver informal and formal speeches on various topics - often impromptu - and will practice active listening techniques as audience members. By the end of the semester, students will have a firm understanding of all the important aspects of effective public speaking, will have put these techniques into practice, and will have self-assessed their speaking using video. 22 SOCIAL STUDIES DEPARTMENT COURSE DESCRIPTIONS The overall goal of the Social Studies Program at the Pascack Valley Regional High School District is to help prepare our students to become lifelong l"
+    },
+    {
+      "dept": "SOCIAL_STUDIES",
+      "title": "Honors/Advanced Placement Courses",
+      "sourcePage": 23,
+      "grades": "9, 10, 11, 12",
+      "prereqText": "Placement by recommendation of teacher and supervisor",
+      "cues": {
+        "half": false,
+        "credits": null,
+        "dual": false
+      },
+      "description": "Any student enrolled in an Honors/AP class must maintain a B average throughout the year in order to continue in that class, unless given special permission by the Supervisor. Students must be recommended for continuation in the Honors/AP program by their teacher based upon the successful completion and high level of achievement in their current Honors/AP course. A student with exceptional performance evaluations in other social studies courses may be recommended for placement in honors courses as requested by the teacher and approved by the Supervisor. Each student must have a minimum of an “A” to be considered for a move to Honors/AP. The objectives of the Honors/AP program in Social Studies focus on the analysis, synthesis, and evaluation of historical data. Students are expected to maintain a high level of academic interest, demonstrate a sophisticated level of critical thinking, and"
+    },
+    {
+      "dept": "SOCIAL_STUDIES",
+      "title": "World History",
+      "sourcePage": 23,
+      "grades": "9",
+      "prereqText": null,
+      "cues": {
+        "half": false,
+        "credits": null,
+        "dual": false
+      },
+      "description": "The purpose of this course is to introduce the major historic events, concepts, and ideas in world history. The chronological emphasis will begin in the Middle Ages and draw from those themes and concepts students learned about the ancient, classical, and medieval worlds. Additionally, European civilization will be analyzed and students will learn how it influenced the rest of the world. 23"
+    },
+    {
+      "dept": "SOCIAL_STUDIES",
+      "title": "U. S. History I",
+      "sourcePage": 24,
+      "grades": "10",
+      "prereqText": "Prerequisite: 9th Grade World History",
+      "cues": {
+        "half": false,
+        "credits": null,
+        "dual": false
+      },
+      "description": "This course provides students with a comprehensive understanding of the development of the American nation through analysis of the following periods of major change in America’s history: the Foundation and Expansionary Periods, Nationalism and Sectionalism, Industrial Development and Economics."
+    },
+    {
+      "dept": "SOCIAL_STUDIES",
+      "title": "U. S. History II",
+      "sourcePage": 24,
+      "grades": "11",
+      "prereqText": "Prerequisite: 10th Grade U. S. History I",
+      "cues": {
+        "half": false,
+        "credits": null,
+        "dual": false
+      },
+      "description": "This course provides students with an understanding of the knowledge and attitudes of the American people since the later part of the 19th century. Imperialism, Globalization, and American Expansionism are highlighted through the study of domestic and global social, political, and economic issues."
+    },
+    {
+      "dept": "SOCIAL_STUDIES",
+      "title": "American Studies/Honors American Studies",
+      "sourcePage": 24,
+      "grades": "11",
+      "prereqText": "Prerequisite: 10th Grade English & History*",
+      "cues": {
+        "half": false,
+        "credits": null,
+        "dual": false
+      },
+      "description": "This course takes the place of 11th grade US History II and English III. Students will fulfill their graduation requirements and credit for both 11th grade American History and 11th grade English. American Studies provides an interdisciplinary examination of the historical, political, social, cultural, and literary heritage of the United States from the industrial era to contemporary times. The course highlights the relationship between historical events and literary trends in America over the past century. The course is taught by both a History and English teacher, who collaborate with each other in order to bring challenging, dynamic, and creative instruction to the classroom. American Studies emphasizes the analysis of primary source materials and literature, the development of critical thinking skills, and the building of learning communities of students working together toward commo"
+    },
+    {
+      "dept": "SOCIAL_STUDIES",
+      "title": "Advanced Placement U.S. History I & II",
+      "sourcePage": 24,
+      "grades": "10, 11",
+      "prereqText": "Prerequisite: 9th Grade World History, placement by recommendation of teacher and supervisor",
+      "cues": {
+        "half": false,
+        "credits": null,
+        "dual": false
+      },
+      "description": "Any student enrolled in an Advanced Placement class must maintain a B average throughout the year in order to continue in that class, unless given special permission by the Supervisor. An Advanced Placement course is one that may be accepted for college credit at a number of participating colleges and universities upon the student’s successful completion of the Advanced Placement examination. This could enable students to start their college work in Social Studies at a more advanced level or to broaden their college experience by pursuing courses in other areas that might not otherwise fit into their programs of study. This course is designed to prepare the highly able student to succeed on the Advanced Placement test, which they are highly encouraged to take in May of their junior year. 24 This course is designed to meet the needs of the student who has superior mastery of skills, self-"
+    },
+    {
+      "dept": "SOCIAL_STUDIES",
+      "title": "Advanced Placement World History",
+      "sourcePage": 25,
+      "grades": "11, 12",
+      "prereqText": "Placement by recommendation of teacher and supervisor",
+      "cues": {
+        "half": false,
+        "credits": null,
+        "dual": false
+      },
+      "description": "The purpose of the AP World History course is to develop greater understanding of the evolution of global processes and contacts, in interaction with different types of human societies. This understanding is advanced through a combination of specific factual knowledge and appropriate analytical skills. The course highlights the nature of changes in international frameworks and their causes and consequences, as well as comparisons among major societies. The course emphasizes relevant factual knowledge deployed in conjunction with leading interpretive issues and types of historical evidence. The course builds on an understanding of cultural, institutional, and technological precedents that, along with geography, set the human stage. Students are highly encouraged to take the AP exam in May."
+    },
+    {
+      "dept": "SOCIAL_STUDIES",
+      "title": "Advanced Placement Art History*",
+      "sourcePage": 25,
+      "grades": "11, 12",
+      "prereqText": "Placement by recommendation of Social Studies teacher and supervisor",
+      "cues": {
+        "half": false,
+        "credits": null,
+        "dual": false
+      },
+      "description": "Advanced Placement Art History is offered through the Social Studies Department as a rigorous, college-level humanities course that examines art as a lens for understanding global history, culture, and human expression. The course introduces students to the nature, function, and meaning of art across time, while emphasizing the connections between artistic production and historical context. Students explore diverse artistic traditions from prehistory to the present, developing a comprehensive understanding of global history through visual culture. The course emphasizes critical thinking through visual, contextual, and comparative analysis, allowing students to interpret works of art within broader social, political, religious, and economic frameworks. Through research, discussion, reading, and analytical writing, students construct meaning from individual works while also examining patte"
+    },
+    {
+      "dept": "SOCIAL_STUDIES",
+      "title": "Sociology",
+      "sourcePage": 26,
+      "grades": "10, 11, 12",
+      "prereqText": null,
+      "cues": {
+        "half": true,
+        "credits": null,
+        "dual": false
+      },
+      "description": "Half-year elective The purpose of this course is to give students an introduction to the field of sociology. Students will focus on social structure, patterns of culture, social class, deviance, mass media, and social problems."
+    },
+    {
+      "dept": "SOCIAL_STUDIES",
+      "title": "Advanced Placement Microeconomics",
+      "sourcePage": 26,
+      "grades": "11, 12",
+      "prereqText": null,
+      "cues": {
+        "half": true,
+        "credits": null,
+        "dual": false
+      },
+      "description": "Half-year elective AP Microeconomics is an introductory college-level course that focuses on the principles of economics as they apply to individual consumers, firms, and markets. The course emphasizes the study of supply and demand, production and costs, market structures, factor markets, and the role of government in promoting economic efficiency and equity. Students develop analytical skills through the use of graphs, charts, and data to describe, analyze, and explain economic behavior and outcomes. Students are highly encouraged to take the AP exam in May. Students enrolled in AP Microeconomics are required to also take AP Macroeconomics."
+    },
+    {
+      "dept": "SOCIAL_STUDIES",
+      "title": "Advanced Placement Macroeconomics",
+      "sourcePage": 26,
+      "grades": "11, 12",
+      "prereqText": null,
+      "cues": {
+        "half": true,
+        "credits": null,
+        "dual": false
+      },
+      "description": "Half-year elective AP Macroeconomics is an introductory college-level course that focuses on the principles that apply to an economic system as a whole. The course places particular emphasis on the study of national income and price-level determination; it also develops students' familiarity with economic performance measures, the financial sector, stabilization policies, economic growth, and international economics. Students learn to use graphs, charts, and data to analyze, describe, and explain economic concepts. Students are highly encouraged to take the AP exam in May."
+    },
+    {
+      "dept": "SOCIAL_STUDIES",
+      "title": "Constitutional Law",
+      "sourcePage": 26,
+      "grades": "10, 11, 12",
+      "prereqText": null,
+      "cues": {
+        "half": true,
+        "credits": null,
+        "dual": false
+      },
+      "description": "Half-year elective This course is designed to inform students about the American judicial system. Emphasis is placed on due process of law as expressed in the fourth, fifth, sixth, eighth, and fourteenth amendments to the U.S. Constitution. Students will explore and debate the reasoning of Supreme Court decisions and the ramifications of these decisions."
+    },
+    {
+      "dept": "SOCIAL_STUDIES",
+      "title": "Religion in America",
+      "sourcePage": 26,
+      "grades": "10, 11, 12",
+      "prereqText": null,
+      "cues": {
+        "half": true,
+        "credits": null,
+        "dual": false
+      },
+      "description": "Half-year elective The major goals of this course are for students to learn the role that religion has played in the development of civilization and for them to understand how the religious experience of the American people has been affected by rapid economic, social, and political changes throughout history. Students will perceive the differences and similarities among the various religious beliefs in the United States and will determine how knowledge marks the beginning of understanding and tolerance."
+    },
+    {
+      "dept": "SOCIAL_STUDIES",
+      "title": "Critical Analysis of History Through Film",
+      "sourcePage": 26,
+      "grades": "11, 12",
+      "prereqText": null,
+      "cues": {
+        "half": true,
+        "credits": null,
+        "dual": false
+      },
+      "description": "Half-year elective This elective will offer an opportunity for students to review concepts in American History through the study of film. The themes inherent in the U.S. I and U.S. II courses have been the subjects of many popular movies. Students will view these films in class and be asked to evaluate each in light of historical accuracy and the use of “poetic license.” 26"
+    },
+    {
+      "dept": "SOCIAL_STUDIES",
+      "title": "One World, One Community: World Problems Today",
+      "sourcePage": 27,
+      "grades": "11, 12",
+      "prereqText": null,
+      "cues": {
+        "half": true,
+        "credits": null,
+        "dual": false
+      },
+      "description": "Half-year elective Students in this course will gain insight into a myriad of current world problems by examining multiple perspectives presented in newspapers, magazines, mass media, and the Internet. Topics such as environmental policies, population trends, world hunger, and the international war on drugs will be explored as students engage critically with primary and secondary sources."
+    },
+    {
+      "dept": "SOCIAL_STUDIES",
+      "title": "Honors Psychology",
+      "sourcePage": 27,
+      "grades": "12",
+      "prereqText": null,
+      "cues": {
+        "half": false,
+        "credits": null,
+        "dual": true
+      },
+      "description": "Dual Enrollment Option with Ramapo College Full-year elective - Honors The Psychology course gives students the opportunity to acquire quite possibly the most important life skills they will ever need: the ability to better understand themselves and others. The course establishes the fundamental principles of psychology and offers practical knowledge and techniques, in addition to important theories. Major units include schools of thought, research methods, biology and behavior, sleep and states of consciousness, and personality theories. Psychology will help students reach a greater understanding of how individuals come to understand each other in social situations. The course is great preparation for college and students will have the opportunity to earn credits by enrolling with Ramapo College of New Jersey. To receive college credit, a student must enroll through the college and pay "
+    },
+    {
+      "dept": "SOCIAL_STUDIES",
+      "title": "An Introduction to the Analysis of Public Policy",
+      "sourcePage": 27,
+      "grades": "12",
+      "prereqText": null,
+      "cues": {
+        "half": true,
+        "credits": null,
+        "dual": true
+      },
+      "description": "Dual Enrollment Option with Syracuse University Project Advance Half-year elective - Honors Syracuse University Project Advance is a cooperative program between the Maxwell School of Public Affairs & Citizenship at Syracuse University and the Pascack Valley Regional High School District that allows high school seniors to enroll in a freshman-level college course. Students who register for the three college credits and successfully complete the course are entitled to a regular Syracuse University transcript recording the credits earned. The course, which is taught by an adjunct instructor of Syracuse University, enables students to gauge their abilities to do college work in an introductory freshman-level course prior to full-time college study. In order to receive the college credit, students must pay a significantly reduced, per credit fee to Syracuse University. The Public Affairs cour"
+    },
+    {
+      "dept": "SOCIAL_STUDIES",
+      "title": "Advanced Placement American Government and Politics",
+      "sourcePage": 28,
+      "grades": "12",
+      "prereqText": null,
+      "cues": {
+        "half": true,
+        "credits": null,
+        "dual": false
+      },
+      "description": "Half-year elective - Honors This course is designed to help students develop a working knowledge of the important concepts, theories, and facts of American government and politics. Coursework is calculated to prepare students for the Advanced Placement examination and includes the study of public policy, government institutions, political parties, interest groups, public opinion, mass media, and civil rights. Political theory, political beliefs, attitudes and actions will also be addressed. Students must take the course An Introduction to the Analysis of Public Policy in conjunction with this course. Students are highly encouraged to take the AP exam in May."
+    },
+    {
+      "dept": "SOCIAL_STUDIES",
+      "title": "History of Sport in America",
+      "sourcePage": 28,
+      "grades": "12",
+      "prereqText": null,
+      "cues": {
+        "half": true,
+        "credits": null,
+        "dual": false
+      },
+      "description": "Half-year elective - Honors This course traces the history of the USA from the standpoint of organized and professional sports across the decades. Students will be exposed to the economic, political, and social impacts of sports as they relate to the development of our country’s national identity. Topics include the impact of sports on race relations, gender issues, capitalism, globalization, regionalization and cultural identity. http://www.materdei.ie/index.cfm/page/newsarchive/id/56 28 MATHEMATICS DEPARTMENT COURSE DESCRIPTIONS The mathematics program for the Pascack Valley Regional High School District seeks to develop the mathematical skills, understandings, and attitudes that students need to meet the quantitative demands of college, career, and everyday life. Students at every level are given opportunities to solve problems, communicate about mathematics, reason mathematically, an"
+    },
+    {
+      "dept": "MATH",
+      "title": "Honors Geometry",
+      "sourcePage": 29,
+      "grades": null,
+      "prereqText": "Placement by recommendation of supervisor (based on 8th grade mathematics test/quiz averages, placement exam and teacher recommendation rubric)",
+      "cues": {
+        "half": false,
+        "credits": null,
+        "dual": false
+      },
+      "description": "In addition to covering the material from Geometry and Geometry Enhanced, Honors Geometry addresses additional topics, more difficult proofs, and requires students to solve more challenging, non-routine problems. See the Mathematics Department website for a description of how students are placed into Honors Geometry. 29"
+    },
+    {
+      "dept": "MATH",
+      "title": "Geometry Enhanced",
+      "sourcePage": 30,
+      "grades": null,
+      "prereqText": "Prerequisite: An initial test/quiz average of ‘C+’ or higher in 8th grade Algebra I; an initial test/quiz average of ‘B-’ or higher in 8th grade math Placement by recommendation of teacher and supervisor",
+      "cues": {
+        "half": false,
+        "credits": null,
+        "dual": false
+      },
+      "description": "In Geometry Enhanced, students study some topics in greater depth, and the pace of the course will be faster than in Geometry."
+    },
+    {
+      "dept": "MATH",
+      "title": "Geometry",
+      "sourcePage": 30,
+      "grades": "10",
+      "prereqText": "Prerequisite: A passing grade in 8th grade math",
+      "cues": {
+        "half": false,
+        "credits": null,
+        "dual": false
+      },
+      "description": "In Geometry, students study the same concepts as in Geometry Enhanced, but with a greater emphasis on mastering prerequisite skills and a slightly slower pace. Algebra I The concepts presented in Algebra I courses are intended to extend and deepen the development of algebraic reasoning that began in middle school. These concepts include quantities and the relationships between them, linear, quadratic and exponential functions, expressions and equations, integer and rational exponents, and descriptive statistics. In addition to this content, students will regularly utilize the eight mathematical practices."
+    },
+    {
+      "dept": "MATH",
+      "title": "Algebra I Enhanced",
+      "sourcePage": 30,
+      "grades": null,
+      "prereqText": "Prerequisite: An initial test/quiz average of ‘C+’ or higher in Geometry Enhanced or ‘A’ or higher in Geometry Placement by recommendation of teacher and supervisor",
+      "cues": {
+        "half": false,
+        "credits": null,
+        "dual": false
+      },
+      "description": "In Algebra I Enhanced, students study some topics in greater depth, and the pace of the course will be faster than in Algebra I."
+    },
+    {
+      "dept": "MATH",
+      "title": "Algebra I",
+      "sourcePage": 30,
+      "grades": "9, 10, 11",
+      "prereqText": "Prerequisite: A passing grade in Geometry",
+      "cues": {
+        "half": false,
+        "credits": null,
+        "dual": false
+      },
+      "description": "In Algebra I, students study the same concepts as in Algebra I Enhanced, but with a greater emphasis on mastering prerequisite skills and a slightly slower pace. Algebra II with Trigonometry Algebra II with Trigonometry extends students’ understanding of functions and function families to include polynomial, rational, radical, and trigonometric functions. In addition, students continue the work of modeling with mathematics, solving various types of equations, and simplifying different types of expressions. Concepts covered in this course include rational numbers and expressions, polynomial, rational, radical, trigonometric, and absolute value functions, transformations on graphs of functions, and the unit circle. In addition to this content, students will regularly utilize the eight mathematical practices."
+    },
+    {
+      "dept": "MATH",
+      "title": "Honors Algebra II with Trigonometry",
+      "sourcePage": 30,
+      "grades": null,
+      "prereqText": "Prerequisite: An initial test/quiz average of ‘B’ or higher in Honors Geometry; an initial test/quiz average of ‘A’ or higher in Geometry Enhanced and Algebra I Enhanced and proficiency on a placement exam Placement by recommendation of teacher and supervisor",
+      "cues": {
+        "half": false,
+        "credits": null,
+        "dual": false
+      },
+      "description": "In addition to covering the material from Algebra II with Trigonometry and Algebra II with Trigonometry Enhanced, Honors Algebra II with Trigonometry addresses additional topics and requires students to solve more challenging, non-routine problems. Graphing calculators are used regularly throughout this course. 30"
+    },
+    {
+      "dept": "MATH",
+      "title": "Algebra II with Trigonometry Enhanced",
+      "sourcePage": 31,
+      "grades": null,
+      "prereqText": "Prerequisite: An initial test/quiz average of ‘C+’ or higher in Algebra I Enhanced or ‘A’ or higher in Placement by recommendation of teacher and supervisor",
+      "cues": {
+        "half": false,
+        "credits": null,
+        "dual": false
+      },
+      "description": "Algebra I, and an initial test/quiz average of ‘C+’ or higher in Geometry Enhanced or ‘A’ or higher in Geometry In Algebra II with Trigonometry Enhanced, students study some topics in greater depth, and the pace of the course will be faster than in Algebra II with Trigonometry. Graphing calculators are used regularly throughout this course."
+    },
+    {
+      "dept": "MATH",
+      "title": "Algebra II with Trigonometry",
+      "sourcePage": 31,
+      "grades": null,
+      "prereqText": "Prerequisite: A passing grade in Algebra I",
+      "cues": {
+        "half": false,
+        "credits": null,
+        "dual": false
+      },
+      "description": "In Algebra II with Trigonometry, students study the same concepts as in Algebra II with Trigonometry Enhanced, but with a greater emphasis on mastering prerequisite skills and a slightly slower pace. Graphing calculators are used regularly throughout this course."
+    },
+    {
+      "dept": "MATH",
+      "title": "Algebra II",
+      "sourcePage": 31,
+      "grades": null,
+      "prereqText": "Prerequisite: A passing grade in Algebra I",
+      "cues": {
+        "half": false,
+        "credits": null,
+        "dual": false
+      },
+      "description": "In Algebra II, students solidify, strengthen, and extend their understanding of Algebra I and Geometry content."
+    },
+    {
+      "dept": "MATH",
+      "title": "College Algebra",
+      "sourcePage": 31,
+      "grades": "11, 12",
+      "prereqText": "Prerequisite: Algebra II with Trigonometry or Algebra II with Trigonometry Enhanced",
+      "cues": {
+        "half": false,
+        "credits": null,
+        "dual": true
+      },
+      "description": "This course provides students with a firm foundation on which to continue their study of mathematics in college. Topics will include algebraic operations, solutions of equations and inequalities, algebraic applications, functions, and trigonometry. This course will emphasize techniques and skills to prepare students for the SATs, ACTs, and college placement exams, and will cover statistics topics, including the collection and analysis of data for the purpose of making determinations on typical values and variation, and modeling data sets for the purpose of drawing conclusions and making predictions. DUAL ENROLLMENT OPTION 11th and 12th grade students enrolled in College Algebra, who meet certain criteria, have the option of earning college credit by registering with William Paterson University at a reduced price but at student expense. Please note that dual enrollment is not required, an"
+    },
+    {
+      "dept": "MATH",
+      "title": "Advanced Placement Pre-Calculus",
+      "sourcePage": 32,
+      "grades": null,
+      "prereqText": "Prerequisite: An initial test/quiz average of ‘B’ or higher in Honors Algebra II with Trigonometry; an initial test/quiz average of ‘A’ or higher in Algebra II with Trigonometry Enhanced and proficiency on a placement exam Placement by recommendation of teacher and supervisor",
+      "cues": {
+        "half": false,
+        "credits": null,
+        "dual": false
+      },
+      "description": "Advanced Placement Pre-Calculus covers the same material as Pre-Calculus, but the course moves at a quicker pace, and students will study many topics in greater depth. Students also begin their study of calculus towards the end of the year. Colleges may grant credit based upon the student’s score on the College Board’s Advanced Placement examination. Graphing calculators are used regularly throughout this course. Students are encouraged to take the AP exam in May."
+    },
+    {
+      "dept": "MATH",
+      "title": "Pre-Calculus",
+      "sourcePage": 32,
+      "grades": null,
+      "prereqText": "Prerequisite: An initial test/quiz average of ‘B-’ or higher in Algebra II with Trigonometry Enhanced; an initial test/quiz average of ‘B+’ or higher in College Algebra and proficiency on a placement exam Placement by recommendation of teacher and supervisor",
+      "cues": {
+        "half": false,
+        "credits": null,
+        "dual": true
+      },
+      "description": "Pre-Calculus provides a firm foundation for study of mathematics at the college level. Students study more advanced functions, trigonometry, series and sequences, statistics, and limits. After completing this course, students will be prepared to take Calculus either at the high school or college level. Graphing calculators are used regularly throughout this course. DUAL ENROLLMENT OPTION 11th and 12th grade students enrolled in Pre-Calculus, who meet certain criteria, have the option of earning college credit by registering with William Paterson University at a reduced price but at student expense. Please note that dual enrollment is not required, and that the course will have the same requirements and expectations whether or not students elect to register for college credit. Calculus"
+    },
+    {
+      "dept": "MATH",
+      "title": "Advanced Placement Calculus BC",
+      "sourcePage": 32,
+      "grades": null,
+      "prereqText": "Prerequisite: An initial test/quiz average of ‘B+’ or higher in Advanced Placement Pre-Calculus Placement by recommendation of teacher and supervisor",
+      "cues": {
+        "half": false,
+        "credits": null,
+        "dual": false
+      },
+      "description": "This full-year course investigates calculus from analytical, graphical, and numerical perspectives. The course builds on the function and limit theory introduced in Advanced Placement Pre-Calculus to fully develop the concept of the derivative and its applications. An investigation is then conducted into the concept of the integral, its use in solving differential equations, and its applications. The study of integration culminates in the discussion of improper integrals. Connections are made with power series, and students apply all the concepts covered in Cartesian, parametric, and polar forms. Many colleges grant credit based upon the student’s score on the College Board’s Advanced Placement examination. Graphing calculators are used regularly throughout this course. Students are highly encouraged to take the AP exam in May. 32"
+    },
+    {
+      "dept": "MATH",
+      "title": "Advanced Placement Calculus AB",
+      "sourcePage": 33,
+      "grades": null,
+      "prereqText": "Prerequisite: An initial test/quiz average of ‘B-’ or higher in Advanced Placement Pre-Calculus; an initial test/quiz average of ‘A’ or higher in Pre-Calculus and proficiency on a placement exam Placement by recommendation of teacher and supervisor",
+      "cues": {
+        "half": false,
+        "credits": null,
+        "dual": false
+      },
+      "description": "This full-year course covers all the material of Calculus in addition to a more in-depth study of integrals. Many colleges grant credit based upon the student’s score on the College Board’s Advanced Placement examination. Graphing calculators are used regularly throughout this course. Students are highly encouraged to take the AP exam in May."
+    },
+    {
+      "dept": "MATH",
+      "title": "Calculus",
+      "sourcePage": 33,
+      "grades": null,
+      "prereqText": "Prerequisite: An initial test/quiz average of ‘B-’ or higher in Pre-Calculus",
+      "cues": {
+        "half": false,
+        "credits": null,
+        "dual": true
+      },
+      "description": "This full-year course builds on students’ knowledge of functions and trigonometry to develop the concepts of calculus. Students will begin with a study of limit theory and use that to fully develop the concept of the derivative. Students will study the derivative from analytical, graphical, and numerical perspectives and investigate its applications. Students will then investigate the concept of the integral from multiple perspectives and learn various methods of antidifferentiation. Applications of the integral will also be studied. Graphing calculators are used regularly throughout this course. DUAL ENROLLMENT OPTION 11th and 12th grade students enrolled in Calculus, who meet certain criteria, have the option of earning college credit by registering with William Paterson University at a reduced price but at student expense. Please note that dual enrollment is not required, and that the"
+    },
+    {
+      "dept": "MATH",
+      "title": "Advanced Topics in Calculus (Honors)",
+      "sourcePage": 33,
+      "grades": null,
+      "prereqText": "Prerequisite: Successful completion of Advanced Placement Calculus BC Placement by recommendation of teacher and supervisor",
+      "cues": {
+        "half": false,
+        "credits": null,
+        "dual": true
+      },
+      "description": "This full-year course will extend key ideas of one- variable calculus to functions with several variables. Topics will include the three-dimensional coordinate system, vectors, equations of lines, planes, cylinders, and quadric surfaces in three- dimensional space, vector functions and their applications to arc length, curvature, and motion in space, partial derivatives, multiple integrals, and theorems of vector calculus. Applications of these concepts will be a critical component of this course. DUAL ENROLLMENT OPTION 11th and 12th grade students enrolled in Advanced Topics in Calculus (Honors), who meet certain criteria, have the option of earning college credit by registering with William Paterson University at a reduced price but at student expense. Please note that dual enrollment is not required, and that the course will have the same requirements and expectations whether or not s"
+    },
+    {
+      "dept": "MATH",
+      "title": "Statistics",
+      "sourcePage": 34,
+      "grades": "11, 12",
+      "prereqText": "Prerequisite: Algebra II with Trigonometry or Algebra II with Trigonometry Enhanced",
+      "cues": {
+        "half": false,
+        "credits": null,
+        "dual": true
+      },
+      "description": "Statistics This course will prepare students to collect and analyze data for the purpose of making determinations on typical values and variation. Students will learn to model data sets in order to draw conclusions and make predictions, and compute probabilities and run simulations for situations where probabilities cannot be computed. Students will also learn how to utilize confidence intervals and hypothesis testing to determine whether a finding is statistically significant. DUAL ENROLLMENT OPTION 11th and 12th grade students enrolled in Statistics, who meet certain criteria, have the option of earning college credit by registering with William Paterson University at a reduced price but at student expense. Please note that dual enrollment is not required, and that the course will have the same requirements and expectations whether or not students elect to register for college credit."
+    },
+    {
+      "dept": "MATH",
+      "title": "Advanced Placement Statistics",
+      "sourcePage": 34,
+      "grades": null,
+      "prereqText": "Prerequisite: Algebra II with Trigonometry Enhanced or College Algebra with an initial test/quiz average of ‘B+’ or higher Placement by recommendation of teacher and supervisor",
+      "cues": {
+        "half": false,
+        "credits": null,
+        "dual": false
+      },
+      "description": "This is a full-year, non-calculus-based statistics course that is typically required as part of a student’s work in engineering, sociology, psychology, health, the sciences, and business. The course will cover a) the exploratory analysis of data, b) the planning of a study, c) the production of models using probability theory and simulation, and d) the use of statistical inference. Heavy emphasis is placed on the use of graphing calculators and specialized software as problem-solving tools, and students should have strong reading comprehension and writing skills. Students are highly encouraged to take the AP exam in May."
+    },
+    {
+      "dept": "MATH",
+      "title": "Discrete Math",
+      "sourcePage": 34,
+      "grades": "11, 12",
+      "prereqText": "Prerequisite: Algebra II with Trigonometry",
+      "cues": {
+        "half": false,
+        "credits": null,
+        "dual": true
+      },
+      "description": "Discrete Math This course is designed to develop the quantitative reasoning skills that students will need for their daily lives and futures. The course will emphasize deep conceptual understanding of real-world applications, and topics may include banking, taxes, loans, investments, and credit cards. Technology will be integrated throughout the curriculum, and statistics topics will be covered, including the collection and analysis of data for the purpose of making determinations on typical values and variation, and modeling data sets for the purpose of drawing conclusions and making predictions. DUAL ENROLLMENT OPTION 11th and 12th grade students enrolled in both Discrete Math, who meet certain criteria, have the option of earning college credit by registering with William Paterson University at a reduced price but at student expense. Please note that dual enrollment is not required, a"
+    },
+    {
+      "dept": "MATH",
+      "title": "Introduction to Computer Science and App Development",
+      "sourcePage": 35,
+      "grades": "9, 10, 11, 12",
+      "prereqText": "Co-requisite or Prerequisite: Geometry or Geometry Enhanced",
+      "cues": {
+        "half": false,
+        "credits": null,
+        "dual": false
+      },
+      "description": "Introduction to Computer Science and App Development offers a multidisciplinary approach to the creative aspects of programming, abstractions, algorithms, large data sets, the Internet, cybersecurity concerns, and computing impacts. Introduction to Computer Science and App Development gives students the opportunity to use current technologies to create computational artifacts for both self-expression and problem solving, and it will enable students to build socially useful mobile apps using App Inventor, a mobile programming language for Android devices. Together, these aspects of the course make up a rigorous and rich curriculum that aims to broaden participation in computer science."
+    },
+    {
+      "dept": "MATH",
+      "title": "Honors Computer Science",
+      "sourcePage": 35,
+      "grades": "10, 11, 12",
+      "prereqText": "Co-requisite or Prerequisite: Honors Algebra II with Trigonometry or Algebra II with Trigonometry Placement by recommendation of teacher and supervisor",
+      "cues": {
+        "half": false,
+        "credits": null,
+        "dual": false
+      },
+      "description": "Enhanced and a high level of interest in programming, or Intro to Computer Science and App Development In this full-year elective course students will learn the fundamentals of computer programming in Java, with an emphasis on the development of logical thinking and problem-solving skills. This course emphasizes techniques of programming design, and it applies these concepts to problems that will demonstrate the power and functionality of the computer. Problems are selected from the areas of mathematics, elementary data processing, sorting, and simulations. The ability to work both independently and collaboratively to problem solve effectively are key components to be successful in this course. Some examples of programs that students will create include games, graphic drawings, and other useful real-world programs. In addition, students may have opportunities to use an open-source microc"
+    },
+    {
+      "dept": "MATH",
+      "title": "Advanced Placement Computer Science A",
+      "sourcePage": 35,
+      "grades": "11, 12",
+      "prereqText": "Prerequisite: Honors Computer Science Placement by recommendation of teacher and supervisor",
+      "cues": {
+        "half": false,
+        "credits": null,
+        "dual": false
+      },
+      "description": "The Advanced Placement Computer Science A course is equivalent to a first-semester, college-level course in computer science. The course introduces students to computer science with fundamental topics that include problem solving, design strategies and methodologies, organization of data (data structures), approaches to processing data (algorithms), analysis of potential solutions, and the ethical and social implications of computing. The course emphasizes object-oriented and imperative problem solving and design using the Java language. These techniques represent proven approaches for developing solutions that can scale up from small, simple problems to large, complex problems. The Advanced Placement Computer Science A course curriculum is compatible with many CS1 courses in colleges and universities. Students are highly encouraged to take the AP exam in May. 35"
+    },
+    {
+      "dept": "MATH",
+      "title": "Advanced Topics in Computer Science (Honors)",
+      "sourcePage": 36,
+      "grades": "12",
+      "prereqText": "Prerequisite: Successful completion of Advanced Placement Computer Science A Placement by recommendation of teacher and supervisor",
+      "cues": {
+        "half": false,
+        "credits": null,
+        "dual": false
+      },
+      "description": "Advanced Topics in Computer Science (Honors) requires a strong background in computer programming. It emphasizes problem solving, procedural and data abstraction, programming and design methodology, and algorithm analysis through a project-based approach. Topics may include programming in languages such as Javascript, Swift, or Python, microcontrollers such as Arduino, advanced data structures, and linear algebra, with consideration that the field of computer science is constantly evolving. 36 SPECIAL MATHEMATICS PROGRAMS"
+    },
+    {
+      "dept": "MATH",
+      "title": "Honors Program",
+      "sourcePage": 37,
+      "grades": "9, 10, 11, 12",
+      "prereqText": null,
+      "cues": {
+        "half": false,
+        "credits": null,
+        "dual": false
+      },
+      "description": "The Honors Program is initially available to students who complete Algebra I in 8th grade. Students who perform exceptionally well on a rubric that includes their Algebra I grade, a placement exam, and a teacher evaluation, will be eligible for Honors Geometry as a freshman. Honors Geometry provides an intensified study of plane and solid geometry, as well as an investigation of the coordinate plane. Honors Algebra II with Trigonometry and Advanced Placement Pre-Calculus cover content at a faster pace, providing the opportunity to study additional topics. In the fourth year of the honors sequence, students will have the opportunity to enroll in an Advanced Placement Calculus course. Students in the Honors Program in Mathematics are expected to maintain an assessment average of a B or better, work independently to master concepts and skills, improve prerequisite skills as needed, be self-"
+    },
+    {
+      "dept": "MATH",
+      "title": "Opportunities for Acceleration",
+      "sourcePage": 37,
+      "grades": "11",
+      "prereqText": null,
+      "cues": {
+        "half": false,
+        "credits": null,
+        "dual": false
+      },
+      "description": "For students that take Math 8, demonstrate mastery of math content, and are interested in taking Calculus in high school, there is opportunity for acceleration. Students who meet the criteria of a placement rubric – which includes Math 8 grades, a placement exam, and a teacher evaluation – will be eligible to double up in Geometry Enhanced and Algebra I Enhanced in 9th grade. Students should demonstrate self-discipline, a willingness to engage in learning and practice, and intellectual curiosity. Interested students should reach out to the department supervisor. The Mathematics Department has pathways that focus on calculus, statistics, quantitative reasoning, and computer science. Students are encouraged to also broaden their math experiences by taking additional courses in the Computer Science pathway or AP Statistics. 37 SCIENCE DEPARTMENT COURSE DESCRIPTIONS The Science Curriculum in"
+    },
+    {
+      "dept": "SCIENCE",
+      "title": "Honors Courses",
+      "sourcePage": 38,
+      "grades": "9, 10, 11, 12",
+      "prereqText": "Prerequisites for admission",
+      "cues": {
+        "half": false,
+        "credits": null,
+        "dual": false
+      },
+      "description": "Honors courses are offered in Biology, Chemistry, Physics, Research in Molecular Genetics, Anatomy & Physiology and Forensics. These courses follow the general topic outline of the regular science offerings, but the depth and breadth of content is much greater than is found in the college preparatory courses. In all honors courses, students must not only master the material as presented, but also extrapolate and apply their knowledge to new situations within the discipline. Assignments involving independent research projects, critiques of current events in scientific research, and critical-thinking essays are all part of the curriculum throughout the year. Laboratory experiments are more intricate than those encountered by students in the college preparatory courses, with special emphasis placed upon problem-solving techniques, data and error analysis, and the development of inferences a"
+    },
+    {
+      "dept": "SCIENCE",
+      "title": "Biology",
+      "sourcePage": 39,
+      "grades": "9",
+      "prereqText": null,
+      "cues": {
+        "half": false,
+        "credits": null,
+        "dual": false
+      },
+      "description": "This college preparatory course provides students with a solid foundation in the major concepts of biology at a pace that allows for extensive practice, reinforcement, and guided support. Students explore biochemistry, cell structure and processes, genetics, evolution, and ecology through phenomenon-based instruction and real-world applications. Laboratory investigations and collaborative activities help students build understanding step by step, with frequent opportunities to revisit and master essential ideas. The course is designed to ensure that all learners develop confidence with the core concepts and skills of modern biology."
+    },
+    {
+      "dept": "SCIENCE",
+      "title": "Biology Enhanced",
+      "sourcePage": 39,
+      "grades": "9",
+      "prereqText": null,
+      "cues": {
+        "half": false,
+        "credits": null,
+        "dual": false
+      },
+      "description": "Biology Enhanced is a more rigorous college preparatory course for students ready to engage more deeply with biological concepts while still benefiting from structured support. Students study biochemistry, cell processes, genetics, evolution, and ecology through phenomenon-based learning, real-world problem solving, and hands-on laboratory experiences. Lessons emphasize data collection, analysis, and evidence-based explanations. The pace is faster and the depth of content is greater than in CP Biology, and students are expected to apply concepts, interpret data, and communicate scientific reasoning."
+    },
+    {
+      "dept": "SCIENCE",
+      "title": "Honors Biology",
+      "sourcePage": 39,
+      "grades": "9",
+      "prereqText": "Suggested Co-requisite: Honors Geometry or Geometry Enhanced",
+      "cues": {
+        "half": false,
+        "credits": null,
+        "dual": false
+      },
+      "description": "Honors Biology is a fast-paced, highly rigorous course designed for students with strong analytical skills and the ability to learn with greater independence. Students investigate biochemistry, cell processes, genetics, evolution, and ecology through inquiry-driven labs, real- world phenomena, and complex problem-solving tasks. The course emphasizes deep conceptual understanding, advanced data analysis, scientific modeling, and the design and evaluation of multi-step investigations. Students are expected to synthesize ideas, construct and defend scientific explanations, and engage in the level of thinking required for future advanced science coursework. 39"
+    },
+    {
+      "dept": "SCIENCE",
+      "title": "Advanced Placement Biology",
+      "sourcePage": 40,
+      "grades": "10, 11, 12",
+      "prereqText": "Placement by recommendation of teacher and supervisor Co-requisite or Prerequisite: Honors Chemistry, Honors Physics",
+      "cues": {
+        "half": false,
+        "credits": null,
+        "dual": false
+      },
+      "description": "This course is equivalent to an introductory college course in biology. Major points of emphasis are molecular biology, biotechnology, energy transfer, cells, ecology, biochemistry, botany, anatomy and physiology, genetics, and microbiology. There is extensive laboratory work, plus readings outside of class focusing on biological issues. Students are highly encouraged to take the AP Exam in May, and some colleges and universities may award credit based upon the student’s score on the Advanced Placement Examination."
+    },
+    {
+      "dept": "SCIENCE",
+      "title": "Chemistry",
+      "sourcePage": 40,
+      "grades": "10",
+      "prereqText": "Suggested Co-requisite: Algebra I",
+      "cues": {
+        "half": false,
+        "credits": null,
+        "dual": false
+      },
+      "description": "This college preparatory course provides students with a solid foundation in the fundamental concepts of chemistry at a pace that allows for greater practice, support, and reinforcement. Students will explore the same core topics addressed in Chemistry Enhanced including matter and energy, atomic structure, bonding, the periodic table, the mathematics of chemistry, writing and balancing chemical equations, gas laws, nuclear chemistry, thermodynamics, and environmental chemistry, while engaging in real-world phenomena and problem-solving experiences. The emphasis is on building understanding through guided instruction, hands-on learning, and multiple opportunities to revisit and master essential ideas. This science course is designed for students who benefit from a more concrete learning environment and provides the opportunity to reinforce reading, writing, math, and organizational skill"
+    },
+    {
+      "dept": "SCIENCE",
+      "title": "Chemistry Enhanced",
+      "sourcePage": 40,
+      "grades": "10",
+      "prereqText": "Suggested Co-requisite: Algebra I Enhanced",
+      "cues": {
+        "half": false,
+        "credits": null,
+        "dual": false
+      },
+      "description": "Chemistry Enhanced is a challenging college preparatory course designed for students who are ready to engage more deeply with chemistry concepts while still benefiting from guided practice and structured support. Students investigate matter and energy, atomic structure, bonding, the periodic table, the mathematics of chemistry, chemical reactions, gas laws, nuclear chemistry, thermodynamics, and environmental chemistry. Learning is grounded in phenomenon-based instruction, real-world problem solving, and laboratory experiences that emphasize accurate data collection, interpretation, and communication. Students are expected to apply concepts, analyze data, and make evidence-based explanations, while the course structure provides scaffolding to ensure understanding."
+    },
+    {
+      "dept": "SCIENCE",
+      "title": "Honors Chemistry",
+      "sourcePage": 40,
+      "grades": "10",
+      "prereqText": "Prerequisite: ‘B’ or better in Honors Biology OR an ‘A’ in Biology Enhanced. Students who have not completed Suggested Co-requisite: Honors Algebra II with Trigonometry or Algebra II with Trigonometry Enhanced",
+      "cues": {
+        "half": false,
+        "credits": null,
+        "dual": false
+      },
+      "description": "Algebra I will also have to complete a math skills placement test prior to final placement decision. Honors Chemistry is an accelerated and highly rigorous laboratory science course designed for students with strong mathematical skills and a high level of independence. Students investigate major chemistry concepts including matter and energy, atomic structure, bonding, the periodic table, stoichiometry and the mathematics of chemistry, chemical reactions, gas laws, nuclear chemistry, thermodynamics, and environmental chemistry through phenomenon-based learning, inquiry-driven labs, and complex real-world problem solving. The course emphasizes advanced data analysis, scientific modeling, and the design and execution of multi-step laboratory investigations. Students are expected to think critically, communicate their reasoning with precision, and synthesize concepts to explain and predict "
+    },
+    {
+      "dept": "SCIENCE",
+      "title": "Advanced Placement Chemistry",
+      "sourcePage": 41,
+      "grades": "11, 12",
+      "prereqText": "Placement by recommendation of teacher and supervisor Prerequisite: Grade of ‘B’ or better in Honors Chemistry Co-requisite or prerequisite: Honors Physics/AP Physics I",
+      "cues": {
+        "half": false,
+        "credits": null,
+        "dual": false
+      },
+      "description": "This course is comparable to an introductory course in chemistry at the college level. Students study the following topics: 1) the structure and states of matter, 2) chemical bonding; 3) thermodynamics; 4) chemical reactions; 5) solutions; 6) kinetics; 7) acids and bases; 8) redox; and 9) equilibrium. The materials covered, both in class and in laboratory work, stress how to use basic principles to answer seemingly complex questions. Students are highly encouraged to take the AP Exam in May, and some colleges and universities may award credit based upon the student’s score on the Advanced Placement Examination."
+    },
+    {
+      "dept": "SCIENCE",
+      "title": "Physics",
+      "sourcePage": 41,
+      "grades": "11",
+      "prereqText": "Co-requisite: Algebra II with Trigonometry",
+      "cues": {
+        "half": false,
+        "credits": null,
+        "dual": false
+      },
+      "description": "This college preparatory course provides students with a strong introduction to the fundamental principles of physics at a pace that allows for guided practice, reinforcement, and skill-building. Students explore momentum, energy, earth science concepts, DC circuits, electromagnetism, waves, and space science through phenomenon-based learning, real-world applications, and hands-on laboratory investigations. Instruction emphasizes conceptual understanding and practical problem solving, with frequent opportunities to revisit and deepen key ideas. The course is designed to ensure that all students develop confidence and proficiency with the core ideas and practices of physics."
+    },
+    {
+      "dept": "SCIENCE",
+      "title": "Physics Enhanced",
+      "sourcePage": 41,
+      "grades": "11",
+      "prereqText": "Suggested Co-requisite: Algebra II with Trigonometry Enhanced or Honors Algebra II with Trigonometry",
+      "cues": {
+        "half": false,
+        "credits": null,
+        "dual": false
+      },
+      "description": "Physics Enhanced is a more rigorous college preparatory course for students who are ready to engage more deeply with physics concepts while still benefiting from structured support. Students investigate momentum, energy, earth science, DC circuits, electromagnetism, waves, and space science through phenomenon-based instruction, authentic problem solving, and laboratory experiences that emphasize accurate measurement, data analysis, and evidence-based reasoning. The pace is faster and the level of detail is greater than in Physics, and students are expected to apply concepts flexibly and interpret data with increasing independence."
+    },
+    {
+      "dept": "SCIENCE",
+      "title": "Honors Physics",
+      "sourcePage": 41,
+      "grades": "11",
+      "prereqText": "Prerequisite: ‘B’ or better in Honors Chemistry OR an ‘A’ in Chemistry Enhanced Suggested Co-requisite: AP Pre-Calculus, Pre-Calculus, or Calculus",
+      "cues": {
+        "half": false,
+        "credits": null,
+        "dual": false
+      },
+      "description": "Honors Physics is a rigorous, fast-paced course designed for students with strong mathematical reasoning skills and the ability to learn with a high level of independence. Students explore momentum, energy, earth science, DC circuits, electromagnetism, waves, and space science through inquiry-driven labs, complex problem-solving tasks, and phenomenon-based investigations. Emphasis is placed on advanced data analysis, modeling, quantitative reasoning, and the design and evaluation of multi-step experiments. Students are expected to synthesize concepts, justify their reasoning, and apply physics principles to explain and predict real-world phenomena. This course prepares students for future advanced study in physics and related STEM fields. 41"
+    },
+    {
+      "dept": "SCIENCE",
+      "title": "Advanced Placement Physics I",
+      "sourcePage": 42,
+      "grades": "11",
+      "prereqText": "Placement by recommendation of teacher and supervisor Co-requisite: AP Pre-Calculus, Pre-Calculus, or Calculus",
+      "cues": {
+        "half": false,
+        "credits": null,
+        "dual": false
+      },
+      "description": "This course is equivalent to an introductory college course in non-calculus-based physics and is designed to prepare students for the AP Physics I exam. This course is designed to be equivalent to physics courses required for students majoring in the life sciences, pre-medicine, and other applied science fields. It will also prepare engineering and physical science majors for their freshmen, calculus-based physics courses. Students explore principles of Newtonian mechanics (including rotational motion), work, energy, and power, mechanical waves and sound, and introductory, simple circuits. Students in this class are highly encouraged to take the AP exam in May, and some colleges and universities may award credit based upon the student’s score on the Advanced Placement Examination."
+    },
+    {
+      "dept": "SCIENCE",
+      "title": "Applied Physics & Engineering",
+      "sourcePage": 42,
+      "grades": "11, 12",
+      "prereqText": "Prerequisite: Algebra I",
+      "cues": {
+        "half": false,
+        "credits": null,
+        "dual": false
+      },
+      "description": "Applied Physics & Engineering is a full-year, ten-credit course, taught by a physics instructor and a technology instructor. The course is designed to emphasize physical concepts that are applicable to technology, and to incorporate these concepts into working technological prototypes. The course will encompass theory, practice, and the real-world application of knowledge gained in physics that leads to creative problem solving in technology. The course will explain how the physical universe functions and will use that information to solve problems dealing with our ever-changing environment. The course will use Autodesk CAD, Inventor and Revit software and rapid prototyping devices, such as 3-D printers and laser engravers, to support students in the engineering design process. While this course fulfills the physics graduation requirement, it can also be taken as a senior-year elective f"
+    },
+    {
+      "dept": "SCIENCE",
+      "title": "Advanced Placement Physics II",
+      "sourcePage": 42,
+      "grades": "12",
+      "prereqText": "Placement by recommendation of teacher and supervisor Prerequisite: Grade of ‘B’ or better in Honors Physics/AP Physics I",
+      "cues": {
+        "half": false,
+        "credits": null,
+        "dual": false
+      },
+      "description": "This course is equivalent to an introductory college course in non-calculus-based physics and is designed to prepare students for the AP Physics 2 exam. Students explore principles of fluids, thermodynamics, electricity, magnetism, optics, and topics in modern physics. There is extensive laboratory work, plus readings outside of class focusing on physics-related issues. This course is designed to be equivalent to physics courses required for students majoring in the life sciences, pre-medicine, and other applied science fields. It will also prepare engineering and physical science majors for their freshmen, calculus-based physics courses. Students are highly encouraged to take the AP Exam in May, and some colleges and universities may award credit based upon the student’s score on the Advanced Placement Examination."
+    },
+    {
+      "dept": "SCIENCE",
+      "title": "Advanced Placement Physics C",
+      "sourcePage": 42,
+      "grades": "12",
+      "prereqText": "Placement by recommendation of teacher and supervisor Prerequisite: Grade of ‘B’ or better in Honors Physics/AP Physics I Co-requisite: Calculus",
+      "cues": {
+        "half": false,
+        "credits": null,
+        "dual": false
+      },
+      "description": "This course is equivalent to an introductory college course in calculus-based physics and is designed to prepare students for the AP Physics C exam. Students explore principles of mechanics and electricity and magnetism. There is extensive laboratory work, plus readings outside of class focusing on physics-related issues. This course is designed to be equivalent to physics courses required for students majoring in engineering, pre-medicine, and other applied science fields. Students are highly encouraged to take the AP Physics C Exam (Mechanics and/or Electricity and Magnetism) in May, and some colleges and universities may award credit based upon the student’s score on Advanced Placement Examination. 42"
+    },
+    {
+      "dept": "SCIENCE",
+      "title": "Science, Ethics, Technology and Society",
+      "sourcePage": 43,
+      "grades": "11, 12",
+      "prereqText": null,
+      "cues": {
+        "half": false,
+        "credits": null,
+        "dual": true
+      },
+      "description": "Full-year elective In this course, students will examine controversial/ethical issues and advances in technology over time, and their impact on the way we live and the way our society is structured. Sample topics to be explored in the course include advances in science and technology through the ages, stem cell research, animal and human experimentation, science and politics, genetic engineering, organ/tissue donation, and various other current and powerful topics found at the intersection of science, technology, and society. This course would be beneficial for any student that is interested in pursuing a career in the sciences, medicine, law or politics. Students will be expected to complete independent readings, participate in classroom debates, and compose opinion pieces regarding the various topics discussed in class. DUAL ENROLLMENT OPTION"
+    },
+    {
+      "dept": "SCIENCE",
+      "title": "Honors Forensic Science",
+      "sourcePage": 43,
+      "grades": "12",
+      "prereqText": "Placement by recommendation of teacher and supervisor Prerequisite: Successful Completion of Biology, Chemistry, and Physics",
+      "cues": {
+        "half": false,
+        "credits": null,
+        "dual": true
+      },
+      "description": "Dual enrollment option with Syracuse University Full-year elective & 4 college credits Forensic Science is focused upon the application of scientific methods and techniques to crime and law. This course is intended to introduce the science behind crime detection. Scientific methods specifically relevant to crime detection and analysis will be presented with emphasis placed upon the techniques used in evaluating physical evidence. Topics included are blood analysis, organic and inorganic evidence analysis, microscopic investigations, hair analysis, DNA, drug chemistry and toxicology, fiber comparisons, paints, glass compositions and fragmentation, fingerprints, soil comparisons, and arson investigation, among others. Laboratory exercises will include techniques commonly employed in forensics investigations. Laboratory experiences are embedded in the curriculum and will take place during t"
+    },
+    {
+      "dept": "SCIENCE",
+      "title": "Honors Research in Molecular Genetics I",
+      "sourcePage": 43,
+      "grades": "10, 11, 12",
+      "prereqText": "Placement by recommendation of teacher and supervisor Prerequisite: Honors Biology or a grade of ‘A-’ or better in Biology Enhanced",
+      "cues": {
+        "half": false,
+        "credits": null,
+        "dual": false
+      },
+      "description": "Full-year elective This is an honors-level advanced research program that is formulated to reflect the skills, behaviors, techniques, and proficiencies necessary for conducting authentic science research. Students will learn how to analyze and interpret experimental data generated in class and by other researchers. The ultimate goal is for students to experience how science is conducted by participating in the Rutgers University Waksman Research Institute investigations, learn about the research process, and design their own authentic research project which will be carried out in Research in Molecular Genetics II if students choose to continue with the program. Laboratory experiences are embedded in the curriculum and will take place during the regularly scheduled class periods. 43"
+    },
+    {
+      "dept": "SCIENCE",
+      "title": "Honors Research in Molecular Genetics II and III",
+      "sourcePage": 44,
+      "grades": "11, 12",
+      "prereqText": "Placement by recommendation of teacher and supervisor Prerequisite: Research in Molecular Genetics I and Research in Molecular Genetics II for RMG III Grades 11, 12",
+      "cues": {
+        "half": false,
+        "credits": null,
+        "dual": false
+      },
+      "description": "Full-year elective This is an honors-level advanced research program that is designed to allow students to design and carry out their own, authentic research. The authentic research experience will require students to work closely with an expert or mentor in the particular field of research."
+    },
+    {
+      "dept": "SCIENCE",
+      "title": "Introduction to Anatomy and Physiology",
+      "sourcePage": 44,
+      "grades": "10, 11, 12",
+      "prereqText": "Prerequisite: Grade of ‘C’ or better in a biology course",
+      "cues": {
+        "half": false,
+        "credits": null,
+        "dual": false
+      },
+      "description": "Full-year elective The Introduction to Anatomy and Physiology course covers the basics of anatomy and physiology including anatomical terminology, basic biochemistry, cells and tissues, and the study of the major organ systems of various species in both healthy and diseased states. The course will involve laboratory activities/dissections, models, diagrams, journal writings, text material and clinical studies. Students will also explore careers in medicine and allied-health professions through guest speakers and classroom projects. Students who take this course may be eligible to take Honors Anatomy and Physiology as a second-year course with teacher recommendation."
+    },
+    {
+      "dept": "SCIENCE",
+      "title": "Honors Anatomy and Physiology",
+      "sourcePage": 44,
+      "grades": "10, 11, 12",
+      "prereqText": "Prerequisite: Honors Biology or a grade of an ‘A-’ or better in Biology Enhanced Placement by recommendation of teacher and supervisor",
+      "cues": {
+        "half": false,
+        "credits": null,
+        "dual": false
+      },
+      "description": "Full-year elective In this course, students will conduct an in-depth and detailed study of the major organ systems of various species in both healthy and diseased states, including morphology and functional features of the cells and tissues. As part of each unit of study, students will research and present case-based medical scenarios utilizing a variety of multimedia applications. This course will rely on live and computer-based virtual dissections to supplement student learning. Students in the honors course will be expected to apply analytical reasoning to the topics discussed and to complete outside reading and independent research on related medical topics."
+    },
+    {
+      "dept": "SCIENCE",
+      "title": "Astronomy",
+      "sourcePage": 44,
+      "grades": "10, 11, 12",
+      "prereqText": null,
+      "cues": {
+        "half": true,
+        "credits": null,
+        "dual": false
+      },
+      "description": "Half-year elective This semester-long science elective will be a descriptive survey of key topics in astronomy. This course will investigate the history of modern astronomy, discuss astronomy-related technologies of ancient civilizations, and progress to modern astronomical observatories and telescopes. The basic scientific principles and theories behind the following topics will be discussed: astronomical instrumentation, fundamental theories of cosmology, the lifecycle of stars, constellations, and lunar and planetary sciences. This course is open to all students interested in further exploring astronomy. Laboratory experiences are embedded in the curriculum and will take place during the regularly scheduled class periods."
+    },
+    {
+      "dept": "SCIENCE",
+      "title": "Earth’s Natural Disasters",
+      "sourcePage": 44,
+      "grades": "10, 11, 12",
+      "prereqText": null,
+      "cues": {
+        "half": true,
+        "credits": null,
+        "dual": false
+      },
+      "description": "Half-year elective This semester-long science elective will be a descriptive survey of key natural disasters. This course will investigate destructive forces involved in geology, meteorology and geography. Topics will examine the natural as well as the human consequences of earthquakes, volcanic eruptions, tornadoes, hurricanes, wildfires, meteor impacts and other natural events. Current natural disasters will be tracked using the internet. This course is open to all students interested in further exploring Earth’s Natural Disasters. Laboratory experiences are embedded in the curriculum and will take place during the regularly scheduled class periods. 44"
+    },
+    {
+      "dept": "SCIENCE",
+      "title": "Advanced Placement Environmental Science",
+      "sourcePage": 45,
+      "grades": "10, 11, 12",
+      "prereqText": "Prerequisite: Chemistry or Honors Chemistry Co-requisite or prerequisite: Chemistry Enhanced or Physics Enhanced",
+      "cues": {
+        "half": false,
+        "credits": null,
+        "dual": true
+      },
+      "description": "Full-year elective The Advanced Placement Environmental Science course is designed to be the equivalent of a one-semester, introductory college course in environmental science, through which students engage with the scientific principles, concepts, and methodologies required to understand the interrelationships of the natural world. The course requires that students identify and analyze natural and human-made environmental problems, evaluate the relative risks associated with these problems, and examine alternative solutions for resolving or preventing them. Environmental Science is interdisciplinary, embracing topics from geology, biology, environmental studies, environmental science, chemistry, and geography. The topics studied include Earth Systems and Resources, the Living World, Population, Land and Water Use, Energy Resources and Consumption, Pollution and Global Change. The Advanc"
+    },
+    {
+      "dept": "WORLD_LANGUAGE",
+      "title": "Chinese I, French I, Italian I and Spanish I",
+      "sourcePage": 46,
+      "grades": "9, 10, 11, 12",
+      "prereqText": null,
+      "cues": {
+        "half": false,
+        "credits": null,
+        "dual": false
+      },
+      "description": "This course is designed for novice students who begin without knowledge of the target language. The emphasis of the course is on real-life communication. Students will be given the opportunity to acquire and interact in the language, as it is spoken and written in the target culture. From the beginning, students will compare and contrast the target language and culture with their own, thus developing insights into the nature of language and culture."
+    },
+    {
+      "dept": "WORLD_LANGUAGE",
+      "title": "Chinese II, French II, Italian II and Spanish II",
+      "sourcePage": 46,
+      "grades": "9, 10, 11, 12",
+      "prereqText": null,
+      "cues": {
+        "half": false,
+        "credits": null,
+        "dual": false
+      },
+      "description": "At Language II levels, communication skills are reinforced and further developed. There is an additional concentration on reading and writing. Also included are studies of vocabulary and idiom development, as well as some study of the history and culture of the country (countries) whose language is being studied. Incoming ninth graders who have taken multiple years of a language in one of the four sending districts are likely to be appropriately placed at this level. 46"
+    },
+    {
+      "dept": "WORLD_LANGUAGE",
+      "title": "Chinese III, French III, Italian III and Spanish III",
+      "sourcePage": 47,
+      "grades": "9, 10, 11, 12",
+      "prereqText": null,
+      "cues": {
+        "half": false,
+        "credits": null,
+        "dual": false
+      },
+      "description": "At Language III levels, there is an increased reinforcement and development of communication skills already introduced in Levels I and II. Additional emphasis is placed on the ongoing development of reading and writing skills, as well as more in-depth presentations of target structures, vocabulary, and idioms. Students are carefully guided through cultural and historical activities through increased student active usage of the world language being studied. Major emphasis is placed upon learning and using the target language in a cultural context."
+    },
+    {
+      "dept": "WORLD_LANGUAGE",
+      "title": "Chinese IV and V, French IV and V, Italian IV and V, and Spanish IV and V",
+      "sourcePage": 47,
+      "grades": "10, 11, 12",
+      "prereqText": null,
+      "cues": {
+        "half": false,
+        "credits": null,
+        "dual": true
+      },
+      "description": "Dual Enrollment Option with Seton Hall University At upper levels, the goals are essentially similar to those of Level III, although a higher level of ability in the language is expected. In addition to continued emphasis on communication skills, there is an introduction to authentic literature in the language being studied. Review of previously taught linguistic structures, oral recitation, extensive vocabulary and idiom development, and composition are included. Also considered are the contributions of the world country, prominent personalities, government, current events, the arts, music, values, and character traits of the world nation and regions."
+    },
+    {
+      "dept": "WORLD_LANGUAGE",
+      "title": "Honors Chinese, French, Italian, Spanish – II, III, and IV",
+      "sourcePage": 47,
+      "grades": "9, 10, 11, 12",
+      "prereqText": "Placement by recommendation of teacher and supervisor",
+      "cues": {
+        "half": false,
+        "credits": null,
+        "dual": false
+      },
+      "description": "The honors program is designed for students who demonstrate a high level of ability in oral and written expression, and who are motivated to achieve an advanced level of proficiency. In the honors program, students will be expected to achieve a strong command of the target language, which includes accurate usage of target structures and extensive application of vocabulary and idiomatic expressions. Students enrolled in the Honors Chinese classes will be expected to increase their accuracy with their interpretation and use of Chinese characters. Students will be recommended for continuation in the Honors Program by their teacher upon the successful completion of their current course."
+    },
+    {
+      "dept": "WORLD_LANGUAGE",
+      "title": "Advanced Placement Language & Culture (French/Italian/Spanish/Chinese)",
+      "sourcePage": 47,
+      "grades": "11, 12",
+      "prereqText": "Prerequisite: Honors language sequence, recommendation of teacher and supervisor",
+      "cues": {
+        "half": false,
+        "credits": null,
+        "dual": false
+      },
+      "description": "An Advanced Placement course is one that may be accepted for college credit at a number of participating colleges and universities upon the student’s successful completion of the College Board’s Advanced Placement Examination. This could enable students to start their college work in a world language at a more advanced level or to broaden their college experience by pursuing courses in areas that might not otherwise fit into their programs of study. Students are strongly encouraged to take the Advanced Placement Examination. The purpose of the French/Italian/Spanish/Chinese Advanced Placement program is to further develop advanced proficiency in the 2nd language for students. The major emphasis of the course will be the development of speaking and listening skills, with further emphasis on students’ ability to read and write. Students as effective communicators will use the language to e"
+    },
+    {
+      "dept": "WORLD_LANGUAGE",
+      "title": "Advanced Placement Literature (Spanish)",
+      "sourcePage": 48,
+      "grades": "12",
+      "prereqText": "Prerequisite: AP Spanish Language & Culture or Spanish for Heritage Speakers III, recommendation of teacher and supervisor",
+      "cues": {
+        "half": false,
+        "credits": null,
+        "dual": false
+      },
+      "description": "This course is designed to provide students with a learning experience equivalent to that of an introductory college course in literature written in Spanish. The course introduces students to the formal study of a representative body of texts from Peninsular Spanish, Latin American, and U.S. Hispanic literature. The course provides opportunities for students to demonstrate their proficiency in Spanish across the three modes of communication (interpersonal, interpretive, and presentational) and the five goal areas (communication, cultures, connections, comparisons, and communities) outlined in the Standards for Foreign Language Learning in the 21st Century. The overarching aims of the course are to provide students with ongoing and varied opportunities to further develop their proficiencies across the full range of language skills — with special attention to critical reading and analytica"
+    },
+    {
+      "dept": "WORLD_LANGUAGE",
+      "title": "Spanish for Heritage Speakers I & II & III (*Honors)",
+      "sourcePage": 48,
+      "grades": "9, 10, 11",
+      "prereqText": null,
+      "cues": {
+        "half": false,
+        "credits": null,
+        "dual": false
+      },
+      "description": "Spanish for Heritage Speakers I, II & III are proficiency-based courses which involve meaningful use of language for real communicative purposes. Instruction focuses on what students can do with the language and build upon their L1 literacy skills, specifically reading comprehension and their written expression. Students entering the program should speak Spanish at home on a regular basis with their families. Students are expected to communicate at the Intermediate and Advanced levels within the interpretive, interpersonal and presentational modes of communication. The course targets AP Spanish Literature themes beginning in level I and spiraling through level III. *Honors designation & course credit are available to students in all levels."
+    },
+    {
+      "dept": "WORLD_LANGUAGE",
+      "title": "English Language Development",
+      "sourcePage": 48,
+      "grades": "9, 10, 11, 12",
+      "prereqText": null,
+      "cues": {
+        "half": false,
+        "credits": null,
+        "dual": false
+      },
+      "description": "English Language Development is a special course designed to teach English to students whose native language is one other than English. As in learning any of the world languages taught in the Pascack Valley Regional High School District, the method of instruction is a communicative approach emphasizing the four basic communication skills: (1) listening and understanding; (2) speaking; (3) reading; and (4) writing. Students receive English or World Language credit for satisfactory work in this course. 48 ART DEPARTMENT COURSE DESCRIPTIONS The arts are deeply embedded in our daily lives - sometimes so deeply or subtly that we are often unaware of their presence. Regardless of our paths in life, there is a time when we are moved by a painting or dramatic performance, are thrilled by a musical performance, make careful choices regarding our home decorations, or sing a simple song to our chil"
+    },
+    {
+      "dept": "ART",
+      "title": "Studio Art I",
+      "sourcePage": 49,
+      "grades": "9, 10, 11, 12",
+      "prereqText": null,
+      "cues": {
+        "half": false,
+        "credits": null,
+        "dual": false
+      },
+      "description": "Studio Art I is an entry-level course in visual communication where students can explore various media and techniques for self-expression. Students will engage in a variety of visual problem- solving experiences and skills such as drawing, painting, printmaking, sculpture and mixed media. Projects will have a strong focus on the elements and principles of art and design. In addition to art production, students will be introduced to art history, art criticism and aesthetics."
+    },
+    {
+      "dept": "ART",
+      "title": "Honors Advanced Studio Art II",
+      "sourcePage": 49,
+      "grades": "10, 11, 12",
+      "prereqText": "Prerequisite: Studio Art I AND Teacher Approved Portfolio/Recommendation",
+      "cues": {
+        "half": false,
+        "credits": null,
+        "dual": false
+      },
+      "description": "Studio Art II as an extension of Studio Art I. Student work will be expanded to deal with visual problems and personal interpretations. The work will focus on the refinement of technical skills in the areas of drawing, painting, printmaking and mixed media. This is a “portfolio preparation” course for the development of personal, college, and/or Advanced Placement Art in Drawing or 2- Dimensional Design portfolio. 49"
+    },
+    {
+      "dept": "ART",
+      "title": "Ceramics & Sculpture I",
+      "sourcePage": 50,
+      "grades": "9, 10, 11, 12",
+      "prereqText": null,
+      "cues": {
+        "half": false,
+        "credits": null,
+        "dual": false
+      },
+      "description": "Students who like to work with their hands will enjoy this opportunity to design with plaster, wood, clay and mixed media. Students will learn the secrets and strategies used by artists over the centuries. They will use pinch, coil and slab methods and become familiar with using the potter’s wheel as well as learning methods in wood, plaster and stone. Students will learn the many different ways of working in three-dimensional art."
+    },
+    {
+      "dept": "ART",
+      "title": "Honors Advanced Ceramics & Sculpture II",
+      "sourcePage": 50,
+      "grades": "10, 11, 12",
+      "prereqText": "Prerequisite: Ceramics & Sculpture I AND Teacher Approved Portfolio/Recommendation",
+      "cues": {
+        "half": false,
+        "credits": null,
+        "dual": false
+      },
+      "description": "The purpose of this class is to prepare students for self-directed advanced studio work in clay and mixed media sculpture materials. Students will be prepared to work in a personal studio career, or continued education in ceramics. Students will work on developing technical skills (using materials and processes appropriate to various concepts) and aesthetic sensibilities (including the use of historic and contemporary references in ceramics and other arts, criticism, and expression of personal concepts in works). This class is intended to build on the basic information from prior hand building, throwing, vessel, and ceramic sculpture classes."
+    },
+    {
+      "dept": "ART",
+      "title": "Photography I",
+      "sourcePage": 50,
+      "grades": "10, 11, 12",
+      "prereqText": null,
+      "cues": {
+        "half": false,
+        "credits": null,
+        "dual": false
+      },
+      "description": "This is an introductory studio course in which students become familiar with the fundamentals of photography. Students look at their world as it is composed through the lens of the camera. Students will learn how to use the creative controls of the camera to better express themselves visually. Students will gain experience using digital-editing tools such as Adobe Photoshop, as they become aware of commercial and fine art applications of digital imaging. Basic design principles are studied in relation to photography. Special projects may involve the operation of film cameras, exposing and developing black and white film, making contact prints, and enlarging and finishing the final print. 50"
+    },
+    {
+      "dept": "ART",
+      "title": "Honors Advanced Photography II*",
+      "sourcePage": 51,
+      "grades": "11, 12",
+      "prereqText": "Prerequisite: Photography I AND Teacher Approved Portfolio/Recommendation",
+      "cues": {
+        "half": false,
+        "credits": null,
+        "dual": false
+      },
+      "description": "This course is designed for students who have successfully completed the introductory photography course. Students will have the opportunity to apply previously learned techniques and procedures to more in-depth photographic study. Students will deal with concept-oriented assignments, experiment with more advanced techniques and processes, and do in-depth study into the work of past and contemporary noted photographers. A considerable emphasis is also placed on using digital photography and specialized software to enhance or otherwise modify traditional black and white photographs and digital photos. Students will use the study of historic and contemporary photos as inspirations for their own work. They also will gain knowledge of the impact of digital images on culture, the course of history, and their own lives. This course is recommended for the more serious photography student who ha"
+    },
+    {
+      "dept": "ART",
+      "title": "Communication Design",
+      "sourcePage": 51,
+      "grades": "11, 12",
+      "prereqText": "Prerequisite: Photography I and/or teacher recommendation",
+      "cues": {
+        "half": false,
+        "credits": null,
+        "dual": false
+      },
+      "description": "This course is designed for students who have completed a 100-level course of a hands-on arts elective and could use an intermediate art-making experience (as opposed to, in addition to, or before taking the Honors Advanced /AP level courses). In this course, students will learn the theory and craft needed to combine words, images, and ideas to visually transmit information and project human experiences in print, on screen, or in space. Emphasis will be placed on building habits that clear creative blocks and support a deeper, more personally meaningful engagement in the creative process. This course may also serve as a seminar for seniors taking multiple arts electives who wish to create thematic connections in their classwork. The Art Department offers four AP (Advanced Placement) courses. An Advanced Placement course is one that may be accepted for college credit at a number of partic"
+    },
+    {
+      "dept": "ART",
+      "title": "Advanced Placement Drawing",
+      "sourcePage": 52,
+      "grades": null,
+      "prereqText": null,
+      "cues": {
+        "half": false,
+        "credits": null,
+        "dual": false
+      },
+      "description": "For this course, students focus on mastering the art of drawing through a wide range of experiences, including drawing techniques, use of drawing media, subject matter and the development of a personal approach to art making. In addition to traditional approaches to drawing, media such as painting, printmaking, and mixed media can be explored and included in this portfolio."
+    },
+    {
+      "dept": "ART",
+      "title": "Advanced Placement 2-D Art and Design",
+      "sourcePage": 52,
+      "grades": null,
+      "prereqText": null,
+      "cues": {
+        "half": false,
+        "credits": null,
+        "dual": false
+      },
+      "description": "In this course, students will focus on work in a variety of media: drawing, painting, printmaking, photography, craft, and digital imaging (all 2-dimensional art activities). The course is designed to guide each student’s growth and personal development in the visual arts. Using a range of approaches to art making, the student will be able to incorporate skills and techniques that reflect a study of 2-dimensional art that spans personal, cultural, philosophical and historical viewpoints."
+    },
+    {
+      "dept": "ART",
+      "title": "Advanced Placement 3-D Art and Design",
+      "sourcePage": 52,
+      "grades": null,
+      "prereqText": null,
+      "cues": {
+        "half": false,
+        "credits": null,
+        "dual": false
+      },
+      "description": "This course will investigate styles, techniques and historical movements in sculpture and is designed as an intensive one-year program that challenges students’ creativity and design skills. The course enables students to develop a body of work that investigates strong underlying visual ideas in 3-D design. Students will be able to explore and enhance their problem solving and artistic techniques by completion of various 3-D projects. Students will create and submit a portfolio consisting of 30 pieces as they complete the 3-D design requirement as delineated by the AP Art and Design program. 52 BUSINESS EDUCATION DEPARTMENT COURSE DESCRIPTIONS The Business Education program of the Pascack Valley Regional High School District consists of courses which provide students with experiences in both professional business applications and personal problem-solving skills that are necessary to meet"
+    },
+    {
+      "dept": "BUSINESS",
+      "title": "Financial Literacy",
+      "sourcePage": 53,
+      "grades": "9, 10, 11, 12",
+      "prereqText": null,
+      "cues": {
+        "half": true,
+        "credits": null,
+        "dual": false
+      },
+      "description": "Half-year graduation requirement Decisions about how to spend and invest money are lifelong skills and very important to our financial future. This course is designed to develop personal strategies in banking, credit, investing, buying or leasing an automobile, buying insurance, purchasing a house and planning for a major event. Using the Internet, students will connect the concepts they learn in the course with the fast-paced, information-based world they live in. Simulations use real-world scenarios that allow students to apply course content in making decisions related to individual or family finances."
+    },
+    {
+      "dept": "BUSINESS",
+      "title": "Financial Literacy (Hybrid)*",
+      "sourcePage": 53,
+      "grades": "10, 11, 12",
+      "prereqText": null,
+      "cues": {
+        "half": true,
+        "credits": null,
+        "dual": false
+      },
+      "description": "Half-year graduation requirement The Hybrid Financial Literacy course option is a hybrid of the PVRHSD Financial Literacy course. The program includes the same core material as the classroom option listed above but with limited teacher/student contact (approximately six-to-ten face to face meetings per semester with weekly online interactions). At the end of the course, students must successfully complete a PVRHSD final assessment given by the business department to receive a grade – Pass/Fail. The online course will be completed during a set time schedule as prescribed by the hybrid course teacher and all elements/assignments must be completed before the final assessment is attempted. *Attendance in the face-to-face part of the class is mandatory to receive credit for the course."
+    },
+    {
+      "dept": "BUSINESS",
+      "title": "Principles of Business",
+      "sourcePage": 53,
+      "grades": "9, 10, 11, 12",
+      "prereqText": null,
+      "cues": {
+        "half": true,
+        "credits": null,
+        "dual": false
+      },
+      "description": "Half-year elective The world of business is a dynamic environment where the only constant is an ever-changing global landscape. Businesspersons need to be skilled in dealing with diversity, promoting ethics and social responsibility, sustaining customer relationships, understanding the impact of government regulation on business, finance and accounting, marketing, and the importance of e-commerce. Principles of Business is an introductory course designed to provide a broad overview of the functions of the business entity. Topics covered include entrepreneurship, human resource management, marketing, finance, information systems, global competition, and challenges of a business career. Both theory and practice will be addressed. Through this course, students will identify the principles of the American enterprise system and its impact on a global marketplace, understand the nature of mana"
+    },
+    {
+      "dept": "BUSINESS",
+      "title": "Entrepreneurship",
+      "sourcePage": 54,
+      "grades": "10, 11, 12",
+      "prereqText": null,
+      "cues": {
+        "half": false,
+        "credits": null,
+        "dual": false
+      },
+      "description": "Full-year elective Using various entrepreneurial models, the students work as team members in a simulated business environment within the high school setting. The course is designed to familiarize students with the world of small business and provide opportunities to analyze the personal strengths and weaknesses of individuals who have launched a career in entrepreneurship. Attention is given to planning, financing, starting, and managing a business. Students have the opportunity to perform numerous business functions (i.e., purchasing, accounting, marketing, human resources) as a simulated company transacts business in a mock setting. Students are involved in decision-making, critical thinking, and team activities. Although not required, students should have some business knowledge to see success in this course."
+    },
+    {
+      "dept": "BUSINESS",
+      "title": "Marketing",
+      "sourcePage": 54,
+      "grades": "9, 10, 11, 12",
+      "prereqText": null,
+      "cues": {
+        "half": true,
+        "credits": null,
+        "dual": false
+      },
+      "description": "Half-year elective The Marketing Course focuses on concepts in effectively marketing goods and services to customers from a domestic and global perspective. The course includes market research, identifying target customers, developing product offers, branding, pricing, marketing communications, and distribution. Marketing is critically examined through the lens of the consumer, economy, technology, legal/political issues, and ethical/social responsibility."
+    },
+    {
+      "dept": "BUSINESS",
+      "title": "Management and Leadership",
+      "sourcePage": 54,
+      "grades": "10, 11, 12",
+      "prereqText": "Prerequisite: One Business Course",
+      "cues": {
+        "half": true,
+        "credits": null,
+        "dual": false
+      },
+      "description": "Half-year elective Management and Leadership is a half-year course that is available to students in grades 10-12, who have successfully completed at least one business class. This course explores essential skills and knowledge needed to become highly qualified business professionals in today’s technological business environment. A major focus of this course is preparing students to become successful leaders and managers in various fields of business. Management and Leadership offers students a broad background in business ethics and management principles, business communication and interpersonal skills, human resources, and employment skills in marketing, finance, and computer technology. Project-based learning activities are developed around business case studies that emphasize the use of analytical decision-making skills. This course will guide students who aspire to attend college for"
+    },
+    {
+      "dept": "BUSINESS",
+      "title": "Honors Marketing and Merchandising",
+      "sourcePage": 54,
+      "grades": "11, 12",
+      "prereqText": "Prerequisite: Marketing and Principles of Business",
+      "cues": {
+        "half": false,
+        "credits": null,
+        "dual": false
+      },
+      "description": "Full-year elective Students accepted into the honors level course must have completed two years of business courses (through half-ear or full-year opportunities) and must have the teacher recommendation. The Honors level marketing course dives deeper into the Marketing Mix: planning, advertising, merchandising, sales, and promotion. Several units will discuss Social Media/Content Marketing and Digital Marketing. The course will include the role of marketing in Sports and Entertainment, analyze sales trends, and help students prepare for a career in marketing. This course will focus on the concepts, tools, and analysis that underlie marketing decisions. The course will focus on the \"demand side:\" the underlying demands of the environment, customer behaviors, and competitive behaviors that affect marketing decisions. 54 Through the use of hands-on applications and the Internet, students wi"
+    },
+    {
+      "dept": "BUSINESS",
+      "title": "Financial Investment",
+      "sourcePage": 55,
+      "grades": "10, 11, 12",
+      "prereqText": null,
+      "cues": {
+        "half": true,
+        "credits": null,
+        "dual": false
+      },
+      "description": "Half-year elective The goal of the half-year Financial Investment course is to educate and extend student knowledge of financial responsibility and the practice of sound investing strategies. The course will focus on the diverse investment strategies individuals use to seek out a positive return. The course will require that students explore topics of how corporate finance works and the corporate structures of businesses. Students will analyze financial statements, estimate risk and return, and evaluate corporate stocks, bonds, and other financial securities."
+    },
+    {
+      "dept": "BUSINESS",
+      "title": "Accounting",
+      "sourcePage": 55,
+      "grades": "10, 11, 12",
+      "prereqText": null,
+      "cues": {
+        "half": false,
+        "credits": null,
+        "dual": false
+      },
+      "description": "Full-year elective Accounting is a full-year accelerated course where students will learn how to record, analyze, interpret, and report financial information in a manual and computerized environment. This course is taught using a college-level textbook and covers material similar to a college accounting course. QuickBooks software, Excel, and Google Sheets spreadsheet applications will be utilized. Course topics include the fundamental principles of double-entry bookkeeping for the accounting cycle, creating and analyzing financial statements, cash controls, employer payroll, and recording cash payments and receipts for a merchandising business."
+    },
+    {
+      "dept": "BUSINESS",
+      "title": "Career Exploration (Internship)",
+      "sourcePage": 55,
+      "grades": "12",
+      "prereqText": null,
+      "cues": {
+        "half": false,
+        "credits": "15",
+        "dual": false
+      },
+      "description": "Full-Year Elective Half-Day Program/15 credits The Career Exploration Internship Program (Senior Experience) is a 15-credit, full-year, half- day immersive learning experience designed to connect classroom learning with authentic professional practice. Students spend half of each school day engaged in a structured internship aligned to their individual career interests, while receiving guidance from the internship coordinator, a job coach, and a professional mentor at their placement site. Through sustained, daily participation in a professional setting, students deepen their content knowledge, strengthen transferable workplace skills, and gain meaningful insight into potential postsecondary pathways. Each internship experience is intentionally designed. Some mentors create specialized projects that allow students to develop targeted skills. Others integrate students into ongoing profess"
+    },
+    {
+      "dept": "BUSINESS",
+      "title": "Honors Teacher Cadet Program",
+      "sourcePage": 56,
+      "grades": "12",
+      "prereqText": null,
+      "cues": {
+        "half": false,
+        "credits": null,
+        "dual": false
+      },
+      "description": "Full-year elective The Center for Educator Recruitment, Retention, and Advancement’s (CERRA) nationally recognized Teacher Cadet Program is an innovative, curriculum-based college level course designed to attract talented young people to the education profession through a challenging introduction to teaching. The Teacher Cadet Program seeks to provide high school students insight into the nature of teaching, the problems of schooling, and the critical issues affecting the quality of education in America’s schools. This honors-level course has a pre-requisite of a GPA of 3.0. Information on the application process is available in Guidance and requires an interview, application, and essay."
+    },
+    {
+      "dept": "BUSINESS",
+      "title": "Pascack Valley Regional High School District Teacher Assistant Program",
+      "sourcePage": 56,
+      "grades": null,
+      "prereqText": null,
+      "cues": {
+        "half": false,
+        "credits": "5",
+        "dual": false
+      },
+      "description": "Goal: To give students the opportunity to work within a department or subject area of the school as a Teaching Assistant (“TA”) in order to give them additional exposure to a subject they are interested in and to support the teaching and learning in the class. Eligibility: 11th or 12th grade student who has previously taken the course they wish to TA in with a grade of B or higher. Senior students must have already met all credit graduation requirements. Grading: Pass/Fail, CP level Credits: 2.5 or 5 credits, depending on the length of the course. Does not fulfill any State subject-specific graduation requirements. Process: As part of the scheduling process each year between January and May, students will share with their school counselor that they wish to participate in the TA program and for which course. They will then apply to the department supervisor of the department they wish to "
+    },
+    {
+      "dept": "FAMILY_CONSUMER_SCIENCES",
+      "title": "21st Century Life Skills",
+      "sourcePage": 57,
+      "grades": "9, 10, 11, 12",
+      "prereqText": null,
+      "cues": {
+        "half": true,
+        "credits": null,
+        "dual": false
+      },
+      "description": "Half-year elective Students will participate in a variety of experiences including techniques in nutritional planning, food preparation, basic clothing design and construction, and investigations into the relationship dynamics of a family/community. Students will also explore budgeting, future careers, planning for an interview, and enhancing communication skills. This semester course will utilize a variety of educational experiences, such as individual projects/portfolios, group work, and hands-on activities."
+    },
+    {
+      "dept": "FAMILY_CONSUMER_SCIENCES",
+      "title": "Culinary Arts I",
+      "sourcePage": 57,
+      "grades": "9, 10, 11, 12",
+      "prereqText": null,
+      "cues": {
+        "half": false,
+        "credits": null,
+        "dual": false
+      },
+      "description": "Basic food preparation skills and techniques will be developed and applied to real-life situations. Food choices are influenced by such factors as available resources, family customs, cultural traditions, religious customs, friends, advertising, and current trends and lifestyles. Through the development of critical thinking and problem solving, students will be asked to develop independent living skills through selecting, planning, and preparing nutritious meals. Students will be expected to assist with the preparation, creation, presentation, and clean up of the different laboratory experiences."
+    },
+    {
+      "dept": "FAMILY_CONSUMER_SCIENCES",
+      "title": "Culinary Arts II",
+      "sourcePage": 57,
+      "grades": "10, 11, 12",
+      "prereqText": "Prerequisite: Culinary Arts I",
+      "cues": {
+        "half": false,
+        "credits": null,
+        "dual": false
+      },
+      "description": "This laboratory course is open to those students interested in learning advanced techniques of food preparation. Emphasis is placed on critically evaluating one's work, understanding reasons for success and failure, food presentation, and recipe development. Quantity food preparation, the study of international foods, and current trends in the culinary field are also part of the program. Students will be expected to assist with the preparation, creation, presentation, and cleanup of the different laboratory experiences."
+    },
+    {
+      "dept": "FAMILY_CONSUMER_SCIENCES",
+      "title": "Clothing Construction",
+      "sourcePage": 57,
+      "grades": "9, 10, 11, 12",
+      "prereqText": null,
+      "cues": {
+        "half": false,
+        "credits": null,
+        "dual": false
+      },
+      "description": "This course is designed for students interested in learning how to construct their own garments. The elements and principles of design are utilized in selecting and constructing attractive fashions. The students learn how to care for and use various types of sewing equipment, including the sewing machine. This course is an excellent \"first\" course for those students who may find an interest in fashion designing, fashion retailing, fashion merchandising, and garment construction. 57"
+    },
+    {
+      "dept": "FAMILY_CONSUMER_SCIENCES",
+      "title": "Advanced Clothing Construction",
+      "sourcePage": 58,
+      "grades": "10, 11, 12",
+      "prereqText": "Prerequisite: Clothing Construction",
+      "cues": {
+        "half": false,
+        "credits": null,
+        "dual": false
+      },
+      "description": "Students interested in learning advanced clothing construction techniques will find this course desirable. Changing commercial patterns and/or working from one's original design are part of the program. A basic knowledge of sewing is necessary."
+    },
+    {
+      "dept": "FAMILY_CONSUMER_SCIENCES",
+      "title": "Fashion Design",
+      "sourcePage": 58,
+      "grades": "9, 10, 11, 12",
+      "prereqText": null,
+      "cues": {
+        "half": false,
+        "credits": null,
+        "dual": false
+      },
+      "description": "This course presents an overview of the historical development of fashion as it is related to current design. Students will develop the skill of drawing the figure, designing for specific figure variations, coordinating accessory design, and studying fashion trends in textiles. Students have the opportunity to design and construct complete outfits from drawing to finished product by the end of the year. Knowledge of clothing construction will be helpful."
+    },
+    {
+      "dept": "FAMILY_CONSUMER_SCIENCES",
+      "title": "Advanced Fashion Design",
+      "sourcePage": 58,
+      "grades": "10, 11, 12",
+      "prereqText": "Prerequisite: Fashion Design",
+      "cues": {
+        "half": false,
+        "credits": null,
+        "dual": false
+      },
+      "description": "This course is designed for students who wish to further their depth of knowledge and skills in the fashion areas. The elements of design are emphasized and transferred into flat pattern or draping and the creation of a finished garment. Special fabrics and advanced construction techniques will be emphasized. Students will develop a professional portfolio to be used for entrance requirements to schools."
+    },
+    {
+      "dept": "FAMILY_CONSUMER_SCIENCES",
+      "title": "Interior Design",
+      "sourcePage": 58,
+      "grades": "9, 10, 11, 12",
+      "prereqText": null,
+      "cues": {
+        "half": false,
+        "credits": null,
+        "dual": false
+      },
+      "description": "This course is designed for students who are interested in learning the fundamental elements and principles of design related to housing and Interior Design. Elements and principles of design, apartment living, housing styles, evaluating floor plans, financial considerations related to housing, furniture styles, and physical treatments of rooms are some of the areas studied. Following the decision-making process, students learn to be educated consumers in the areas of housing and home furnishings. Each student is responsible for designing and decorating an original apartment floor plan."
+    },
+    {
+      "dept": "FAMILY_CONSUMER_SCIENCES",
+      "title": "Early Childhood and Family Education I",
+      "sourcePage": 59,
+      "grades": null,
+      "prereqText": null,
+      "cues": {
+        "half": false,
+        "credits": null,
+        "dual": false
+      },
+      "description": "This is a hands-on laboratory course that has specific qualifications for students to be enrolled: • Students must be of excellent character as they serve as the role models for preschool children to exemplify and emulate. • Students must be dependable, reliable, and with outstanding school attendance. • Students must understand that the Early Childhood curriculum includes weekly reading/writing assignments, projects, and presentations. • Students must be dedicated to the success of the program. 58 Early Childhood and Family Education I This course is designed to help prepare students for the role of parent and to acquire skills for entry-level positions in childcare-related careers such as an early childhood educator. All students will participate in our on-site preschool, which operates four days a week, from October through May. Students will be introduced to child psychology, focusin"
+    },
+    {
+      "dept": "FAMILY_CONSUMER_SCIENCES",
+      "title": "Early Childhood and Family Education II",
+      "sourcePage": 59,
+      "grades": "10, 11, 12",
+      "prereqText": "Prerequisite: Early Childhood and Family Education I",
+      "cues": {
+        "half": false,
+        "credits": null,
+        "dual": false
+      },
+      "description": "Early Childhood and Family Education II is an advanced course designed and recommended for the student who is interested in the field of Early Childhood Education, Psychology, Special Education, Social Work, and other related careers. Topics include curriculum areas in preschool education, planning developmentally appropriate learning activities for the preschool child, and practice with caring for young children. Students will take an active role in the planning, organizing, and operation of the on-site preschool. This is a hands-on experience, which is continued from their participation in Early Childhood & Family Education I. This course is student-centered and project-based."
+    },
+    {
+      "dept": "FAMILY_CONSUMER_SCIENCES",
+      "title": "Early Childhood and Family Education III",
+      "sourcePage": 59,
+      "grades": "11, 12",
+      "prereqText": "Prerequisite: Early Childhood and Family Education II",
+      "cues": {
+        "half": false,
+        "credits": null,
+        "dual": false
+      },
+      "description": "Early Childhood and Family Education III is designed for the student who plans to work and study in the field of early childhood education, social work, or psychology. Students will further their understanding of developing age-appropriate lessons and teaching these lessons to preschool-aged children. Topics include curriculum areas in early education, the various types of childcare centers, communication with parents, nutrition, and math and science for young children. Students will take a leadership role in the Preschool along with their role in the planning, organizing, and operation of the day-to-day program. Students will assist with special activities during the year including field trips, Open House, and graduation. This course involves independent work and is student-centered and project based."
+    },
+    {
+      "dept": "FAMILY_CONSUMER_SCIENCES",
+      "title": "Daily Food Preparation and Nutrition Skills",
+      "sourcePage": 59,
+      "grades": "9, 10, 11, 12",
+      "prereqText": null,
+      "cues": {
+        "half": false,
+        "credits": null,
+        "dual": false
+      },
+      "description": "The Daily Food Preparation and Nutrition Skills course is designed to assist students within the Pascack Valley Regional High School District to acquire food selection, handling, and nutrition skills necessary for living on their own after high school. Students will also learn proper table setting and etiquette practices. Topics will include safety, reading a recipe, measuring, basic-food preparation techniques, nutrition, maintaining a healthy lifestyle and becoming an informed consumer. The course will include group work, guest speakers, videos, shopping trips, Internet research, and hands-on activities. 59 HEALTH AND PHYSICAL EDUCATION DEPARTMENT COURSE DESCRIPTIONS"
+    },
+    {
+      "dept": "HEALTH_PE",
+      "title": "Health Education",
+      "sourcePage": 60,
+      "grades": "9, 10, 11, 12",
+      "prereqText": null,
+      "cues": {
+        "half": false,
+        "credits": null,
+        "dual": false
+      },
+      "description": "The Comprehensive Health Education program provides learning opportunities that motivate and educate students to protect, maintain, and improve their own health and physical literacy and that of others. These learning strategies are based on the best available scientific knowledge, covering a broad range of relevant health concepts, and are designed, selected, and conducted in accordance with the needs, interests, and maturity levels of the individual students and the needs of the community at large. The curriculum emphasizes the development of integrated health skills (e.g., decision-making, goal setting, communication, and advocacy) to empower students for lifelong wellness. Our health program, which may be integrated into the student's regularly scheduled Physical Education classes or offered as a standalone course, explores contemporary health issues. Guest speakers and community res"
+    },
+    {
+      "dept": "HEALTH_PE",
+      "title": "Physical Education",
+      "sourcePage": 61,
+      "grades": "9, 10, 11, 12",
+      "prereqText": null,
+      "cues": {
+        "half": false,
+        "credits": null,
+        "dual": true
+      },
+      "description": "Physical Education is an integral part of the educational program that provides an opportunity for the optimal physical, cognitive, and emotional development of an individual. This discipline augments other disciplines by developing young people with integrated personalities capable of functioning at a high level of efficiency in work, recreation, and everyday activities. Physical Education teaches movement skills and concepts that affect and enhance the quality of life, emphasizing the importance of a physically active lifestyle for all individuals regardless of their ability. Its aim is the total fitness of growing young men and women to meet the demands of living today and in the future. Each Physical Education course consists of a variety of physical activities, including team sports, individual and dual sports, recreational activities, and activities that promote health-related and "
+    },
+    {
+      "dept": "MUSIC",
+      "title": "Choir/Lunch",
+      "sourcePage": 62,
+      "grades": "9, 10, 11, 12",
+      "prereqText": null,
+      "cues": {
+        "half": false,
+        "credits": null,
+        "dual": false
+      },
+      "description": "This choral class meets for a half period and is designed so all students can have a choral experience. Students will learn proper vocal technique as well as perform music of all genres. Performances throughout the year are presented with other vocal ensembles."
+    },
+    {
+      "dept": "MUSIC",
+      "title": "Concert Choir",
+      "sourcePage": 62,
+      "grades": "9, 10, 11, 12",
+      "prereqText": null,
+      "cues": {
+        "half": false,
+        "credits": null,
+        "dual": false
+      },
+      "description": "Membership in the Concert Choir is open to all high school students, regardless of any previous musical background or experience. Concert Choir meets for a full period and provides students with a more in-depth experience. The course concentrates on vocal training, performance, and sight-reading skills. Students perform throughout the year with exposure to a variety of music styles."
+    },
+    {
+      "dept": "MUSIC",
+      "title": "Chamber Choir",
+      "sourcePage": 62,
+      "grades": "10, 11, 12",
+      "prereqText": "Prerequisite: Audition*",
+      "cues": {
+        "half": false,
+        "credits": null,
+        "dual": false
+      },
+      "description": "Chamber Choir is our most advanced choral ensemble. The goal of this choir is to enrich vocal technique, performance standards, and sight-reading skills. The music performed is designed to challenge the student vocalist. The repertoire comes from all genres of music with performances occurring throughout the year. Selection to this ensemble is by audition with the Choral Director at the high school. To secure an audition, contact the high school Choral Director and check the director’s website for audition dates. *This course is not offered to freshmen at Pascack Valley High School and Pascack Hills High School. 62"
+    },
+    {
+      "dept": "MUSIC",
+      "title": "Honors Chamber Choir",
+      "sourcePage": 63,
+      "grades": "10, 11, 12",
+      "prereqText": "Prerequisite: Audition",
+      "cues": {
+        "half": false,
+        "credits": null,
+        "dual": false
+      },
+      "description": "Honors Chamber Choir is an advanced, audition-based course for dedicated vocalists in grades 10–12 who have participated in choir throughout high school and are concurrently enrolled in Chamber Choir. This rigorous program is designed to foster individual musical growth, leadership, and academic excellence through high-level study and performance. Students engage in activities such as developing a performance portfolio, maintaining a practice journal, conducting performance-related research, and participating in additional lessons and advanced performance opportunities. Admission is by audition each June and requires a minimum of one year in choir, an A– or higher in music classes, a self-nomination form, and a Choir Director recommendation. Students in Honors Chamber Choir are expected to be musically talented, intellectually curious, and committed to practicing independently. Evaluatio"
+    },
+    {
+      "dept": "MUSIC",
+      "title": "Concert Band",
+      "sourcePage": 63,
+      "grades": "9, 10, 11, 12",
+      "prereqText": null,
+      "cues": {
+        "half": false,
+        "credits": null,
+        "dual": false
+      },
+      "description": "Membership in the Concert Band will be open to all high school students, regardless of any previous musical background or experience, interested in learning to play a brass, woodwind, or percussion instrument. The Concert Band program includes music fundamentals of reading music notation, performance techniques, and rules of music interpretation. In addition to performing in evening concerts, Band students perform at assemblies, pep rallies, clinics, and festivals. Students are encouraged to take this course for four years and are expected to produce increasingly advanced work with each year. As a part of the concert band course, students are enrolled in the instrumental lesson program to further their growth as people and musicians. Lessons are grouped by instrument and occur during the school day on a rotating schedule to build skills that are unique to each instrument and student."
+    },
+    {
+      "dept": "MUSIC",
+      "title": "Honors Concert Band",
+      "sourcePage": 63,
+      "grades": "10, 11, 12",
+      "prereqText": "Prerequisite: Audition",
+      "cues": {
+        "half": false,
+        "credits": null,
+        "dual": false
+      },
+      "description": "This course is designed to deepen musical and academic growth, and the honors band program emphasizes leadership, performance excellence, and independent study. Students in Honors Concert Band engage in advanced work such as developing a performance portfolio, maintaining a practice journal, conducting performance-related research, and participating in additional lessons and advanced performance opportunities. To qualify, students must maintain an A- or higher in music classes, complete a self-nomination form, earn a Band Director recommendation, and successfully audition each year. Evaluation is based on musicianship, rehearsals and performance, lessons, portfolio work, and leadership. Ideal candidates are intellectually curious, self-motivated, and passionate about expressing themselves through music while contributing meaningfully to their ensemble. 63"
+    },
+    {
+      "dept": "MUSIC",
+      "title": "Modern Rock Band",
+      "sourcePage": 64,
+      "grades": "9, 10, 11, 12",
+      "prereqText": null,
+      "cues": {
+        "half": false,
+        "credits": null,
+        "dual": false
+      },
+      "description": "Modern Rock Band is open to all students in grades 9-12 who are interested in a non-traditional band experience. No prior classical music training is necessary for this class, and students will be exposed to the core instrumentation of the Drum Set, Bass Guitar, Electric Guitar, and Keyboard. Experience in this genre and collection of instruments is not needed but certainly welcomed. This course gives students the opportunity and resources to explore popular musical styles in an authentic, real-world learning environment. Popular music of different time periods and cultures will be used as a vehicle to inspire the direction of various lessons and projects. There will be performance opportunities for modern rock band students throughout the duration of the class and consist of cover songs as well as originals written in class."
+    },
+    {
+      "dept": "MUSIC",
+      "title": "Keyboard/Piano",
+      "sourcePage": 64,
+      "grades": "9, 10, 11, 12",
+      "prereqText": null,
+      "cues": {
+        "half": false,
+        "credits": null,
+        "dual": false
+      },
+      "description": "The keyboard/piano course is a performance-based class for those students who are interested in learning to play piano/keyboard or seeking to improve their keyboard skills. The class is open to students from beginner to advanced level. No audition is required to be accepted to this class. Each student will develop a repertoire of piano pieces that will be suitable to their level. The students will be evaluated based on their performances at the end of each semester. Students will have an opportunity to perform at a student-organized recital at the end of each semester. In addition, students are encouraged to participate in school concerts as accompanists, chamber music players, or soloists."
+    },
+    {
+      "dept": "MUSIC",
+      "title": "Music Technology*",
+      "sourcePage": 64,
+      "grades": "9, 10, 11, 12",
+      "prereqText": null,
+      "cues": {
+        "half": false,
+        "credits": null,
+        "dual": false
+      },
+      "description": "This course is designed for students interested in exploring the world of music technology. Music technology will equip students with a working knowledge of the industry tools for composition and notation, sound recording/engineering, web presence development, and the history of commercial music in the United States. This class will develop students' understanding of basic computer systems and tools that the music industry uses as well as provide hands-on learning for basic recording and mixing techniques. *It is encouraged but not required for students to be able to read music and/or have notational music literacy skills."
+    },
+    {
+      "dept": "MUSIC",
+      "title": "Music Theory",
+      "sourcePage": 64,
+      "grades": "9, 10, 11, 12",
+      "prereqText": null,
+      "cues": {
+        "half": false,
+        "credits": null,
+        "dual": false
+      },
+      "description": "This course is recommended for students with a serious interest in music, or those planning a music major or minor in college. This course is designed for students who seek the opportunity to study music theory, write original compositions, or plan to continue their study of music in college. Music Theory will equip students with a working knowledge of the art of music through the study of music’s structure and theories. In addition to developing compositional abilities, experiences will include the development of skills needed to analyze and evaluate music. Students will explore music’s relationship with other disciplines and its impact on culture, and develop the ability to perform, record, present, and discuss original compositions. After successfully completing this class, student will be eligible to enroll in AP Music Theory. 64"
+    },
+    {
+      "dept": "MUSIC",
+      "title": "Advanced Placement Music Theory",
+      "sourcePage": 65,
+      "grades": "11, 12",
+      "prereqText": "Prerequisite: Recommendation of teacher and supervisor",
+      "cues": {
+        "half": false,
+        "credits": null,
+        "dual": false
+      },
+      "description": "This course is recommended for students with a serious interest in music, or those planning a music major or minor in college. It will also prepare students to take the AP Music Theory exam in May. This course is designed for students who seek the opportunity to recognize, understand, and describe the materials and processes of music that are heard or created in a score. Students work towards creating their own original music compositions. AP Music Theory will further equip students with knowledge of the art of music through the study of music’s structures and theories. In addition to the development of compositional abilities, experiences will include analytical and evaluation techniques of music. Students will continue to explore music’s relationship with other disciplines and its impact on culture, and develop the ability to perform, record, present, and discuss original compositions."
+    },
+    {
+      "dept": "MUSIC",
+      "title": "Guitar I",
+      "sourcePage": 65,
+      "grades": "9, 10, 11, 12",
+      "prereqText": null,
+      "cues": {
+        "half": false,
+        "credits": null,
+        "dual": false
+      },
+      "description": "This class is open to all students interested in studying music and playing the guitar regardless of their musical background. The Guitar I class introduces the fundamentals of guitar playing through a variety of musical styles, time periods, and levels of complexity. It includes interpreting music for the guitar, chord symbols, music reading, and the utilization of various finger picks and strums."
+    },
+    {
+      "dept": "MUSIC",
+      "title": "American Pop Music",
+      "sourcePage": 65,
+      "grades": "9, 10, 11, 12",
+      "prereqText": null,
+      "cues": {
+        "half": false,
+        "credits": null,
+        "dual": false
+      },
+      "description": "This course is designed for students who seek the opportunity to extend their musical understanding, heighten their music listening skills, and increase their ability to respond more fully to music by tracing the development of American Music to the present. Experiences will include opportunities to analyze famous compositions representative of many styles, and inquire into musical connections to contemporary life, history, and culture. 65 TECHNOLOGY EDUCATION DEPARTMENT COURSE DESCRIPTIONS The study of Technology can most plainly be described as the study of our “Designed World” or the products and processes in our environment that have been created by people. Advances in technology are designed with the goal of supporting humans in being more productive and satisfying customers’ and clients’ needs and wants. Exercise equipment, surgical tools, electronic fuel injection, hydroponics gar"
+    },
+    {
+      "dept": "TECHNOLOGY",
+      "title": "Creative Design Principles in STEM",
+      "sourcePage": 66,
+      "grades": "9, 10, 11, 12",
+      "prereqText": null,
+      "cues": {
+        "half": false,
+        "credits": null,
+        "dual": false
+      },
+      "description": "Full-year elective This course introduces students to principles in STEM (Science, Technology, Engineering, and Math) and Design. Students will learn how computer software and rapid prototyping processes, such as 3D printing, can be used to design and create products, ranging from car parts and smartphone cases to graphics, fashion accessories, and prosthetics. This is a project-based course where students will be immersed in the design process as it relates to identifying and solving real-world problems."
+    },
+    {
+      "dept": "TECHNOLOGY",
+      "title": "Graphic Design I",
+      "sourcePage": 66,
+      "grades": "9, 10, 11, 12",
+      "prereqText": null,
+      "cues": {
+        "half": false,
+        "credits": null,
+        "dual": false
+      },
+      "description": "Full-year elective This course will introduce students to the concepts of using graphic images to communicate information and ideas, sell products, and influence public opinion. Students will use industry-standard programs including Adobe Illustrator, Photoshop, and InDesign for logos, branding, and print advertisements and will use Muse and Dreamweaver for Web Design and App creations to explore the use of layout, typography, and color. The hands-on, project-based format of the course will allow students to communicate with a specific audience by conceptualizing ideas and designs, outputting them in various formats and medium, and creating digital media products that meet the needs of the consumers/clients."
+    },
+    {
+      "dept": "TECHNOLOGY",
+      "title": "Graphic Design II",
+      "sourcePage": 66,
+      "grades": "10, 11, 12",
+      "prereqText": "Prerequisite: Graphic Design I",
+      "cues": {
+        "half": false,
+        "credits": null,
+        "dual": false
+      },
+      "description": "Full-year elective In this course, students will build upon the skills developed in Graphic Design I as they continue to combine technology and art to communicate ideas visually and explore career paths in graphic design. Students will engage in advanced study in creative visual design, communication, and production processes, including advertising campaigns, the creation of promotional items, package design, and corporate identity and branding. The projects in this course will center on real-world application of software and skills in order to creatively solve problems that exist in the design industry across various fields. The focus will be on print-driven media, with advanced methods of mock-up construction, display, and photography, with the option to create a professional portfolio. 66"
+    },
+    {
+      "dept": "TECHNOLOGY",
+      "title": "Architecture",
+      "sourcePage": 67,
+      "grades": "9, 10, 11, 12",
+      "prereqText": null,
+      "cues": {
+        "half": false,
+        "credits": null,
+        "dual": false
+      },
+      "description": "Full-year elective In this STEM and design course, students will integrate the design process as it relates to creating a 3-D model of a residential structure (i.e. a dream home). They will learn to develop floor plans, cross-sections, elevations, and perspective drawings, and the fundamental concepts related to communicating architecture-related technical information and design ideas. Through a series of hands-on experiences, students will become familiar with the sketching, lettering, scale drawing, print reading, visualizations, and problem-solving techniques used by architects. They will use industry- standard software such as AutoDesk Revit and CAD to support them in developing their models."
+    },
+    {
+      "dept": "TECHNOLOGY",
+      "title": "Robotics and Game Design",
+      "sourcePage": 67,
+      "grades": "9, 10, 11, 12",
+      "prereqText": null,
+      "cues": {
+        "half": false,
+        "credits": null,
+        "dual": true
+      },
+      "description": "Full-year elective In this STEM and design course, students will explore the fields of robotics, control systems, and game design, using various computer programs and applications. Students will work individually and in teams to design, program, build, and test robotics systems and games. Students will integrate engineering design and computer programming to solve design challenges and bring their ideas to life. DUAL ENROLLMENT OPTION"
+    },
+    {
+      "dept": "TECHNOLOGY",
+      "title": "Honors Engineering Design I",
+      "sourcePage": 67,
+      "grades": "9, 10, 11, 12",
+      "prereqText": "Co-requisite for 9th grade students: Honors Biology",
+      "cues": {
+        "half": false,
+        "credits": null,
+        "dual": true
+      },
+      "description": "Note: This course is designed for the serious pre-engineering student In this STEM and design course, students will identify problems, perform research, and conceive and design solutions in a variety of engineering disciplines, including but not limited to chemical, civil, computer, electrical, industrial, mechanical, reverse, and systems engineering while exploring Universal Design. Students will gain a more in-depth understanding of how to use a variety of software applications in the creation of design solutions. Sample projects might include brewing the perfect cup of coffee, redesigning a building in an earthquake-prone region, building a circuit with an Arduino microcontroller and programming it to play a piece of music, designing technologies for people with disabilities, or designing and deploying an aerial imaging system. The course will use Autodesk CAD, Inventor, and Revit sof"
+    },
+    {
+      "dept": "TECHNOLOGY",
+      "title": "Honors Engineering Design II",
+      "sourcePage": 67,
+      "grades": "10, 11, 12",
+      "prereqText": "Prerequisite: Engineering Design I",
+      "cues": {
+        "half": false,
+        "credits": null,
+        "dual": false
+      },
+      "description": "Note: This course is designed for the serious pre-engineering student After taking Engineering Design I, students will have the opportunity to hone their STEM and design abilities and apply them to more complex engineering problems. Taking on the role of engineer, students will identify problems, perform research, and conceive and design solutions in a variety of engineering disciplines, as well as enter local competitions. Local competitions may include but are not limited to the Panasonic Design Challenge, Edison Challenge, TSA, Passaic County Community College Robotics Challenge, Water Botics, and STEM League. Students will work in groups to research and develop prototypes used to compete against student groups throughout the region and state. The course will use Autodesk CAD, Inventor, and Revit software and rapid prototyping devices, such as 3-D printers and laser engravers, to supp"
+    },
+    {
+      "dept": "TECHNOLOGY",
+      "title": "Applied Physics & Engineering",
+      "sourcePage": 68,
+      "grades": "11, 12",
+      "prereqText": "Prerequisite: Chemistry",
+      "cues": {
+        "half": false,
+        "credits": null,
+        "dual": false
+      },
+      "description": "Note: This is a 2 period, 10-credit course Applied Physics & Engineering is a full-year, ten-credit course, taught by a physics instructor and technology education instructor. The course is designed to emphasize physical concepts that are applicable to technology, and to incorporate these concepts into working technological prototypes. The course will encompass theory, practice, and the real-world application of knowledge gained in physics that leads to creative problem solving in technology. The course will explain how the physical universe functions and will use that information to solve problems dealing with our ever-changing environment. The course will use Autodesk CAD, Inventor, and Revit software and rapid prototyping devices, such as 3-D printers and laser engravers, to support students in the engineering design process. While this course fulfills the physics graduation requireme"
+    },
+    {
+      "dept": "TECHNOLOGY",
+      "title": "Video Production",
+      "sourcePage": 68,
+      "grades": "9, 10, 11, 12",
+      "prereqText": null,
+      "cues": {
+        "half": false,
+        "credits": null,
+        "dual": false
+      },
+      "description": "Full-year elective Video Production is designed to give students basic instruction and hands-on experience in the operation of the various kinds of equipment typically found in commercial television studio and film sets. Students will be directly involved in planning, shooting, and editing various projects throughout the year including music videos, short films, commercials, and more. Through camera angles and shot composition to storyboarding and script writing, this course will help students learn how to make their ideas come to life."
+    },
+    {
+      "dept": "TECHNOLOGY",
+      "title": "Advanced Video Production",
+      "sourcePage": 68,
+      "grades": "10, 11, 12",
+      "prereqText": "Prerequisite: Successful completion of Video Production and teacher recommendation",
+      "cues": {
+        "half": false,
+        "credits": null,
+        "dual": false
+      },
+      "description": "Advanced Video Production is designed to review, expand upon, and apply the basic operational techniques introduced in Video Production. Students will learn how to use professional cameras (DSLR and Television Studio Cameras) and expand their editing IQ using After Effects. In addition, there is a greater emphasis on long-term projects, such as documentaries, advertising campaigns, and submissions to state film competitions. Students will have the opportunity to create a portfolio to showcase their talent for college and career opportunities."
+    },
+    {
+      "dept": "TECHNOLOGY",
+      "title": "Honors Broadcast Television Production",
+      "sourcePage": 68,
+      "grades": "10, 11, 12",
+      "prereqText": "Prerequisite: Successful completion of Video Production and teacher recommendation",
+      "cues": {
+        "half": false,
+        "credits": null,
+        "dual": false
+      },
+      "description": "Students will learn advanced studio and field production techniques, including the use of professional equipment and software as they apply to individual projects, as well as the school- based news shows. This course includes production and development of content for the weekly news shows. Students will interview staff and students and film academic, extracurricular, and athletic events. Students will be expected to maintain a professional and positive relationship with members of the school and community. 68"
+    },
+    {
+      "dept": "TECHNOLOGY",
+      "title": "Honors Research in Innovation and Design",
+      "sourcePage": 69,
+      "grades": "11, 12",
+      "prereqText": "Prerequisite: Successful completion of one or more Technology Education courses and teacher recommendation",
+      "cues": {
+        "half": false,
+        "credits": null,
+        "dual": false
+      },
+      "description": "In this capstone course, students will carry out an independent project of their own design. They will submit their work to regional and state competitions for opportunities to compete at the national and international level. Sample projects include a new form of head gear to reduce concussions in sports or other injury-prone activities, prosthetic limbs for people with medical conditions/injuries, environmentally friendly utensils for fast food restaurants, a prototype for an autonomous car, or a new type of living facility. Students will work closely with teacher mentors and explore college and career options as part of the course. Technology Education Course Sequence and Electives Grade Level STEM Digital Media Honors Engineering and Design I Video Production 9 Creative Design Principles in STEM Graphic Design I Robotics and Game Design Architecture Honors Engineering and Design I Vid"
+    },
+    {
+      "dept": "SPECIAL_ED",
+      "title": "Satellite School",
+      "sourcePage": 71,
+      "grades": "10, 11, 12",
+      "prereqText": null,
+      "cues": {
+        "half": false,
+        "credits": null,
+        "dual": false
+      },
+      "description": "The Bergen County Technical Education Center, Northeast Satellite School in Paramus is a shared-time facility that cooperates with local high schools in Northern Bergen County. Paramus Satellite provides local high schools with County-sponsored vocational-technical courses directed to the individual needs of job-oriented high school students. The aim is to help students emerge with marketable skills for employment upon graduation from high school. Paramus Satellite provides half-days of vocational and technical training which are coordinated with the students' high school schedules. Academic classes and extra-curricular activities take place in the \"home\" high school. The Pascack Valley Regional High School District will provide tuition and transportation for enrolled students. Among the shops in operation at Paramus Satellite are Auto Body, Auto Mechanics, Culinary Arts, Carpentry, Reta"
+    },
+    {
+      "dept": "SPECIAL_ED",
+      "title": "Virtual High School (VHS)",
+      "sourcePage": 71,
+      "grades": "10, 11, 12",
+      "prereqText": null,
+      "cues": {
+        "half": false,
+        "credits": null,
+        "dual": false
+      },
+      "description": "Virtual High School is a collaborative of more than 200 high schools from across the country and around the world. It offers students a way to experience fully virtual learning. A student should consider taking a VHS class only if they are an extremely self-motivated, self-disciplined learner who is a proficient user of technology. VHS allows students an opportunity to pursue an area of particular interest. Students may only choose courses that are not currently available in our schools. Before students apply, they need to make sure they fully understand what is involved in taking an online course through Virtual High School. For further information, please visit the Guidance website."
+    },
+    {
+      "dept": "SPECIAL_ED",
+      "title": "Study Skills",
+      "sourcePage": 71,
+      "grades": "9, 10, 11, 12",
+      "prereqText": null,
+      "cues": {
+        "half": false,
+        "credits": null,
+        "dual": false
+      },
+      "description": "Study Skills provides supplemental support to students across the curriculum, to meet the NJSLS as designated in the district's curriculum guides for English, Math, Science, Social Studies, and World Language. Students are assisted in the following areas: preparation, organization, time management, study and learning strategies, test taking skills and strategies, writing and research skills, digital literacy and citizenship, and personal wellness. Other areas of focus include communication and self-advocacy, problem solving, listening skills, and timely completion of assignments. Guided instruction and the use of technology will also provide students with a platform for effective notetaking and the ability to compose projects and presentations. 71"
+    },
+    {
+      "dept": "SPECIAL_ED",
+      "title": "English 1-2 and 3-4",
+      "sourcePage": 72,
+      "grades": null,
+      "prereqText": null,
+      "cues": {
+        "half": false,
+        "credits": null,
+        "dual": false
+      },
+      "description": "In English 1, 2, 3, and 4, an individual prescriptive approach is infused into instruction to address language arts skills that will more effectively prepare students to pursue life goals. The ultimate purpose is to develop literate readers, writers, speakers, listeners, and viewers. The primary teaching goal is to strengthen each student’s ability to understand, process, and communicate information. In this course, teachers employ multisensory techniques, creativity, and flexibility to accommodate individual student ability levels and needs. Activities are designed to encourage students to make connections to other disciplines, their own life, and the world in general. The curriculum also addresses the reinforcement of essential skills, including reading comprehension, cooperative learning, effective communication, decision-making, and technology use. The ninth and tenth grade curriculu"
+    },
+    {
+      "dept": "SPECIAL_ED",
+      "title": "Themes in World History",
+      "sourcePage": 72,
+      "grades": "9",
+      "prereqText": null,
+      "cues": {
+        "half": false,
+        "credits": null,
+        "dual": false
+      },
+      "description": "In Themes in World History, students will acquire the knowledge and skills to think analytically and systematically about how past interactions of people, cultures, and the environment affect issues across time and cultures. Such knowledge and skills enable students to make informed decisions as socially and ethically responsible world citizens in the 21st century. Topics include Ancient Civilizations and the Middle Ages, the First Age of Global Encounters, the Age of Absolutism, the Enlightenment and Scientific Revolution, the French and American Revolutions, the 19th Century: New World Order, Imperialism, the World Wars, and the Post- war/Cold War/Modern Era."
+    },
+    {
+      "dept": "SPECIAL_ED",
+      "title": "Themes in United States History I",
+      "sourcePage": 72,
+      "grades": "10",
+      "prereqText": null,
+      "cues": {
+        "half": false,
+        "credits": null,
+        "dual": false
+      },
+      "description": "In Themes in United States History I, students will acquire the knowledge and skills to think analytically and systematically about how past interactions of people, cultures, and the environment affect issues across time and cultures. Such knowledge and skills enable students to make informed decisions as socially and ethically responsible world citizens in the 21st century. Topics include Colonial America, the American Revolution, the Constitution, the Early Republic, Political, Economic and Social Reform, Manifest Destiny and the Mexican War, the Civil War, Reconstruction, and the West. 72"
+    },
+    {
+      "dept": "SPECIAL_ED",
+      "title": "Themes in United States History II",
+      "sourcePage": 73,
+      "grades": "11",
+      "prereqText": null,
+      "cues": {
+        "half": false,
+        "credits": null,
+        "dual": false
+      },
+      "description": "In Themes in United States History II, students will acquire the knowledge and skills to think analytically and systematically about how past interactions of people, cultures, and the environment affect issues across time and cultures. Such knowledge and skills enable students to make informed decisions as socially and ethically responsible world citizens in the 21st century. Topics include the Industrial Era, the Spanish-American War and World War I, the Progressive Era, the Roaring 20s and Great Depression, World War II, Post-war and the 1950s, the Civil Rights Movement, the 1960s, 1970s, and the Era of Activism, and Nixon to the present."
+    },
+    {
+      "dept": "SPECIAL_ED",
+      "title": "Math 1-2 and 3-4",
+      "sourcePage": 73,
+      "grades": null,
+      "prereqText": null,
+      "cues": {
+        "half": false,
+        "credits": null,
+        "dual": false
+      },
+      "description": "In Math 1, 2, 3 and 4, students will demonstrate increasingly complex understanding of number sense, spatial reasoning, geometric principles, measurement, data, personal finance, and analytic procedures. Students will solve increasingly complex mathematical problems, making productive use of algebra and functions. To accomplish the task of building understanding within this curriculum, students will participate in various types of activities and lessons that are designed to address different learning styles. Students will take part in engaging hands-on scientific and mathematical experiments, collaborative educational games, and teacher-facilitated group discussions. Interactive technology will be utilized to demonstrate and assess comprehension."
+    },
+    {
+      "dept": "SPECIAL_ED",
+      "title": "Elements of Biological Science",
+      "sourcePage": 73,
+      "grades": null,
+      "prereqText": null,
+      "cues": {
+        "half": false,
+        "credits": null,
+        "dual": false
+      },
+      "description": "Grade 9 or 10 This course is designed to give students an understanding of science practices in the field of biology. The intent of this course is to provide each student the opportunity to develop an understanding and appreciation of major scientific concepts including cell processes, genetics, evolution, and ecology. From this conceptual base, students will be encouraged to foster critical thinking skills, apply knowledge, and identify the real-life significance of biology."
+    },
+    {
+      "dept": "SPECIAL_ED",
+      "title": "Elements of Chemistry in the Community",
+      "sourcePage": 73,
+      "grades": null,
+      "prereqText": null,
+      "cues": {
+        "half": false,
+        "credits": null,
+        "dual": false
+      },
+      "description": "Grade 9 or 10 This course is designed to give students an understanding of some of the key aspects and applications of chemistry. The intent of this course is to provide each student the opportunity to acquire knowledge of major scientific concepts including processes that scientists employ and how they pertain to real life, the significance of the structure of matter, how weather and climate affect the earth, how climate is changing and how human activity affects our changing environment, and how food serves as an important source of energy and nutrients necessary for daily living and growth. Elements of Chemistry in the Community incorporates student-centered activities and is designed for students who need a more concrete learning environment. From this conceptual base, students will be encouraged to foster critical thinking skills, apply knowledge, and identify the real-life signific"
+    },
+    {
+      "dept": "SPECIAL_ED",
+      "title": "Elements of Conceptual Physics",
+      "sourcePage": 74,
+      "grades": null,
+      "prereqText": null,
+      "cues": {
+        "half": false,
+        "credits": null,
+        "dual": false
+      },
+      "description": "Grade 11 or 12 This course is designed to give students an understanding of some of the key aspects and applications of physics. The intent of this course is to provide each student the opportunity to acquire knowledge of major scientific concepts. This course emphasizes the understanding of the world and the universe through a study of the following topics: mechanics, electricity and magnetism, and light, sound, and optics. From this conceptual base, students will be encouraged to foster critical thinking skills, apply knowledge, and identify the real-life significance of physics."
+    },
+    {
+      "dept": "SPECIAL_ED",
+      "title": "Elements of Science 1",
+      "sourcePage": 74,
+      "grades": null,
+      "prereqText": null,
+      "cues": {
+        "half": false,
+        "credits": null,
+        "dual": false
+      },
+      "description": "Grade 9 or 10 Designed to instill a strong foundation in science and engineering, the Elements of Science 1 course offers students an immersive exploration of key concepts in life science, physical science, and earth and space science. Through hands-on experiences, participants develop foundational skills while delving into interdisciplinary connections that underscore the holistic nature of scientific understanding. This course covers diverse topics, including energy transfer in closed systems, the relationship between Earth's tilt and seasonal changes, and ecological principles. In a student-centered environment, the course is designed to help students develop essential knowledge while also encouraging critical thinking and the application of scientific principles to real-life scenarios. Elements of Science 1 sets the stage for future scientific exploration, fostering a deep appreciati"
+    },
+    {
+      "dept": "SPECIAL_ED",
+      "title": "Elements of Science 2",
+      "sourcePage": 74,
+      "grades": null,
+      "prereqText": null,
+      "cues": {
+        "half": false,
+        "credits": null,
+        "dual": false
+      },
+      "description": "Grade 9 or 10 Continuing the journey from Elements of Science 1, the Elements of Science 2 course propels students further into the wonders of science, building upon foundational skills acquired in the previous class. With a focus on chemical reactions, natural selection, and environmental conservation, students will engage in hands-on explorations while continuing to develop critical thinking skills. Maintaining a student-centered approach, this course ensures an interactive and engaging learning experience, encouraging students to connect scientific principles to real-life scenarios while solidifying their appreciation for the interconnected nature of science."
+    },
+    {
+      "dept": "SPECIAL_ED",
+      "title": "Elements of Science 3",
+      "sourcePage": 74,
+      "grades": null,
+      "prereqText": null,
+      "cues": {
+        "half": false,
+        "credits": null,
+        "dual": false
+      },
+      "description": "Grade 10 or 11 Elements of Science 3 builds upon the solid foundation established in the preceding courses. This class delves into three captivating topics: body systems, collisions and force, and conservation. With an emphasis on interactive learning experiences, students will investigate the intricacies of the human body's systems, explore the physics behind collisions and force, and understand the importance of conservation in our world. The culmination of the course involves a meaningful class project, challenging students to develop a strategy for conserving, recycling, or reusing resources within our school community. By applying the critical thinking skills cultivated throughout the Elements of Science series, students will not only deepen their understanding of scientific principles, but also actively contribute to the betterment of our local environment. 74"
+    },
+    {
+      "dept": "SPECIAL_ED",
+      "title": "Elements of Innovation and Design",
+      "sourcePage": 75,
+      "grades": "9, 10, 11, 12",
+      "prereqText": null,
+      "cues": {
+        "half": false,
+        "credits": null,
+        "dual": false
+      },
+      "description": "This course introduces students to principles in STEM (Science Technology Engineering and Math) and Design. Students will learn how computer software and rapid prototyping processes, such as 3D printing, can be used to design and create products, ranging from car parts and smartphone cases to graphics, fashion accessories, and prosthetics. This is a project-based course where students will be immersed in the design process as it relates to identifying and solving real-world problems."
+    },
+    {
+      "dept": "SPECIAL_ED",
+      "title": "Spanish Conversation & Culture",
+      "sourcePage": 75,
+      "grades": "9, 10, 11, 12",
+      "prereqText": null,
+      "cues": {
+        "half": false,
+        "credits": null,
+        "dual": false
+      },
+      "description": "This is an introductory-level course designed to engage students in meaningful, real-world communication while exploring the rich diversity of Spanish-speaking cultures. Through interactive activities, songs, projects, and visuals, students will build foundational language skills to greet others, talk about themselves, describe their surroundings, and express likes and feelings."
+    },
+    {
+      "dept": "SPECIAL_ED",
+      "title": "Transition Education 1 and 2",
+      "sourcePage": 75,
+      "grades": "11 and 12",
+      "prereqText": null,
+      "cues": {
+        "half": false,
+        "credits": null,
+        "dual": false
+      },
+      "description": "This course focuses on instruction and support services needed to help students move from the school environment to the workforce, vocational program, or other program designed to promote independent living. Concurrently, students participate in Job Sampling and Structured Learning Experiences. Through Job Sampling, students are introduced to professions and industries to help them prepare for employment. In a typical experience, students shadow employees and participate in workplace activities/tasks with the guidance and supervision of a Job Coach. Structured Learning Experiences (SLE) are experiential, supervised, in-depth learning experiences designed to offer students the opportunity to explore specific career interests more fully. The SLE program allows students to build on individual strengths in real work situations, with the goal of developing independent working skills. Although"
+    },
+    {
+      "dept": "SPECIAL_ED",
+      "title": "Daily Living Skills 1 and 2",
+      "sourcePage": 75,
+      "grades": "9 and 10",
+      "prereqText": null,
+      "cues": {
+        "half": false,
+        "credits": null,
+        "dual": false
+      },
+      "description": "The Daily Living Skills 1 and 2 course is designed to provide each student the opportunity to acquire knowledge in the areas of independent living, including functional life and social skills. Community-Based Instruction is a component of the Daily Living Skills curriculum that helps students generalize classroom-based learning in community settings."
+    },
+    {
+      "dept": "SPECIAL_ED",
+      "title": "Related Arts",
+      "sourcePage": 75,
+      "grades": "9, 10, 11, 12",
+      "prereqText": null,
+      "cues": {
+        "half": false,
+        "credits": null,
+        "dual": false
+      },
+      "description": "Related Arts is an entry-level course in visual communication where students can explore various media and techniques for self-expression. Students will engage in a variety of visual problem- solving experiences and skills such as drawing, painting, printmaking, photography, sculpture, ceramics, and mixed media. Projects will have a strong focus on the elements and principles of art and design. In addition to art production, students will be introduced to art history, art criticism, and aesthetics. 75"
+    },
+    {
+      "dept": "SPECIAL_ED",
+      "title": "Elements of Financial Literacy",
+      "sourcePage": 76,
+      "grades": "9, 10, 11, 12",
+      "prereqText": null,
+      "cues": {
+        "half": false,
+        "credits": null,
+        "dual": false
+      },
+      "description": "This business course is designed to assist students in developing a strong foundation for making lifelong financial decisions. Making good financial choices requires integrating different kinds of information, of which financial data is only one part. Life-style preferences and choices, economic and political trends, principles of budgeting and accounting, legal consequences, and opportunity cost analysis all play a role in financial decision making. This course integrates essential disciplines, including economics, accounting, finance, investing, consumer law, tax law, and consumer psychology, and emphasizes the skills needed to navigate the complex and often confusing financial world. Students taking this course will put into practice lessons learned during real-world scenarios as they engage in Transition Education 1 & 2. Transition Education 1 & 2 focuses on instruction and support s"
+    }
+  ]
+}

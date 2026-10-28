@@ -1,0 +1,46 @@
+[
+  {
+    "slug": "engineering-building",
+    "label": "Engineering and building"
+  },
+  {
+    "slug": "coding-cs",
+    "label": "Coding and computer science"
+  },
+  {
+    "slug": "medicine-health",
+    "label": "Medicine and health"
+  },
+  {
+    "slug": "business-money",
+    "label": "Business and money"
+  },
+  {
+    "slug": "art-design",
+    "label": "Art and design"
+  },
+  {
+    "slug": "film-media",
+    "label": "Film and media"
+  },
+  {
+    "slug": "music-performing",
+    "label": "Music and performing"
+  },
+  {
+    "slug": "writing-humanities",
+    "label": "Writing and humanities"
+  },
+  {
+    "slug": "languages",
+    "label": "Languages"
+  },
+  {
+    "slug": "science-research",
+    "label": "Science research"
+  },
+  {
+    "slug": "hands-on-careers",
+    "label": "Hands-on career programs (Satellite School)"
+  }
+]

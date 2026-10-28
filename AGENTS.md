@@ -23,7 +23,7 @@ npx prisma generate                  # client goes to src/generated/prisma (giti
 npm run db:seed
 ```
 
-Never run `pkill` or broad process kills. This machine runs other services. Stop your own server by port: `fuser -k 3100/tcp`.
+Do not run `next build` while `npm run dev` is up (dev starts reloading pages forever; stop dev, delete `.next/dev`, restart). Never run `pkill` or broad process kills. This machine runs other services. Stop your own server by port: `fuser -k 3100/tcp`.
 
 ## Hard rules
 
