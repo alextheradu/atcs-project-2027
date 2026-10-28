@@ -30,7 +30,12 @@ Owner signs in with Google, sees role-aware nav, uses `/admin/users`. Staff role
 
 ## Done when
 
-- [ ] Policy module tests pass, auth tests pass.
-- [ ] No direct `next-auth` imports outside `src/lib/auth/`.
-- [ ] Every admin action audited.
-- [ ] `docs/STATUS.md` updated.
+- [x] Policy module tests pass, auth tests pass.
+- [x] No direct `next-auth` imports outside `src/lib/auth/`.
+- [x] Every admin action audited.
+- [x] `docs/STATUS.md` updated.
+
+## Remaining for the checkpoint
+
+- [ ] Owner adds `AUTH_GOOGLE_ID` and `AUTH_GOOGLE_SECRET`, signs in, and tries the link-email flow.
+- [ ] Origin check helper for route handlers (moved to Phase 11).
