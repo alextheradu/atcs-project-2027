@@ -1,0 +1,697 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+// ---------- enums ----------
+
+enum Role {
+  STUDENT
+  INCOMING
+  COUNSELOR
+  SUPERVISOR
+  ADMIN
+}
+
+enum Cohort {
+  CURRENT
+  INCOMING_8
+}
+
+enum Department {
+  ENGLISH
+  SOCIAL_STUDIES
+  MATH
+  COMPUTER_SCIENCE
+  SCIENCE
+  WORLD_LANGUAGE
+  ART
+  BUSINESS
+  FAMILY_CONSUMER_SCIENCES
+  HEALTH_PE
+  MUSIC
+  TECHNOLOGY
+  SPECIAL_ED
+  OTHER
+}
+
+enum Level {
+  CP
+  ENHANCED
+  HONORS
+  AP
+  DUAL_ENROLLMENT
+  MIDDLE_SCHOOL
+}
+
+enum Duration {
+  FULL
+  HALF
+}
+
+enum RequirementKind {
+  ENGLISH
+  MATH
+  SCI_BIO
+  SCI_CHEM
+  SCI_PHYS
+  SOCIAL_STUDIES
+  ARTS
+  LIFE_CAREERS
+  FIN_LIT
+  WORLD_LANG
+  PE_HEALTH
+}
+
+enum Track {
+  MATH
+  SCIENCE
+  COMPUTER_SCIENCE
+  WORLD_LANGUAGE
+  ENGLISH
+  SOCIAL_STUDIES
+  OTHER
+}
+
+enum EdgeKind {
+  STANDARD
+  ADVANCE
+}
+
+enum LetterGrade {
+  A_PLUS
+  A
+  A_MINUS
+  B_PLUS
+  B
+  B_MINUS
+  C_PLUS
+  C
+  C_MINUS
+  D_PLUS
+  D
+  F
+  PASS
+}
+
+enum EntryStatus {
+  PLANNED
+  IN_PROGRESS
+  COMPLETED
+}
+
+enum EntrySource {
+  MANUAL
+  IMPORT
+  STARTER
+}
+
+enum PlanStatus {
+  DRAFT
+  SUBMITTED
+  CHANGES_REQUESTED
+  APPROVED
+}
+
+enum AppealStatus {
+  DRAFT
+  SUBMITTED
+  UNDER_REVIEW
+  APPROVED
+  DENIED
+  WITHDRAWN
+}
+
+enum QuestionType {
+  TEXT
+  LONG_TEXT
+  NUMBER
+  YES_NO
+  CHOICE
+}
+
+enum TimelineKind {
+  GRADES_DUE
+  COURSE_SELECTION
+  APPEAL_WINDOW
+  APPEAL_DECISIONS
+  OTHER
+}
+
+enum Audience {
+  CURRENT
+  INCOMING
+  ALL
+}
+
+enum EighthMath {
+  ALGEBRA_I
+  PRE_ALGEBRA
+  UNSURE
+}
+
+enum NotificationKind {
+  APPEAL_SUBMITTED
+  APPEAL_ASSIGNED
+  APPEAL_DECIDED
+  PLAN_SUBMITTED
+  PLAN_CHANGES_REQUESTED
+  PLAN_APPROVED
+  PLAN_COMMENT
+  ROLE_CHANGED
+  DELETION_CONFIRM
+  DELETION_SCHEDULED
+  TIMELINE_REMINDER
+  SYSTEM
+}
+
+enum Channel {
+  IN_APP
+  EMAIL
+  PUSH
+}
+
+enum DeliveryStatus {
+  PENDING
+  SENT
+  FAILED
+  SKIPPED
+}
+
+enum DeletionStatus {
+  AWAITING_CONFIRMATION
+  SCHEDULED
+  CANCELLED
+  COMPLETED
+}
+
+enum PolicyKind {
+  PRIVACY
+  TERMS
+}
+
+// ---------- auth and users ----------
+
+model User {
+  id               String       @id @default(cuid())
+  name             String?
+  email            String       @unique
+  emailVerified    DateTime?
+  image            String?
+  role             Role         @default(STUDENT)
+  departments      Department[] // supervisors only
+  ageConfirmed13At DateTime?
+  onboardedAt      DateTime?
+  createdAt        DateTime     @default(now())
+  updatedAt        DateTime     @updatedAt
+
+  accounts          Account[]
+  sessions          Session[]
+  linkedEmails      LinkedEmail[]
+  profile           StudentProfile?
+  onboarding        OnboardingProgress?
+  plans             Plan[]                   @relation("PlanOwner")
+  reviewedPlans     Plan[]                   @relation("PlanReviewer")
+  planComments      PlanComment[]
+  appeals           Appeal[]                 @relation("AppealStudent")
+  decidedAppeals    Appeal[]                 @relation("AppealDecider")
+  acceptances       PolicyAcceptance[]
+  notifications     Notification[]
+  notificationPrefs NotificationPreference[]
+  pushSubscriptions PushSubscription[]
+  deletionRequests  DeletionRequest[]
+  auditEntries      AuditLog[]
+  aliasesCreated    CourseAlias[]
+  grantsCreated     RoleGrant[]              @relation("GrantCreator")
+
+  @@index([role])
+}
+
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String? @db.Text
+  access_token      String? @db.Text
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String? @db.Text
+  session_state     String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+  @@index([userId])
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+}
+
+model VerificationToken {
+  identifier String
+  token      String
+  expires    DateTime
+
+  @@unique([identifier, token])
+}
+
+model LinkedEmail {
+  id         String    @id @default(cuid())
+  userId     String
+  email      String    @unique
+  verifiedAt DateTime?
+  createdAt  DateTime  @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+}
+
+model RoleGrant {
+  id          String       @id @default(cuid())
+  email       String       @unique // lowercase
+  role        Role
+  departments Department[]
+  createdById String?
+  createdAt   DateTime     @default(now())
+  appliedAt   DateTime?
+
+  createdBy User? @relation("GrantCreator", fields: [createdById], references: [id], onDelete: SetNull)
+}
+
+model AllowedDomain {
+  id      String  @id @default(cuid())
+  domain  String  @unique
+  cohort  Cohort
+  label   String?
+  enabled Boolean @default(true)
+}
+
+model AppSetting {
+  key         String   @id
+  value       Json
+  updatedAt   DateTime @updatedAt
+  updatedById String?
+}
+
+model PolicyDocument {
+  id          String     @id @default(cuid())
+  kind        PolicyKind
+  version     Int
+  title       String
+  bodyMd      String     @db.Text
+  effectiveAt DateTime
+  createdAt   DateTime   @default(now())
+
+  acceptances PolicyAcceptance[]
+
+  @@unique([kind, version])
+}
+
+model PolicyAcceptance {
+  id         String   @id @default(cuid())
+  userId     String
+  documentId String
+  acceptedAt DateTime @default(now())
+
+  user     User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  document PolicyDocument @relation(fields: [documentId], references: [id])
+
+  @@unique([userId, documentId])
+}
+
+model OnboardingProgress {
+  id          String    @id @default(cuid())
+  userId      String    @unique
+  step        Int       @default(0)
+  draft       Json      @default("{}")
+  completedAt DateTime?
+  updatedAt   DateTime  @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model StudentProfile {
+  id                 String       @id @default(cuid())
+  userId             String       @unique
+  cohort             Cohort
+  gradYear           Int?
+  currentGrade       Int?
+  intendedMajor      String?
+  eighthMath         EighthMath?
+  eighthMathGrade    LetterGrade?
+  scienceGrade       LetterGrade?
+  englishGrade       LetterGrade?
+  historyGrade       LetterGrade?
+  languageStudied    String?
+  languageLevel      Int?
+  selfReported       Boolean      @default(true)
+  honestyConfirmedAt DateTime?
+  snapshotExpiresAt  DateTime?
+  createdAt          DateTime     @default(now())
+  updatedAt          DateTime     @updatedAt
+
+  user      User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  interests InterestTag[] @relation("StudentInterests")
+}
+
+// ---------- catalog ----------
+
+model InterestTag {
+  id    String @id @default(cuid())
+  slug  String @unique
+  label String
+
+  courses  Course[]         @relation("CourseInterests")
+  students StudentProfile[] @relation("StudentInterests")
+}
+
+model Course {
+  id                 String     @id @default(cuid())
+  slug               String     @unique
+  name               String
+  department         Department
+  level              Level
+  duration           Duration
+  credits            Decimal    @db.Decimal(4, 1)
+  gradesOffered      Int[]
+  description        String     @default("") @db.Text
+  prereqText         String?    @db.Text
+  rules              Json?
+  dualEnrollmentNote String?
+  hasApExam          Boolean    @default(false)
+  plannable          Boolean    @default(true) // false for middle school pseudo-courses
+  archived           Boolean    @default(false)
+  sourcePage         Int?
+  createdAt          DateTime   @default(now())
+  updatedAt          DateTime   @updatedAt
+
+  requirements   CourseRequirement[]
+  interests      InterestTag[]       @relation("CourseInterests")
+  aliases        CourseAlias[]
+  edgesFrom      CourseEdge[]        @relation("EdgeFrom")
+  edgesTo        CourseEdge[]        @relation("EdgeTo")
+  planEntries    PlanEntry[]
+  appealsTarget  Appeal[]            @relation("AppealTarget")
+  appealsCurrent Appeal[]            @relation("AppealCurrent")
+
+  @@index([department, level])
+  @@index([archived])
+}
+
+model RequirementRule {
+  kind            RequirementKind @id
+  label           String
+  requiredCredits Decimal         @db.Decimal(5, 1)
+  notes           String?
+}
+
+model CourseRequirement {
+  id          String          @id @default(cuid())
+  courseId    String
+  kind        RequirementKind
+  credits     Decimal         @db.Decimal(4, 1)
+  provisional Boolean         @default(false)
+
+  course Course @relation(fields: [courseId], references: [id], onDelete: Cascade)
+
+  @@unique([courseId, kind])
+}
+
+model CourseAlias {
+  id          String   @id @default(cuid())
+  courseId    String
+  alias       String   @unique // normalized transcript title
+  createdById String?
+  createdAt   DateTime @default(now())
+
+  course    Course @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  createdBy User?  @relation(fields: [createdById], references: [id], onDelete: SetNull)
+
+  @@index([courseId])
+}
+
+model CourseEdge {
+  id         String   @id @default(cuid())
+  fromId     String
+  toId       String
+  track      Track
+  kind       EdgeKind @default(STANDARD)
+  appealable Boolean  @default(true)
+  note       String?
+
+  from Course @relation("EdgeFrom", fields: [fromId], references: [id], onDelete: Cascade)
+  to   Course @relation("EdgeTo", fields: [toId], references: [id], onDelete: Cascade)
+
+  @@unique([fromId, toId])
+}
+
+// ---------- plans ----------
+
+model Plan {
+  id          String     @id @default(cuid())
+  ownerId     String
+  name        String
+  isPrimary   Boolean    @default(false)
+  status      PlanStatus @default(DRAFT)
+  reviewerId  String?
+  submittedAt DateTime?
+  decidedAt   DateTime?
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+
+  owner    User          @relation("PlanOwner", fields: [ownerId], references: [id], onDelete: Cascade)
+  reviewer User?         @relation("PlanReviewer", fields: [reviewerId], references: [id], onDelete: SetNull)
+  entries  PlanEntry[]
+  comments PlanComment[]
+
+  @@index([ownerId])
+  // Also in a raw SQL migration:
+  // CREATE UNIQUE INDEX one_primary_plan_per_user ON "Plan"("ownerId") WHERE "isPrimary";
+}
+
+model PlanEntry {
+  id               String       @id @default(cuid())
+  planId           String
+  courseId         String
+  gradeLevel       Int // 9 to 12
+  status           EntryStatus  @default(PLANNED)
+  grade            LetterGrade?
+  credits          Decimal      @db.Decimal(4, 1)
+  source           EntrySource  @default(MANUAL)
+  overrideAppealId String?
+  note             String?
+  createdAt        DateTime     @default(now())
+  updatedAt        DateTime     @updatedAt
+
+  plan           Plan          @relation(fields: [planId], references: [id], onDelete: Cascade)
+  course         Course        @relation(fields: [courseId], references: [id])
+  overrideAppeal Appeal?       @relation("AppealOverrides", fields: [overrideAppealId], references: [id], onDelete: SetNull)
+  comments       PlanComment[]
+
+  @@unique([planId, courseId])
+  @@index([planId, gradeLevel])
+}
+
+model PlanComment {
+  id        String   @id @default(cuid())
+  planId    String
+  entryId   String?
+  authorId  String
+  body      String   @db.Text
+  createdAt DateTime @default(now())
+
+  plan   Plan       @relation(fields: [planId], references: [id], onDelete: Cascade)
+  entry  PlanEntry? @relation(fields: [entryId], references: [id], onDelete: SetNull)
+  author User       @relation(fields: [authorId], references: [id], onDelete: Cascade)
+
+  @@index([planId])
+}
+
+// ---------- appeals ----------
+
+model TimelineEvent {
+  id         String       @id @default(cuid())
+  kind       TimelineKind
+  audience   Audience     @default(ALL)
+  label      String
+  schoolYear String // for example "2027-28"
+  opensAt    DateTime
+  closesAt   DateTime?
+  createdAt  DateTime     @default(now())
+
+  appeals Appeal[]
+
+  @@index([kind, audience, opensAt])
+}
+
+model AppealQuestion {
+  id         String       @id @default(cuid())
+  department Department? // null means all departments
+  prompt     String
+  helpText   String?
+  type       QuestionType @default(LONG_TEXT)
+  options    Json?
+  required   Boolean      @default(true)
+  sortOrder  Int          @default(0)
+  active     Boolean      @default(true)
+
+  answers AppealAnswer[]
+}
+
+model Appeal {
+  id              String       @id @default(cuid())
+  studentId       String
+  targetCourseId  String
+  currentCourseId String?
+  department      Department
+  status          AppealStatus @default(DRAFT)
+  reportedGrade   LetterGrade?
+  reportedAverage Decimal?     @db.Decimal(5, 2)
+  selfReported    Boolean      @default(true)
+  unmetRules      Json         @default("[]")
+  windowId        String?
+  submittedAt     DateTime?
+  decidedAt       DateTime?
+  decidedById     String?
+  decisionNote    String?      @db.Text
+  createdAt       DateTime     @default(now())
+  updatedAt       DateTime     @updatedAt
+
+  student       User           @relation("AppealStudent", fields: [studentId], references: [id], onDelete: Cascade)
+  decidedBy     User?          @relation("AppealDecider", fields: [decidedById], references: [id], onDelete: SetNull)
+  targetCourse  Course         @relation("AppealTarget", fields: [targetCourseId], references: [id])
+  currentCourse Course?        @relation("AppealCurrent", fields: [currentCourseId], references: [id])
+  window        TimelineEvent? @relation(fields: [windowId], references: [id], onDelete: SetNull)
+  answers       AppealAnswer[]
+  overrides     PlanEntry[]    @relation("AppealOverrides")
+
+  @@index([studentId])
+  @@index([department, status])
+}
+
+model AppealAnswer {
+  id         String  @id @default(cuid())
+  appealId   String
+  questionId String?
+  prompt     String // snapshot of the question text
+  answer     String  @db.Text
+
+  appeal   Appeal          @relation(fields: [appealId], references: [id], onDelete: Cascade)
+  question AppealQuestion? @relation(fields: [questionId], references: [id], onDelete: SetNull)
+
+  @@index([appealId])
+}
+
+// ---------- notifications ----------
+
+model Notification {
+  id        String           @id @default(cuid())
+  userId    String
+  kind      NotificationKind
+  title     String
+  body      String           @db.Text
+  url       String?
+  data      Json?
+  readAt    DateTime?
+  createdAt DateTime         @default(now())
+
+  user       User                   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  deliveries NotificationDelivery[]
+
+  @@index([userId, readAt])
+}
+
+model NotificationDelivery {
+  id             String         @id @default(cuid())
+  notificationId String
+  channel        Channel
+  status         DeliveryStatus @default(PENDING)
+  attempts       Int            @default(0)
+  nextAttemptAt  DateTime       @default(now())
+  lastError      String?
+  sentAt         DateTime?
+
+  notification Notification @relation(fields: [notificationId], references: [id], onDelete: Cascade)
+
+  @@index([status, nextAttemptAt])
+}
+
+model NotificationPreference {
+  id     String           @id @default(cuid())
+  userId String
+  kind   NotificationKind
+  inApp  Boolean          @default(true)
+  email  Boolean          @default(true)
+  push   Boolean          @default(false)
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, kind])
+}
+
+model PushSubscription {
+  id         String   @id @default(cuid())
+  userId     String
+  endpoint   String   @unique
+  p256dh     String
+  auth       String
+  userAgent  String?
+  createdAt  DateTime @default(now())
+  lastSeenAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+}
+
+// ---------- privacy and audit ----------
+
+model DeletionRequest {
+  id           String         @id @default(cuid())
+  userId       String?
+  emailHash    String
+  source       String         @default("self") // self or guardian
+  status       DeletionStatus @default(AWAITING_CONFIRMATION)
+  requestedAt  DateTime       @default(now())
+  confirmedAt  DateTime?
+  scheduledFor DateTime?
+  cancelledAt  DateTime?
+  completedAt  DateTime?
+
+  user User? @relation(fields: [userId], references: [id], onDelete: SetNull)
+
+  @@index([status, scheduledFor])
+}
+
+model AuditLog {
+  id         String   @id @default(cuid())
+  actorId    String?
+  actorLabel String // replaced with "deleted user" when the actor is deleted
+  action     String
+  entityType String
+  entityId   String?
+  before     Json?
+  after      Json?
+  createdAt  DateTime @default(now())
+
+  actor User? @relation(fields: [actorId], references: [id], onDelete: SetNull)
+
+  @@index([entityType, entityId])
+  @@index([createdAt])
+}
