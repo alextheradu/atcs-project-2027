@@ -16,7 +16,7 @@ export function SignupModeForm({ current }: { current: string }) {
   const [pending, start] = useTransition();
 
   return (
-    <div className="card space-y-3 p-4">
+    <div className="space-y-3">
       {MODES.map(([value, label, help]) => (
         <label key={value} className="flex cursor-pointer items-start gap-3">
           <input
@@ -28,7 +28,7 @@ export function SignupModeForm({ current }: { current: string }) {
           />
           <span>
             <span className="block text-sm">{label}</span>
-            <span className="block text-xs text-muted">{help}</span>
+            <span className="block text-[13px] text-muted">{help}</span>
           </span>
         </label>
       ))}
@@ -59,7 +59,7 @@ export function AddDomainForm() {
 
   return (
     <form
-      className="card flex flex-wrap items-center gap-2 p-4"
+      className="flex flex-wrap items-center gap-2"
       onSubmit={(e) => {
         e.preventDefault();
         start(async () => {
@@ -85,9 +85,9 @@ export function AddDomainForm() {
 export function DomainRow({ id, domain, cohort, enabled }: { id: string; domain: string; cohort: string; enabled: boolean }) {
   const [pending, start] = useTransition();
   return (
-    <li className="flex items-center justify-between gap-3 px-4 py-2 text-sm">
+    <li className="flex items-center justify-between gap-3 py-2.5 text-sm">
       <span>
-        <span className="font-mono">{domain}</span> <span className="text-muted">{cohort}</span>
+        <span className="num text-[13px]">{domain}</span> <span className="text-muted">{cohort.toLowerCase()}</span>
       </span>
       <span className="flex items-center gap-2">
         <Button size="sm" disabled={pending} onClick={() => start(async () => void (await setDomainEnabled(id, !enabled)))}>

@@ -26,7 +26,7 @@ export function GrantForm() {
   };
 
   return (
-    <form onSubmit={submit} className="card space-y-3 p-4">
+    <form onSubmit={submit} className="space-y-3">
       <div className="flex flex-wrap items-center gap-2">
         <input
           className="input !w-64"
@@ -47,7 +47,7 @@ export function GrantForm() {
         </Button>
       </div>
       {role === "SUPERVISOR" && <DeptPicker value={depts} onChange={setDepts} />}
-      <p className="text-xs text-muted">
+      <p className="text-[13px] text-muted">
         Staff roles only work for @pascack.org addresses. A student grant works as an invite for any address.
       </p>
       {msg && (

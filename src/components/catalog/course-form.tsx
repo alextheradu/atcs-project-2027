@@ -17,7 +17,7 @@ interface Props {
 }
 
 const field = "space-y-1.5";
-const label = "text-xs font-medium text-muted";
+const label = "text-[13px] font-medium";
 
 export function CourseForm({ mode, courseId, archived, initial, interestOptions }: Props) {
   const router = useRouter();
@@ -47,8 +47,8 @@ export function CourseForm({ mode, courseId, archived, initial, interestOptions 
     });
 
   return (
-    <div className="space-y-8">
-      <section className="card grid gap-4 p-5 sm:grid-cols-2">
+    <div className="space-y-10">
+      <section className="grid gap-5 sm:grid-cols-2">
         <label className={field}>
           <span className={label}>Name</span>
           <input className="input" value={c.name} onChange={(e) => set("name", e.target.value)} maxLength={160} />
@@ -125,13 +125,13 @@ export function CourseForm({ mode, courseId, archived, initial, interestOptions 
         </label>
       </section>
 
-      <section className="space-y-3">
+      <section className="space-y-4 border-t border-line pt-6">
         <h2 className="text-sm font-medium">Graduation requirement tags</h2>
-        <ul className="card divide-y divide-line">
+        <ul className="list">
           {REQUIREMENT_KINDS.map((kind) => {
             const t = tag(kind);
             return (
-              <li key={kind} className="flex flex-wrap items-center gap-4 px-4 py-2.5 text-sm">
+              <li key={kind} className="flex flex-wrap items-center gap-4 py-2.5 text-sm">
                 <label className="flex w-64 items-center gap-2">
                   <input type="checkbox" className="accent-[var(--accent)]" checked={!!t} onChange={(e) => setTag(kind, e.target.checked ? { credits: c.credits, provisional: false } : null)} />
                   {KIND_LABEL[kind]}
@@ -154,9 +154,9 @@ export function CourseForm({ mode, courseId, archived, initial, interestOptions 
         </ul>
       </section>
 
-      <section className="space-y-3">
+      <section className="space-y-4 border-t border-line pt-6">
         <h2 className="text-sm font-medium">Interest tags</h2>
-        <div className="card flex flex-wrap gap-x-5 gap-y-2 p-4">
+        <div className="flex flex-wrap gap-x-6 gap-y-2.5">
           {interestOptions.map((i) => (
             <label key={i.slug} className="flex items-center gap-2 text-sm">
               <input type="checkbox" className="accent-[var(--accent)]" checked={c.interests.includes(i.slug)} onChange={(e) => set("interests", e.target.checked ? [...c.interests, i.slug] : c.interests.filter((x) => x !== i.slug))} />
@@ -166,7 +166,7 @@ export function CourseForm({ mode, courseId, archived, initial, interestOptions 
         </div>
       </section>
 
-      <div className="flex flex-wrap items-center gap-3">
+      <div className="flex flex-wrap items-center gap-3 border-t border-line pt-6">
         <Button variant="primary" onClick={save} disabled={pending}>{mode === "new" ? "Create course" : "Save changes"}</Button>
         {mode === "edit" && courseId && (
           <>

@@ -20,7 +20,6 @@
   --orange: #ff8c37;
   --red: #ec3750;
 
-  --radius-card: 12px;
   --radius-pill: 999px;
   --spring: cubic-bezier(0.3, 1.6, 0.6, 1);
 }
@@ -39,7 +38,6 @@
   --color-yellow: var(--yellow);
   --color-orange: var(--orange);
   --color-red: var(--red);
-  --radius-card: var(--radius-card);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 }
@@ -52,7 +50,27 @@ body {
   background: var(--bg);
   color: var(--fg);
   font-family: var(--font-geist-sans), system-ui, sans-serif;
-  letter-spacing: -0.005em;
+  letter-spacing: -0.006em;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h3 {
+  text-wrap: balance;
+  letter-spacing: -0.02em;
+}
+p {
+  text-wrap: pretty;
+}
+code, .font-mono {
+  font-variant-numeric: tabular-nums;
+}
+
+@keyframes page-in {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: none; }
+}
+.page-enter {
+  animation: page-in 0.28s cubic-bezier(0.2, 0.7, 0.2, 1) both;
 }
 
 ::selection {
@@ -164,31 +182,66 @@ body {
     }
   }
 
-  .card {
-    background: var(--bg-raised);
-    border: 1px solid var(--line);
-    border-radius: var(--radius-card);
+  /* Flat lists: hairline rules instead of boxes. */
+  .list {
+    border-top: 1px solid var(--line);
   }
-  .card-selected {
-    background: var(--bg-elevated);
+  .list > li {
+    border-bottom: 1px solid var(--line);
+  }
+  .list-hover > li {
+    transition: background 0.15s;
+  }
+  @media (hover: hover) {
+    .list-hover > li:hover {
+      background: var(--bg-raised);
+    }
+  }
+  .row-selected {
+    background: var(--bg-raised);
     box-shadow: inset 2px 0 0 var(--accent);
   }
 
   .input {
-    height: 36px;
+    height: 34px;
     width: 100%;
-    padding: 0 12px;
-    border-radius: 8px;
+    padding: 0 10px;
+    border-radius: 6px;
     border: 1px solid var(--line);
-    background: var(--bg-raised);
+    background: var(--bg);
     color: var(--fg);
-    font-size: 14px;
+    font-size: 13px;
+    transition: border-color 0.15s, background 0.15s;
+  }
+  textarea.input {
+    height: auto;
+    line-height: 1.5;
+    resize: vertical;
   }
   .input::placeholder {
-    color: var(--muted);
+    color: #6b6b6b;
   }
   .input:hover {
     border-color: var(--line-strong);
+  }
+  .input:disabled {
+    opacity: 0.55;
+    cursor: not-allowed;
+  }
+  select.input {
+    padding-right: 6px;
+  }
+
+  .eyebrow {
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--muted);
+    letter-spacing: 0;
+  }
+  .num {
+    font-family: var(--font-geist-mono), ui-monospace, monospace;
+    font-variant-numeric: tabular-nums;
+    font-size: 12px;
   }
 
   /* Sign-in and onboarding only */
@@ -198,19 +251,35 @@ body {
       rgb(20 20 20 / 0.7);
     backdrop-filter: blur(8px);
   }
+  /* A quiet hairline grid, faded out toward the edges. Neutral, no color. */
+  .grid-backdrop {
+    background-image:
+      linear-gradient(to right, rgb(255 255 255 / 0.04) 1px, transparent 1px),
+      linear-gradient(to bottom, rgb(255 255 255 / 0.04) 1px, transparent 1px);
+    background-size: 56px 56px;
+    mask-image: radial-gradient(ellipse 70% 60% at 50% 40%, #000 20%, transparent 75%);
+  }
 
+  /* Status: a colored dot and a plain label. */
   .badge {
     display: inline-flex;
     align-items: center;
     gap: 6px;
-    height: 22px;
-    padding: 0 10px;
-    border-radius: var(--radius-pill);
-    border: 1px solid var(--badge-c, var(--line));
-    color: var(--badge-c, var(--muted));
-    background: color-mix(in srgb, var(--badge-c, var(--muted)) 10%, transparent);
+    height: 20px;
+    padding: 0 8px;
+    border-radius: 6px;
+    border: 1px solid var(--line);
+    color: var(--fg);
     font-size: 12px;
     font-weight: 500;
+    white-space: nowrap;
+  }
+  .badge::before {
+    content: "";
+    width: 6px;
+    height: 6px;
+    border-radius: 999px;
+    background: var(--badge-c, var(--line-strong));
   }
   .badge-eligible { --badge-c: var(--green); }
   .badge-warning { --badge-c: var(--yellow); }
@@ -242,6 +311,7 @@ body {
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .page-enter { animation: none; }
   .btn { transition: none; }
   .btn:hover, .btn:active { transform: none; }
   .star-border::before { animation: none; }

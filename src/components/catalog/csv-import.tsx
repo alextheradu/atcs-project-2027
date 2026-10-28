@@ -11,13 +11,14 @@ export function CsvImport() {
 
   return (
     <div className="space-y-2">
-      <label className="text-xs font-medium text-muted" htmlFor="csv">Import CSV (creates new slugs, updates existing ones, all or nothing)</label>
+      <label className="text-sm font-medium" htmlFor="csv">Import CSV</label>
+      <p className="text-[13px] text-muted">Creates new slugs and updates existing ones. All or nothing.</p>
       <input
         id="csv"
         type="file"
         accept=".csv,text/csv"
         disabled={pending}
-        className="input !h-auto py-2 text-sm"
+        className="input !h-auto max-w-sm py-1.5 text-[13px]"
         onChange={(e) => {
           const file = e.target.files?.[0];
           if (!file) return;
