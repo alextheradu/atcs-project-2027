@@ -29,3 +29,10 @@ Settled choices and deviations from the original spec. Add a dated entry when yo
 - **Unauthorized pages stream a 404 body with HTTP 200** because the role check runs behind Suspense. No admin data is sent (verified). API and server actions throw proper errors.
 - **Baseline CSP uses `'unsafe-inline'` for scripts** (no nonces, so static shells still work). Phase 11 tightens it with SRI or nonces.
 - **Dev login** is `GET /api/dev-login?email=&role=&dept=`, only when `NODE_ENV` is development or test and `DEV_AUTH=true`. It creates a database session directly.
+
+## 2026-10-28 (Docker)
+
+- **Dockerfile is in and tested** (build, boot against an empty database, migrations applied, `/api/health` ok, runs as non-root uid 1001, dev-login returns 404). Stages: deps, builder, migrator, runner. Base `node:22-bookworm-slim` (Debian, not Alpine, so Prisma's engines just work).
+- **Migrations run in `docker-entrypoint.sh`** using a separate Prisma CLI install in `/opt/migrate` (pinned 7.10.1, same as the app) so the CLI stays out of the standalone bundle. If you bump Prisma, bump it in the `migrator` stage too.
+- **No seed runs in the container yet.** In production, `signupMode` falls back to `SIGNUP_MODE_DEFAULT` and the `pascack.org` allowed domain does not exist until it is added in `/admin/settings` or a production seed is written (Phase 2). The first admin comes from `ADMIN_EMAILS`.
+- **Container listens on 3000 internally.** Dokploy routes the domain to it. Set `AUTH_URL` to the public https URL and `AUTH_TRUST_HOST=true`.
