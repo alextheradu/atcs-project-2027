@@ -40,10 +40,10 @@ export function AppShell({ nav, user, unread = 0, children }: ShellProps) {
 
   return (
     <div className="min-h-dvh">
-      <a href="#content" className="skip-link">Skip to content</a>
+      <a href="#content" className="skip-link print:hidden">Skip to content</a>
       <aside
         className={cn(
-          "fixed inset-y-0 left-0 z-30 flex w-[232px] flex-col border-r border-line bg-bg transition-transform duration-200 md:translate-x-0",
+          "fixed inset-y-0 left-0 z-30 flex w-[232px] print:hidden flex-col border-r border-line bg-bg transition-transform duration-200 md:translate-x-0",
           open ? "translate-x-0" : "-translate-x-full",
         )}
       >
@@ -105,12 +105,12 @@ export function AppShell({ nav, user, unread = 0, children }: ShellProps) {
         </div>
       </aside>
 
-      {open && <div className="fixed inset-0 z-20 bg-black/60 md:hidden" onClick={() => setOpen(false)} aria-hidden />}
+      {open && <div className="fixed inset-0 z-20 bg-black/60 md:hidden print:hidden" onClick={() => setOpen(false)} aria-hidden />}
 
 
       <nav
         aria-label="Primary"
-        className="fixed inset-x-0 bottom-0 z-20 flex border-t border-line bg-bg pb-[env(safe-area-inset-bottom)] md:hidden"
+        className="fixed inset-x-0 bottom-0 z-20 flex border-t border-line bg-bg pb-[env(safe-area-inset-bottom)] md:hidden print:hidden"
       >
         {nav
           .filter((n) => n.group === "Workspace")
@@ -141,8 +141,8 @@ export function AppShell({ nav, user, unread = 0, children }: ShellProps) {
         </button>
       </nav>
 
-      <div className="md:pl-[232px]">
-        <header className="sticky top-0 z-10 flex h-12 items-center gap-3 border-b border-line bg-bg px-4 md:px-8">
+      <div className="md:pl-[232px] print:pl-0">
+        <header className="sticky top-0 z-10 flex h-12 print:hidden items-center gap-3 border-b border-line bg-bg px-4 md:px-8">
           <Button variant="ghost" size="icon" className="md:hidden" aria-label="Open menu" onClick={() => setOpen(true)}>
             <Menu size={16} />
           </Button>

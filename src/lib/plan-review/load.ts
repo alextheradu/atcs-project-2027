@@ -11,8 +11,8 @@ export async function loadComments(planId: string): Promise<CommentView[]> {
   });
   return rows.map((c) => ({
     id: c.id,
-    author: c.author.name ?? c.author.email.split("@")[0],
-    authorRole: c.author.role,
+    author: c.author ? (c.author.name ?? c.author.email.split("@")[0]) : "Deleted user",
+    authorRole: c.author?.role ?? "DELETED",
     body: c.body,
     when: c.createdAt.toLocaleDateString("en-US", { month: "short", day: "numeric" }),
     entryName: c.entry?.course.name ?? null,

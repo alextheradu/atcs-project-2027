@@ -26,5 +26,5 @@ Owner deletes and exports a test account.
 
 ## Done when
 
-- [ ] Deletion and export tests cover every user-related table (add a test that fails when a new user-owned model is not handled).
-- [ ] Print view is black on white and fits one page per plan where possible.
+- [x] Deletion and export tests cover every user-related table (add a test that fails when a new user-owned model is not handled).
+- [x] Print view is black on white and fits one page per plan where possible.

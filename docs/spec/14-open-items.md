@@ -55,3 +55,8 @@ Edit any of these in `/admin/rules`. Each is a reading call, not something the P
 - Which intended major words should raise math or science to 4. The defaults are guesses from the PDF's three phrases (math, science and engineering majors, and science, health care and engineering majors). A counselor should review the keyword lists.
 - Counselors currently see every student. A caseload or grade-based filter needs a definition of "their students".
 
+## Added in Phase 10 (policy placeholders)
+
+- Hosting provider name and how long database backups are kept, for the privacy policy (`[HOSTING PROVIDER]`, `[BACKUP RETENTION]`).
+- Operator name and contact email replace `[OPERATOR NAME]` and `[CONTACT EMAIL]` in both policies. Seeding adds a new version, so edit the text in `prisma/seed/policies.json` and add version 3, or edit the row, then students are asked to accept again.
+- A teacher or the school should read both drafts before real students use the app.
