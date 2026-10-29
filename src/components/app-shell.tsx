@@ -14,8 +14,13 @@ interface ShellProps {
   children: React.ReactNode;
 }
 
+const LABEL_AFTER: Record<string, string> = { plans: "Plan", catalog: "Course" };
+/** A database id in the URL is not something to show. Name it after what it is. */
+const isId = (s: string) => /^[a-z0-9]{20,}$/i.test(s) && /\d/.test(s);
+
 function Breadcrumbs() {
-  const parts = usePathname().split("/").filter(Boolean);
+  const raw = usePathname().split("/").filter(Boolean);
+  const parts = raw.map((p, i) => (isId(p) ? (LABEL_AFTER[raw[i - 1]] ?? "Details") : p));
   return (
     <nav aria-label="Breadcrumb" className="flex items-center gap-2 text-[13px] text-muted">
       {parts.map((p, i) => (
@@ -142,7 +147,7 @@ export function AppShell({ nav, user, children }: ShellProps) {
           </Button>
           <Breadcrumbs />
         </header>
-        <main id="content" key={pathname} className="page-enter mx-auto max-w-[1100px] px-4 pb-28 pt-8 md:px-8 md:pb-16 md:pt-10">{children}</main>
+        <main id="content" key={pathname} className={cn("page-enter mx-auto px-4 pb-28 pt-8 md:px-8 md:pb-16 md:pt-10", /^\/(plans\/[^/]+|pathways)/.test(pathname) ? "max-w-[1440px]" : "max-w-[1100px]")}>{children}</main>
       </div>
     </div>
   );

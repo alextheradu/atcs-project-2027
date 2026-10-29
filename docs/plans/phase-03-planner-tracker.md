@@ -24,6 +24,11 @@ Owner builds a plan and checks totals.
 
 ## Done when
 
-- [ ] Credit and requirement logic has full unit tests.
-- [ ] Drag and drop works by mouse and keyboard.
-- [ ] Clone, primary switch, delete verified.
+- [x] Credit and requirement logic has full unit tests.
+- [x] Drag and drop works by mouse and keyboard.
+- [x] Clone, primary switch, delete verified.
+
+## Remaining for the checkpoint
+
+- [ ] Owner builds a plan and checks the totals against the PDF rules.
+- [ ] Owner confirms the open credit questions in `docs/spec/14-open-items.md` that change totals (honors science 5 or 6, American Studies split).

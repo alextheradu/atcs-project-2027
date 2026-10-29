@@ -29,6 +29,7 @@ const fakeDb = vi.hoisted(() => {
     roleGrant: m(),
     allowedDomain: m(),
     appSetting: m(),
+    requirementRule: m(),
     $transaction: vi.fn(),
   };
   db.$transaction.mockImplementation(async (cb: (tx: typeof db) => unknown) => cb(db));
@@ -37,6 +38,7 @@ const fakeDb = vi.hoisted(() => {
 vi.mock("@/lib/db", () => ({ db: fakeDb }));
 
 import { writeAudit } from "@/lib/audit";
+import * as graduation from "./graduation";
 import * as settings from "./settings";
 import * as users from "./users";
 
@@ -54,6 +56,12 @@ beforeEach(() => {
   fakeDb.$transaction.mockImplementation(async (cb: (tx: typeof fakeDb) => unknown) => cb(fakeDb));
 });
 
+const KINDS = ["ENGLISH", "MATH", "SCI_BIO", "SCI_CHEM", "SCI_PHYS", "SOCIAL_STUDIES", "ARTS", "LIFE_CAREERS", "FIN_LIT", "WORLD_LANG", "PE_HEALTH"];
+const gradConfig = () => ({
+  rules: KINDS.map((kind) => ({ kind, requiredCredits: 5 })),
+  settings: { totalRequired: 120, minPerYear: 30, minFinalYear: 25, maxPeriodsPerYear: 8 },
+});
+
 // Every exported admin action with a harmless payload.
 const actions: [string, () => Promise<unknown>][] = [
   ["searchUsers", () => users.searchUsers("a")],
@@ -64,6 +72,7 @@ const actions: [string, () => Promise<unknown>][] = [
   ["addAllowedDomain", () => settings.addAllowedDomain({ domain: "school.org", cohort: "CURRENT" })],
   ["setDomainEnabled", () => settings.setDomainEnabled("d1", false)],
   ["removeAllowedDomain", () => settings.removeAllowedDomain("d1")],
+  ["updateGraduationConfig", () => graduation.updateGraduationConfig(gradConfig())],
 ];
 
 describe("every admin action is ADMIN only", () => {
@@ -88,6 +97,8 @@ describe("every admin action is ADMIN only", () => {
     fakeDb.roleGrant.upsert.mockResolvedValue({ id: "g" });
     fakeDb.allowedDomain.create.mockResolvedValue({ id: "d" });
     fakeDb.user.count.mockResolvedValue(2);
+    fakeDb.requirementRule.findMany.mockResolvedValue([]);
+    fakeDb.appSetting.findUnique.mockResolvedValue(null);
     const out = run();
     await expect(out).resolves.not.toThrow();
   });
@@ -218,5 +229,33 @@ describe("settings actions", () => {
     fakeDb.allowedDomain.findUnique.mockResolvedValue({ id: "d" });
     const r = await settings.addAllowedDomain({ domain: "pascack.org", cohort: "CURRENT" });
     expect(r.ok).toBe(false);
+  });
+});
+
+describe("updateGraduationConfig", () => {
+  beforeEach(() => {
+    state.user = make("ADMIN");
+    fakeDb.requirementRule.findMany.mockResolvedValue([]);
+    fakeDb.appSetting.findUnique.mockResolvedValue(null);
+  });
+  it("saves all rules and the settings in one transaction and audits it", async () => {
+    const r = await graduation.updateGraduationConfig(gradConfig());
+    expect(r.ok).toBe(true);
+    expect(fakeDb.requirementRule.update).toHaveBeenCalledTimes(11);
+    expect(fakeDb.appSetting.upsert).toHaveBeenCalledTimes(1);
+    expect(writeAudit).toHaveBeenCalledWith(expect.objectContaining({ action: "settings.graduation" }), expect.anything());
+  });
+  it("rejects off-step credits, missing rules, duplicates and silly settings, writing nothing", async () => {
+    const good = gradConfig();
+    const bad = [
+      { ...good, rules: good.rules.map((r, i) => (i === 0 ? { ...r, requiredCredits: 5.3 } : r)) },
+      { ...good, rules: good.rules.slice(1) },
+      { ...good, rules: good.rules.map((r, i) => (i === 1 ? { ...r, kind: "ENGLISH" } : r)) },
+      { ...good, settings: { ...good.settings, maxPeriodsPerYear: 0 } },
+      { ...good, settings: { ...good.settings, totalRequired: -1 } },
+      null,
+    ];
+    for (const b of bad) expect((await graduation.updateGraduationConfig(b)).ok).toBe(false);
+    expect(fakeDb.requirementRule.update).not.toHaveBeenCalled();
   });
 });

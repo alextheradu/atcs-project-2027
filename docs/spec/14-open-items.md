@@ -20,3 +20,20 @@ Track resolution status in `docs/STATUS.md`.
 - Grades offered for AP Drawing, AP 2-D and AP 3-D Art are not stated (assumed 11 and 12).
 - The PDF labels History of Sport in America and An Introduction to the Analysis of Public Policy "Half-year elective - Honors". They are marked Honors level.
 - Seton Hall dual enrollment is applied to IV, V and AP for all four languages.
+
+## Added in Phase 4 (rule readings a supervisor should confirm)
+
+Edit any of these in `/admin/rules`. Each is a reading call, not something the PDF states outright.
+
+- **Placement exam on one branch or both.** Honors Algebra II with Trigonometry, AP Pre-Calculus, Pre-Calculus and AP Calculus AB all say "initial average of X in A; initial average of Y in B and proficiency on a placement exam". The exam is encoded on the second branch only.
+- **Which courses count as "9th, 10th, 11th Grade English" and "10th Grade U.S. History".** Encoded as the whole core sequence of that grade (all levels). Electives and AP Capstone are not counted for English III and IV.
+- **Do higher levels satisfy a prerequisite that names a college prep or enhanced course?** For example Statistics lists "Algebra II with Trigonometry or Enhanced". A student with Honors Algebra II with Trigonometry is not matched today.
+- **8th grade Algebra I counts as Algebra I** for Algebra II with Trigonometry (all levels) and Chemistry, per the page 37 path diagram.
+- **Geometry Enhanced:** "C+ in 8th grade Algebra I; B- in 8th grade math" is read as two alternatives, not both.
+- **AP Statistics:** whether the B+ applies to Algebra II with Trigonometry Enhanced as well as College Algebra.
+- **AP Biology and AP Chemistry:** "Honors Chemistry, Honors Physics" and "Honors Physics/AP Physics I" are read as either one.
+- **Biology, Chemistry, Physics for Forensic Science:** any level of each counts.
+- **Honors Geometry for students who did not take 8th grade Algebra I** shows as appealable (page 38 says students can move into honors later).
+- **World language and English ladders** are drawn from course numbering. The PDF lists no formal prerequisite between language levels.
+- **Applied Physics and Engineering** is a `manual` rule because the Science and Technology listings disagree.
+

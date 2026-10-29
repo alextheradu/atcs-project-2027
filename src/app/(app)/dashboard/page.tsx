@@ -6,6 +6,7 @@ import { requirePageUser } from "@/lib/auth/page";
 import { navFor } from "@/lib/nav";
 
 const BLURB: Record<string, string> = {
+  "/plans": "Build a four year plan and see what graduation still needs",
   "/courses": "Browse the catalog and filter by department, level and grade",
   "/admin/catalog": "Edit courses, requirement tags and aliases",
   "/admin/users": "Roles and pre-approved grants",

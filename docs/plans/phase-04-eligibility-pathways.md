@@ -24,6 +24,12 @@ Owner tests real course choices and the pathway graph.
 
 ## Done when
 
-- [ ] Every encoded rule cites a PDF page in its `note` or seed comment.
-- [ ] Engine has no framework imports and is used by both client and server.
-- [ ] Supervisors cannot edit rules outside their departments (tested).
+- [x] Every encoded rule cites a PDF page in `rules.json` (a test checks it against the course's source page).
+- [x] Engine has no framework imports and is used by both client and server.
+- [x] Supervisors cannot edit rules outside their departments (tested, mutation checked).
+
+## Remaining for the checkpoint
+
+- [ ] Owner tries real course choices in the planner and on course pages.
+- [ ] Owner walks the pathway graph for math, science and computer science.
+- [ ] A supervisor confirms the rule readings in `docs/spec/14-open-items.md` ("Added in Phase 4").
