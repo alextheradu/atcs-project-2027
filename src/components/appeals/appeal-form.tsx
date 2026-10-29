@@ -45,13 +45,13 @@ export function AppealForm({ appealId, questions, initialAnswers, reportedGrade,
     setMsg(null);
     start(async () => {
       try {
-      const s = await saveDraft(payload());
-      if (!s.ok) return setMsg({ tone: "error", text: s.error });
-      answerDraft.commit(answers); gradeDraft.commit(grade); avgDraft.commit(avg);
-      if (!then) return setMsg({ tone: "ok", text: okText });
-      const r = await then();
-      if (!r.ok) return setMsg({ tone: "error", text: r.error ?? "That did not work." });
-      router.refresh();
+        const s = await saveDraft(payload());
+        if (!s.ok) return setMsg({ tone: "error", text: s.error });
+        answerDraft.commit(answers); gradeDraft.commit(grade); avgDraft.commit(avg);
+        if (!then) return setMsg({ tone: "ok", text: okText });
+        const r = await then();
+        if (!r.ok) return setMsg({ tone: "error", text: r.error ?? "That did not work." });
+        router.refresh();
       } catch { setMsg({ tone: "error", text: SAVE_INTERRUPTED }); }
     });
   }

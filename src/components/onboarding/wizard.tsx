@@ -53,13 +53,13 @@ export function Wizard({ startStep, cohort: startCohort, policies, interests, ne
     setError(null);
     start(async () => {
       try {
-      const r = await fn();
-      if (!r.ok) setError(r.error ?? "That did not work.");
-      else {
-        if (step === 3) { backgroundDraft.commit(form); interestDraft.commit(picked); }
-        if (step === 4) majorDraft.commit(major);
-        go(next);
-      }
+        const r = await fn();
+        if (!r.ok) setError(r.error ?? "That did not work.");
+        else {
+          if (step === 3) { backgroundDraft.commit(form); interestDraft.commit(picked); }
+          if (step === 4) majorDraft.commit(major);
+          go(next);
+        }
       } catch { setError(SAVE_INTERRUPTED); }
     });
   }

@@ -3,6 +3,7 @@ export const instant = false;
 import { notFound } from "next/navigation";
 import { Badge } from "@/components/ui/badge";
 import { PageHeader } from "@/components/ui/page";
+import { ReviewPanel } from "@/components/plan-review/review-panel";
 import { PlanActions } from "@/components/planner/plan-actions";
 import { Planner } from "@/components/planner/planner";
 import { requirePageUser } from "@/lib/auth/page";
@@ -10,6 +11,8 @@ import { db } from "@/lib/db";
 import { getGraduationConfig } from "@/lib/requirements/config";
 import { loadOwnedPlan, loadPickerCourses } from "@/lib/plans/load";
 import { isEditable } from "@/lib/plans/schemas";
+import { loadGuidance } from "@/lib/guidance/load";
+import { loadComments } from "@/lib/plan-review/load";
 import { PLAN_STATUS_LABEL } from "@/lib/plans/view";
 
 export default async function PlanPage({ params, searchParams }: { params: Promise<{ id: string }>; searchParams: Promise<{ tour?: string }> }) {
@@ -21,11 +24,13 @@ export default async function PlanPage({ params, searchParams }: { params: Promi
   const data = await loadOwnedPlan(id, user.id);
   if (!data) notFound();
 
-  const [courses, interests, config, profile] = await Promise.all([
+  const [courses, interests, config, profile, guidanceConfig, comments] = await Promise.all([
     loadPickerCourses(),
     db.interestTag.findMany({ orderBy: { label: "asc" }, select: { slug: true, label: true } }),
     getGraduationConfig(),
-    db.studentProfile.findUnique({ where: { userId: user.id }, select: { eighthMath: true, eighthMathGrade: true } }),
+    db.studentProfile.findUnique({ where: { userId: user.id }, select: { eighthMath: true, eighthMathGrade: true, intendedMajor: true } }),
+    loadGuidance(),
+    loadComments(id),
   ]);
   const { plan, entries } = data;
   const editable = isEditable(plan.status);
@@ -59,7 +64,8 @@ export default async function PlanPage({ params, searchParams }: { params: Promi
           </ul>
         </aside>
       )}
-      <Planner plan={plan} entries={entries} courses={courses} interests={interests} rules={config.rules} settings={config.settings} prior={profile ?? {}} />
+      <Planner plan={plan} entries={entries} courses={courses} interests={interests} rules={config.rules} settings={config.settings} prior={profile ?? {}} guidance={{ config: guidanceConfig, intendedMajor: profile?.intendedMajor ?? null }} />
+      <ReviewPanel planId={plan.id} status={plan.status} isOwner canReview={false} comments={comments} entries={entries.map((e) => ({ id: e.id, name: e.name }))} />
     </div>
   );
 }

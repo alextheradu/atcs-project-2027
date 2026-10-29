@@ -49,3 +49,9 @@ Edit any of these in `/admin/rules`. Each is a reading call, not something the P
 - The real appeal window dates for the next cycle (add them in `/admin/timeline`).
 - Whether a supervisor may approve a course the engine marks locked. Today a locked course cannot be requested.
 
+## Added in Phase 8
+
+- Social studies "3-4 years" and world language "2-4 years" on the college table: the guidance uses the low end (3 and 2). Change it in `/admin/major-guidance` if the school prefers the high end.
+- Which intended major words should raise math or science to 4. The defaults are guesses from the PDF's three phrases (math, science and engineering majors, and science, health care and engineering majors). A counselor should review the keyword lists.
+- Counselors currently see every student. A caseload or grade-based filter needs a definition of "their students".
+

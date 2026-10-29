@@ -41,9 +41,9 @@ export function SignupModeForm({ current }: { current: string }) {
           onClick={() =>
             start(async () => {
               try {
-              const r = await setSignupMode(mode);
-              if (r.ok) modeDraft.commit(mode);
-              setMsg(r.ok ? "Saved" : r.error);
+                const r = await setSignupMode(mode);
+                if (r.ok) modeDraft.commit(mode);
+                setMsg(r.ok ? "Saved" : r.error);
               } catch { setMsg(SAVE_INTERRUPTED); }
             })
           }
@@ -69,9 +69,9 @@ export function AddDomainForm() {
         e.preventDefault();
         start(async () => {
           try {
-          const r = await addAllowedDomain({ domain, cohort });
-          setMsg(r.ok ? { ok: true, text: "Added" } : { ok: false, text: r.error });
-          if (r.ok) { domainDraft.discard(); cohortDraft.commit(cohort); }
+            const r = await addAllowedDomain({ domain, cohort });
+            setMsg(r.ok ? { ok: true, text: "Added" } : { ok: false, text: r.error });
+            if (r.ok) { domainDraft.commit(domain, ""); cohortDraft.commit(cohort); }
           } catch { setMsg({ ok: false, text: SAVE_INTERRUPTED }); }
         });
       }}

@@ -34,9 +34,9 @@ export function AliasManager({ courseId, aliases }: { courseId: string; aliases:
           e.preventDefault();
           start(async () => {
             try {
-            const r = await addAlias({ courseId, alias });
-            setMsg(r.ok ? null : r.error);
-            if (r.ok) { draft.discard(); router.refresh(); }
+              const r = await addAlias({ courseId, alias });
+              setMsg(r.ok ? null : r.error);
+              if (r.ok) { draft.commit(alias, ""); router.refresh(); }
             } catch { setMsg(SAVE_INTERRUPTED); }
           });
         }}

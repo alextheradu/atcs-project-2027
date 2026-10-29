@@ -1,6 +1,7 @@
 import { HINTS } from "@/lib/learn/content";
 import { formatCredits } from "@/lib/credits";
 import { describeWarning, type PlanWarning } from "@/lib/plan-warnings";
+import type { GuidanceResult } from "@/lib/guidance";
 import type { GraduationSummary } from "@/lib/requirements";
 
 function Meter({ earned, scheduled, required, label }: { earned: number; scheduled: number; required: number; label: string }) {
@@ -14,7 +15,7 @@ function Meter({ earned, scheduled, required, label }: { earned: number; schedul
   );
 }
 
-export function RequirementRail({ summary, warnings }: { summary: GraduationSummary; warnings: PlanWarning[] }) {
+export function RequirementRail({ summary, warnings, advice }: { summary: GraduationSummary; warnings: PlanWarning[]; advice?: GuidanceResult | null }) {
   const unconfirmed = summary.kinds.some((k) => k.provisional > 0);
   return (
     <aside aria-label="Graduation progress" className="space-y-8 xl:sticky xl:top-20 xl:self-start">
@@ -100,6 +101,22 @@ export function RequirementRail({ summary, warnings }: { summary: GraduationSumm
         )}
         <p className="mt-3 text-xs text-muted">Warnings never block your plan. The school makes the final decision.</p>
       </section>
-    </aside>
+          {advice && (
+        <section>
+          <h2 className="mb-1 text-sm font-medium">For college</h2>
+          <p className="mb-2 text-xs text-muted">
+            Years of each subject colleges usually look for{advice.matched.length > 0 ? `, raised for ${advice.matched.join(" and ").toLowerCase()} majors` : ""}. A recommendation, not a graduation rule.
+          </p>
+          <ul className="list">
+            {advice.lines.map((l) => (
+              <li key={l.subject} className="flex items-baseline justify-between py-2 text-[13px]">
+                <span className={l.met ? "text-muted" : "text-fg"}>{l.label}</span>
+                <span className="num"><span className={l.met ? "text-green" : "text-fg"}>{l.have}</span><span className="text-muted"> / {l.need} years</span></span>
+              </li>
+            ))}
+          </ul>
+        </section>
+      )}
+</aside>
   );
 }

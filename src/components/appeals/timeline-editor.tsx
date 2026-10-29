@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useTransition } from "react";
+import { DraftNotice, SAVE_INTERRUPTED, useDraftState } from "@/components/draft-state";
 import { Button } from "@/components/ui/button";
 import { createTimelineEvent, deleteTimelineEvent } from "@/lib/appeals/admin";
 
@@ -18,10 +19,11 @@ const KINDS: [string, string][] = [["APPEAL_WINDOW", "Appeal window"], ["COURSE_
 const day = (s: string) => new Date(s).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric", timeZone: "UTC" });
 
 export function TimelineEditor({ rows }: { rows: TRow[] }) {
-  const [f, setF] = useState({ kind: "APPEAL_WINDOW", audience: "INCOMING", label: "", schoolYear: "", opensAt: "", closesAt: "" });
+  const BLANK = { kind: "APPEAL_WINDOW", audience: "INCOMING", label: "", schoolYear: "", opensAt: "", closesAt: "" };
+  const [f, setF, fDraft] = useDraftState("timeline:new", BLANK);
   const [error, setError] = useState<string | null>(null);
   const [pending, start] = useTransition();
-  const set = (k: keyof typeof f, v: string) => setF((p) => ({ ...p, [k]: v }));
+  const set = (k: keyof typeof f, v: string) => setF({ ...f, [k]: v });
 
   return (
     <div className="space-y-10">
@@ -47,9 +49,10 @@ export function TimelineEditor({ rows }: { rows: TRow[] }) {
         <span />
         <label className="space-y-1 text-[13px]"><span className="text-muted">Opens</span><input className="input" type="date" value={f.opensAt} onChange={(e) => set("opensAt", e.target.value)} /></label>
         <label className="space-y-1 text-[13px]"><span className="text-muted">Closes (optional)</span><input className="input" type="date" value={f.closesAt} onChange={(e) => set("closesAt", e.target.value)} /></label>
+        <div className="sm:col-span-2"><DraftNotice drafts={[fDraft]} /></div>
         {error && <p role="alert" className="text-[13px] text-red sm:col-span-2">{error}</p>}
         <div className="sm:col-span-2">
-          <Button variant="primary" disabled={pending || !f.label || !f.opensAt || !f.schoolYear} onClick={() => { setError(null); start(async () => { const r = await createTimelineEvent({ ...f, opensAt: `${f.opensAt}T00:00:00Z`, closesAt: f.closesAt ? `${f.closesAt}T23:59:59Z` : null }); if (!r.ok) setError(r.error); else setF((p) => ({ ...p, label: "", opensAt: "", closesAt: "" })); }); }}>Add</Button>
+          <Button variant="primary" disabled={pending || !f.label || !f.opensAt || !f.schoolYear} onClick={() => { setError(null); start(async () => { try { const r = await createTimelineEvent({ ...f, opensAt: `${f.opensAt}T00:00:00Z`, closesAt: f.closesAt ? `${f.closesAt}T23:59:59Z` : null }); if (!r.ok) setError(r.error); else fDraft.commit(f, { ...f, label: "", opensAt: "", closesAt: "" }); } catch { setError(SAVE_INTERRUPTED); } }); }}>Add</Button>
         </div>
       </section>
     </div>

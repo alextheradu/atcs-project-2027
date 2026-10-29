@@ -24,5 +24,9 @@ Counselor walkthrough with the owner.
 
 ## Done when
 
-- [ ] Demand numbers verified against seeded data.
-- [ ] Submitted plans uneditable by the student.
+- [x] Demand numbers verified against seeded data.
+- [x] Submitted plans uneditable by the student.
+
+## Remaining for the checkpoint
+
+- [ ] Counselor walkthrough with the owner.

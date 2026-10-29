@@ -2,7 +2,8 @@
 
 import Link from "next/link";
 import { useDraggable } from "@dnd-kit/core";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { DraftNotice, useDraftState } from "@/components/draft-state";
 import { Breakdown } from "@/components/eligibility/breakdown";
 import { EligibilityBadge } from "@/components/eligibility/status-badge";
 import { Button } from "@/components/ui/button";
@@ -52,6 +53,11 @@ export function RowBody({ entry, offered, result }: { entry: EntryView; offered:
 
 export function CourseRow({ entry, editable, actions, result }: { entry: EntryView; editable: boolean; actions: RowActions; result?: EvalResult }) {
   const [open, setOpen] = useState(false);
+  const [creditText, setCreditText, creditDraft] = useDraftState(`entry:${entry.id}:credits`, String(entry.credits));
+  const { dirty, commit } = creditDraft;
+  useEffect(() => {
+    if (dirty && creditText === String(entry.credits)) commit(creditText);
+  }, [dirty, creditText, entry.credits, commit]);
   const pending = entry.id.startsWith("tmp-");
   const { attributes, listeners, setNodeRef, isDragging } = useDraggable({ id: entry.id, disabled: !editable || pending });
   const offered = entry.gradesOffered.length === 0 || entry.gradesOffered.includes(entry.gradeLevel);
@@ -80,7 +86,7 @@ export function CourseRow({ entry, editable, actions, result }: { entry: EntryVi
         </button>
       </div>
 
-      {open && (
+      {(open || creditDraft.dirty) && (
         <div className="mb-3 ml-7 grid gap-3 border-t border-line pt-3 text-[13px] sm:grid-cols-2">
           {result && result.tree && (
             <div className="sm:col-span-2">
@@ -93,6 +99,7 @@ export function CourseRow({ entry, editable, actions, result }: { entry: EntryVi
           )}
           {editable ? (
             <>
+              <DraftNotice drafts={[creditDraft]} />
               <label className="space-y-1">
                 <span className="text-muted">Status</span>
                 <select
@@ -124,7 +131,8 @@ export function CourseRow({ entry, editable, actions, result }: { entry: EntryVi
                   step="0.5"
                   min={0}
                   max={30}
-                  defaultValue={entry.credits}
+                  value={creditText}
+                  onChange={(e) => setCreditText(e.target.value)}
                   disabled={pending}
                   onBlur={(e) => {
                     const v = Number(e.target.value);

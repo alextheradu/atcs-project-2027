@@ -26,9 +26,9 @@ export function GraduationForm({ rules, settings }: { rules: RequirementRuleInpu
         e.preventDefault();
         start(async () => {
           try {
-          const res = await updateGraduationConfig({ rules: r.map(({ kind, requiredCredits }) => ({ kind, requiredCredits })), settings: s });
-          if (res.ok) { ruleDraft.commit(r); settingsDraft.commit(s); }
-          setMsg(res.ok ? { ok: true, text: "Saved. Plans use the new numbers right away." } : { ok: false, text: res.error });
+            const res = await updateGraduationConfig({ rules: r.map(({ kind, requiredCredits }) => ({ kind, requiredCredits })), settings: s });
+            if (res.ok) { ruleDraft.commit(r); settingsDraft.commit(s); }
+            setMsg(res.ok ? { ok: true, text: "Saved. Plans use the new numbers right away." } : { ok: false, text: res.error });
           } catch { setMsg({ ok: false, text: SAVE_INTERRUPTED }); }
         });
       }}

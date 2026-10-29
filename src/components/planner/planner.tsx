@@ -9,6 +9,7 @@ import { DraftNotice, SAVE_INTERRUPTED, useDraftState } from "@/components/draft
 import { Button } from "@/components/ui/button";
 import { formatCredits } from "@/lib/credits";
 import { eligibilityWarnings, evaluatePlan, type PlanCourse, type StudentPrior } from "@/lib/eligibility";
+import { guidanceFor, type GuidanceConfig } from "@/lib/guidance";
 import { computeWarnings } from "@/lib/plan-warnings";
 import { addEntry, moveEntry, removeEntry, updateEntry, type ActionResult } from "@/lib/plans/actions";
 import { isEditable } from "@/lib/plans/schemas";
@@ -28,6 +29,9 @@ interface Props {
   rules: RequirementRuleInput[];
   settings: GraduationSettings;
   prior: StudentPrior;
+  /** Counselor and admin view: nobody edits from here. */
+  readOnly?: boolean;
+  guidance?: { config: GuidanceConfig; intendedMajor: string | null };
 }
 
 /** The pointer decides when there is one. A keyboard drag has no pointer, so fall back to overlapping rectangles. */
@@ -64,10 +68,10 @@ function Column({ grade, credits, need, editable, count, onAdd, children }: {
   );
 }
 
-export function Planner({ plan, entries: serverEntries, courses, interests, rules, settings, prior }: Props) {
+export function Planner({ plan, entries: serverEntries, courses, interests, rules, settings, prior, readOnly = false, guidance }: Props) {
   const [change, setChange, changeDraft] = useDraftState<PlanChange | null>(`plan:${plan.id}:pending`, null);
   const [pending, startTransition] = useTransition();
-  const editable = isEditable(plan.status) && !change && !pending;
+  const editable = isEditable(plan.status) && !readOnly && !change && !pending;
   const [entries, setEntries] = useState(serverEntries);
   const [error, setError] = useState<string | null>(null);
   const [activeId, setActiveId] = useState<string | null>(null);
@@ -95,6 +99,7 @@ export function Planner({ plan, entries: serverEntries, courses, interests, rule
     () => computeWarnings(entries.map(toWarnEntry), settings, eligibilityWarnings(placements, results)),
     [entries, settings, placements, results],
   );
+  const advice = useMemo(() => (guidance ? guidanceFor(guidance.config, guidance.intendedMajor, entries.map((e) => ({ department: e.department, gradeLevel: e.gradeLevel }))) : null), [guidance, entries]);
   const inPlan = useMemo(() => new Set(entries.map((e) => e.courseId)), [entries]);
 
   const sensors = useSensors(
@@ -111,17 +116,17 @@ export function Planner({ plan, entries: serverEntries, courses, interests, rule
     optimistic();
     startTransition(async () => {
       try {
-      const r = await action();
-      if (!r.ok) {
-        setError(r.error);
-        setEntries(serverEntries);
-      } else changeDraft.discard();
+        const r = await action();
+        if (!r.ok) {
+          setError(r.error);
+          setEntries(serverEntries);
+        } else changeDraft.discard();
       } catch { setError(SAVE_INTERRUPTED); setEntries(serverEntries); }
     });
   }
 
   function retry() {
-    if (pending || !isEditable(plan.status)) return;
+    if (pending || readOnly || !isEditable(plan.status)) return;
     const action = recoverPlanChange(change, serverEntries);
     if (!action) { changeDraft.discard(); setError(null); return; }
     if ("conflict" in action) { setError("This course has changed. Check the saved plan, then discard this pending change and edit the course again."); return; }
@@ -188,9 +193,9 @@ export function Planner({ plan, entries: serverEntries, courses, interests, rule
   return (
     <div className="grid gap-12 xl:grid-cols-[minmax(0,1fr)_300px]">
       <div>
-        {!isEditable(plan.status) && (
+        {(readOnly || !isEditable(plan.status)) && (
           <p className="mb-6 border-y border-line py-3 text-[13px] text-muted">
-            This plan is in review, so it is read-only. You can still look around.
+            {readOnly ? "You are looking at a student's plan. It is read-only." : "This plan is in review, so it is read-only. You can still look around."}
           </p>
         )}
         {change && !pending && (
@@ -198,7 +203,7 @@ export function Planner({ plan, entries: serverEntries, courses, interests, rule
             <DraftNotice drafts={[changeDraft]} />
             <p className="text-[13px] text-muted">A course change has not been confirmed. Retry checks whether it was already saved.</p>
             <div className="flex gap-2">
-              <Button size="sm" onClick={retry} disabled={!isEditable(plan.status)}>Retry change</Button>
+              <Button size="sm" onClick={retry} disabled={readOnly || !isEditable(plan.status)}>Retry change</Button>
               <Button size="sm" variant="ghost" onClick={() => { changeDraft.discard(); setEntries(serverEntries); setError(null); }}>Discard pending change</Button>
             </div>
           </div>
@@ -240,7 +245,7 @@ export function Planner({ plan, entries: serverEntries, courses, interests, rule
         </DndContext>
       </div>
 
-      <RequirementRail summary={summary} warnings={warnings} />
+      <RequirementRail summary={summary} warnings={warnings} advice={advice} />
 
       <AddCoursePanel
         open={panel.open && editable}

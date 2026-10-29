@@ -42,6 +42,17 @@ describe("editor recovery", () => {
     expect(createDraftStore(storage, "course", "saved").getSnapshot().dirty).toBe(false);
     expect(data.size).toBe(0);
   });
+  it("resets an add form after saving, while retaining edits made during the request", () => {
+    const { storage } = setup();
+    const store = createDraftStore(storage, "new", "");
+    store.set("first");
+    store.commit("first", "");
+    expect(store.getSnapshot()).toMatchObject({ value: "", dirty: false });
+    store.set("second");
+    store.set("third");
+    store.commit("second", "");
+    expect(createDraftStore(storage, "new", "").getSnapshot().value).toBe("third");
+  });
   it("discards explicitly and notifies subscribers", () => {
     const { storage } = setup();
     const store = createDraftStore(storage, "course", "original");

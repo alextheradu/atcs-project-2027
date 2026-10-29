@@ -21,9 +21,9 @@ export function GrantForm() {
     e.preventDefault();
     start(async () => {
       try {
-      const r = await createGrant({ email, role, departments: depts });
-      setMsg(r.ok ? { ok: true, text: "Grant saved" } : { ok: false, text: r.error });
-      if (r.ok) { emailDraft.discard(); roleDraft.commit(role); deptDraft.commit(depts); }
+        const r = await createGrant({ email, role, departments: depts });
+        setMsg(r.ok ? { ok: true, text: "Grant saved" } : { ok: false, text: r.error });
+        if (r.ok) { emailDraft.commit(email, ""); roleDraft.commit(role); deptDraft.commit(depts); }
       } catch { setMsg({ ok: false, text: SAVE_INTERRUPTED }); }
     });
   };

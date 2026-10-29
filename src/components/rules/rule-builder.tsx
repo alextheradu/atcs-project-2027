@@ -215,9 +215,9 @@ export function RuleBuilder({ courseId, initial, options }: { courseId: string; 
     setSaved(null);
     start(async () => {
       try {
-      const r = await saveCourseRules({ courseId, rules: clean });
-      if (r.ok) { draft.commit(root); setSaved(clean ? "Saved." : "Rules cleared. The catalog text is now only a note."); }
-      else setError(r.error);
+        const r = await saveCourseRules({ courseId, rules: clean });
+        if (r.ok) { draft.commit(root); setSaved(clean ? "Saved." : "Rules cleared. The catalog text is now only a note."); }
+        else setError(r.error);
       } catch { setError(SAVE_INTERRUPTED); }
     });
   }

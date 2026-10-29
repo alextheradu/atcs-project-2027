@@ -20,9 +20,9 @@ export function NewPlanForm({ label = "New plan", first = false }: { label?: str
         start(async () => {
           setError(null);
           try {
-          const r = await createPlan(name.trim() === "" ? undefined : name);
-          if (r.ok && r.data) { draft.discard(); router.push(`/plans/${r.data.id}`); }
-          else if (!r.ok) setError(r.error);
+            const r = await createPlan(name.trim() === "" ? undefined : name);
+            if (r.ok && r.data) { draft.commit(name, ""); router.push(`/plans/${r.data.id}`); }
+            else if (!r.ok) setError(r.error);
           } catch { setError(SAVE_INTERRUPTED); }
         });
       }}
