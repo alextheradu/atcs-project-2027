@@ -92,7 +92,8 @@ export function ImportFlow({ plans, courses, aliases }: Props) {
     }
   }
 
-  const chosen = lines.filter((l) => l.courseId);
+  const chosen = lines.filter((l) => l.courseId && l.courseId !== "__missing");
+  const missing = lines.filter((l) => l.courseId === "__missing");
 
   function confirm() {
     setError(null);
@@ -104,9 +105,9 @@ export function ImportFlow({ plans, courses, aliases }: Props) {
       credits: l.inProgress ? null : l.credits,
     }));
     // A hand mapping is any choice that differs from what the matcher picked on its own.
-    const aliasesOut = chosen.filter((l) => l.courseId !== l.autoCourseId || l.via === "fuzzy").map((l) => ({ title: l.title, courseId: l.courseId }));
+    const suggestions = chosen.filter((l) => l.courseId !== l.autoCourseId || l.via === "fuzzy").map((l) => ({ title: l.title, courseId: l.courseId }));
     start(async () => {
-      const r = await confirmImport({ planId, rows, aliases: aliasesOut });
+      const r = await confirmImport({ planId, rows, suggestions, missing: missing.map((l) => ({ title: l.title })) });
       if (r.ok) setDone(r.data ?? null);
       else setError(r.error);
     });
@@ -138,7 +139,7 @@ export function ImportFlow({ plans, courses, aliases }: Props) {
           <p>
             Added <span className="num">{done.added}</span> {done.added === 1 ? "course" : "courses"}.
             {done.skipped.length > 0 && <> Skipped {done.skipped.join(", ")} because {done.skipped.length === 1 ? "it was" : "they were"} already in the plan.</>}
-            {done.aliasesSaved > 0 && <> Saved <span className="num">{done.aliasesSaved}</span> new {done.aliasesSaved === 1 ? "name" : "names"} so the next import matches on its own.</>}
+            {done.sentToStaff > 0 && <> Sent <span className="num">{done.sentToStaff}</span> {done.sentToStaff === 1 ? "title" : "titles"} to a counselor to review. Courses that are not in the catalog yet were not added. You can add them by hand once they exist.</>}
           </p>
           <Link href={`/plans/${planId}`} className="mt-2 inline-block underline underline-offset-4">Open the plan</Link>
         </div>
@@ -183,6 +184,7 @@ export function ImportFlow({ plans, courses, aliases }: Props) {
                           onChange={(e) => setLines((ls) => ls.map((x) => (x.key === l.key ? { ...x, courseId: e.target.value } : x)))}
                         >
                           <option value="">Skip this row</option>
+                          <option value="__missing">Not in the catalog, ask a counselor</option>
                           {l.candidates.length > 0 && (
                             <optgroup label="Best matches">
                               {l.candidates.map((c) => <option key={c.courseId} value={c.courseId}>{c.name}</option>)}
@@ -198,7 +200,7 @@ export function ImportFlow({ plans, courses, aliases }: Props) {
                 </div>
               ))}
               <div className="flex flex-wrap items-center gap-3">
-                <Button variant="primary" disabled={pending || chosen.length === 0 || !!done} onClick={confirm}>
+                <Button variant="primary" disabled={pending || (chosen.length === 0 && missing.length === 0) || !!done} onClick={confirm}>
                   {pending ? "Adding" : `Add ${chosen.length} ${chosen.length === 1 ? "course" : "courses"}`}
                 </Button>
                 <Button variant="ghost" disabled={pending} onClick={() => { setParsed(null); setLines([]); setDone(null); }}>Start over</Button>

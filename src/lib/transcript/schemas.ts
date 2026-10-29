@@ -12,10 +12,13 @@ const row = z.object({
   credits: z.number().min(0).max(30).multipleOf(0.5).nullable().optional(),
 });
 
-export const importSchema = z.object({
+const base = z.object({
   planId: id,
-  rows: z.array(row).min(1, "Pick at least one course.").max(MAX_IMPORT_ROWS, `Import up to ${MAX_IMPORT_ROWS} courses at a time.`),
-  /** Transcript titles the student mapped by hand. Saved so the next import matches on its own. */
-  aliases: z.array(z.object({ title: z.string().trim().min(2).max(120), courseId: id })).max(MAX_IMPORT_ROWS).default([]),
+  rows: z.array(row).max(MAX_IMPORT_ROWS, `Import up to ${MAX_IMPORT_ROWS} courses at a time.`),
+  /** Titles the student matched by hand. A counselor reviews each one before it can help anyone else. */
+  suggestions: z.array(z.object({ title: z.string().trim().min(2).max(120), courseId: id })).max(MAX_IMPORT_ROWS).default([]),
+  /** Titles that are not in the catalog at all. They go to a counselor or admin. */
+  missing: z.array(z.object({ title: z.string().trim().min(2).max(120) })).max(MAX_IMPORT_ROWS).default([]),
 });
+export const importSchema = base.refine((v) => v.rows.length + v.missing.length > 0, { message: "Pick at least one course." });
 export type ImportInput = z.infer<typeof importSchema>;

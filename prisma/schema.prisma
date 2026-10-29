@@ -188,6 +188,12 @@ enum DeletionStatus {
   COMPLETED
 }
 
+enum ImportRequestStatus {
+  PENDING
+  APPROVED
+  DISMISSED
+}
+
 enum PolicyKind {
   PRIVACY
   TERMS
@@ -217,6 +223,7 @@ model User {
   reviewedPlans     Plan[]                   @relation("PlanReviewer")
   planComments      PlanComment[]
   appeals           Appeal[]                 @relation("AppealStudent")
+  importRequests    ImportRequest[]          @relation("ImportRequestStudent")
   decidedAppeals    Appeal[]                 @relation("AppealDecider")
   acceptances       PolicyAcceptance[]
   notifications     Notification[]
@@ -409,6 +416,7 @@ model Course {
   planEntries    PlanEntry[]
   appealsTarget  Appeal[]            @relation("AppealTarget")
   appealsCurrent Appeal[]            @relation("AppealCurrent")
+  importRequests ImportRequest[]
 
   @@index([department, level])
   @@index([archived])
@@ -444,6 +452,26 @@ model CourseAlias {
   createdBy User?  @relation(fields: [createdById], references: [id], onDelete: SetNull)
 
   @@index([courseId])
+}
+
+/// A transcript title a student could not match. Staff review it before it can affect anyone else.
+/// With a courseId it is a suggested alias. Without one the course is missing from the catalog.
+model ImportRequest {
+  id              String              @id @default(cuid())
+  studentId       String
+  title           String
+  normalizedTitle String
+  courseId        String?
+  status          ImportRequestStatus @default(PENDING)
+  decidedById     String?
+  decidedAt       DateTime?
+  createdAt       DateTime            @default(now())
+
+  student User    @relation("ImportRequestStudent", fields: [studentId], references: [id], onDelete: Cascade)
+  course  Course? @relation(fields: [courseId], references: [id], onDelete: SetNull)
+
+  @@unique([studentId, normalizedTitle])
+  @@index([status, createdAt])
 }
 
 model CourseEdge {
