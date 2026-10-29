@@ -17,7 +17,7 @@ export function describeRule(rule: Rule, names: Record<string, string> = {}): st
     case "gradeLevel":
       return `grade ${rule.in.join(", ")}`;
     case "coreq":
-      return `${list(names, rule.courses)} in the same year or earlier`;
+      return `${list(names, rule.courses)} ${rule.timing === "sameYear" ? "in the same school year" : "in the same year or earlier"}`;
     case "priorCoursework":
       return `8th grade ${rule.value === "ALGEBRA_I" ? "Algebra I" : rule.value === "PRE_ALGEBRA" ? "Pre-Algebra" : "math"}${rule.minGrade ? ` with ${gradeText(rule.minGrade)} or higher` : ""}`;
     case "manual":

@@ -8,7 +8,7 @@ Store prerequisites as structured rules in `Course.rules` (JSON), alongside the 
 - `completed { courses: [slug...] }`
 - `minGrade { course: slug | courses: [slug...], grade: "B+", basis: "initialAverage" | "final" }`
 - `gradeLevel { in: [10,11,12] }`
-- `coreq { course: slug }`
+- `coreq { courses: [slug...], timing?: "sameYear" | "sameOrEarlier" }`: any listed course satisfies it. `sameYear` requires the same grade year, including completed coursework in that year. Omitted timing keeps the existing same-year-or-earlier behavior. New rules default to `sameYear` in the editor. AP Microeconomics and AP Macroeconomics are a same-year pair.
 - `priorCoursework { field: "eighthMath", value: "ALGEBRA_I" }` (for middle school math)
 - `manual { label: "Placement exam proficiency" }` (cannot be checked automatically)
 - Any leaf can set `appealable: true | false` (default true) and a human `note`.

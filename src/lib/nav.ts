@@ -1,4 +1,5 @@
 import type { Role } from "@/lib/auth/policy";
+import { STUDENT_WORKSPACE_ROLES } from "@/lib/auth/student-access";
 
 export interface NavItem {
   href: string;
@@ -12,9 +13,9 @@ export const NAV: NavItem[] = [
   { href: "/dashboard", label: "Dashboard", group: "Workspace" },
   { href: "/plans", label: "Plans", group: "Workspace" },
   { href: "/courses", label: "Courses", group: "Workspace" },
-  { href: "/import", label: "Import", roles: ["STUDENT", "INCOMING"], group: "Workspace" },
+  { href: "/import", label: "Import", roles: STUDENT_WORKSPACE_ROLES, group: "Workspace" },
   { href: "/pathways", label: "Pathways", group: "Workspace" },
-  { href: "/appeals", label: "Placement reviews", roles: ["STUDENT", "INCOMING"], group: "Workspace" },
+  { href: "/appeals", label: "Placement reviews", roles: STUDENT_WORKSPACE_ROLES, group: "Workspace" },
   { href: "/review", label: "Reviews", roles: ["SUPERVISOR", "ADMIN"], group: "Admin" },
   { href: "/counselor", label: "Counselor", roles: ["COUNSELOR", "ADMIN"], group: "Admin" },
   { href: "/admin/catalog", label: "Catalog", roles: ["COUNSELOR", "ADMIN"], group: "Admin" },

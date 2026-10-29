@@ -5,12 +5,13 @@ import { Badge } from "@/components/ui/badge";
 import { EmptyState } from "@/components/ui/empty-state";
 import { PageHeader } from "@/components/ui/page";
 import { requirePageRole } from "@/lib/auth/page";
+import { STUDENT_WORKSPACE_ROLES } from "@/lib/auth/student-access";
 import { db } from "@/lib/db";
 import { STATUS_LABEL, type AppealStatus } from "@/lib/appeals/rules";
 import { TONE } from "@/components/appeals/tone";
 
 export default async function Appeals() {
-  const user = await requirePageRole("STUDENT", "INCOMING");
+  const user = await requirePageRole(...STUDENT_WORKSPACE_ROLES);
   const appeals = await db.appeal.findMany({
     where: { studentId: user.id },
     orderBy: { updatedAt: "desc" },

@@ -153,6 +153,18 @@ describe("confirmImport", () => {
 });
 
 describe("request safety", () => {
+  it.each(["confirmImport", "bulkAddCourses"] as const)("admins can use %s for their own plan", async (action) => {
+    state.user = { ...user, id: `admin${++n}`, role: "ADMIN" };
+    expect(await actions[action]({ planId: "p1", rows: [row("c1")] })).toMatchObject({ ok: true, data: { added: 1 } });
+    expect(fakeDb.plan.findFirst).toHaveBeenCalledWith(expect.objectContaining({ where: { id: "p1", ownerId: (state.user as { id: string }).id } }));
+  });
+  it.each(["confirmImport", "bulkAddCourses"] as const)("admins cannot use %s on another owner's plan", async (action) => {
+    state.user = { ...user, id: `admin${++n}`, role: "ADMIN" };
+    fakeDb.plan.findFirst.mockResolvedValue(null);
+    expect(await actions[action]({ planId: "theirs", rows: [row("c1")] })).toEqual({ ok: false, error: "Plan not found." });
+    expect(fakeDb.plan.findFirst).toHaveBeenCalledWith(expect.objectContaining({ where: { id: "theirs", ownerId: (state.user as { id: string }).id } }));
+    expect(fakeDb.planEntry.create).not.toHaveBeenCalled();
+  });
   it("refuses staff roles", async () => {
     state.user = { ...user, id: "staff", role: "COUNSELOR" };
     expect((await actions.confirmImport({ planId: "p1", rows: [row("c1")] })).ok).toBe(false);

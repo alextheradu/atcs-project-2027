@@ -4,6 +4,7 @@ import { redirect } from "next/navigation";
 import { Wizard } from "@/components/onboarding/wizard";
 import { DraftProvider } from "@/components/draft-state";
 import { requirePageUser } from "@/lib/auth/page";
+import { canUseStudentWorkspace } from "@/lib/auth/student-access";
 import { db } from "@/lib/db";
 import { needsOnboarding, latestPolicies } from "@/lib/onboarding/gate";
 
@@ -14,8 +15,8 @@ const SUMMARY: Record<string, string> = {
 
 export default async function Onboarding() {
   const user = await requirePageUser();
-  if (user.role !== "STUDENT" && user.role !== "INCOMING") redirect("/dashboard");
-  if (!(await needsOnboarding(user))) redirect("/dashboard");
+  if (!canUseStudentWorkspace(user.role)) redirect("/dashboard");
+  if (user.role !== "ADMIN" && !(await needsOnboarding(user))) redirect("/dashboard");
 
   const [progress, profile, policies, interests, row] = await Promise.all([
     db.onboardingProgress.findUnique({ where: { userId: user.id } }),
@@ -26,7 +27,8 @@ export default async function Onboarding() {
   ]);
 
   // A new policy version re-prompts onboarded users at the policy step only.
-  const startStep = row?.onboardedAt ? 1 : (progress?.step ?? 0);
+  let startStep = row?.onboardedAt ? 1 : (progress?.step ?? 0);
+  if (user.role === "ADMIN") startStep = progress?.step === 7 ? 0 : (progress?.step ?? 0);
   return (
     <main className="min-h-dvh px-4 py-14">
       <DraftProvider userId={user.id}><Wizard

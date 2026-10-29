@@ -3,6 +3,7 @@
 import { revalidatePath } from "next/cache";
 import { writeAudit } from "@/lib/audit";
 import { requireRole, requireUser } from "@/lib/auth";
+import { canUseStudentWorkspace } from "@/lib/auth/student-access";
 import { ForbiddenError } from "@/lib/auth/guards";
 import { db } from "@/lib/db";
 import { bestFitOf } from "./fit";
@@ -22,7 +23,7 @@ const ownAppeal = (appealId: string, studentId: string) => db.appeal.findFirst({
 
 async function student() {
   const user = await requireUser();
-  if (user.role !== "STUDENT" && user.role !== "INCOMING") return null;
+  if (!canUseStudentWorkspace(user.role)) return null;
   return user;
 }
 
@@ -50,7 +51,7 @@ export async function startAppeal(courseSlug: unknown): Promise<ActionResult<{ i
   }
 
   let unmet: { type: string; message: string }[] = [];
-  if (user.role === "STUDENT") {
+  if (user.role !== "INCOMING") {
     const fit = await bestFitOf(user.id, course);
     if (!fit) return fail("That course is not offered in grades 9 to 12.");
     if (fit.status === "ELIGIBLE") return fail("You already meet the requirements for this course.");
@@ -111,7 +112,7 @@ export async function submitAppeal(appealId: unknown): Promise<ActionResult> {
   if (!appeal) return fail(NOT_FOUND);
   if (!canTransition(appeal.status, "SUBMITTED")) return fail("This request was already submitted.");
 
-  const check = checkWindow(user.role as "STUDENT" | "INCOMING", await windows());
+  const check = checkWindow(user.role === "INCOMING" ? "INCOMING" : "STUDENT", await windows());
   if (!check.allowed) {
     return fail(check.nextOpen ? `Requests open on ${check.nextOpen.toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric" })}. Your draft is saved.` : "Requests are not open right now. Your draft is saved, and we will show the dates when they are set.");
   }

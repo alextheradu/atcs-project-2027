@@ -196,6 +196,10 @@ describe("English and social studies (p16-27)", () => {
     expect(run("ap-microeconomics", 11, []).status).toBe("NOT_ELIGIBLE_APPEALABLE");
     expect(run("ap-microeconomics", 11, [plan("ap-macroeconomics", 11)]).status).toBe("ELIGIBLE");
     expect(run("ap-macroeconomics", 11, [plan("ap-microeconomics", 11)]).status).toBe("ELIGIBLE");
+    for (const [target, companion] of [["ap-microeconomics", "ap-macroeconomics"], ["ap-macroeconomics", "ap-microeconomics"]]) {
+      expect(run(target, 12, [plan(companion, 11)]).status).toBe("NOT_ELIGIBLE_APPEALABLE");
+      expect(run(target, 12, [done(companion, "B", 11)]).status).toBe("NOT_ELIGIBLE_APPEALABLE");
+    }
   });
   it("AP Government and the Syracuse public policy course are taken together", () => {
     expect(run("ap-american-government-and-politics", 12, []).status).toBe("NOT_ELIGIBLE_APPEALABLE");

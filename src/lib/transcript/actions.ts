@@ -2,6 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 import { requireUser } from "@/lib/auth";
+import { canUseStudentWorkspace } from "@/lib/auth/student-access";
 import { writeAudit } from "@/lib/audit";
 import { db } from "@/lib/db";
 import { RateLimitError, enforceLimit } from "@/lib/rate-limit";
@@ -21,8 +22,7 @@ export interface ImportSummary {
 
 async function save(input: unknown, source: "IMPORT" | "MANUAL"): Promise<ActionResult<ImportSummary>> {
   const user = await requireUser();
-  // Student roles only, enforced here and not just on the page.
-  if (user.role !== "STUDENT" && user.role !== "INCOMING") return fail("Importing is for students.");
+  if (!canUseStudentWorkspace(user.role)) return fail("Importing is for students and admins.");
   try {
     enforceLimit("import", user.id);
   } catch (e) {

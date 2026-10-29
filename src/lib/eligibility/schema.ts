@@ -21,7 +21,7 @@ const minGrade = z.object({
   ...leaf,
 });
 const gradeLevel = z.object({ type: z.literal("gradeLevel"), in: z.array(z.number().int().min(6).max(12)).min(1).max(7), ...leaf });
-const coreq = z.object({ type: z.literal("coreq"), courses: slugs, ...leaf });
+const coreq = z.object({ type: z.literal("coreq"), courses: slugs, timing: z.enum(["sameYear", "sameOrEarlier"]).optional(), ...leaf });
 const prior = z.object({
   type: z.literal("priorCoursework"),
   field: z.literal("eighthMath"),

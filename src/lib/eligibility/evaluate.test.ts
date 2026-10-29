@@ -146,6 +146,39 @@ describe("coreq", () => {
   });
 });
 
+describe("same-year co-requisites", () => {
+  const rule: Rule = { type: "coreq", courses: ["ap-macroeconomics"], timing: "sameYear" };
+
+  it.each(["PLANNED", "IN_PROGRESS", "COMPLETED"] as const)("accepts a passing companion in the same year with status %s", (status) => {
+    expect(evaluate(rule, ctx(11, [{ slug: "ap-macroeconomics", gradeLevel: 11, status, grade: status === "COMPLETED" ? "B" : null }])).status).toBe("ELIGIBLE");
+  });
+
+  it.each([10, 12])("rejects a companion in grade %i, even when completed", (year) => {
+    for (const entry of [planned("ap-macroeconomics", year), done("ap-macroeconomics", "B", year)]) {
+      const r = evaluate(rule, ctx(11, [entry]));
+      expect(r.status).toBe("NOT_ELIGIBLE_APPEALABLE");
+      expect(r.summary).toContain("same school year");
+      expect(r.summary).not.toContain("or earlier");
+    }
+  });
+
+  it("explains a missing companion using its name and target year", () => {
+    expect(evaluate(rule, ctx(11, [], { names: { "ap-macroeconomics": "AP Macroeconomics" } })).summary)
+      .toBe("Take AP Macroeconomics in grade 11, in the same school year as this course.");
+  });
+
+  it("does not count a failed companion and explains the failure", () => {
+    const r = evaluate(rule, ctx(11, [done("ap-macroeconomics", "F", 11)]));
+    expect(r.status).toBe("NOT_ELIGIBLE_APPEALABLE");
+    expect(r.summary).toContain("did not pass");
+  });
+
+  it("checks all alternatives instead of stopping at the first mismatch", () => {
+    const either: Rule = { ...rule, courses: ["other", "ap-macroeconomics"] };
+    expect(evaluate(either, ctx(11, [planned("other", 10), planned("ap-macroeconomics", 11)])).status).toBe("ELIGIBLE");
+  });
+});
+
 describe("priorCoursework and gradeLevel", () => {
   const algI: Rule = { type: "priorCoursework", field: "eighthMath", value: "ALGEBRA_I", minGrade: "C_PLUS" };
   it("asks for the profile when 8th grade math is unknown", () => {

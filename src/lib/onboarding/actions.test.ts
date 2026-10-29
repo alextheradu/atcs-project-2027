@@ -34,7 +34,7 @@ beforeEach(() => {
   fakeDb.user.findUnique.mockResolvedValue({ ageConfirmed13At: null });
 });
 
-describe("onboarding is student only", () => {
+describe("onboarding authorization", () => {
   const calls: [string, () => Promise<unknown>][] = [
     ["chooseGrade", () => actions.chooseGrade({ grade: 10 })],
     ["acceptPolicies", () => actions.acceptPolicies()],
@@ -48,7 +48,7 @@ describe("onboarding is student only", () => {
     state.user = null;
     await expect(run()).rejects.toBeInstanceOf(UnauthenticatedError);
   });
-  for (const role of ["COUNSELOR", "SUPERVISOR", "ADMIN"] as const) {
+  for (const role of ["COUNSELOR", "SUPERVISOR"] as const) {
     it.each(calls)(`%s refuses ${role} and writes nothing`, async (_n, run) => {
       state.user = make(role);
       expect(await run()).toMatchObject({ ok: false });
@@ -59,6 +59,12 @@ describe("onboarding is student only", () => {
 });
 
 describe("chooseGrade", () => {
+  it.each([8, 9, 10, 11, 12])("preserves the admin role when choosing grade %s", async (grade) => {
+    state.user = make("ADMIN");
+    expect(await actions.chooseGrade({ grade, role: "STUDENT" })).toEqual({ ok: true, data: { role: "ADMIN" } });
+    expect(fakeDb.user.update).toHaveBeenCalledWith(expect.objectContaining({ where: { id: "u1" }, data: expect.objectContaining({ role: "ADMIN" }) }));
+    expect(fakeDb.studentProfile.upsert).toHaveBeenCalledWith(expect.objectContaining({ where: { userId: "u1" }, create: expect.objectContaining({ currentGrade: grade }) }));
+  });
   it("sets a student role, never a staff role, whatever is sent", async () => {
     for (const g of [8, 9, 10, 11, 12]) {
       fakeDb.user.update.mockClear();

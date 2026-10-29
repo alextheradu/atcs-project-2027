@@ -89,8 +89,8 @@ rule("ap-u-s-history-i", 24, all(done(WORLD, { note: "Any 9th grade World Histor
 rule("ap-world-history", 25, manual(REC));
 rule("ap-art-history", 25, manual("Recommendation of Social Studies teacher and supervisor"));
 // Paired courses (p26-28): each must be taken together with the other.
-rule("ap-microeconomics", 26, co(["ap-macroeconomics"], { note: "The PDF says students must also take AP Macroeconomics." }));
-rule("ap-macroeconomics", 26, co(["ap-microeconomics"], { note: "Taken as a pair with AP Microeconomics (p26)." }));
+rule("ap-microeconomics", 26, { type: "coreq", courses: ["ap-macroeconomics"], timing: "sameYear", note: "The PDF says students must also take AP Macroeconomics." });
+rule("ap-macroeconomics", 26, { type: "coreq", courses: ["ap-microeconomics"], timing: "sameYear", note: "Taken as a pair with AP Microeconomics (p26)." });
 rule("an-introduction-to-the-analysis-of-public-policy", [27, 28], co(["ap-american-government-and-politics"], { note: "Taken with AP American Government and Politics." }));
 rule("ap-american-government-and-politics", [28, 27], co(["an-introduction-to-the-analysis-of-public-policy"], { note: "Taken with An Introduction to the Analysis of Public Policy." }));
 

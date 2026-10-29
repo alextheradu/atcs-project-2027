@@ -3,11 +3,12 @@ export const instant = false;
 import { ImportFlow } from "@/components/import/import-flow";
 import { PageHeader } from "@/components/ui/page";
 import { requirePageRole } from "@/lib/auth/page";
+import { STUDENT_WORKSPACE_ROLES } from "@/lib/auth/student-access";
 import { db } from "@/lib/db";
 import { isEditable } from "@/lib/plans/schemas";
 
 export default async function Import() {
-  const user = await requirePageRole("STUDENT", "INCOMING");
+  const user = await requirePageRole(...STUDENT_WORKSPACE_ROLES);
   const [plans, courses, aliases] = await Promise.all([
     db.plan.findMany({ where: { ownerId: user.id }, orderBy: [{ isPrimary: "desc" }, { createdAt: "asc" }], select: { id: true, name: true, isPrimary: true, status: true } }),
     db.course.findMany({ where: { plannable: true }, orderBy: { name: "asc" }, select: { id: true, name: true, archived: true } }),

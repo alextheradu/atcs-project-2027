@@ -42,6 +42,27 @@ beforeEach(() => {
 });
 
 describe("students and their own appeals", () => {
+  it("admins can save, submit, withdraw and delete their own requests", async () => {
+    state.user = make("ADMIN", [], "admin");
+    expect((await actions.saveDraft({ appealId: "a1", answers: [] })).ok).toBe(true);
+    expect((await actions.submitAppeal("a1")).ok).toBe(true);
+    fakeDb.appeal.findFirst.mockResolvedValue(appeal({ status: "SUBMITTED" }));
+    expect((await actions.withdrawAppeal("a1")).ok).toBe(true);
+    fakeDb.appeal.findFirst.mockResolvedValue(appeal());
+    expect((await actions.deleteDraft("a1")).ok).toBe(true);
+    for (const [query] of fakeDb.appeal.findFirst.mock.calls) expect(query.where.studentId).toBe("admin");
+  });
+
+  it("admins cannot use student actions on another student's request", async () => {
+    state.user = make("ADMIN", [], "admin");
+    fakeDb.appeal.findFirst.mockResolvedValue(null);
+    for (const result of [await actions.saveDraft({ appealId: "a1", answers: [] }), await actions.submitAppeal("a1"), await actions.withdrawAppeal("a1"), await actions.deleteDraft("a1")]) {
+      expect(result).toEqual({ ok: false, error: "Appeal not found." });
+    }
+    for (const [query] of fakeDb.appeal.findFirst.mock.calls) expect(query.where.studentId).toBe("admin");
+    expect(fakeDb.appeal.update).not.toHaveBeenCalled();
+    expect(fakeDb.appeal.delete).not.toHaveBeenCalled();
+  });
   it("another student's appeal is not found, for every student action", async () => {
     fakeDb.appeal.findFirst.mockResolvedValue(null);
     for (const r of [await actions.saveDraft({ appealId: "a1", answers: [] }), await actions.submitAppeal("a1"), await actions.withdrawAppeal("a1"), await actions.deleteDraft("a1")]) {
@@ -144,6 +165,16 @@ describe("starting a request", () => {
     fakeDb.appeal.create.mockResolvedValue({ id: "new" });
   });
   const fit = (status: string) => vi.mocked(bestFitOf).mockResolvedValue({ status, unmet: [{ rule: { type: "minGrade" }, message: "Needs B-", state: "unmet" }], leaves: [] } as never);
+
+  it("admins start requests against their own eligibility with current-student rules", async () => {
+    state.user = make("ADMIN", [], "admin");
+    fit("ELIGIBLE_WITH_WARNING");
+    expect((await actions.startAppeal("calculus")).ok).toBe(true);
+    expect(bestFitOf).toHaveBeenCalledWith("admin", course);
+    expect(fakeDb.appeal.create).toHaveBeenCalledWith(expect.objectContaining({ data: expect.objectContaining({ studentId: "admin" }) }));
+    fit("NOT_ELIGIBLE_LOCKED");
+    expect((await actions.startAppeal("calculus")).ok).toBe(false);
+  });
 
   it("allows a course the student is close to, and snapshots what was missing", async () => {
     fit("NOT_ELIGIBLE_APPEALABLE");
