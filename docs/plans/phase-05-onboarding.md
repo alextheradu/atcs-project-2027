@@ -26,6 +26,10 @@ Owner walks both paths.
 
 ## Done when
 
-- [ ] Under-13 path stores nothing.
-- [ ] Starter plan tests pass and copy follows the wording rules.
-- [ ] Onboarding is resumable mid-step.
+- [x] Under-13 path stores nothing.
+- [x] Starter plan tests pass and copy follows the wording rules.
+- [x] Onboarding is resumable mid-step.
+
+## Remaining for the checkpoint
+
+- [ ] Owner walks both paths and reads the copy.

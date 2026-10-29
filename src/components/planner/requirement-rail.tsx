@@ -1,3 +1,4 @@
+import { HINTS } from "@/lib/learn/content";
 import { formatCredits } from "@/lib/credits";
 import { describeWarning, type PlanWarning } from "@/lib/plan-warnings";
 import type { GraduationSummary } from "@/lib/requirements";
@@ -19,7 +20,7 @@ export function RequirementRail({ summary, warnings }: { summary: GraduationSumm
     <aside aria-label="Graduation progress" className="space-y-8 xl:sticky xl:top-20 xl:self-start">
       <section>
         <div className="flex items-baseline justify-between">
-          <h2 className="text-sm font-medium">Credits</h2>
+          <h2 className="text-sm font-medium" title={HINTS.credits}>Credits</h2>
           <span className="num">
             <span className="text-fg">{formatCredits(summary.total)}</span>
             <span className="text-muted"> / {formatCredits(summary.totalRequired)}</span>

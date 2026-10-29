@@ -110,6 +110,7 @@ export function CourseForm({ mode, courseId, archived, initial, interestOptions 
         <div className="flex flex-wrap gap-6 sm:col-span-2">
           <label className="flex items-center gap-2 text-sm"><input type="checkbox" className="accent-[var(--accent)]" checked={c.plannable} onChange={(e) => set("plannable", e.target.checked)} />Plannable</label>
           <label className="flex items-center gap-2 text-sm"><input type="checkbox" className="accent-[var(--accent)]" checked={c.hasApExam} onChange={(e) => set("hasApExam", e.target.checked)} />Has an AP exam</label>
+          <label className="flex items-center gap-2 text-sm"><input type="checkbox" className="accent-[var(--accent)]" checked={c.dualEnrollment} onChange={(e) => set("dualEnrollment", e.target.checked)} />Dual enrollment</label>
         </div>
         <label className={`${field} sm:col-span-2`}>
           <span className={label}>Description</span>

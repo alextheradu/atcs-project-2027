@@ -2,7 +2,7 @@
 
 Seed the catalog from the Program of Studies PDF into `prisma/seed/courses.json`, loaded by `prisma/seed.ts`. Write an extraction script under `scripts/` that you run once, then hand-review the output. Expect roughly 150 courses.
 
-Per course: `slug`, `name`, `department`, `level` (CP, ENHANCED, HONORS, AP, DUAL_ENROLLMENT, MIDDLE_SCHOOL), `duration` (FULL or HALF), `credits`, `gradesOffered`, `description`, `prereqText` (verbatim from the PDF), structured `rules` (see `06-eligibility-pathways.md`), requirement tags, interest tags, `hasApExam`, dual enrollment note, `sourcePage`.
+Per course: `slug`, `name`, `department`, `level` (CP, ENHANCED, HONORS, AP, MIDDLE_SCHOOL), `duration` (FULL or HALF), `credits`, `gradesOffered`, `description`, `prereqText` (verbatim from the PDF), structured `rules` (see `06-eligibility-pathways.md`), requirement tags, interest tags, `hasApExam`, `dualEnrollment` (an independent checkbox), optional dual enrollment note, `sourcePage`.
 
 ## Data rules and pitfalls found in the PDF and a real transcript
 

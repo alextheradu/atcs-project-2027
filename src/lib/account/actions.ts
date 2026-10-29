@@ -1,6 +1,8 @@
 "use server";
 
 import { cookies } from "next/headers";
+import { redirect } from "next/navigation";
+import { AGE_COOKIE, verifyAge } from "@/lib/age-gate";
 import { revalidatePath } from "next/cache";
 import { signIn, signOut, requireUser } from "@/lib/auth";
 import { LINK_INTENT_COOKIE, LINK_INTENT_TTL_MS, signLinkIntent } from "@/lib/auth/link-intent";
@@ -8,6 +10,10 @@ import { writeAudit } from "@/lib/audit";
 import { db } from "@/lib/db";
 
 export async function signInWithGoogle() {
+  // The age gate is enforced here too, not only in the button state. Staff and returning users who
+  // already confirmed are covered by the cookie lasting a few hours; anyone else must answer first.
+  const answer = verifyAge((await cookies()).get(AGE_COOKIE)?.value, process.env.AUTH_SECRET ?? "");
+  if (answer !== "over13") redirect("/?error=age_required");
   await signIn("google", { redirectTo: "/dashboard" });
 }
 

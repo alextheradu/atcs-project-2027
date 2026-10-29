@@ -26,7 +26,7 @@ function snapshot(c: CourseWithRelations) {
   return {
     slug: c.slug, name: c.name, department: c.department, level: c.level, duration: c.duration,
     credits: Number(c.credits), gradesOffered: c.gradesOffered, description: c.description,
-    prereqText: c.prereqText, dualEnrollmentNote: c.dualEnrollmentNote, hasApExam: c.hasApExam,
+    prereqText: c.prereqText, dualEnrollment: c.dualEnrollment, dualEnrollmentNote: c.dualEnrollmentNote, hasApExam: c.hasApExam,
     plannable: c.plannable, archived: c.archived, sourcePage: c.sourcePage,
     requirements: c.requirements.map((r) => ({ kind: r.kind, credits: Number(r.credits), provisional: r.provisional })),
     interests: c.interests.map((i) => i.slug).sort(),
@@ -44,7 +44,7 @@ function scalar(c: CourseInput) {
   return {
     name: c.name, department: c.department, level: c.level, duration: c.duration, credits: c.credits,
     gradesOffered: c.gradesOffered, description: c.description, prereqText: c.prereqText,
-    dualEnrollmentNote: c.dualEnrollmentNote, hasApExam: c.hasApExam, plannable: c.plannable, sourcePage: c.sourcePage,
+    dualEnrollment: c.dualEnrollment, dualEnrollmentNote: c.dualEnrollmentNote, hasApExam: c.hasApExam, plannable: c.plannable, sourcePage: c.sourcePage,
   };
 }
 

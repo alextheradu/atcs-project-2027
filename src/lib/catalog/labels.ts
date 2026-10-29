@@ -5,7 +5,7 @@ export const DEPT_LABEL: Record<string, string> = {
   TECHNOLOGY: "Technology", SPECIAL_ED: "Special Education", OTHER: "Other Programs",
 };
 export const LEVEL_LABEL: Record<string, string> = {
-  CP: "College prep", ENHANCED: "Enhanced", HONORS: "Honors", AP: "AP", DUAL_ENROLLMENT: "Dual enrollment", MIDDLE_SCHOOL: "Middle school",
+  CP: "College prep", ENHANCED: "Enhanced", HONORS: "Honors", AP: "AP", MIDDLE_SCHOOL: "Middle school",
 };
 export const KIND_LABEL: Record<string, string> = {
   ENGLISH: "English", MATH: "Mathematics", SCI_BIO: "Biology", SCI_CHEM: "Chemistry", SCI_PHYS: "Physics",

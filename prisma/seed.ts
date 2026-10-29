@@ -14,6 +14,7 @@ interface CourseSeed {
   gradesOffered: number[];
   description: string;
   prereqText: string | null;
+  dualEnrollment: boolean;
   dualEnrollmentNote: string | null;
   hasApExam: boolean;
   plannable: boolean;
@@ -102,6 +103,14 @@ async function main() {
     if (!course) throw new Error(`alias target missing: ${a.courseSlug}`);
     await db.courseAlias.upsert({ where: { alias: a.alias }, create: { alias: a.alias, courseId: course.id }, update: {} });
     aliases++;
+  }
+
+  for (const d of read<{ kind: never; version: number; title: string; bodyMd: string }[]>("policies.json")) {
+    await db.policyDocument.upsert({
+      where: { kind_version: { kind: d.kind, version: d.version } },
+      create: { ...d, effectiveAt: new Date() },
+      update: {},
+    });
   }
 
   const rules = await seedRules();

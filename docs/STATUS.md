@@ -11,8 +11,8 @@ Update this file at the end of every phase or session.
 | 2 | Catalog | built, awaiting owner review of the catalog and provisional tags |
 | 3 | Planner and tracker | built, awaiting owner checkpoint (build a plan, check totals) |
 | 4 | Eligibility and pathways | built, awaiting owner checkpoint (try real course choices and the pathway graph) |
-| 5 | Onboarding | not started |
-| 6 | Transcript import | not started, needs a layout reference transcript |
+| 5 | Onboarding | built, awaiting owner checkpoint (walk the 9th grade and 8th grade paths) |
+| 6 | Transcript import | built, awaiting owner checkpoint (import your own transcript locally) |
 | 7 | Appeals | not started |
 | 8 | Review and dashboards | not started |
 | 9 | Notifications and PWA | not started |

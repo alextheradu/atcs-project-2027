@@ -11,7 +11,7 @@ const csp = [
   "img-src 'self' data: blob: https://lh3.googleusercontent.com",
   "font-src 'self'",
   "connect-src 'self'",
-  "worker-src 'self'",
+  "worker-src 'self' blob:",
   "manifest-src 'self'",
   "object-src 'none'",
   "base-uri 'self'",

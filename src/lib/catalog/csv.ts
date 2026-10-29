@@ -3,7 +3,7 @@ import type { CourseInput } from "./schemas";
 
 export const CSV_COLUMNS = [
   "slug", "name", "department", "level", "duration", "credits", "gradesOffered", "description",
-  "prereqText", "dualEnrollmentNote", "hasApExam", "plannable", "archived", "sourcePage",
+  "prereqText", "dualEnrollment", "dualEnrollmentNote", "hasApExam", "plannable", "archived", "sourcePage",
   "requirements", "interests",
 ] as const;
 
@@ -61,7 +61,7 @@ export function parseCsv(text: string): string[][] {
 export function courseToRow(c: CourseRecord): string[] {
   return [
     c.slug, c.name, c.department, c.level, c.duration, String(c.credits), c.gradesOffered.join("|"),
-    c.description, c.prereqText ?? "", c.dualEnrollmentNote ?? "", String(c.hasApExam), String(c.plannable),
+    c.description, c.prereqText ?? "", String(c.dualEnrollment), c.dualEnrollmentNote ?? "", String(c.hasApExam), String(c.plannable),
     String(c.archived), c.sourcePage === null ? "" : String(c.sourcePage),
     c.requirements.map((r) => `${r.kind}:${r.credits}:${r.provisional}`).join("|"),
     c.interests.join("|"),
@@ -76,6 +76,8 @@ const list = (s: string) => (s.trim() === "" ? [] : s.split("|").map((x) => x.tr
 /** Converts one CSV row into course input. Enum and range validation happens later in the zod schema. */
 export function rowToCourseInput(header: string[], row: string[]): Result {
   for (const col of CSV_COLUMNS) {
+    // Older exports encoded dual enrollment only in the partner note.
+    if (col === "dualEnrollment") continue;
     if (!header.includes(col)) return { ok: false, error: `Missing column: ${col}` };
   }
   const cell = (name: (typeof CSV_COLUMNS)[number]) => row[header.indexOf(name)] ?? "";
@@ -109,6 +111,7 @@ export function rowToCourseInput(header: string[], row: string[]): Result {
       gradesOffered: grades,
       description: cell("description"),
       prereqText: cell("prereqText").trim() === "" ? null : cell("prereqText"),
+      dualEnrollment: header.includes("dualEnrollment") ? bool(cell("dualEnrollment")) : cell("dualEnrollmentNote").trim() !== "",
       dualEnrollmentNote: cell("dualEnrollmentNote").trim() === "" ? null : cell("dualEnrollmentNote"),
       hasApExam: bool(cell("hasApExam")),
       plannable: bool(cell("plannable")),
