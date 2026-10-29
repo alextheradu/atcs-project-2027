@@ -105,6 +105,16 @@ describe("saveCourseRules", () => {
   beforeEach(() => {
     state.user = make("ADMIN");
   });
+  it("preserves same-year timing through validation, storage and audit", async () => {
+    const rules = { type: "coreq", courses: ["ap-macroeconomics"], timing: "sameYear" };
+    expect(await actions.saveCourseRules({ courseId: "c1", rules })).toEqual({ ok: true });
+    expect(fakeDb.course.update).toHaveBeenCalledWith({ where: { id: "c1" }, data: { rules } });
+    expect(writeAudit).toHaveBeenCalledWith(expect.objectContaining({ after: rules }), expect.anything());
+  });
+  it("rejects unsupported co-requisite timing", async () => {
+    expect((await actions.saveCourseRules({ courseId: "c1", rules: { type: "coreq", courses: ["x"], timing: "anytime" } })).ok).toBe(false);
+    expect(fakeDb.course.update).not.toHaveBeenCalled();
+  });
   it("saves, audits before and after, and clears with null", async () => {
     fakeDb.course.findUnique.mockResolvedValue({ id: "c1", slug: "geometry", department: "MATH", rules: { type: "manual", label: "x" } });
     expect((await actions.saveCourseRules({ courseId: "c1", rules: rule })).ok).toBe(true);

@@ -92,6 +92,12 @@ describe("tree edits", () => {
 import { describeRule } from "./describe";
 
 describe("describeRule", () => {
+  it("distinguishes taking courses together from taking one earlier", () => {
+    expect(describeRule({ type: "coreq", courses: ["macro"], timing: "sameYear" }, { macro: "AP Macroeconomics" }))
+      .toBe("AP Macroeconomics in the same school year");
+    expect(describeRule({ type: "coreq", courses: ["macro"], timing: "sameOrEarlier" }))
+      .toBe("macro in the same year or earlier");
+  });
   const names = { "honors-geometry": "Honors Geometry", "geometry-enhanced": "Geometry Enhanced" };
   it("reads the Honors Algebra II example in plain words", () => {
     const r: Rule = {

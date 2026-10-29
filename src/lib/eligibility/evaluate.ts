@@ -100,6 +100,14 @@ function evalMinGrade(rule: Extract<LeafRule, { type: "minGrade" }>, ctx: EvalCo
 function evalCoreq(rule: Extract<LeafRule, { type: "coreq" }>, ctx: EvalContext): LeafResult {
   const names = listNames(ctx, rule.courses);
   const hits = ctx.taken.filter((t) => rule.courses.includes(t.slug));
+  if (rule.timing === "sameYear") {
+    const sameYear = hits.filter((t) => t.gradeLevel === ctx.gradeLevel);
+    const ok = sameYear.find((t) => t.status !== "COMPLETED" || !t.grade || isPassing(t.grade));
+    if (ok) return result(rule, "met", `${nameOf(ctx, ok.slug)} is in the same school year.`, true);
+    const failed = sameYear.find((t) => t.status === "COMPLETED" && t.grade && !isPassing(t.grade));
+    if (failed) return result(rule, "unmet", `You did not pass ${nameOf(ctx, failed.slug)}. Check with your counselor about this co-requisite.`, true);
+    return result(rule, "unmet", `Take ${names} in grade ${ctx.gradeLevel}, in the same school year as this course.`, true);
+  }
   const ok = hits.find((t) => (t.status === "COMPLETED" ? !(t.grade && !isPassing(t.grade)) : t.gradeLevel <= ctx.gradeLevel));
   if (ok) {
     const together = ok.status !== "COMPLETED" && ok.gradeLevel === ctx.gradeLevel;

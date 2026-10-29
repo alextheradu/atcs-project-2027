@@ -335,6 +335,7 @@
       "courses": [
         "ap-macroeconomics"
       ],
+      "timing": "sameYear",
       "note": "The PDF says students must also take AP Macroeconomics."
     },
     "pages": [
@@ -348,6 +349,7 @@
       "courses": [
         "ap-microeconomics"
       ],
+      "timing": "sameYear",
       "note": "Taken as a pair with AP Microeconomics (p26)."
     },
     "pages": [

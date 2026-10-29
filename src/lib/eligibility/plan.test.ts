@@ -42,6 +42,17 @@ describe("evaluatePlan", () => {
 });
 
 describe("eligibilityWarnings", () => {
+  it("warns for both split co-requisites and clears both warnings when reunited", () => {
+    const micro = mk("micro", 11, { type: "coreq", courses: ["macro"], timing: "sameYear" });
+    const macro = mk("macro", 12, { type: "coreq", courses: ["micro"], timing: "sameYear" });
+    const split = [micro, macro];
+    expect(eligibilityWarnings(split, evaluatePlan(split)).map((w) => [w.entryId, w.code]))
+      .toEqual([["micro", "MISSING_COREQ"], ["macro", "MISSING_COREQ"]]);
+    const together = [micro, { ...macro, gradeLevel: 11 }];
+    expect(eligibilityWarnings(together, evaluatePlan(together))).toEqual([]);
+    expect(eligibilityWarnings([micro], evaluatePlan([micro]))).toMatchObject([{ entryId: "micro", code: "MISSING_COREQ" }]);
+  });
+
   it("raises prerequisite and co-requisite warnings only for failures", () => {
     const micro = mk("micro", 11, { type: "coreq", courses: ["macro"] });
     const calc = mk("calc", 11, { type: "completed", courses: ["pre"] });

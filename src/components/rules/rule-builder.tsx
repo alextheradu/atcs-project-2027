@@ -16,7 +16,7 @@ interface CourseOption {
 const LEAF_LABEL: Record<LeafType, string> = {
   completed: "Completed a course",
   minGrade: "Minimum grade in a course",
-  coreq: "Taken in the same year",
+  coreq: "Co-requisite (take together)",
   gradeLevel: "Grade level",
   priorCoursework: "8th grade math",
   manual: "Checked by a person",
@@ -90,8 +90,21 @@ function Common({ rule, onChange }: { rule: LeafRule; onChange: (r: LeafRule) =>
 function LeafFields({ rule, options, onChange }: { rule: LeafRule; options: CourseOption[]; onChange: (r: LeafRule) => void }) {
   switch (rule.type) {
     case "completed":
-    case "coreq":
       return <CoursePicker value={rule.courses} options={options} onChange={(courses) => onChange({ ...rule, courses })} />;
+    case "coreq":
+      return (
+        <div className="space-y-2">
+          <CoursePicker value={rule.courses} options={options} onChange={(courses) => onChange({ ...rule, courses })} />
+          <label className="flex flex-wrap items-center gap-2 text-[13px] text-muted">
+            When to take it
+            <select className="input !w-auto" value={rule.timing ?? "sameOrEarlier"} onChange={(e) => onChange({ ...rule, timing: e.target.value as typeof rule.timing })}>
+              <option value="sameYear">Same school year</option>
+              <option value="sameOrEarlier">Same year or earlier</option>
+            </select>
+          </label>
+          <p className="text-xs text-muted">For paired courses, add a same-year co-requisite to each course. Missing co-requisites warn students without blocking their plan.</p>
+        </div>
+      );
     case "minGrade":
       return (
         <div className="space-y-2">

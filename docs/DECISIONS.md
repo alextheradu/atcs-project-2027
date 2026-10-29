@@ -2,6 +2,16 @@
 
 Settled choices and deviations from the original spec. Add a dated entry when you make a new one. Do not re-litigate without the owner.
 
+## 2026-10-29 (admin student access)
+
+- **Admins can use every student page with their own data.** Import and placement review navigation, page guards and server actions share an explicit student workspace role list (`STUDENT`, `INCOMING`, `ADMIN`). Admin pathways use their own primary plan. Ownership checks still apply, and staff review views retain their existing permissions.
+- **Admin onboarding is optional and preserves `ADMIN`.** Visiting `/onboarding` can create or update the admin's own student profile and plan. Grade choices never demote an admin or promote a student to staff. Admins still skip mandatory onboarding and use current-student eligibility and appeal windows.
+
+## 2026-10-29 (same-year co-requisites)
+
+- **Co-requisites have explicit timing:** `sameYear` requires a companion in the same grade year, including completed courses from that year. `sameOrEarlier` also accepts earlier coursework. Existing rules without a timing field keep the earlier-course behavior; new co-requisites default to `sameYear` in the rule builder. The planner has no semester schedule, so paired half-year courses share a school year, not necessarily a semester.
+- **AP Microeconomics and AP Macroeconomics are a same-year pair**, as confirmed by the owner, based on the pairing on Program of Studies page 26. Each course references the other. Missing, removed or split companions raise planner warnings without preventing saves. The migration upgrades only rules that still exactly match the original seeds, preserving staff edits and cleared rules.
+
 ## 2026-10-29 (deployment recovery)
 
 - **Unsaved editor drafts stay in `sessionStorage`**, scoped to the authenticated user and resource, with a versioned key independent of the release. This survives reloads and redeployments within a tab without keeping student input indefinitely across closed tabs. Store no raw transcript file or raw PDF text. Recovery restores input for review; it never bypasses server authorization or submits automatically.

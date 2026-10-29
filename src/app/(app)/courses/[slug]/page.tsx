@@ -10,6 +10,7 @@ import { requirePageUser } from "@/lib/auth/page";
 import { db } from "@/lib/db";
 import { DEPT_LABEL, KIND_LABEL, LEVEL_LABEL, fmtCredits } from "@/lib/catalog/labels";
 import { courseFit, parseRule, ruleSlugs, type PlanCourse } from "@/lib/eligibility";
+import { describeRule } from "@/lib/rules/describe";
 
 export default async function CoursePage({ params }: { params: Promise<{ slug: string }> }) {
   const user = await requirePageUser();
@@ -54,12 +55,12 @@ export default async function CoursePage({ params }: { params: Promise<{ slug: s
         <div className="space-y-8">
           <p className="max-w-[65ch] leading-relaxed">{course.description}</p>
 
-          {course.prereqText && (
+          {(course.prereqText || rules) && (
             <Section
-              title="Requirements from the Program of Studies"
+              title={course.prereqText ? "Requirements from the Program of Studies" : "Course requirements"}
               description={rules ? "The school decides placement. This is a check against your primary plan." : "This course is not checked automatically yet. The school decides placement."}
             >
-              <p className="max-w-[65ch] text-sm leading-relaxed">{course.prereqText}</p>
+              <p className="max-w-[65ch] text-sm leading-relaxed">{course.prereqText || (rules ? describeRule(rules, names) : null)}</p>
             </Section>
           )}
 

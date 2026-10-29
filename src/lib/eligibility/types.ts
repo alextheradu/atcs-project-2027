@@ -39,10 +39,12 @@ export interface GradeLevelRule extends LeafBase {
   type: "gradeLevel";
   in: number[];
 }
-/** Any one of `courses` is taken in the same year, or was finished earlier. */
+/** Any one of `courses` satisfies the specified timing. */
 export interface CoreqRule extends LeafBase {
   type: "coreq";
   courses: string[];
+  /** Omitted on older rules, which allow the companion in the same year or earlier. */
+  timing?: "sameYear" | "sameOrEarlier";
 }
 /** The student's own 8th grade math, from their profile. */
 export interface PriorCourseworkRule extends LeafBase {

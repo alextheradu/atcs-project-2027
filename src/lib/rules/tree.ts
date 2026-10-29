@@ -14,7 +14,7 @@ export function blankLeaf(type: LeafType): LeafRule {
     case "gradeLevel":
       return { type, in: [10, 11, 12] };
     case "coreq":
-      return { type, courses: [] };
+      return { type, courses: [], timing: "sameYear" };
     case "priorCoursework":
       return { type, field: "eighthMath" };
     case "manual":

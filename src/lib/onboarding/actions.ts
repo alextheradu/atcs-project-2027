@@ -3,6 +3,7 @@
 import { cookies } from "next/headers";
 import { z } from "zod";
 import { requireUser } from "@/lib/auth";
+import { canUseStudentWorkspace } from "@/lib/auth/student-access";
 import { AGE_COOKIE, signAge, verifyAge, AGE_TTL_MS } from "@/lib/age-gate";
 import { db } from "@/lib/db";
 import { buildStarterPlan, type StarterCourse } from "@/lib/starter-plan";
@@ -20,10 +21,10 @@ const secret = () => {
   return s;
 };
 
-/** Student roles only. Staff never onboard and a grade pick can never change a staff role. */
+/** Admins may optionally onboard with their own profile while keeping their role. */
 async function student() {
   const user = await requireUser();
-  if (user.role !== "STUDENT" && user.role !== "INCOMING") return null;
+  if (!canUseStudentWorkspace(user.role)) return null;
   return user;
 }
 
@@ -50,9 +51,10 @@ export async function chooseGrade(input: unknown, ageOk = false): Promise<Action
   if (!existing?.ageConfirmed13At && cookieAge !== "over13" && !ageOk) return fail("Confirm that you are 13 or older.");
 
   const p = placementForGrade(parsed.data.grade);
+  const role = user.role === "ADMIN" ? "ADMIN" : p.role;
   await db.$transaction(async (tx) => {
-    // Only ever between the two student roles, never a staff role.
-    await tx.user.update({ where: { id: user.id }, data: { role: p.role, ageConfirmed13At: existing?.ageConfirmed13At ?? new Date() } });
+    // Grade choices cannot grant a staff role or remove an admin's access.
+    await tx.user.update({ where: { id: user.id }, data: { role, ageConfirmed13At: existing?.ageConfirmed13At ?? new Date() } });
     await tx.studentProfile.upsert({
       where: { userId: user.id },
       create: { userId: user.id, cohort: p.cohort, gradYear: p.gradYear, currentGrade: p.currentGrade },
@@ -60,7 +62,7 @@ export async function chooseGrade(input: unknown, ageOk = false): Promise<Action
     });
   });
   await progress(user.id, 1);
-  return { ok: true, data: { role: p.role } };
+  return { ok: true, data: { role } };
 }
 
 export async function acceptPolicies(): Promise<ActionResult> {

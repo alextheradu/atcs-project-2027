@@ -6,12 +6,13 @@ import { TONE } from "@/components/appeals/tone";
 import { Badge } from "@/components/ui/badge";
 import { PageHeader, Section } from "@/components/ui/page";
 import { requirePageRole } from "@/lib/auth/page";
+import { STUDENT_WORKSPACE_ROLES } from "@/lib/auth/student-access";
 import { db } from "@/lib/db";
 import { checkWindow, isEditable, isWithdrawable, STATUS_LABEL, type AppealStatus, type WindowEvent } from "@/lib/appeals/rules";
 import { gradeLabel } from "@/lib/plans/view";
 
 export default async function AppealPage({ params }: { params: Promise<{ id: string }> }) {
-  const user = await requirePageRole("STUDENT", "INCOMING");
+  const user = await requirePageRole(...STUDENT_WORKSPACE_ROLES);
   const { id } = await params;
   if (!/^[a-z0-9]{1,64}$/i.test(id)) notFound();
   // Ownership is part of the query: someone else's request is a 404.
@@ -29,7 +30,7 @@ export default async function AppealPage({ params }: { params: Promise<{ id: str
       db.appealQuestion.findMany({ where: { active: true, OR: [{ department: null }, { department: appeal.department }] }, orderBy: [{ sortOrder: "asc" }, { prompt: "asc" }] }),
       db.timelineEvent.findMany({ where: { kind: "APPEAL_WINDOW" } }),
     ]);
-    const check = checkWindow(user.role as "STUDENT" | "INCOMING", events.map((e) => ({ ...e, audience: e.audience as WindowEvent["audience"] })));
+    const check = checkWindow(user.role === "INCOMING" ? "INCOMING" : "STUDENT", events.map((e) => ({ ...e, audience: e.audience as WindowEvent["audience"] })));
     const blocked = check.allowed ? null : check.nextOpen
       ? `Requests for incoming students open on ${check.nextOpen.toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric" })}. You can save a draft now.`
       : "Requests for incoming students are not open yet. You can save a draft now, and the dates will show here when they are set.";
