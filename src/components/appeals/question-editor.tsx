@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useTransition } from "react";
+import { DraftNotice, SAVE_INTERRUPTED, useDraftState } from "@/components/draft-state";
 import { Button } from "@/components/ui/button";
 import { DEPT_LABEL } from "@/lib/catalog/labels";
 import { saveQuestion } from "@/lib/appeals/admin";
@@ -20,18 +21,21 @@ export interface QRow {
 const BLANK: Omit<QRow, "id"> = { department: null, prompt: "", helpText: null, type: "LONG_TEXT", options: [], required: true, sortOrder: 50, active: true };
 
 function Editor({ row, departments, canAll, onDone }: { row: QRow | null; departments: string[]; canAll: boolean; onDone: () => void }) {
-  const [q, setQ] = useState<Omit<QRow, "id">>(row ?? { ...BLANK, department: canAll ? null : departments[0] ?? null });
-  const [opts, setOpts] = useState(q.options.join(", "));
+  const key = `question:${row?.id ?? "new"}`;
+  const [q, setQ, qDraft] = useDraftState<Omit<QRow, "id">>(key, row ?? { ...BLANK, department: canAll ? null : departments[0] ?? null });
+  const [opts, setOpts, optsDraft] = useDraftState(`${key}:options`, q.options.join(", "));
   const [error, setError] = useState<string | null>(null);
   const [pending, start] = useTransition();
-  const set = <K extends keyof typeof q>(k: K, v: (typeof q)[K]) => setQ((p) => ({ ...p, [k]: v }));
+  const set = <K extends keyof typeof q>(k: K, v: (typeof q)[K]) => setQ({ ...q, [k]: v });
 
   function save() {
     setError(null);
     start(async () => {
-      const r = await saveQuestion(row?.id ?? null, { ...q, helpText: q.helpText || null, options: q.type === "CHOICE" ? opts.split(",").map((s) => s.trim()).filter(Boolean) : undefined });
-      if (r.ok) onDone();
-      else setError(r.error);
+      try {
+        const r = await saveQuestion(row?.id ?? null, { ...q, helpText: q.helpText || null, options: q.type === "CHOICE" ? opts.split(",").map((s) => s.trim()).filter(Boolean) : undefined });
+        if (r.ok) { qDraft.commit(q, row ?? { ...BLANK, department: canAll ? null : departments[0] ?? null }); optsDraft.commit(opts, ""); onDone(); }
+        else setError(r.error);
+      } catch { setError(SAVE_INTERRUPTED); }
     });
   }
 
@@ -50,6 +54,7 @@ function Editor({ row, departments, canAll, onDone }: { row: QRow | null; depart
       <label className="flex items-center gap-2 text-[13px]"><input type="checkbox" checked={q.required} onChange={(e) => set("required", e.target.checked)} /> Required</label>
       <label className="flex items-center gap-2 text-[13px]"><input type="checkbox" checked={q.active} onChange={(e) => set("active", e.target.checked)} /> Shown to students</label>
       <label className="flex items-center gap-2 text-[13px]"><span className="text-muted">Order</span><input className="input num !w-24" type="number" min={0} max={999} value={q.sortOrder} onChange={(e) => set("sortOrder", Number(e.target.value))} /></label>
+      <div className="sm:col-span-2"><DraftNotice drafts={[qDraft, optsDraft]} /></div>
       {error && <p role="alert" className="text-[13px] text-red sm:col-span-2">{error}</p>}
       <div className="flex gap-2 sm:col-span-2">
         <Button variant="primary" size="sm" disabled={pending || q.prompt.trim().length < 3} onClick={save}>Save</Button>

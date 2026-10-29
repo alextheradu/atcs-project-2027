@@ -109,9 +109,9 @@ export function ImportFlow({ plans, courses, aliases }: Props) {
     const suggestions = chosen.filter((l) => l.courseId !== l.autoCourseId || l.via === "fuzzy").map((l) => ({ title: l.title, courseId: l.courseId }));
     start(async () => {
       try {
-      const r = await confirmImport({ planId, rows, suggestions, missing: missing.map((l) => ({ title: l.title })) });
-      if (r.ok) { parsedDraft.discard(); lineDraft.discard(); setDone(r.data ?? null); }
-      else setError(r.error);
+        const r = await confirmImport({ planId, rows, suggestions, missing: missing.map((l) => ({ title: l.title })) });
+        if (r.ok) { parsedDraft.commit(parsed, null); lineDraft.commit(lines, []); setDone(r.data ?? null); }
+        else setError(r.error);
       } catch { setError(SAVE_INTERRUPTED); }
     });
   }
@@ -241,14 +241,14 @@ function ByHand({ planId, courses, onDone, onError }: { planId: string; courses:
     onDone(null);
     start(async () => {
       try {
-      const r = await bulkAddCourses({
-        planId,
-        rows: ready.map((x) => ({ courseId: x.courseId, gradeLevel: x.gradeLevel, status: x.status, grade: x.status === "COMPLETED" && x.grade ? x.grade : null, credits: null })),
-      });
-      if (r.ok) {
-        onDone(r.data ?? null);
-        handDraft.discard();
-      } else onError(r.error);
+        const r = await bulkAddCourses({
+          planId,
+          rows: ready.map((x) => ({ courseId: x.courseId, gradeLevel: x.gradeLevel, status: x.status, grade: x.status === "COMPLETED" && x.grade ? x.grade : null, credits: null })),
+        });
+        if (r.ok) {
+          onDone(r.data ?? null);
+          handDraft.commit(rows, [{ key: 1, text: "", courseId: "", gradeLevel: 9, status: "COMPLETED", grade: "" }]);
+        } else onError(r.error);
       } catch { onError(SAVE_INTERRUPTED); }
     });
   }

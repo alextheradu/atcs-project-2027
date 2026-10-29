@@ -69,11 +69,12 @@ export function createDraftStore<T>(storage: StorageAccess, key: string, initial
       read();
       publish(typeof next === "function" ? (next as (previous: T) => T)(snapshot.value) : next);
     },
-    commit: (submitted: T) => {
+    commit: (submitted: T, reset: T = submitted) => {
       read();
-      base = submitted;
+      const value = equal(snapshot.value, submitted) ? reset : snapshot.value;
+      base = reset;
       snapshot = { ...snapshot, recovered: false, conflict: false };
-      publish(snapshot.value);
+      publish(value);
     },
     discard: () => {
       read();

@@ -18,9 +18,9 @@ export function PlanActions({ planId, name, isPrimary, editable }: { planId: str
     start(async () => {
       setError(null);
       try {
-      const r = await fn();
-      if (!r.ok) setError("error" in r ? (r.error ?? "That did not work.") : "That did not work.");
-      else then?.(r as { ok: true; data?: { id: string } });
+        const r = await fn();
+        if (!r.ok) setError("error" in r ? (r.error ?? "That did not work.") : "That did not work.");
+        else then?.(r as { ok: true; data?: { id: string } });
       } catch { setError(SAVE_INTERRUPTED); }
     });
 

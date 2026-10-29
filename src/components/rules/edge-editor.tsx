@@ -1,6 +1,7 @@
 "use client";
 
 import { useId, useMemo, useState, useTransition } from "react";
+import { DraftNotice, SAVE_INTERRUPTED, useDraftState } from "@/components/draft-state";
 import { Button } from "@/components/ui/button";
 import { TRACKS, TRACK_LABEL, type Track } from "@/lib/pathways";
 import { createEdge, deleteEdge, updateEdge } from "@/lib/rules/actions";
@@ -24,11 +25,11 @@ interface Option {
 
 export function EdgeEditor({ edges, options }: { edges: EdgeRow[]; options: Option[] }) {
   const listId = useId();
-  const [track, setTrack] = useState<Track>("MATH");
-  const [from, setFrom] = useState("");
-  const [to, setTo] = useState("");
-  const [kind, setKind] = useState<"STANDARD" | "ADVANCE">("STANDARD");
-  const [note, setNote] = useState("");
+  const [track, setTrack, trackDraft] = useDraftState<Track>("edge:track", "MATH");
+  const [from, setFrom, fromDraft] = useDraftState("edge:from", "");
+  const [to, setTo, toDraft] = useDraftState("edge:to", "");
+  const [kind, setKind, kindDraft] = useDraftState<"STANDARD" | "ADVANCE">("edge:kind", "STANDARD");
+  const [note, setNote, noteDraft] = useDraftState("edge:note", "");
   const [error, setError] = useState<string | null>(null);
   const [pending, start] = useTransition();
 
@@ -38,9 +39,11 @@ export function EdgeEditor({ edges, options }: { edges: EdgeRow[]; options: Opti
   function run(fn: () => Promise<{ ok: boolean; error?: string }>, after?: () => void) {
     setError(null);
     start(async () => {
-      const r = await fn();
-      if (!r.ok) setError(r.error ?? "That did not work.");
-      else after?.();
+      try {
+        const r = await fn();
+        if (!r.ok) setError(r.error ?? "That did not work.");
+        else after?.();
+      } catch { setError(SAVE_INTERRUPTED); }
     });
   }
 
@@ -51,15 +54,17 @@ export function EdgeEditor({ edges, options }: { edges: EdgeRow[]; options: Opti
     run(
       () => createEdge({ fromId, toId, track, kind, appealable: true, note: note || null }),
       () => {
-        setFrom("");
-        setTo("");
-        setNote("");
+        fromDraft.commit(from, "");
+        toDraft.commit(to, "");
+        noteDraft.commit(note, "");
+        trackDraft.commit(track); kindDraft.commit(kind);
       },
     );
   }
 
   return (
     <div className="space-y-8">
+      <DraftNotice drafts={[fromDraft, toDraft, noteDraft, kindDraft]} />
       <div role="tablist" aria-label="Pathway" className="flex flex-wrap gap-x-5 gap-y-1 border-b border-line">
         {TRACKS.map((t) => (
           <button

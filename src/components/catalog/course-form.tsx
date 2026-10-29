@@ -37,15 +37,15 @@ export function CourseForm({ mode, courseId, archived, initial, interestOptions 
   const save = () =>
     start(async () => {
       try {
-      if (mode === "new") {
-        const r = await createCourse(c);
-        if (r.ok && r.data) { draft.commit(c); router.push(`/admin/catalog/${r.data.id}`); }
-        else setMsg({ ok: false, text: r.ok ? "Saved" : r.error });
-      } else {
-        const r = await updateCourse(courseId!, c);
-        setMsg(r.ok ? { ok: true, text: "Saved" } : { ok: false, text: r.error });
-        if (r.ok) { draft.commit(c); router.refresh(); }
-      }
+        if (mode === "new") {
+          const r = await createCourse(c);
+          if (r.ok && r.data) { draft.commit(c); router.push(`/admin/catalog/${r.data.id}`); }
+          else setMsg({ ok: false, text: r.ok ? "Saved" : r.error });
+        } else {
+          const r = await updateCourse(courseId!, c);
+          setMsg(r.ok ? { ok: true, text: "Saved" } : { ok: false, text: r.error });
+          if (r.ok) { draft.commit(c); router.refresh(); }
+        }
       } catch { setMsg({ ok: false, text: SAVE_INTERRUPTED }); }
     });
 

@@ -18,9 +18,9 @@ export function UserRoleForm({ userId, role: initial, departments: initialDepts 
   const save = () =>
     start(async () => {
       try {
-      const r = await changeUserRole({ userId, role, departments: depts });
-      if (r.ok) { roleDraft.commit(role); deptDraft.commit(depts); }
-      setMsg(r.ok ? { ok: true, text: "Saved" } : { ok: false, text: r.error });
+        const r = await changeUserRole({ userId, role, departments: depts });
+        if (r.ok) { roleDraft.commit(role); deptDraft.commit(depts); }
+        setMsg(r.ok ? { ok: true, text: "Saved" } : { ok: false, text: r.error });
       } catch { setMsg({ ok: false, text: SAVE_INTERRUPTED }); }
     });
 

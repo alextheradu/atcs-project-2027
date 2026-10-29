@@ -2,6 +2,12 @@
 
 Settled choices and deviations from the original spec. Add a dated entry when you make a new one. Do not re-litigate without the owner.
 
+## 2026-10-29 (deployment recovery)
+
+- **Unsaved editor drafts stay in `sessionStorage`**, scoped to the authenticated user and resource, with a versioned key independent of the release. This survives reloads and redeployments within a tab without keeping student input indefinitely across closed tabs. Store no raw transcript file or raw PDF text. Recovery restores input for review; it never bypasses server authorization or submits automatically.
+- **Save acknowledgement is revision specific.** Clearing a draft must preserve typing made while the request was pending. Planner recovery keeps one pending course action, with explicit retry and reconciliation against saved entries so a lost response does not duplicate an added course.
+- **Docker builds get a unique `NEXT_DEPLOYMENT_ID`**, generated during the build unless an operator supplies it. Next.js can then detect older client versions and navigate to the current release while drafts survive the reload. Existing database volumes and auth secrets must persist between releases.
+
 ## 2026-10-28
 
 - **Prisma 7.10.1, not 8.** npm `latest` is 8.0 RC. We pin stable 7.10.1. Datasource URL lives in `prisma.config.ts`, generator is `prisma-client` with output `src/generated/prisma`, and the client uses `@prisma/adapter-pg`. Revisit when 8 is stable.
@@ -126,4 +132,14 @@ Settled choices and deviations from the original spec. Add a dated entry when yo
 - **Approval** sets `PlanEntry.overrideAppealId` on that student's entries for the course, so the planner and the course page show "Approved via appeal". Adding the course later links the approval automatically. Denied or withdrawn requests change no plan.
 - **Notifications:** submitting notifies the supervisors of that department (admins if there are none). A decision notifies the student. They are saved as in-app `Notification` rows with no grades or answers in the text. Showing and delivering them is Phase 9.
 - **Default questions** (six, from the spec) are seeded only when none exist. Supervisors edit questions for their own departments, admins any, including the all-department ones. Submissions are rate limited (10 an hour).
+
+## 2026-10-29 (Phase 8, plan review and dashboards)
+
+- **Plan review flow:** `DRAFT` to `SUBMITTED`, then a counselor or admin approves or requests changes. A student can take a submitted plan back to a draft, resubmit after changes were requested, or reopen an approved plan (which clears the approval). Submitted and approved plans are read-only for the student, and the existing plan actions already enforce that. Only counselors and admins review plans. Supervisors review appeals, not plans.
+- **Counselors and admins read, never edit.** `/counselor/plans/[id]` shows any student's plan through the same planner with editing off. Every edit action still checks ownership, so a counselor cannot change a student's plan even by calling the action directly.
+- **Comments** are on the plan or on one course, up to 1000 characters, shown as plain text (a pasted `<b>` stays literal). Only the plan's owner and plan reviewers can comment, and anyone else gets "not found". Asking for changes needs a note, which is saved as a comment. Notifications say a comment exists and never contain its text.
+- **Counselor dashboard** (`/counselor`): plans waiting for review, plans that leave graduation open (uses the Phase 3 requirement and warning modules on each primary plan, with a class year filter), and course demand. The filter by counselor is skipped until caseloads exist, as agreed.
+- **Course demand** counts a student once per course when it is in their primary plan or in a submitted or approved plan. Other drafts are what-ifs and are left out. The count is by grade level and can be sorted by students or name. Checked against an independent SQL count in the browser.
+- **Dashboard** shows the next dates by audience with countdowns (an open window counts down to its close). Nothing is hardcoded, the dates come from the admin timeline.
+- **College guidance** (`/admin/major-guidance`, admin editable, audited): the table on page 12 of the Program of Studies is stored as years of English, math, social studies, science and world language. Social studies uses 3 (the PDF says 3 to 4) and world language 2 (2 to 4). Majors are groups with keywords. Typing a matching intended major (whole words) raises math or science to 4. It shows on the plan rail as "For college" and counts a year when the plan has a course from that department in it. It is labeled a recommendation, not a graduation rule.
 

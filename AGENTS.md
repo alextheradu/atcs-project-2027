@@ -44,6 +44,7 @@ Do not run `next build` while `npm run dev` is up (dev starts reloading pages fo
 - Pure logic (eligibility, credit math, requirement tracking, transcript parsing, matching) lives in `src/lib/<name>/` with no framework imports and has vitest tests. Write the tests first for these.
 - Read `PRODUCT.md` and `DESIGN.md` (repo root) before any UI work. Dark theme only, tokens in `src/app/globals.css`, rules in `docs/spec/12-design-system.md`. Backgrounds are neutral (equal R, G, B). Blue only on interactive elements. No cards: use `PageHeader`, `Section`, `Dl`, `.list` rows, `Badge`, `StarBorder`, `.input` (see the layout language in the design doc). Check `/styleguide`.
 - Geist Mono for course codes, credits, grades, dates.
+- Editable input uses `useDraftState` under the signed-in `DraftProvider`, keyed by resource, so reloads and deployments preserve unsaved work. Clear only the revision the server acknowledged with `draft.commit(submitted)`; retain newer typing and failed saves. Use `useState` for temporary UI such as expanded rows. See `docs/deployments.md`.
 - Credits are `Decimal`. Never use floating point for credit math (use a decimal or integer tenths helper).
 - Commit only when the owner asks. Small, focused commits when asked.
 

@@ -14,7 +14,9 @@ COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 # prisma generate only reads the schema, it does not connect. The URL just has to parse.
 RUN DATABASE_URL="postgresql://build:build@localhost:5432/build" npx prisma generate
-RUN npm run build
+ARG NEXT_DEPLOYMENT_ID
+# A fresh release gets a unique ID so open tabs can detect a deployment change.
+RUN NEXT_DEPLOYMENT_ID="${NEXT_DEPLOYMENT_ID:-$(node -e 'process.stdout.write(require("node:crypto").randomUUID())')}" npm run build
 # Bundle the seed into one file so the runtime image can load reference data without tsx or the
 # full node_modules (the standalone output does not include the Prisma driver adapter).
 RUN npx esbuild prisma/seed.ts --bundle --platform=node --format=esm --tsconfig=tsconfig.json --external:pg-native --banner:js="import { createRequire as __cr } from 'module'; const require = __cr(import.meta.url);" --outfile=seed.mjs

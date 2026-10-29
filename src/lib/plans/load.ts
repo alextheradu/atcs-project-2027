@@ -4,15 +4,7 @@ import { parseRule, type Rule } from "@/lib/eligibility";
 import type { RequirementKind } from "@/lib/requirements";
 import type { EntryView } from "./view";
 
-const courseInclude = { requirements: true } as const;
-
-/** The owner's plan with its entries, or null. Ownership is part of the query. */
-export async function loadOwnedPlan(planId: string, ownerId: string) {
-  const plan = await db.plan.findFirst({
-    where: { id: planId, ownerId },
-    include: { entries: { include: { course: { include: courseInclude } }, orderBy: [{ gradeLevel: "asc" }, { createdAt: "asc" }] } },
-  });
-  if (!plan) return null;
+function present(plan: NonNullable<Awaited<ReturnType<typeof findPlan>>>) {
   const entries: EntryView[] = plan.entries.map((e) => ({
     id: e.id,
     courseId: e.courseId,
@@ -32,7 +24,25 @@ export async function loadOwnedPlan(planId: string, ownerId: string) {
     prereqText: e.course.prereqText,
     approvedAppeal: e.overrideAppealId !== null,
   }));
-  return { plan: { id: plan.id, name: plan.name, isPrimary: plan.isPrimary, status: plan.status }, entries };
+  return { plan: { id: plan.id, name: plan.name, isPrimary: plan.isPrimary, status: plan.status, ownerId: plan.ownerId }, entries };
+}
+
+const findPlan = (where: { id: string; ownerId?: string }) =>
+  db.plan.findFirst({
+    where,
+    include: { entries: { include: { course: { include: { requirements: true } } }, orderBy: [{ gradeLevel: "asc" }, { createdAt: "asc" }] } },
+  });
+
+/** The owner's plan with its entries, or null. Ownership is part of the query. */
+export async function loadOwnedPlan(planId: string, ownerId: string) {
+  const plan = await findPlan({ id: planId, ownerId });
+  return plan ? present(plan) : null;
+}
+
+/** Any plan, for the counselor and admin read-only view. Callers must check the role first. */
+export async function loadPlanForReview(planId: string) {
+  const plan = await findPlan({ id: planId });
+  return plan ? present(plan) : null;
 }
 
 /** Everything the add-course panel can search, as a slim list. */

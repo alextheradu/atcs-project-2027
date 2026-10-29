@@ -14,7 +14,7 @@ Update this file at the end of every phase or session.
 | 5 | Onboarding | built, awaiting owner checkpoint (walk the 9th grade and 8th grade paths) |
 | 6 | Transcript import | built, awaiting owner checkpoint (import your own transcript locally) |
 | 7 | Appeals | built, awaiting owner checkpoint (submit as a student, decide as a supervisor) |
-| 8 | Review and dashboards | not started |
+| 8 | Review and dashboards | built, awaiting owner checkpoint (counselor walkthrough) |
 | 9 | Notifications and PWA | not started |
 | 10 | Privacy and export | not started |
 | 11 | Ship | not started |
@@ -42,6 +42,7 @@ Plans: `docs/plans/phase-NN-*.md`.
 
 ## Log
 
+- 2026-10-29: Deployment resilience: user and resource scoped drafts now recover unsaved editor input after a reload in the same browser tab. Interrupted planner actions retain a pending change with explicit retry, including detection of a save whose response was lost. Confirmed saves preserve newer typing. Docker generates a release ID for Next.js version checks. Typecheck, lint (one warning in concurrent planner loader work), all 697 unit tests and five browser recovery tests passed. Rollout and storage limits are documented in `docs/deployments.md`. No production deployment performed.
 - 2026-10-29: Catalog update: dual enrollment is an independent checkbox alongside a course's base level. Existing partner notes were migrated for 28 courses without changing levels. CSV exports include the flag and older imports still work. Typecheck, lint and all 574 tests pass. Browser verified Honors plus dual enrollment, save and reload, display without a note, and clearing the checkbox while preserving the note.
 - 2026-10-28: Phase 0 built. Next 16.4.3, Prisma 7.10.1, schema and init migration applied, design tokens, `/styleguide`. Spec split into `docs/spec/*`, agent docs written.
 - 2026-10-28: Phase 1 built. Policy, guards, rate limiter, link-intent, signIn decision, role application and all admin actions are unit tested (124 tests). Live Google sign-in and the link-email flow are not tested yet (no credentials). Admin flows verified in a browser through the dev login. Plan item 9 "origin check helper for route handlers" is deferred to Phase 11 (no custom route handlers take state-changing input yet).
