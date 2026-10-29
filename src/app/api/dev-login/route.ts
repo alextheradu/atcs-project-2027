@@ -23,6 +23,18 @@ export async function GET(req: NextRequest) {
     create: { email, name: email.split("@")[0], emailVerified: new Date(), role, departments },
     update: { role, departments },
   });
+  // Skip onboarding by default so other checks stay quick. Pass onboarding=1 to walk it.
+  if (q.get("onboarding") === "1") {
+    await db.user.update({ where: { id: user.id }, data: { onboardedAt: null, ageConfirmed13At: null } });
+    await db.policyAcceptance.deleteMany({ where: { userId: user.id } });
+    await db.onboardingProgress.deleteMany({ where: { userId: user.id } });
+    await db.studentProfile.deleteMany({ where: { userId: user.id } });
+  } else {
+    await db.user.update({ where: { id: user.id }, data: { onboardedAt: user.onboardedAt ?? new Date(), ageConfirmed13At: user.ageConfirmed13At ?? new Date() } });
+    const docs = await db.policyDocument.findMany({ orderBy: { version: "desc" } });
+    const latest = [...new Map(docs.map((d) => [d.kind, d])).values()];
+    await db.policyAcceptance.createMany({ data: latest.map((d) => ({ userId: user.id, documentId: d.id })), skipDuplicates: true });
+  }
   const sessionToken = randomBytes(32).toString("hex");
   await db.session.create({
     data: { sessionToken, userId: user.id, expires: new Date(Date.now() + 7 * 24 * 3600_000) },

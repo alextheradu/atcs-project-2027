@@ -12,6 +12,7 @@ const sample: CourseRecord = {
   gradesOffered: [11, 12],
   description: "Line one,\nline two, with a comma.",
   prereqText: "Prerequisite: B+ in AP Pre-Calculus",
+  dualEnrollment: false,
   dualEnrollmentNote: null,
   hasApExam: true,
   plannable: true,
@@ -37,6 +38,25 @@ describe("csv primitives", () => {
 });
 
 describe("course rows", () => {
+  it.each(["HONORS", "AP"] as const)("round trips dual enrollment alongside %s without a note", (level) => {
+    const course = { ...sample, level, dualEnrollment: true };
+    const result = rowToCourseInput([...CSV_COLUMNS], courseToRow(course));
+    expect(result).toEqual({ ok: true, value: course });
+    if (result.ok) expect(courseInputSchema.parse(result.value)).toMatchObject({ level, dualEnrollment: true });
+  });
+  it("reads older CSV files using their dual enrollment note", () => {
+    const course = { ...sample, dualEnrollment: true, dualEnrollmentNote: "Partner college" };
+    const header = CSV_COLUMNS.filter((column) => column !== "dualEnrollment");
+    const row = courseToRow(course).filter((_, index) => CSV_COLUMNS[index] !== "dualEnrollment");
+    expect(rowToCourseInput(header, row)).toEqual({ ok: true, value: course });
+  });
+  it("preserves an unchecked setting even when a partner note exists", () => {
+    const course = { ...sample, dualEnrollment: false, dualEnrollmentNote: "Partner college" };
+    expect(rowToCourseInput([...CSV_COLUMNS], courseToRow(course))).toEqual({ ok: true, value: course });
+  });
+  it("rejects dual enrollment as a course level", () => {
+    expect(courseInputSchema.safeParse({ ...sample, level: "DUAL_ENROLLMENT" }).success).toBe(false);
+  });
   it("round trips a course through a CSV row", () => {
     const row = courseToRow(sample);
     expect(row).toHaveLength(CSV_COLUMNS.length);

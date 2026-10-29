@@ -17,6 +17,7 @@ export default async function NewCourse() {
         initial={{
           slug: "", name: "", department: "OTHER", level: "CP", duration: "FULL", credits: 5, gradesOffered: [9, 10, 11, 12],
           description: "", prereqText: null, dualEnrollmentNote: null, hasApExam: false, plannable: true, sourcePage: null,
+          dualEnrollment: false,
           requirements: [], interests: [],
         }}
       />

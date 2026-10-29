@@ -1,7 +1,7 @@
 import { z } from "zod";
 import { DEPARTMENTS } from "@/lib/admin/schemas";
 
-export const LEVELS = ["CP", "ENHANCED", "HONORS", "AP", "DUAL_ENROLLMENT", "MIDDLE_SCHOOL"] as const;
+export const LEVELS = ["CP", "ENHANCED", "HONORS", "AP", "MIDDLE_SCHOOL"] as const;
 export const REQUIREMENT_KINDS = [
   "ENGLISH", "MATH", "SCI_BIO", "SCI_CHEM", "SCI_PHYS", "SOCIAL_STUDIES",
   "ARTS", "LIFE_CAREERS", "FIN_LIT", "WORLD_LANG", "PE_HEALTH",
@@ -26,6 +26,7 @@ export const courseInputSchema = z
     gradesOffered: z.array(z.number().int().min(8).max(12)).max(5),
     description: text(4000),
     prereqText: text(2000).nullable(),
+    dualEnrollment: z.boolean(),
     dualEnrollmentNote: text(500).nullable(),
     hasApExam: z.boolean(),
     plannable: z.boolean(),

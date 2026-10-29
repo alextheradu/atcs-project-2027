@@ -68,9 +68,9 @@ export default async function CoursePage({ params }: { params: Promise<{ slug: s
             <p className="text-sm text-muted">Create a plan to see whether you meet these requirements.</p>
           )}
 
-          {course.dualEnrollmentNote && (
+          {course.dualEnrollment && (
             <Section title="Dual enrollment">
-              <p className="text-sm text-muted">{course.dualEnrollmentNote}</p>
+              <p className="text-sm text-muted">{course.dualEnrollmentNote || "Dual enrollment is available. Ask your counselor about college credit and registration."}</p>
             </Section>
           )}
 

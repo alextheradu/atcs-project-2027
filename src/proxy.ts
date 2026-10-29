@@ -1,7 +1,7 @@
 import { NextResponse, type NextRequest } from "next/server";
 
 // Optimistic check only: real authorization happens in requireRole() on the server.
-const PROTECTED = ["/dashboard", "/plans", "/courses", "/pathways", "/import", "/appeals", "/review", "/counselor", "/admin", "/settings"];
+const PROTECTED = ["/dashboard", "/plans", "/courses", "/pathways", "/import", "/appeals", "/review", "/counselor", "/admin", "/settings", "/help", "/onboarding"];
 const SESSION_COOKIES = ["authjs.session-token", "__Secure-authjs.session-token"];
 
 export function proxy(req: NextRequest) {

@@ -16,6 +16,8 @@ interface Course {
   requirements: { kind: string; credits: number; provisional: boolean }[];
   interests: string[];
   prereqText: string | null;
+  dualEnrollment: boolean;
+  dualEnrollmentNote: string | null;
 }
 
 const read = <T>(f: string) => JSON.parse(readFileSync(path.resolve("prisma/seed", f), "utf8")) as T;
@@ -154,9 +156,17 @@ describe("catalog seed integrity", () => {
     }
   });
   it("the dual enrollment partners from the spec are present", () => {
-    const notes = courses.map((c) => c as unknown as { dualEnrollmentNote: string | null }).map((c) => c.dualEnrollmentNote ?? "");
+    const notes = courses.filter((c) => c.dualEnrollment).map((c) => c.dualEnrollmentNote ?? "");
     for (const partner of ["Seton Hall", "Kean", "William Paterson", "Syracuse", "Ramapo", "Texas"]) {
       expect(notes.some((n) => n.includes(partner)), partner).toBe(true);
+    }
+  });
+  it("dual enrollment keeps the base course level", () => {
+    expect(get("honors-psychology")).toMatchObject({ level: "HONORS", dualEnrollment: true });
+    expect(get("ap-music-theory")).toMatchObject({ level: "AP", dualEnrollment: true });
+    for (const c of courses) {
+      expect(c.level).not.toBe("DUAL_ENROLLMENT");
+      expect(c.dualEnrollment, c.slug).toBe(!!c.dualEnrollmentNote);
     }
   });
 });

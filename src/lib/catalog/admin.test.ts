@@ -35,12 +35,14 @@ const user = (role: SessionUser["role"]): SessionUser => ({ id: "a", role, depar
 const valid = {
   slug: "new-course", name: "New Course", department: "MATH", level: "CP", duration: "FULL", credits: 5,
   gradesOffered: [11], description: "A course.", prereqText: null, dualEnrollmentNote: null,
+  dualEnrollment: false,
   hasApExam: false, plannable: true, sourcePage: null, requirements: [], interests: [],
 };
 
 const existing = {
   id: "c1", slug: "new-course", name: "Old", department: "MATH", level: "CP", duration: "FULL", credits: 5,
   gradesOffered: [11], description: "x", prereqText: null, dualEnrollmentNote: null, hasApExam: false,
+  dualEnrollment: false,
   plannable: true, archived: false, sourcePage: null, requirements: [], interests: [],
 };
 
@@ -136,6 +138,15 @@ describe("updateCourse", () => {
     expect(call.action).toBe("course.updated");
     expect(call.before).toMatchObject({ name: "Old" });
     expect(call.after).toMatchObject({ name: "New Course" });
+  });
+  it.each([true, false])("saves dual enrollment %s independently of honors and audits it", async (dualEnrollment) => {
+    const data = { ...valid, level: "HONORS", dualEnrollment, dualEnrollmentNote: "Partner college" };
+    fakeDb.course.update.mockResolvedValue({ ...existing, ...data });
+    expect((await catalog.updateCourse("c1", data)).ok).toBe(true);
+    expect(fakeDb.course.update).toHaveBeenCalledWith(expect.objectContaining({
+      data: expect.objectContaining({ level: "HONORS", dualEnrollment, dualEnrollmentNote: "Partner college" }),
+    }));
+    expect(vi.mocked(writeAudit).mock.calls[0][0].after).toMatchObject({ level: "HONORS", dualEnrollment });
   });
   it("replaces requirement tags", async () => {
     await catalog.updateCourse("c1", { ...valid, requirements: [{ kind: "MATH", credits: 5, provisional: false }] });

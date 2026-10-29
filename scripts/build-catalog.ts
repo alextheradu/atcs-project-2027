@@ -12,7 +12,7 @@ import { normalizeTitle } from "../src/lib/catalog/normalize";
 type Dept =
   | "ENGLISH" | "SOCIAL_STUDIES" | "MATH" | "COMPUTER_SCIENCE" | "SCIENCE" | "WORLD_LANGUAGE" | "ART"
   | "BUSINESS" | "FAMILY_CONSUMER_SCIENCES" | "HEALTH_PE" | "MUSIC" | "TECHNOLOGY" | "SPECIAL_ED" | "OTHER";
-type Level = "CP" | "ENHANCED" | "HONORS" | "AP" | "DUAL_ENROLLMENT" | "MIDDLE_SCHOOL";
+type Level = "CP" | "ENHANCED" | "HONORS" | "AP" | "MIDDLE_SCHOOL";
 type Kind =
   | "ENGLISH" | "MATH" | "SCI_BIO" | "SCI_CHEM" | "SCI_PHYS" | "SOCIAL_STUDIES" | "ARTS"
   | "LIFE_CAREERS" | "FIN_LIT" | "WORLD_LANG" | "PE_HEALTH";
@@ -44,6 +44,7 @@ export interface CourseSeed {
   description: string;
   prereqText: string | null;
   rules: null;
+  dualEnrollment: boolean;
   dualEnrollmentNote: string | null;
   hasApExam: boolean;
   plannable: boolean;
@@ -136,6 +137,7 @@ function add(d: Draft | null, dept: Dept, v: V) {
     description,
     prereqText: v.prereq !== undefined ? v.prereq : d?.prereqText ?? null,
     rules: null,
+    dualEnrollment: !!v.dual,
     dualEnrollmentNote: v.dual ?? null,
     hasApExam: v.ap ?? v.level === "AP",
     plannable: v.plannable ?? true,

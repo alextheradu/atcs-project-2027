@@ -37,6 +37,7 @@ export default async function EditCourse({ params }: { params: Promise<{ id: str
           slug: course.slug, name: course.name, department: course.department, level: course.level,
           duration: course.duration, credits: Number(course.credits), gradesOffered: course.gradesOffered,
           description: course.description, prereqText: course.prereqText, dualEnrollmentNote: course.dualEnrollmentNote,
+          dualEnrollment: course.dualEnrollment,
           hasApExam: course.hasApExam, plannable: course.plannable, sourcePage: course.sourcePage,
           requirements: course.requirements.map((r) => ({ kind: r.kind, credits: Number(r.credits), provisional: r.provisional })),
           interests: course.interests.map((i) => i.slug),

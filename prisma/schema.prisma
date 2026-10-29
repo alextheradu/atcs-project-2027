@@ -44,7 +44,6 @@ enum Level {
   ENHANCED
   HONORS
   AP
-  DUAL_ENROLLMENT
   MIDDLE_SCHOOL
 }
 
@@ -393,6 +392,7 @@ model Course {
   description        String     @default("") @db.Text
   prereqText         String?    @db.Text
   rules              Json?
+  dualEnrollment     Boolean    @default(false)
   dualEnrollmentNote String?
   hasApExam          Boolean    @default(false)
   plannable          Boolean    @default(true) // false for middle school pseudo-courses

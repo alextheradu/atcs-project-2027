@@ -1,0 +1,14 @@
+[
+  {
+    "kind": "PRIVACY",
+    "version": 1,
+    "title": "Privacy policy (draft)",
+    "bodyMd": "## Draft\n\nThis is a draft with placeholders. It is not final and the school has not signed off on it. This tool is run by some students form the AT Comp Sci class. It is not run by or affiliated with Pascack Valley Regional High School District.\n\n## What we collect\n\nYour Google account name and email, the grade you pick, the courses you plan, grades you enter yourself, and anything you write in an appeal. We do not store your age or birthdate. We only remember that you said you are 13 or older.\n\n## Eighth graders\n\nIf you are an incoming 8th grader, the grades you type in are a self-reported snapshot. We delete them at the end of your first appeal cycle.\n\n## Who sees it\n\nYou. Counselors and department supervisors at the school can see plans and appeals they need to review. We do not sell data or show ads.\n\n## Your choices\n\nYou can export or delete your data from Settings. Contact: [CONTACT EMAIL].\n"
+  },
+  {
+    "kind": "TERMS",
+    "version": 1,
+    "title": "Terms of use (draft)",
+    "bodyMd": "## Draft\n\nThis is a draft with placeholders. It is not final and the school has not signed off on it.\n\n## What this is\n\nAn unofficial tool to plan courses and check graduation credits. It does not place you in courses. The school decides placement from your real records.\n\n## Your part\n\nEnter information honestly. Suggestions made from self-reported answers may be wrong. Check important choices with your counselor.\n\n## No warranty\n\nThe tool is provided as is. Course information comes from the Program of Studies and may be out of date. Contact: [CONTACT EMAIL]. Operator: [OPERATOR NAME].\n"
+  }
+]

@@ -37,3 +37,9 @@ Edit any of these in `/admin/rules`. Each is a reading call, not something the P
 - **World language and English ladders** are drawn from course numbering. The PDF lists no formal prerequisite between language levels.
 - **Applied Physics and Engineering** is a `manual` rule because the Science and Technology listings disagree.
 
+## Added in Phase 5
+
+- Real privacy policy and terms text, operator name and contact email. The seeded v1 documents are drafts with placeholders.
+- Which world language the starter plan should suggest when an 8th grader gives none. It currently shows the first beginner course and says it is a guess.
+- Appeal windows for incoming students (`TimelineEvent`, audience `INCOMING`). Until one exists, snapshots expire August 31.
+
