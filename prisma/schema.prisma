@@ -540,13 +540,13 @@ model PlanComment {
   id        String   @id @default(cuid())
   planId    String
   entryId   String?
-  authorId  String
+  authorId  String? // null once the author deletes their account
   body      String   @db.Text
   createdAt DateTime @default(now())
 
   plan   Plan       @relation(fields: [planId], references: [id], onDelete: Cascade)
   entry  PlanEntry? @relation(fields: [entryId], references: [id], onDelete: SetNull)
-  author User       @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  author User?      @relation(fields: [authorId], references: [id], onDelete: SetNull)
 
   @@index([planId])
 }

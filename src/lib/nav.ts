@@ -24,6 +24,7 @@ export const NAV: NavItem[] = [
   { href: "/admin/timeline", label: "Dates", roles: ["ADMIN"], group: "Admin" },
   { href: "/admin/major-guidance", label: "College guidance", roles: ["ADMIN"], group: "Admin" },
   { href: "/admin/users", label: "Users", roles: ["ADMIN"], group: "Admin" },
+  { href: "/admin/deletions", label: "Deletions", roles: ["ADMIN"], group: "Admin" },
   { href: "/admin/settings", label: "Admin settings", roles: ["ADMIN"], group: "Admin" },
   { href: "/help", label: "Help", group: "Workspace" },
   { href: "/settings", label: "Settings", group: "Workspace" },

@@ -48,6 +48,7 @@ export const LIMITS = {
   plan: { limit: 30, windowMs: 60 * 60_000 },
   import: { limit: 10, windowMs: 60 * 60_000 },
   export: { limit: 5, windowMs: 60 * 60_000 },
+  deletion: { limit: 5, windowMs: 60 * 60_000 },
 } as const satisfies Record<string, RateLimitConfig>;
 
 export type LimitName = keyof typeof LIMITS;

@@ -26,7 +26,7 @@ interface Props {
   entries: { id: string; name: string }[];
 }
 
-const ROLE: Record<string, string> = { COUNSELOR: "Counselor", ADMIN: "Admin", STUDENT: "Student", INCOMING: "Student", SUPERVISOR: "Supervisor" };
+const ROLE: Record<string, string> = { DELETED: "former account", COUNSELOR: "Counselor", ADMIN: "Admin", STUDENT: "Student", INCOMING: "Student", SUPERVISOR: "Supervisor" };
 
 export function ReviewPanel({ planId, status, isOwner, canReview, comments, entries }: Props) {
   const router = useRouter();

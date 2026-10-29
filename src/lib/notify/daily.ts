@@ -1,4 +1,5 @@
 import { db } from "@/lib/db";
+import { eraseUser } from "@/lib/deletion/erase";
 import { notify } from "./index";
 
 /** Days before a date that a reminder goes out. */
@@ -45,7 +46,28 @@ export async function sendTimelineReminders(now = new Date()): Promise<number> {
   return sent;
 }
 
-/** Hook for Phase 10: confirmed account deletions that are due. Nothing is scheduled before that phase. */
-export async function processDueDeletions(): Promise<number> {
-  return 0;
+/**
+ * Deletes every account whose grace period has ended. Each runs in its own transaction, and the status
+ * change comes first, so a request cancelled a moment earlier is skipped and two overlapping runs cannot
+ * both delete. The last admin is never deleted: that request is cancelled instead.
+ */
+export async function processDueDeletions(now = new Date()): Promise<number> {
+  const due = await db.deletionRequest.findMany({ where: { status: "SCHEDULED", scheduledFor: { lte: now }, userId: { not: null } }, select: { id: true, userId: true }, take: 100 });
+  let done = 0;
+  for (const r of due) {
+    if (!r.userId) continue;
+    const userId = r.userId;
+    const ok = await db.$transaction(async (tx) => {
+      const claimed = await tx.deletionRequest.updateMany({ where: { id: r.id, status: "SCHEDULED" }, data: { status: "COMPLETED", completedAt: now } });
+      if (claimed.count === 0) return false;
+      const u = await tx.user.findUnique({ where: { id: userId }, select: { role: true } });
+      if (u?.role === "ADMIN" && (await tx.user.count({ where: { role: "ADMIN", id: { not: userId } } })) === 0) {
+        await tx.deletionRequest.update({ where: { id: r.id }, data: { status: "CANCELLED", completedAt: null, cancelledAt: now, scheduledFor: null } });
+        return false;
+      }
+      return eraseUser(tx, userId);
+    });
+    if (ok) done++;
+  }
+  return done;
 }

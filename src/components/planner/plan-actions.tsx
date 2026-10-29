@@ -1,9 +1,10 @@
 "use client";
 
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState, useTransition } from "react";
 import { DraftNotice, SAVE_INTERRUPTED, useDraftState } from "@/components/draft-state";
-import { Button } from "@/components/ui/button";
+import { Button, buttonVariants } from "@/components/ui/button";
 import { clonePlan, deletePlan, renamePlan, setPrimaryPlan } from "@/lib/plans/actions";
 
 export function PlanActions({ planId, name, isPrimary, editable }: { planId: string; name: string; isPrimary: boolean; editable: boolean }) {
@@ -44,6 +45,7 @@ export function PlanActions({ planId, name, isPrimary, editable }: { planId: str
           <>
             {editable && <Button size="sm" variant="ghost" onClick={() => setRenaming(true)}>Rename</Button>}
             {!isPrimary && <Button size="sm" disabled={pending} onClick={() => run(() => setPrimaryPlan(planId), () => router.refresh())}>Make primary</Button>}
+            <Link href={`/plans/${planId}/print`} className={buttonVariants({ size: "sm" })}>Print</Link>
             <Button size="sm" disabled={pending} onClick={() => run(() => clonePlan(planId), (r) => r.data && router.push(`/plans/${r.data.id}`))}>Duplicate</Button>
             {confirming ? (
               <>

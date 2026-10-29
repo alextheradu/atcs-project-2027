@@ -1,12 +1,16 @@
 import Link from "next/link";
 
-/** Very small markdown: `## ` headings and paragraphs. The policy text is ours, never user input. */
+/** Very small markdown: `## ` headings, `- ` bullet lists and paragraphs. The policy text is ours, never user input. */
 export function PolicyBody({ md }: { md: string }) {
   return (
     <div className="space-y-4">
       {md.split(/\n{2,}/).map((block, i) =>
         block.startsWith("## ") ? (
           <h2 key={i} className="pt-4 text-base font-medium">{block.slice(3)}</h2>
+        ) : block.split("\n").every((l) => l.startsWith("- ")) ? (
+          <ul key={i} className="max-w-[65ch] list-disc space-y-1 pl-5 text-sm leading-relaxed text-muted">
+            {block.split("\n").map((l) => <li key={l}>{l.slice(2)}</li>)}
+          </ul>
         ) : (
           <p key={i} className="max-w-[65ch] text-sm leading-relaxed text-muted">{block}</p>
         ),

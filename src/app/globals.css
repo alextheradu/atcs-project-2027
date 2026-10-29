@@ -499,3 +499,10 @@ input[type="search"]::-webkit-search-decoration { appearance: none; }
   .btn:hover, .btn:active { transform: none; }
   .star-border::before { animation: none; }
 }
+
+/* Print: the plan sheet is the one place that is black on white, to save ink. */
+@media print {
+  @page { margin: 12mm; }
+  html, body { background: #fff !important; color: #000 !important; }
+  main#content { padding: 0 !important; max-width: none !important; animation: none !important; }
+}
