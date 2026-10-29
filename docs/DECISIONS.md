@@ -65,3 +65,32 @@ Settled choices and deviations from the original spec. Add a dated entry when yo
 - **Phones:** opaque bottom tab bar (Workspace items plus More), 44px inputs at 16px text on touch.
 - **Not taken from contd:** tilt, rotation and sticker styling (the spec bans tilt), and the red accent.
 - **`globals.test.ts`** guards the stylesheet. A slicing edit once deleted the whole components layer (buttons, lists, badges); the test now fails if shared classes disappear or braces unbalance.
+
+## 2026-10-28 (Phase 3, planner)
+
+- **Credits and requirement math use integer tenths** (`src/lib/credits`). A tag worth less than the whole course counts its own credits (American Studies 5 + 5, Applied Physics 5 of 10). A full tag counts the credits the student actually has, so a 6 credit honors science counts 6 toward its requirement.
+- **Completed vs planned:** `COMPLETED` entries are earned. `PLANNED` and `IN_PROGRESS` are scheduled. Requirements met by any mix are met; the rail shows the two shades.
+- **Warnings are advice only.** Under 30 credits (25 senior year), more than 8 periods (a 10 credit course counts as 2, half-years as 0.5), and a course placed in a grade it is not offered in. Prereq and coreq warnings plug into `computeWarnings(..., extra)` in Phase 4.
+- **Plans:** up to 10 per student, 60 courses per plan, first plan is primary, names default to Plan A, Plan B. Submitted and approved plans are read-only; `CHANGES_REQUESTED` is editable again. A submitted plan cannot be deleted.
+- **Ownership lives in the query** (`where: { id, ownerId }`). Someone else's plan, for any role including counselor and admin, is a 404. Counselors get their read-only view in Phase 8.
+- **Thresholds are admin editable** in `/admin/settings` (11 requirement credits plus total, per year, senior year and max periods, stored in `RequirementRule` and `AppSetting graduation`).
+- **Drag and drop:** `@dnd-kit/core` with mouse, touch (180ms hold) and keyboard sensors. Collision uses the pointer when there is one and falls back to rectangle overlap for keyboard drags. Every row also has a "Move to grade" select as a non-drag alternative. The `DndContext` has a fixed `id` to avoid a hydration mismatch.
+- **Optimistic updates:** the client applies the change, calls the server action, and falls back to the server's copy if it refuses. Server data replaces local state whenever it arrives (state is reset during render, not in an effect).
+- **The planner page is wider** (max 1440px) than other pages. Four columns need 2xl width; below that it is a 2 by 2 grid.
+
+## 2026-10-29 (Phase 4, eligibility and pathways)
+
+- **The engine is `src/lib/eligibility/`**, pure and shared by client and server. Rule trees are `all`, `any` and six leaves: `completed`, `minGrade`, `gradeLevel`, `coreq`, `priorCoursework`, `manual`. A leaf listing several courses means any one of them.
+- **Four results:** `ELIGIBLE`, `ELIGIBLE_WITH_WARNING`, `NOT_ELIGIBLE_APPEALABLE`, `NOT_ELIGIBLE_LOCKED`. A met requirement is eligible. A prerequisite that is only planned in an earlier year, a missing grade, a `Pass`, a missing 8th grade profile, a `manual` leaf, or an unmet `advisory` leaf gives a warning. `all` takes the worst child, `any` the best. A `manual` leaf never passes or fails but never hides a real failure.
+- **Appealable or locked:** a grade that is too low is appealable. A prerequisite that was skipped (or planned after the course) is locked. A leaf can override with `appealable`. This is how "skipping a step is locked, moving up a level is appealable" falls out of the rules, no extra data needed.
+- **Final grade stands in for the "initial test/quiz average".** `minGrade` has a `basis`. When it is `initialAverage` the message says the final grade is an estimate. The appeal form (Phase 7) collects the real average.
+- **Approved appeal:** a plan entry with `overrideAppealId` set counts as "Approved via appeal" and clears an unmet result. Phase 7 sets that column only for approved appeals.
+- **Rules come from the PDF text only.** `scripts/build-rules.ts` is the reviewed source and writes `prisma/seed/rules.json` and `edges.json`. Each entry cites PDF pages and a test fails if the page does not match the course's `sourcePage`. 94 courses are encoded. Vague placements, auditions and recommendations are `manual` leaves. A course with prerequisite text nobody encoded shows a warning and the text, it never passes silently.
+- **How generic PDF names were read:** "9th Grade English", "a biology course", "Biology, Chemistry, and Physics" use the whole subject family. Exact course names ("Geometry", "Algebra I", "Pre-Calculus") mean that exact course. 8th grade Algebra I counts as Algebra I for the courses that follow it (page 37 path diagram). Each of these is listed in `docs/spec/14-open-items.md`.
+- **"Suggested Co-requisite" is `advisory`:** it warns, never fails.
+- **Seeding rules and edges is one time** (`AppSetting seed.rules.v1`). After that admins own them, so a re-seed cannot bring back something an admin removed. Bump the key to apply a revised set, and it only fills courses without a rule.
+- **Edges come from the typical path diagrams** (math and computer science p37, science p46) plus prerequisite text. Solid arrows are `STANDARD`, dotted arrows that move up are `ADVANCE`. Dotted arrows that move down (for example Honors Geometry to Algebra II Enhanced) are not drawn. Middle school Algebra I and Pre-Algebra are the two math starting nodes and light up from the student's profile. World language and English ladders follow course numbering only, and the edge note says the PDF lists no formal prerequisite.
+- **Pathways page** uses React Flow with dagre (top to bottom). Node state comes from the student's primary plan. Staff see the graph without states. "Request placement review" is a disabled stub until Phase 7.
+- **Rule and edge admin** (`/admin/rules`, `/admin/edges`): ADMIN everywhere, SUPERVISOR only in their own departments, nobody else. The scope check lives in the server action, a mutation test confirms the tests fail without it. A supervisor gets a 404, not a 403, for another department's course. An edge needs both courses in scope. New edges cannot make a loop. Every change is audited with before and after.
+- **Plan warnings:** failing placements become `UNMET_PREREQ` or `MISSING_COREQ` (only when every unmet leaf is a co-requisite). Warning-level results show as a "Check details" badge on the row, not in the warning list.
+

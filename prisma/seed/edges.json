@@ -1,0 +1,794 @@
+[
+  {
+    "from": "algebra-i-8th-grade",
+    "to": "honors-geometry",
+    "track": "MATH",
+    "kind": "STANDARD",
+    "appealable": true,
+    "note": "Typical Math Paths, p37"
+  },
+  {
+    "from": "algebra-i-8th-grade",
+    "to": "geometry-enhanced",
+    "track": "MATH",
+    "kind": "STANDARD",
+    "appealable": true,
+    "note": "Typical Math Paths, p37"
+  },
+  {
+    "from": "pre-algebra-8th-grade",
+    "to": "geometry-enhanced",
+    "track": "MATH",
+    "kind": "STANDARD",
+    "appealable": true,
+    "note": "Typical Math Paths, p37"
+  },
+  {
+    "from": "pre-algebra-8th-grade",
+    "to": "geometry",
+    "track": "MATH",
+    "kind": "STANDARD",
+    "appealable": true,
+    "note": "Typical Math Paths, p37"
+  },
+  {
+    "from": "honors-geometry",
+    "to": "honors-algebra-ii-with-trigonometry",
+    "track": "MATH",
+    "kind": "STANDARD",
+    "appealable": true,
+    "note": "Typical Math Paths, p37"
+  },
+  {
+    "from": "geometry-enhanced",
+    "to": "algebra-ii-with-trigonometry-enhanced",
+    "track": "MATH",
+    "kind": "STANDARD",
+    "appealable": true,
+    "note": "Typical Math Paths, p37"
+  },
+  {
+    "from": "geometry-enhanced",
+    "to": "algebra-i-enhanced",
+    "track": "MATH",
+    "kind": "STANDARD",
+    "appealable": true,
+    "note": "Typical Math Paths, p37"
+  },
+  {
+    "from": "geometry",
+    "to": "algebra-i",
+    "track": "MATH",
+    "kind": "STANDARD",
+    "appealable": true,
+    "note": "Typical Math Paths, p37"
+  },
+  {
+    "from": "algebra-i-enhanced",
+    "to": "algebra-ii-with-trigonometry-enhanced",
+    "track": "MATH",
+    "kind": "STANDARD",
+    "appealable": true,
+    "note": "Typical Math Paths, p37"
+  },
+  {
+    "from": "algebra-i",
+    "to": "algebra-ii-with-trigonometry",
+    "track": "MATH",
+    "kind": "STANDARD",
+    "appealable": true,
+    "note": "Typical Math Paths, p37"
+  },
+  {
+    "from": "honors-algebra-ii-with-trigonometry",
+    "to": "ap-pre-calculus",
+    "track": "MATH",
+    "kind": "STANDARD",
+    "appealable": true,
+    "note": "Typical Math Paths, p37"
+  },
+  {
+    "from": "algebra-ii-with-trigonometry-enhanced",
+    "to": "pre-calculus",
+    "track": "MATH",
+    "kind": "STANDARD",
+    "appealable": true,
+    "note": "Typical Math Paths, p37"
+  },
+  {
+    "from": "algebra-ii-with-trigonometry-enhanced",
+    "to": "ap-statistics",
+    "track": "MATH",
+    "kind": "STANDARD",
+    "appealable": true,
+    "note": "Typical Math Paths, p37"
+  },
+  {
+    "from": "algebra-ii-with-trigonometry",
+    "to": "college-algebra",
+    "track": "MATH",
+    "kind": "STANDARD",
+    "appealable": true,
+    "note": "Typical Math Paths, p37"
+  },
+  {
+    "from": "algebra-ii-with-trigonometry",
+    "to": "statistics",
+    "track": "MATH",
+    "kind": "STANDARD",
+    "appealable": true,
+    "note": "Typical Math Paths, p37"
+  },
+  {
+    "from": "algebra-ii-with-trigonometry",
+    "to": "discrete-math",
+    "track": "MATH",
+    "kind": "STANDARD",
+    "appealable": true,
+    "note": "Typical Math Paths, p37"
+  },
+  {
+    "from": "ap-pre-calculus",
+    "to": "ap-calculus-bc",
+    "track": "MATH",
+    "kind": "STANDARD",
+    "appealable": true,
+    "note": "Typical Math Paths, p37"
+  },
+  {
+    "from": "ap-pre-calculus",
+    "to": "ap-calculus-ab",
+    "track": "MATH",
+    "kind": "STANDARD",
+    "appealable": true,
+    "note": "Typical Math Paths, p37"
+  },
+  {
+    "from": "pre-calculus",
+    "to": "calculus",
+    "track": "MATH",
+    "kind": "STANDARD",
+    "appealable": true,
+    "note": "Typical Math Paths, p37"
+  },
+  {
+    "from": "ap-calculus-bc",
+    "to": "advanced-topics-in-calculus-honors",
+    "track": "MATH",
+    "kind": "STANDARD",
+    "appealable": true,
+    "note": "Typical Math Paths, p37"
+  },
+  {
+    "from": "geometry-enhanced",
+    "to": "honors-algebra-ii-with-trigonometry",
+    "track": "MATH",
+    "kind": "ADVANCE",
+    "appealable": true,
+    "note": "Typical Math Paths, p37. Moving up a level, may need an appeal."
+  },
+  {
+    "from": "algebra-ii-with-trigonometry-enhanced",
+    "to": "ap-pre-calculus",
+    "track": "MATH",
+    "kind": "ADVANCE",
+    "appealable": true,
+    "note": "Typical Math Paths, p37. Moving up a level, may need an appeal."
+  },
+  {
+    "from": "geometry",
+    "to": "algebra-i-enhanced",
+    "track": "MATH",
+    "kind": "ADVANCE",
+    "appealable": true,
+    "note": "Typical Math Paths, p37. Moving up a level, may need an appeal."
+  },
+  {
+    "from": "algebra-i",
+    "to": "algebra-ii-with-trigonometry-enhanced",
+    "track": "MATH",
+    "kind": "ADVANCE",
+    "appealable": true,
+    "note": "Typical Math Paths, p37. Moving up a level, may need an appeal."
+  },
+  {
+    "from": "pre-calculus",
+    "to": "ap-calculus-ab",
+    "track": "MATH",
+    "kind": "ADVANCE",
+    "appealable": true,
+    "note": "Typical Math Paths, p37. Moving up a level, may need an appeal."
+  },
+  {
+    "from": "college-algebra",
+    "to": "pre-calculus",
+    "track": "MATH",
+    "kind": "ADVANCE",
+    "appealable": true,
+    "note": "Typical Math Paths, p37. Moving up a level, may need an appeal."
+  },
+  {
+    "from": "college-algebra",
+    "to": "ap-statistics",
+    "track": "MATH",
+    "kind": "ADVANCE",
+    "appealable": true,
+    "note": "Typical Math Paths, p37. Moving up a level, may need an appeal."
+  },
+  {
+    "from": "introduction-to-computer-science-and-app-development",
+    "to": "honors-computer-science",
+    "track": "COMPUTER_SCIENCE",
+    "kind": "STANDARD",
+    "appealable": true,
+    "note": "Typical Comp Sci Paths, p37"
+  },
+  {
+    "from": "honors-computer-science",
+    "to": "ap-computer-science-a",
+    "track": "COMPUTER_SCIENCE",
+    "kind": "STANDARD",
+    "appealable": true,
+    "note": "Typical Comp Sci Paths, p37"
+  },
+  {
+    "from": "ap-computer-science-a",
+    "to": "advanced-topics-in-computer-science-honors",
+    "track": "COMPUTER_SCIENCE",
+    "kind": "STANDARD",
+    "appealable": true,
+    "note": "Typical Comp Sci Paths, p37"
+  },
+  {
+    "from": "honors-biology",
+    "to": "honors-chemistry",
+    "track": "SCIENCE",
+    "kind": "STANDARD",
+    "appealable": true,
+    "note": "Typical Science Paths, p46"
+  },
+  {
+    "from": "biology-enhanced",
+    "to": "chemistry-enhanced",
+    "track": "SCIENCE",
+    "kind": "STANDARD",
+    "appealable": true,
+    "note": "Typical Science Paths, p46"
+  },
+  {
+    "from": "biology",
+    "to": "chemistry",
+    "track": "SCIENCE",
+    "kind": "STANDARD",
+    "appealable": true,
+    "note": "Typical Science Paths, p46"
+  },
+  {
+    "from": "honors-chemistry",
+    "to": "honors-physics",
+    "track": "SCIENCE",
+    "kind": "STANDARD",
+    "appealable": true,
+    "note": "Typical Science Paths, p46"
+  },
+  {
+    "from": "chemistry-enhanced",
+    "to": "physics-enhanced",
+    "track": "SCIENCE",
+    "kind": "STANDARD",
+    "appealable": true,
+    "note": "Typical Science Paths, p46"
+  },
+  {
+    "from": "chemistry",
+    "to": "physics",
+    "track": "SCIENCE",
+    "kind": "STANDARD",
+    "appealable": true,
+    "note": "Typical Science Paths, p46"
+  },
+  {
+    "from": "biology-enhanced",
+    "to": "honors-chemistry",
+    "track": "SCIENCE",
+    "kind": "ADVANCE",
+    "appealable": true,
+    "note": "Typical Science Paths, p46. Moving up a level, may need supervisor approval."
+  },
+  {
+    "from": "biology",
+    "to": "chemistry-enhanced",
+    "track": "SCIENCE",
+    "kind": "ADVANCE",
+    "appealable": true,
+    "note": "Typical Science Paths, p46. Moving up a level, may need supervisor approval."
+  },
+  {
+    "from": "chemistry-enhanced",
+    "to": "honors-physics",
+    "track": "SCIENCE",
+    "kind": "ADVANCE",
+    "appealable": true,
+    "note": "Typical Science Paths, p46. Moving up a level, may need supervisor approval."
+  },
+  {
+    "from": "chemistry",
+    "to": "physics-enhanced",
+    "track": "SCIENCE",
+    "kind": "ADVANCE",
+    "appealable": true,
+    "note": "Typical Science Paths, p46. Moving up a level, may need supervisor approval."
+  },
+  {
+    "from": "chinese-i",
+    "to": "chinese-ii",
+    "track": "WORLD_LANGUAGE",
+    "kind": "STANDARD",
+    "appealable": true,
+    "note": "Level order from the course names. The PDF lists no formal prerequisite."
+  },
+  {
+    "from": "chinese-ii",
+    "to": "chinese-iii",
+    "track": "WORLD_LANGUAGE",
+    "kind": "STANDARD",
+    "appealable": true,
+    "note": "Level order from the course names. The PDF lists no formal prerequisite."
+  },
+  {
+    "from": "chinese-iii",
+    "to": "chinese-iv",
+    "track": "WORLD_LANGUAGE",
+    "kind": "STANDARD",
+    "appealable": true,
+    "note": "Level order from the course names. The PDF lists no formal prerequisite."
+  },
+  {
+    "from": "chinese-iv",
+    "to": "chinese-v",
+    "track": "WORLD_LANGUAGE",
+    "kind": "STANDARD",
+    "appealable": true,
+    "note": "Level order from the course names. The PDF lists no formal prerequisite."
+  },
+  {
+    "from": "honors-chinese-ii",
+    "to": "honors-chinese-iii",
+    "track": "WORLD_LANGUAGE",
+    "kind": "STANDARD",
+    "appealable": true,
+    "note": "Level order from the course names. The PDF lists no formal prerequisite."
+  },
+  {
+    "from": "honors-chinese-iii",
+    "to": "honors-chinese-iv",
+    "track": "WORLD_LANGUAGE",
+    "kind": "STANDARD",
+    "appealable": true,
+    "note": "Level order from the course names. The PDF lists no formal prerequisite."
+  },
+  {
+    "from": "honors-chinese-iv",
+    "to": "ap-chinese-language-and-culture",
+    "track": "WORLD_LANGUAGE",
+    "kind": "STANDARD",
+    "appealable": true,
+    "note": "Level order from the course names. The PDF lists no formal prerequisite."
+  },
+  {
+    "from": "chinese-i",
+    "to": "honors-chinese-ii",
+    "track": "WORLD_LANGUAGE",
+    "kind": "ADVANCE",
+    "appealable": true,
+    "note": "Moving to the honors level. Honors admission is by self-nomination (p47)."
+  },
+  {
+    "from": "chinese-ii",
+    "to": "honors-chinese-iii",
+    "track": "WORLD_LANGUAGE",
+    "kind": "ADVANCE",
+    "appealable": true,
+    "note": "Moving to the honors level. Honors admission is by self-nomination (p47)."
+  },
+  {
+    "from": "chinese-iii",
+    "to": "honors-chinese-iv",
+    "track": "WORLD_LANGUAGE",
+    "kind": "ADVANCE",
+    "appealable": true,
+    "note": "Moving to the honors level. Honors admission is by self-nomination (p47)."
+  },
+  {
+    "from": "french-i",
+    "to": "french-ii",
+    "track": "WORLD_LANGUAGE",
+    "kind": "STANDARD",
+    "appealable": true,
+    "note": "Level order from the course names. The PDF lists no formal prerequisite."
+  },
+  {
+    "from": "french-ii",
+    "to": "french-iii",
+    "track": "WORLD_LANGUAGE",
+    "kind": "STANDARD",
+    "appealable": true,
+    "note": "Level order from the course names. The PDF lists no formal prerequisite."
+  },
+  {
+    "from": "french-iii",
+    "to": "french-iv",
+    "track": "WORLD_LANGUAGE",
+    "kind": "STANDARD",
+    "appealable": true,
+    "note": "Level order from the course names. The PDF lists no formal prerequisite."
+  },
+  {
+    "from": "french-iv",
+    "to": "french-v",
+    "track": "WORLD_LANGUAGE",
+    "kind": "STANDARD",
+    "appealable": true,
+    "note": "Level order from the course names. The PDF lists no formal prerequisite."
+  },
+  {
+    "from": "honors-french-ii",
+    "to": "honors-french-iii",
+    "track": "WORLD_LANGUAGE",
+    "kind": "STANDARD",
+    "appealable": true,
+    "note": "Level order from the course names. The PDF lists no formal prerequisite."
+  },
+  {
+    "from": "honors-french-iii",
+    "to": "honors-french-iv",
+    "track": "WORLD_LANGUAGE",
+    "kind": "STANDARD",
+    "appealable": true,
+    "note": "Level order from the course names. The PDF lists no formal prerequisite."
+  },
+  {
+    "from": "honors-french-iv",
+    "to": "ap-french-language-and-culture",
+    "track": "WORLD_LANGUAGE",
+    "kind": "STANDARD",
+    "appealable": true,
+    "note": "Level order from the course names. The PDF lists no formal prerequisite."
+  },
+  {
+    "from": "french-i",
+    "to": "honors-french-ii",
+    "track": "WORLD_LANGUAGE",
+    "kind": "ADVANCE",
+    "appealable": true,
+    "note": "Moving to the honors level. Honors admission is by self-nomination (p47)."
+  },
+  {
+    "from": "french-ii",
+    "to": "honors-french-iii",
+    "track": "WORLD_LANGUAGE",
+    "kind": "ADVANCE",
+    "appealable": true,
+    "note": "Moving to the honors level. Honors admission is by self-nomination (p47)."
+  },
+  {
+    "from": "french-iii",
+    "to": "honors-french-iv",
+    "track": "WORLD_LANGUAGE",
+    "kind": "ADVANCE",
+    "appealable": true,
+    "note": "Moving to the honors level. Honors admission is by self-nomination (p47)."
+  },
+  {
+    "from": "italian-i",
+    "to": "italian-ii",
+    "track": "WORLD_LANGUAGE",
+    "kind": "STANDARD",
+    "appealable": true,
+    "note": "Level order from the course names. The PDF lists no formal prerequisite."
+  },
+  {
+    "from": "italian-ii",
+    "to": "italian-iii",
+    "track": "WORLD_LANGUAGE",
+    "kind": "STANDARD",
+    "appealable": true,
+    "note": "Level order from the course names. The PDF lists no formal prerequisite."
+  },
+  {
+    "from": "italian-iii",
+    "to": "italian-iv",
+    "track": "WORLD_LANGUAGE",
+    "kind": "STANDARD",
+    "appealable": true,
+    "note": "Level order from the course names. The PDF lists no formal prerequisite."
+  },
+  {
+    "from": "italian-iv",
+    "to": "italian-v",
+    "track": "WORLD_LANGUAGE",
+    "kind": "STANDARD",
+    "appealable": true,
+    "note": "Level order from the course names. The PDF lists no formal prerequisite."
+  },
+  {
+    "from": "honors-italian-ii",
+    "to": "honors-italian-iii",
+    "track": "WORLD_LANGUAGE",
+    "kind": "STANDARD",
+    "appealable": true,
+    "note": "Level order from the course names. The PDF lists no formal prerequisite."
+  },
+  {
+    "from": "honors-italian-iii",
+    "to": "honors-italian-iv",
+    "track": "WORLD_LANGUAGE",
+    "kind": "STANDARD",
+    "appealable": true,
+    "note": "Level order from the course names. The PDF lists no formal prerequisite."
+  },
+  {
+    "from": "honors-italian-iv",
+    "to": "ap-italian-language-and-culture",
+    "track": "WORLD_LANGUAGE",
+    "kind": "STANDARD",
+    "appealable": true,
+    "note": "Level order from the course names. The PDF lists no formal prerequisite."
+  },
+  {
+    "from": "italian-i",
+    "to": "honors-italian-ii",
+    "track": "WORLD_LANGUAGE",
+    "kind": "ADVANCE",
+    "appealable": true,
+    "note": "Moving to the honors level. Honors admission is by self-nomination (p47)."
+  },
+  {
+    "from": "italian-ii",
+    "to": "honors-italian-iii",
+    "track": "WORLD_LANGUAGE",
+    "kind": "ADVANCE",
+    "appealable": true,
+    "note": "Moving to the honors level. Honors admission is by self-nomination (p47)."
+  },
+  {
+    "from": "italian-iii",
+    "to": "honors-italian-iv",
+    "track": "WORLD_LANGUAGE",
+    "kind": "ADVANCE",
+    "appealable": true,
+    "note": "Moving to the honors level. Honors admission is by self-nomination (p47)."
+  },
+  {
+    "from": "spanish-i",
+    "to": "spanish-ii",
+    "track": "WORLD_LANGUAGE",
+    "kind": "STANDARD",
+    "appealable": true,
+    "note": "Level order from the course names. The PDF lists no formal prerequisite."
+  },
+  {
+    "from": "spanish-ii",
+    "to": "spanish-iii",
+    "track": "WORLD_LANGUAGE",
+    "kind": "STANDARD",
+    "appealable": true,
+    "note": "Level order from the course names. The PDF lists no formal prerequisite."
+  },
+  {
+    "from": "spanish-iii",
+    "to": "spanish-iv",
+    "track": "WORLD_LANGUAGE",
+    "kind": "STANDARD",
+    "appealable": true,
+    "note": "Level order from the course names. The PDF lists no formal prerequisite."
+  },
+  {
+    "from": "spanish-iv",
+    "to": "spanish-v",
+    "track": "WORLD_LANGUAGE",
+    "kind": "STANDARD",
+    "appealable": true,
+    "note": "Level order from the course names. The PDF lists no formal prerequisite."
+  },
+  {
+    "from": "honors-spanish-ii",
+    "to": "honors-spanish-iii",
+    "track": "WORLD_LANGUAGE",
+    "kind": "STANDARD",
+    "appealable": true,
+    "note": "Level order from the course names. The PDF lists no formal prerequisite."
+  },
+  {
+    "from": "honors-spanish-iii",
+    "to": "honors-spanish-iv",
+    "track": "WORLD_LANGUAGE",
+    "kind": "STANDARD",
+    "appealable": true,
+    "note": "Level order from the course names. The PDF lists no formal prerequisite."
+  },
+  {
+    "from": "honors-spanish-iv",
+    "to": "ap-spanish-language-and-culture",
+    "track": "WORLD_LANGUAGE",
+    "kind": "STANDARD",
+    "appealable": true,
+    "note": "Level order from the course names. The PDF lists no formal prerequisite."
+  },
+  {
+    "from": "spanish-i",
+    "to": "honors-spanish-ii",
+    "track": "WORLD_LANGUAGE",
+    "kind": "ADVANCE",
+    "appealable": true,
+    "note": "Moving to the honors level. Honors admission is by self-nomination (p47)."
+  },
+  {
+    "from": "spanish-ii",
+    "to": "honors-spanish-iii",
+    "track": "WORLD_LANGUAGE",
+    "kind": "ADVANCE",
+    "appealable": true,
+    "note": "Moving to the honors level. Honors admission is by self-nomination (p47)."
+  },
+  {
+    "from": "spanish-iii",
+    "to": "honors-spanish-iv",
+    "track": "WORLD_LANGUAGE",
+    "kind": "ADVANCE",
+    "appealable": true,
+    "note": "Moving to the honors level. Honors admission is by self-nomination (p47)."
+  },
+  {
+    "from": "ap-spanish-language-and-culture",
+    "to": "ap-spanish-literature-and-culture",
+    "track": "WORLD_LANGUAGE",
+    "kind": "STANDARD",
+    "appealable": true,
+    "note": "Prerequisite for AP Spanish Literature, p49."
+  },
+  {
+    "from": "spanish-for-heritage-speakers-iii",
+    "to": "ap-spanish-literature-and-culture",
+    "track": "WORLD_LANGUAGE",
+    "kind": "STANDARD",
+    "appealable": true,
+    "note": "Prerequisite for AP Spanish Literature, p49."
+  },
+  {
+    "from": "english-i",
+    "to": "english-ii",
+    "track": "ENGLISH",
+    "kind": "STANDARD",
+    "appealable": true,
+    "note": "Prerequisite text, p16-18."
+  },
+  {
+    "from": "english-ii",
+    "to": "english-iii",
+    "track": "ENGLISH",
+    "kind": "STANDARD",
+    "appealable": true,
+    "note": "Prerequisite text, p16-18."
+  },
+  {
+    "from": "english-iii",
+    "to": "english-iv",
+    "track": "ENGLISH",
+    "kind": "STANDARD",
+    "appealable": true,
+    "note": "Prerequisite text, p16-18."
+  },
+  {
+    "from": "honors-english-i",
+    "to": "honors-english-ii",
+    "track": "ENGLISH",
+    "kind": "STANDARD",
+    "appealable": true,
+    "note": "Prerequisite text, p16-18."
+  },
+  {
+    "from": "honors-english-ii",
+    "to": "honors-english-iii",
+    "track": "ENGLISH",
+    "kind": "STANDARD",
+    "appealable": true,
+    "note": "Prerequisite text, p16-18."
+  },
+  {
+    "from": "honors-english-iii",
+    "to": "honors-english-iv",
+    "track": "ENGLISH",
+    "kind": "STANDARD",
+    "appealable": true,
+    "note": "Prerequisite text, p16-18."
+  },
+  {
+    "from": "ap-capstone-seminar",
+    "to": "ap-capstone-research",
+    "track": "ENGLISH",
+    "kind": "STANDARD",
+    "appealable": true,
+    "note": "Prerequisite text, p16-18."
+  },
+  {
+    "from": "english-i",
+    "to": "honors-english-ii",
+    "track": "ENGLISH",
+    "kind": "ADVANCE",
+    "appealable": true,
+    "note": "Moving to the honors level."
+  },
+  {
+    "from": "english-ii",
+    "to": "honors-english-iii",
+    "track": "ENGLISH",
+    "kind": "ADVANCE",
+    "appealable": true,
+    "note": "Moving to the honors level."
+  },
+  {
+    "from": "english-iii",
+    "to": "honors-english-iv",
+    "track": "ENGLISH",
+    "kind": "ADVANCE",
+    "appealable": true,
+    "note": "Moving to the honors level."
+  },
+  {
+    "from": "world-history",
+    "to": "u-s-history-i",
+    "track": "SOCIAL_STUDIES",
+    "kind": "STANDARD",
+    "appealable": true,
+    "note": "Prerequisite text, p24."
+  },
+  {
+    "from": "u-s-history-i",
+    "to": "u-s-history-ii",
+    "track": "SOCIAL_STUDIES",
+    "kind": "STANDARD",
+    "appealable": true,
+    "note": "Prerequisite text, p24."
+  },
+  {
+    "from": "honors-world-history",
+    "to": "honors-u-s-history-i",
+    "track": "SOCIAL_STUDIES",
+    "kind": "STANDARD",
+    "appealable": true,
+    "note": "Prerequisite text, p24."
+  },
+  {
+    "from": "honors-u-s-history-i",
+    "to": "honors-u-s-history-ii",
+    "track": "SOCIAL_STUDIES",
+    "kind": "STANDARD",
+    "appealable": true,
+    "note": "Prerequisite text, p24."
+  },
+  {
+    "from": "world-history",
+    "to": "honors-u-s-history-i",
+    "track": "SOCIAL_STUDIES",
+    "kind": "ADVANCE",
+    "appealable": true,
+    "note": "Moving to the honors or AP level."
+  },
+  {
+    "from": "u-s-history-i",
+    "to": "honors-u-s-history-ii",
+    "track": "SOCIAL_STUDIES",
+    "kind": "ADVANCE",
+    "appealable": true,
+    "note": "Moving to the honors or AP level."
+  },
+  {
+    "from": "world-history",
+    "to": "ap-u-s-history-i",
+    "track": "SOCIAL_STUDIES",
+    "kind": "ADVANCE",
+    "appealable": true,
+    "note": "Moving to the honors or AP level."
+  }
+]

@@ -1,0 +1,2176 @@
+[
+  {
+    "slug": "english-ii",
+    "rules": {
+      "type": "completed",
+      "courses": [
+        "english-i",
+        "honors-english-i"
+      ],
+      "note": "Any 9th grade English course."
+    },
+    "pages": [
+      16
+    ]
+  },
+  {
+    "slug": "honors-english-ii",
+    "rules": {
+      "type": "completed",
+      "courses": [
+        "english-i",
+        "honors-english-i"
+      ],
+      "note": "Any 9th grade English course."
+    },
+    "pages": [
+      16
+    ]
+  },
+  {
+    "slug": "english-iii",
+    "rules": {
+      "type": "completed",
+      "courses": [
+        "english-ii",
+        "honors-english-ii",
+        "ap-capstone-seminar"
+      ],
+      "note": "Any 10th grade English course."
+    },
+    "pages": [
+      16
+    ]
+  },
+  {
+    "slug": "honors-english-iii",
+    "rules": {
+      "type": "completed",
+      "courses": [
+        "english-ii",
+        "honors-english-ii",
+        "ap-capstone-seminar"
+      ],
+      "note": "Any 10th grade English course."
+    },
+    "pages": [
+      16
+    ]
+  },
+  {
+    "slug": "american-studies",
+    "rules": {
+      "type": "all",
+      "rules": [
+        {
+          "type": "completed",
+          "courses": [
+            "english-ii",
+            "honors-english-ii",
+            "ap-capstone-seminar"
+          ],
+          "note": "Any 10th grade English course."
+        },
+        {
+          "type": "completed",
+          "courses": [
+            "u-s-history-i",
+            "honors-u-s-history-i",
+            "ap-u-s-history-i"
+          ],
+          "note": "Any 10th grade U.S. History course."
+        }
+      ]
+    },
+    "pages": [
+      17
+    ]
+  },
+  {
+    "slug": "honors-american-studies",
+    "rules": {
+      "type": "all",
+      "rules": [
+        {
+          "type": "completed",
+          "courses": [
+            "english-ii",
+            "honors-english-ii",
+            "ap-capstone-seminar"
+          ],
+          "note": "Any 10th grade English course."
+        },
+        {
+          "type": "completed",
+          "courses": [
+            "u-s-history-i",
+            "honors-u-s-history-i",
+            "ap-u-s-history-i"
+          ],
+          "note": "Any 10th grade U.S. History course."
+        }
+      ]
+    },
+    "pages": [
+      17
+    ]
+  },
+  {
+    "slug": "english-iv",
+    "rules": {
+      "type": "completed",
+      "courses": [
+        "english-iii",
+        "honors-english-iii",
+        "american-studies",
+        "honors-american-studies"
+      ],
+      "note": "Any 11th grade English course."
+    },
+    "pages": [
+      17
+    ]
+  },
+  {
+    "slug": "honors-english-iv",
+    "rules": {
+      "type": "completed",
+      "courses": [
+        "english-iii",
+        "honors-english-iii",
+        "american-studies",
+        "honors-american-studies"
+      ],
+      "note": "Any 11th grade English course."
+    },
+    "pages": [
+      17
+    ]
+  },
+  {
+    "slug": "ap-capstone-seminar",
+    "rules": {
+      "type": "completed",
+      "courses": [
+        "english-i",
+        "honors-english-i"
+      ],
+      "note": "Any 9th grade English course."
+    },
+    "pages": [
+      17
+    ]
+  },
+  {
+    "slug": "ap-capstone-research",
+    "rules": {
+      "type": "completed",
+      "courses": [
+        "ap-capstone-seminar"
+      ]
+    },
+    "pages": [
+      18
+    ]
+  },
+  {
+    "slug": "reading-science-fiction-literature",
+    "rules": {
+      "type": "completed",
+      "courses": [
+        "english-ii",
+        "honors-english-ii",
+        "ap-capstone-seminar"
+      ],
+      "note": "Any 10th grade English course."
+    },
+    "pages": [
+      18
+    ]
+  },
+  {
+    "slug": "honors-reading-science-fiction-literature",
+    "rules": {
+      "type": "completed",
+      "courses": [
+        "english-ii",
+        "honors-english-ii",
+        "ap-capstone-seminar"
+      ],
+      "note": "Any 10th grade English course."
+    },
+    "pages": [
+      18
+    ]
+  },
+  {
+    "slug": "honors-advanced-21st-century-journalism-and-media",
+    "rules": {
+      "type": "completed",
+      "courses": [
+        "21st-century-journalism-and-media"
+      ]
+    },
+    "pages": [
+      20
+    ]
+  },
+  {
+    "slug": "honors-advanced-21st-century-journalism-and-media-ii",
+    "rules": {
+      "type": "completed",
+      "courses": [
+        "honors-advanced-21st-century-journalism-and-media"
+      ]
+    },
+    "pages": [
+      21
+    ]
+  },
+  {
+    "slug": "u-s-history-i",
+    "rules": {
+      "type": "completed",
+      "courses": [
+        "world-history",
+        "honors-world-history"
+      ],
+      "note": "Any 9th grade World History course."
+    },
+    "pages": [
+      24
+    ]
+  },
+  {
+    "slug": "honors-u-s-history-i",
+    "rules": {
+      "type": "completed",
+      "courses": [
+        "world-history",
+        "honors-world-history"
+      ],
+      "note": "Any 9th grade World History course."
+    },
+    "pages": [
+      24
+    ]
+  },
+  {
+    "slug": "u-s-history-ii",
+    "rules": {
+      "type": "completed",
+      "courses": [
+        "u-s-history-i",
+        "honors-u-s-history-i",
+        "ap-u-s-history-i"
+      ],
+      "note": "Any 10th grade U.S. History I course."
+    },
+    "pages": [
+      24
+    ]
+  },
+  {
+    "slug": "honors-u-s-history-ii",
+    "rules": {
+      "type": "completed",
+      "courses": [
+        "u-s-history-i",
+        "honors-u-s-history-i",
+        "ap-u-s-history-i"
+      ],
+      "note": "Any 10th grade U.S. History I course."
+    },
+    "pages": [
+      24
+    ]
+  },
+  {
+    "slug": "ap-u-s-history-i",
+    "rules": {
+      "type": "all",
+      "rules": [
+        {
+          "type": "completed",
+          "courses": [
+            "world-history",
+            "honors-world-history"
+          ],
+          "note": "Any 9th grade World History course."
+        },
+        {
+          "type": "manual",
+          "label": "Recommendation of teacher and supervisor"
+        }
+      ]
+    },
+    "pages": [
+      24
+    ]
+  },
+  {
+    "slug": "ap-world-history",
+    "rules": {
+      "type": "manual",
+      "label": "Recommendation of teacher and supervisor"
+    },
+    "pages": [
+      25
+    ]
+  },
+  {
+    "slug": "ap-art-history",
+    "rules": {
+      "type": "manual",
+      "label": "Recommendation of Social Studies teacher and supervisor"
+    },
+    "pages": [
+      25
+    ]
+  },
+  {
+    "slug": "ap-microeconomics",
+    "rules": {
+      "type": "coreq",
+      "courses": [
+        "ap-macroeconomics"
+      ],
+      "note": "The PDF says students must also take AP Macroeconomics."
+    },
+    "pages": [
+      26
+    ]
+  },
+  {
+    "slug": "ap-macroeconomics",
+    "rules": {
+      "type": "coreq",
+      "courses": [
+        "ap-microeconomics"
+      ],
+      "note": "Taken as a pair with AP Microeconomics (p26)."
+    },
+    "pages": [
+      26
+    ]
+  },
+  {
+    "slug": "an-introduction-to-the-analysis-of-public-policy",
+    "rules": {
+      "type": "coreq",
+      "courses": [
+        "ap-american-government-and-politics"
+      ],
+      "note": "Taken with AP American Government and Politics."
+    },
+    "pages": [
+      27,
+      28
+    ]
+  },
+  {
+    "slug": "ap-american-government-and-politics",
+    "rules": {
+      "type": "coreq",
+      "courses": [
+        "an-introduction-to-the-analysis-of-public-policy"
+      ],
+      "note": "Taken with An Introduction to the Analysis of Public Policy."
+    },
+    "pages": [
+      28,
+      27
+    ]
+  },
+  {
+    "slug": "honors-geometry",
+    "rules": {
+      "type": "all",
+      "rules": [
+        {
+          "type": "priorCoursework",
+          "field": "eighthMath",
+          "value": "ALGEBRA_I",
+          "appealable": true,
+          "note": "The Honors Program starts with 8th grade Algebra I. Students can move in later (p38)."
+        },
+        {
+          "type": "manual",
+          "label": "Supervisor placement: 8th grade averages, placement exam, and teacher rubric"
+        }
+      ]
+    },
+    "pages": [
+      29,
+      38
+    ]
+  },
+  {
+    "slug": "geometry-enhanced",
+    "rules": {
+      "type": "all",
+      "rules": [
+        {
+          "type": "any",
+          "rules": [
+            {
+              "type": "priorCoursework",
+              "field": "eighthMath",
+              "value": "ALGEBRA_I",
+              "minGrade": "C_PLUS",
+              "note": "Initial test/quiz average of C+ or higher in 8th grade Algebra I."
+            },
+            {
+              "type": "priorCoursework",
+              "field": "eighthMath",
+              "minGrade": "B_MINUS",
+              "note": "Initial test/quiz average of B- or higher in 8th grade math."
+            }
+          ]
+        },
+        {
+          "type": "manual",
+          "label": "Recommendation of teacher and supervisor"
+        }
+      ]
+    },
+    "pages": [
+      30
+    ]
+  },
+  {
+    "slug": "geometry",
+    "rules": {
+      "type": "priorCoursework",
+      "field": "eighthMath",
+      "minGrade": "D",
+      "note": "A passing grade in 8th grade math."
+    },
+    "pages": [
+      30
+    ]
+  },
+  {
+    "slug": "algebra-i-enhanced",
+    "rules": {
+      "type": "all",
+      "rules": [
+        {
+          "type": "any",
+          "rules": [
+            {
+              "type": "minGrade",
+              "courses": [
+                "geometry-enhanced"
+              ],
+              "grade": "C_PLUS",
+              "basis": "initialAverage"
+            },
+            {
+              "type": "minGrade",
+              "courses": [
+                "geometry"
+              ],
+              "grade": "A",
+              "basis": "initialAverage"
+            }
+          ]
+        },
+        {
+          "type": "manual",
+          "label": "Recommendation of teacher and supervisor"
+        }
+      ]
+    },
+    "pages": [
+      30
+    ]
+  },
+  {
+    "slug": "algebra-i",
+    "rules": {
+      "type": "completed",
+      "courses": [
+        "geometry"
+      ]
+    },
+    "pages": [
+      30
+    ]
+  },
+  {
+    "slug": "honors-algebra-ii-with-trigonometry",
+    "rules": {
+      "type": "all",
+      "rules": [
+        {
+          "type": "any",
+          "rules": [
+            {
+              "type": "minGrade",
+              "courses": [
+                "honors-geometry"
+              ],
+              "grade": "B",
+              "basis": "initialAverage"
+            },
+            {
+              "type": "all",
+              "rules": [
+                {
+                  "type": "minGrade",
+                  "courses": [
+                    "geometry-enhanced"
+                  ],
+                  "grade": "A",
+                  "basis": "initialAverage"
+                },
+                {
+                  "type": "any",
+                  "rules": [
+                    {
+                      "type": "minGrade",
+                      "courses": [
+                        "algebra-i-enhanced"
+                      ],
+                      "grade": "A",
+                      "basis": "initialAverage"
+                    },
+                    {
+                      "type": "priorCoursework",
+                      "field": "eighthMath",
+                      "value": "ALGEBRA_I",
+                      "minGrade": "A",
+                      "note": "8th grade Algebra I counts as Algebra I here, per the typical path diagram on p37."
+                    }
+                  ]
+                },
+                {
+                  "type": "manual",
+                  "label": "Proficiency on a placement exam",
+                  "note": "The PDF's punctuation does not say whether the exam applies to both options. A supervisor should confirm."
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "manual",
+          "label": "Recommendation of teacher and supervisor"
+        }
+      ]
+    },
+    "pages": [
+      30
+    ]
+  },
+  {
+    "slug": "algebra-ii-with-trigonometry-enhanced",
+    "rules": {
+      "type": "all",
+      "rules": [
+        {
+          "type": "any",
+          "rules": [
+            {
+              "type": "minGrade",
+              "courses": [
+                "algebra-i-enhanced"
+              ],
+              "grade": "C_PLUS",
+              "basis": "initialAverage"
+            },
+            {
+              "type": "minGrade",
+              "courses": [
+                "algebra-i"
+              ],
+              "grade": "A",
+              "basis": "initialAverage"
+            },
+            {
+              "type": "priorCoursework",
+              "field": "eighthMath",
+              "value": "ALGEBRA_I",
+              "minGrade": "C_PLUS",
+              "note": "8th grade Algebra I counts as Algebra I here, per the typical path diagram on p37."
+            }
+          ]
+        },
+        {
+          "type": "any",
+          "rules": [
+            {
+              "type": "minGrade",
+              "courses": [
+                "geometry-enhanced"
+              ],
+              "grade": "C_PLUS",
+              "basis": "initialAverage"
+            },
+            {
+              "type": "minGrade",
+              "courses": [
+                "geometry"
+              ],
+              "grade": "A",
+              "basis": "initialAverage"
+            }
+          ]
+        },
+        {
+          "type": "manual",
+          "label": "Recommendation of teacher and supervisor"
+        }
+      ]
+    },
+    "pages": [
+      31
+    ]
+  },
+  {
+    "slug": "algebra-ii-with-trigonometry",
+    "rules": {
+      "type": "any",
+      "rules": [
+        {
+          "type": "completed",
+          "courses": [
+            "algebra-i"
+          ]
+        },
+        {
+          "type": "priorCoursework",
+          "field": "eighthMath",
+          "value": "ALGEBRA_I",
+          "minGrade": "D",
+          "note": "8th grade Algebra I counts as Algebra I here, per the typical path diagram on p37."
+        }
+      ]
+    },
+    "pages": [
+      31
+    ]
+  },
+  {
+    "slug": "algebra-ii",
+    "rules": {
+      "type": "any",
+      "rules": [
+        {
+          "type": "completed",
+          "courses": [
+            "algebra-i"
+          ]
+        },
+        {
+          "type": "priorCoursework",
+          "field": "eighthMath",
+          "value": "ALGEBRA_I",
+          "minGrade": "D",
+          "note": "8th grade Algebra I counts as Algebra I here, per the typical path diagram on p37."
+        }
+      ]
+    },
+    "pages": [
+      31
+    ]
+  },
+  {
+    "slug": "college-algebra",
+    "rules": {
+      "type": "completed",
+      "courses": [
+        "algebra-ii-with-trigonometry",
+        "algebra-ii-with-trigonometry-enhanced"
+      ]
+    },
+    "pages": [
+      31
+    ]
+  },
+  {
+    "slug": "ap-pre-calculus",
+    "rules": {
+      "type": "all",
+      "rules": [
+        {
+          "type": "any",
+          "rules": [
+            {
+              "type": "minGrade",
+              "courses": [
+                "honors-algebra-ii-with-trigonometry"
+              ],
+              "grade": "B",
+              "basis": "initialAverage"
+            },
+            {
+              "type": "all",
+              "rules": [
+                {
+                  "type": "minGrade",
+                  "courses": [
+                    "algebra-ii-with-trigonometry-enhanced"
+                  ],
+                  "grade": "A",
+                  "basis": "initialAverage"
+                },
+                {
+                  "type": "manual",
+                  "label": "Proficiency on a placement exam",
+                  "note": "The PDF does not say whether the exam applies to both options. A supervisor should confirm."
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "manual",
+          "label": "Recommendation of teacher and supervisor"
+        }
+      ]
+    },
+    "pages": [
+      32
+    ]
+  },
+  {
+    "slug": "pre-calculus",
+    "rules": {
+      "type": "all",
+      "rules": [
+        {
+          "type": "any",
+          "rules": [
+            {
+              "type": "minGrade",
+              "courses": [
+                "algebra-ii-with-trigonometry-enhanced"
+              ],
+              "grade": "B_MINUS",
+              "basis": "initialAverage"
+            },
+            {
+              "type": "all",
+              "rules": [
+                {
+                  "type": "minGrade",
+                  "courses": [
+                    "college-algebra"
+                  ],
+                  "grade": "B_PLUS",
+                  "basis": "initialAverage"
+                },
+                {
+                  "type": "manual",
+                  "label": "Proficiency on a placement exam",
+                  "note": "The PDF does not say whether the exam applies to both options. A supervisor should confirm."
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "manual",
+          "label": "Recommendation of teacher and supervisor"
+        }
+      ]
+    },
+    "pages": [
+      32
+    ]
+  },
+  {
+    "slug": "ap-calculus-bc",
+    "rules": {
+      "type": "all",
+      "rules": [
+        {
+          "type": "minGrade",
+          "courses": [
+            "ap-pre-calculus"
+          ],
+          "grade": "B_PLUS",
+          "basis": "initialAverage"
+        },
+        {
+          "type": "manual",
+          "label": "Recommendation of teacher and supervisor"
+        }
+      ]
+    },
+    "pages": [
+      32
+    ]
+  },
+  {
+    "slug": "ap-calculus-ab",
+    "rules": {
+      "type": "all",
+      "rules": [
+        {
+          "type": "any",
+          "rules": [
+            {
+              "type": "minGrade",
+              "courses": [
+                "ap-pre-calculus"
+              ],
+              "grade": "B_MINUS",
+              "basis": "initialAverage"
+            },
+            {
+              "type": "all",
+              "rules": [
+                {
+                  "type": "minGrade",
+                  "courses": [
+                    "pre-calculus"
+                  ],
+                  "grade": "A",
+                  "basis": "initialAverage"
+                },
+                {
+                  "type": "manual",
+                  "label": "Proficiency on a placement exam",
+                  "note": "The PDF does not say whether the exam applies to both options. A supervisor should confirm."
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "manual",
+          "label": "Recommendation of teacher and supervisor"
+        }
+      ]
+    },
+    "pages": [
+      33
+    ]
+  },
+  {
+    "slug": "calculus",
+    "rules": {
+      "type": "minGrade",
+      "courses": [
+        "pre-calculus"
+      ],
+      "grade": "B_MINUS",
+      "basis": "initialAverage"
+    },
+    "pages": [
+      33
+    ]
+  },
+  {
+    "slug": "advanced-topics-in-calculus-honors",
+    "rules": {
+      "type": "all",
+      "rules": [
+        {
+          "type": "completed",
+          "courses": [
+            "ap-calculus-bc"
+          ]
+        },
+        {
+          "type": "manual",
+          "label": "Recommendation of teacher and supervisor"
+        }
+      ]
+    },
+    "pages": [
+      33
+    ]
+  },
+  {
+    "slug": "statistics",
+    "rules": {
+      "type": "completed",
+      "courses": [
+        "algebra-ii-with-trigonometry",
+        "algebra-ii-with-trigonometry-enhanced"
+      ]
+    },
+    "pages": [
+      34
+    ]
+  },
+  {
+    "slug": "ap-statistics",
+    "rules": {
+      "type": "all",
+      "rules": [
+        {
+          "type": "any",
+          "rules": [
+            {
+              "type": "completed",
+              "courses": [
+                "algebra-ii-with-trigonometry-enhanced"
+              ]
+            },
+            {
+              "type": "minGrade",
+              "courses": [
+                "college-algebra"
+              ],
+              "grade": "B_PLUS",
+              "basis": "initialAverage",
+              "note": "The PDF is unclear whether the B+ also applies to Algebra II with Trigonometry Enhanced. A supervisor should confirm."
+            }
+          ]
+        },
+        {
+          "type": "manual",
+          "label": "Recommendation of teacher and supervisor"
+        }
+      ]
+    },
+    "pages": [
+      34
+    ]
+  },
+  {
+    "slug": "discrete-math",
+    "rules": {
+      "type": "completed",
+      "courses": [
+        "algebra-ii-with-trigonometry"
+      ]
+    },
+    "pages": [
+      34
+    ]
+  },
+  {
+    "slug": "introduction-to-computer-science-and-app-development",
+    "rules": {
+      "type": "any",
+      "rules": [
+        {
+          "type": "completed",
+          "courses": [
+            "geometry",
+            "geometry-enhanced"
+          ]
+        },
+        {
+          "type": "coreq",
+          "courses": [
+            "geometry",
+            "geometry-enhanced"
+          ]
+        }
+      ]
+    },
+    "pages": [
+      35
+    ]
+  },
+  {
+    "slug": "honors-computer-science",
+    "rules": {
+      "type": "all",
+      "rules": [
+        {
+          "type": "any",
+          "rules": [
+            {
+              "type": "all",
+              "rules": [
+                {
+                  "type": "any",
+                  "rules": [
+                    {
+                      "type": "completed",
+                      "courses": [
+                        "honors-algebra-ii-with-trigonometry",
+                        "algebra-ii-with-trigonometry-enhanced"
+                      ]
+                    },
+                    {
+                      "type": "coreq",
+                      "courses": [
+                        "honors-algebra-ii-with-trigonometry",
+                        "algebra-ii-with-trigonometry-enhanced"
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "manual",
+                  "label": "A high level of interest in programming"
+                }
+              ]
+            },
+            {
+              "type": "any",
+              "rules": [
+                {
+                  "type": "completed",
+                  "courses": [
+                    "introduction-to-computer-science-and-app-development"
+                  ]
+                },
+                {
+                  "type": "coreq",
+                  "courses": [
+                    "introduction-to-computer-science-and-app-development"
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "manual",
+          "label": "Recommendation of teacher and supervisor"
+        }
+      ]
+    },
+    "pages": [
+      35
+    ]
+  },
+  {
+    "slug": "ap-computer-science-a",
+    "rules": {
+      "type": "all",
+      "rules": [
+        {
+          "type": "completed",
+          "courses": [
+            "honors-computer-science"
+          ]
+        },
+        {
+          "type": "manual",
+          "label": "Recommendation of teacher and supervisor"
+        }
+      ]
+    },
+    "pages": [
+      35
+    ]
+  },
+  {
+    "slug": "advanced-topics-in-computer-science-honors",
+    "rules": {
+      "type": "all",
+      "rules": [
+        {
+          "type": "completed",
+          "courses": [
+            "ap-computer-science-a"
+          ]
+        },
+        {
+          "type": "manual",
+          "label": "Recommendation of teacher and supervisor"
+        }
+      ]
+    },
+    "pages": [
+      36
+    ]
+  },
+  {
+    "slug": "honors-biology",
+    "rules": {
+      "type": "any",
+      "rules": [
+        {
+          "type": "completed",
+          "courses": [
+            "honors-geometry",
+            "geometry-enhanced"
+          ],
+          "advisory": true
+        },
+        {
+          "type": "coreq",
+          "courses": [
+            "honors-geometry",
+            "geometry-enhanced"
+          ],
+          "advisory": true
+        }
+      ]
+    },
+    "pages": [
+      39
+    ]
+  },
+  {
+    "slug": "ap-biology",
+    "rules": {
+      "type": "all",
+      "rules": [
+        {
+          "type": "any",
+          "rules": [
+            {
+              "type": "any",
+              "rules": [
+                {
+                  "type": "completed",
+                  "courses": [
+                    "honors-chemistry"
+                  ]
+                },
+                {
+                  "type": "coreq",
+                  "courses": [
+                    "honors-chemistry"
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "any",
+              "rules": [
+                {
+                  "type": "completed",
+                  "courses": [
+                    "honors-physics"
+                  ],
+                  "note": "The PDF lists Honors Chemistry and Honors Physics together. We accept either."
+                },
+                {
+                  "type": "coreq",
+                  "courses": [
+                    "honors-physics"
+                  ],
+                  "note": "The PDF lists Honors Chemistry and Honors Physics together. We accept either."
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "manual",
+          "label": "Recommendation of teacher and supervisor"
+        }
+      ]
+    },
+    "pages": [
+      40
+    ]
+  },
+  {
+    "slug": "chemistry",
+    "rules": {
+      "type": "any",
+      "rules": [
+        {
+          "type": "any",
+          "rules": [
+            {
+              "type": "completed",
+              "courses": [
+                "algebra-i"
+              ],
+              "advisory": true
+            },
+            {
+              "type": "coreq",
+              "courses": [
+                "algebra-i"
+              ],
+              "advisory": true
+            }
+          ]
+        },
+        {
+          "type": "priorCoursework",
+          "field": "eighthMath",
+          "value": "ALGEBRA_I",
+          "minGrade": "D",
+          "advisory": true,
+          "note": "8th grade Algebra I counts as Algebra I here, per the typical path diagram on p37."
+        }
+      ]
+    },
+    "pages": [
+      40
+    ]
+  },
+  {
+    "slug": "chemistry-enhanced",
+    "rules": {
+      "type": "any",
+      "rules": [
+        {
+          "type": "completed",
+          "courses": [
+            "algebra-i-enhanced"
+          ],
+          "advisory": true
+        },
+        {
+          "type": "coreq",
+          "courses": [
+            "algebra-i-enhanced"
+          ],
+          "advisory": true
+        }
+      ]
+    },
+    "pages": [
+      40
+    ]
+  },
+  {
+    "slug": "honors-chemistry",
+    "rules": {
+      "type": "all",
+      "rules": [
+        {
+          "type": "any",
+          "rules": [
+            {
+              "type": "minGrade",
+              "courses": [
+                "honors-biology"
+              ],
+              "grade": "B",
+              "basis": "final"
+            },
+            {
+              "type": "minGrade",
+              "courses": [
+                "biology-enhanced"
+              ],
+              "grade": "A",
+              "basis": "final"
+            }
+          ]
+        },
+        {
+          "type": "manual",
+          "label": "Math skills placement test, if you have not completed Algebra I"
+        },
+        {
+          "type": "any",
+          "rules": [
+            {
+              "type": "completed",
+              "courses": [
+                "honors-algebra-ii-with-trigonometry",
+                "algebra-ii-with-trigonometry-enhanced"
+              ],
+              "advisory": true
+            },
+            {
+              "type": "coreq",
+              "courses": [
+                "honors-algebra-ii-with-trigonometry",
+                "algebra-ii-with-trigonometry-enhanced"
+              ],
+              "advisory": true
+            }
+          ]
+        }
+      ]
+    },
+    "pages": [
+      40
+    ]
+  },
+  {
+    "slug": "ap-chemistry",
+    "rules": {
+      "type": "all",
+      "rules": [
+        {
+          "type": "minGrade",
+          "courses": [
+            "honors-chemistry"
+          ],
+          "grade": "B",
+          "basis": "final"
+        },
+        {
+          "type": "any",
+          "rules": [
+            {
+              "type": "completed",
+              "courses": [
+                "honors-physics",
+                "ap-physics-i"
+              ],
+              "note": "Honors Physics or AP Physics I."
+            },
+            {
+              "type": "coreq",
+              "courses": [
+                "honors-physics",
+                "ap-physics-i"
+              ],
+              "note": "Honors Physics or AP Physics I."
+            }
+          ]
+        },
+        {
+          "type": "manual",
+          "label": "Recommendation of teacher and supervisor"
+        }
+      ]
+    },
+    "pages": [
+      41
+    ]
+  },
+  {
+    "slug": "physics",
+    "rules": {
+      "type": "any",
+      "rules": [
+        {
+          "type": "completed",
+          "courses": [
+            "algebra-ii-with-trigonometry"
+          ]
+        },
+        {
+          "type": "coreq",
+          "courses": [
+            "algebra-ii-with-trigonometry"
+          ]
+        }
+      ]
+    },
+    "pages": [
+      41
+    ]
+  },
+  {
+    "slug": "physics-enhanced",
+    "rules": {
+      "type": "any",
+      "rules": [
+        {
+          "type": "completed",
+          "courses": [
+            "algebra-ii-with-trigonometry-enhanced",
+            "honors-algebra-ii-with-trigonometry"
+          ],
+          "advisory": true
+        },
+        {
+          "type": "coreq",
+          "courses": [
+            "algebra-ii-with-trigonometry-enhanced",
+            "honors-algebra-ii-with-trigonometry"
+          ],
+          "advisory": true
+        }
+      ]
+    },
+    "pages": [
+      41
+    ]
+  },
+  {
+    "slug": "honors-physics",
+    "rules": {
+      "type": "all",
+      "rules": [
+        {
+          "type": "any",
+          "rules": [
+            {
+              "type": "minGrade",
+              "courses": [
+                "honors-chemistry"
+              ],
+              "grade": "B",
+              "basis": "final"
+            },
+            {
+              "type": "minGrade",
+              "courses": [
+                "chemistry-enhanced"
+              ],
+              "grade": "A",
+              "basis": "final"
+            }
+          ]
+        },
+        {
+          "type": "any",
+          "rules": [
+            {
+              "type": "completed",
+              "courses": [
+                "ap-pre-calculus",
+                "pre-calculus",
+                "calculus"
+              ],
+              "advisory": true
+            },
+            {
+              "type": "coreq",
+              "courses": [
+                "ap-pre-calculus",
+                "pre-calculus",
+                "calculus"
+              ],
+              "advisory": true
+            }
+          ]
+        }
+      ]
+    },
+    "pages": [
+      41
+    ]
+  },
+  {
+    "slug": "ap-physics-i",
+    "rules": {
+      "type": "all",
+      "rules": [
+        {
+          "type": "any",
+          "rules": [
+            {
+              "type": "completed",
+              "courses": [
+                "ap-pre-calculus",
+                "pre-calculus",
+                "calculus",
+                "ap-calculus-ab",
+                "ap-calculus-bc"
+              ]
+            },
+            {
+              "type": "coreq",
+              "courses": [
+                "ap-pre-calculus",
+                "pre-calculus",
+                "calculus",
+                "ap-calculus-ab",
+                "ap-calculus-bc"
+              ]
+            }
+          ]
+        },
+        {
+          "type": "manual",
+          "label": "Recommendation of teacher and supervisor"
+        }
+      ]
+    },
+    "pages": [
+      42
+    ]
+  },
+  {
+    "slug": "applied-physics-and-engineering",
+    "rules": {
+      "type": "manual",
+      "label": "The Science listing says Algebra I and the Technology Education listing says Chemistry. Ask the supervisor which applies"
+    },
+    "pages": [
+      42
+    ]
+  },
+  {
+    "slug": "ap-physics-ii",
+    "rules": {
+      "type": "all",
+      "rules": [
+        {
+          "type": "minGrade",
+          "courses": [
+            "honors-physics",
+            "ap-physics-i"
+          ],
+          "grade": "B",
+          "basis": "final"
+        },
+        {
+          "type": "manual",
+          "label": "Recommendation of teacher and supervisor"
+        }
+      ]
+    },
+    "pages": [
+      42
+    ]
+  },
+  {
+    "slug": "ap-physics-c",
+    "rules": {
+      "type": "all",
+      "rules": [
+        {
+          "type": "minGrade",
+          "courses": [
+            "honors-physics",
+            "ap-physics-i"
+          ],
+          "grade": "B",
+          "basis": "final"
+        },
+        {
+          "type": "any",
+          "rules": [
+            {
+              "type": "completed",
+              "courses": [
+                "calculus",
+                "ap-calculus-ab",
+                "ap-calculus-bc"
+              ],
+              "note": "Required."
+            },
+            {
+              "type": "coreq",
+              "courses": [
+                "calculus",
+                "ap-calculus-ab",
+                "ap-calculus-bc"
+              ],
+              "note": "Required."
+            }
+          ]
+        },
+        {
+          "type": "manual",
+          "label": "Recommendation of teacher and supervisor"
+        }
+      ]
+    },
+    "pages": [
+      42
+    ]
+  },
+  {
+    "slug": "honors-forensic-science",
+    "rules": {
+      "type": "all",
+      "rules": [
+        {
+          "type": "completed",
+          "courses": [
+            "biology",
+            "biology-enhanced",
+            "honors-biology",
+            "ap-biology"
+          ],
+          "note": "Any Biology course."
+        },
+        {
+          "type": "completed",
+          "courses": [
+            "chemistry",
+            "chemistry-enhanced",
+            "honors-chemistry",
+            "ap-chemistry"
+          ],
+          "note": "Any Chemistry course."
+        },
+        {
+          "type": "completed",
+          "courses": [
+            "physics",
+            "physics-enhanced",
+            "honors-physics",
+            "ap-physics-i"
+          ],
+          "note": "Any Physics course."
+        },
+        {
+          "type": "manual",
+          "label": "Recommendation of teacher and supervisor"
+        }
+      ]
+    },
+    "pages": [
+      43
+    ]
+  },
+  {
+    "slug": "honors-research-in-molecular-genetics-i",
+    "rules": {
+      "type": "all",
+      "rules": [
+        {
+          "type": "any",
+          "rules": [
+            {
+              "type": "completed",
+              "courses": [
+                "honors-biology"
+              ]
+            },
+            {
+              "type": "minGrade",
+              "courses": [
+                "biology-enhanced"
+              ],
+              "grade": "A_MINUS",
+              "basis": "final"
+            }
+          ]
+        },
+        {
+          "type": "manual",
+          "label": "Recommendation of teacher and supervisor"
+        }
+      ]
+    },
+    "pages": [
+      43
+    ]
+  },
+  {
+    "slug": "honors-research-in-molecular-genetics-ii",
+    "rules": {
+      "type": "all",
+      "rules": [
+        {
+          "type": "completed",
+          "courses": [
+            "honors-research-in-molecular-genetics-i"
+          ]
+        },
+        {
+          "type": "manual",
+          "label": "Recommendation of teacher and supervisor"
+        }
+      ]
+    },
+    "pages": [
+      44
+    ]
+  },
+  {
+    "slug": "honors-research-in-molecular-genetics-iii",
+    "rules": {
+      "type": "all",
+      "rules": [
+        {
+          "type": "completed",
+          "courses": [
+            "honors-research-in-molecular-genetics-i"
+          ]
+        },
+        {
+          "type": "completed",
+          "courses": [
+            "honors-research-in-molecular-genetics-ii"
+          ]
+        },
+        {
+          "type": "manual",
+          "label": "Recommendation of teacher and supervisor"
+        }
+      ]
+    },
+    "pages": [
+      44
+    ]
+  },
+  {
+    "slug": "introduction-to-anatomy-and-physiology",
+    "rules": {
+      "type": "minGrade",
+      "courses": [
+        "biology",
+        "biology-enhanced",
+        "honors-biology",
+        "ap-biology"
+      ],
+      "grade": "C",
+      "basis": "final",
+      "note": "A C or better in a biology course."
+    },
+    "pages": [
+      44
+    ]
+  },
+  {
+    "slug": "honors-anatomy-and-physiology",
+    "rules": {
+      "type": "all",
+      "rules": [
+        {
+          "type": "any",
+          "rules": [
+            {
+              "type": "completed",
+              "courses": [
+                "honors-biology"
+              ]
+            },
+            {
+              "type": "minGrade",
+              "courses": [
+                "biology-enhanced"
+              ],
+              "grade": "A_MINUS",
+              "basis": "final"
+            }
+          ]
+        },
+        {
+          "type": "manual",
+          "label": "Recommendation of teacher and supervisor"
+        }
+      ]
+    },
+    "pages": [
+      44
+    ]
+  },
+  {
+    "slug": "ap-environmental-science",
+    "rules": {
+      "type": "all",
+      "rules": [
+        {
+          "type": "completed",
+          "courses": [
+            "chemistry",
+            "honors-chemistry"
+          ]
+        },
+        {
+          "type": "any",
+          "rules": [
+            {
+              "type": "completed",
+              "courses": [
+                "chemistry-enhanced",
+                "physics-enhanced"
+              ]
+            },
+            {
+              "type": "coreq",
+              "courses": [
+                "chemistry-enhanced",
+                "physics-enhanced"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "pages": [
+      45
+    ]
+  },
+  {
+    "slug": "ap-chinese-language-and-culture",
+    "rules": {
+      "type": "manual",
+      "label": "Honors language sequence, and recommendation of teacher and supervisor"
+    },
+    "pages": [
+      47
+    ]
+  },
+  {
+    "slug": "ap-french-language-and-culture",
+    "rules": {
+      "type": "manual",
+      "label": "Honors language sequence, and recommendation of teacher and supervisor"
+    },
+    "pages": [
+      47
+    ]
+  },
+  {
+    "slug": "ap-italian-language-and-culture",
+    "rules": {
+      "type": "manual",
+      "label": "Honors language sequence, and recommendation of teacher and supervisor"
+    },
+    "pages": [
+      47
+    ]
+  },
+  {
+    "slug": "ap-spanish-language-and-culture",
+    "rules": {
+      "type": "manual",
+      "label": "Honors language sequence, and recommendation of teacher and supervisor"
+    },
+    "pages": [
+      47
+    ]
+  },
+  {
+    "slug": "ap-spanish-literature-and-culture",
+    "rules": {
+      "type": "all",
+      "rules": [
+        {
+          "type": "completed",
+          "courses": [
+            "ap-spanish-language-and-culture",
+            "spanish-for-heritage-speakers-iii"
+          ]
+        },
+        {
+          "type": "manual",
+          "label": "Recommendation of teacher and supervisor"
+        }
+      ]
+    },
+    "pages": [
+      48,
+      49
+    ]
+  },
+  {
+    "slug": "honors-advanced-studio-art-ii",
+    "rules": {
+      "type": "all",
+      "rules": [
+        {
+          "type": "completed",
+          "courses": [
+            "studio-art-i"
+          ]
+        },
+        {
+          "type": "manual",
+          "label": "Teacher approved portfolio or recommendation"
+        }
+      ]
+    },
+    "pages": [
+      49
+    ]
+  },
+  {
+    "slug": "honors-advanced-ceramics-and-sculpture-ii",
+    "rules": {
+      "type": "all",
+      "rules": [
+        {
+          "type": "completed",
+          "courses": [
+            "ceramics-and-sculpture-i"
+          ]
+        },
+        {
+          "type": "manual",
+          "label": "Teacher approved portfolio or recommendation"
+        }
+      ]
+    },
+    "pages": [
+      50
+    ]
+  },
+  {
+    "slug": "honors-advanced-photography-ii",
+    "rules": {
+      "type": "all",
+      "rules": [
+        {
+          "type": "completed",
+          "courses": [
+            "photography-i"
+          ]
+        },
+        {
+          "type": "manual",
+          "label": "Teacher approved portfolio or recommendation"
+        }
+      ]
+    },
+    "pages": [
+      51
+    ]
+  },
+  {
+    "slug": "communication-design",
+    "rules": {
+      "type": "any",
+      "rules": [
+        {
+          "type": "completed",
+          "courses": [
+            "photography-i"
+          ]
+        },
+        {
+          "type": "manual",
+          "label": "Teacher recommendation"
+        }
+      ]
+    },
+    "pages": [
+      51
+    ]
+  },
+  {
+    "slug": "management-and-leadership",
+    "rules": {
+      "type": "completed",
+      "courses": [
+        "financial-literacy",
+        "financial-literacy-hybrid",
+        "principles-of-business",
+        "entrepreneurship",
+        "marketing",
+        "honors-marketing-and-merchandising",
+        "financial-investment",
+        "accounting",
+        "career-exploration-internship",
+        "honors-teacher-cadet-program",
+        "teacher-assistant-program"
+      ],
+      "note": "Any one Business course."
+    },
+    "pages": [
+      54
+    ]
+  },
+  {
+    "slug": "honors-marketing-and-merchandising",
+    "rules": {
+      "type": "completed",
+      "courses": [
+        "marketing",
+        "principles-of-business"
+      ],
+      "note": "Marketing and Principles of Business."
+    },
+    "pages": [
+      54
+    ]
+  },
+  {
+    "slug": "culinary-arts-ii",
+    "rules": {
+      "type": "completed",
+      "courses": [
+        "culinary-arts-i"
+      ]
+    },
+    "pages": [
+      57
+    ]
+  },
+  {
+    "slug": "advanced-clothing-construction",
+    "rules": {
+      "type": "completed",
+      "courses": [
+        "clothing-construction"
+      ]
+    },
+    "pages": [
+      58
+    ]
+  },
+  {
+    "slug": "advanced-fashion-design",
+    "rules": {
+      "type": "completed",
+      "courses": [
+        "fashion-design"
+      ]
+    },
+    "pages": [
+      58
+    ]
+  },
+  {
+    "slug": "early-childhood-and-family-education-ii",
+    "rules": {
+      "type": "completed",
+      "courses": [
+        "early-childhood-and-family-education-i"
+      ]
+    },
+    "pages": [
+      59
+    ]
+  },
+  {
+    "slug": "early-childhood-and-family-education-iii",
+    "rules": {
+      "type": "completed",
+      "courses": [
+        "early-childhood-and-family-education-ii"
+      ]
+    },
+    "pages": [
+      59
+    ]
+  },
+  {
+    "slug": "chamber-choir",
+    "rules": {
+      "type": "manual",
+      "label": "Audition"
+    },
+    "pages": [
+      62
+    ]
+  },
+  {
+    "slug": "honors-chamber-choir",
+    "rules": {
+      "type": "manual",
+      "label": "Audition"
+    },
+    "pages": [
+      63
+    ]
+  },
+  {
+    "slug": "honors-concert-band",
+    "rules": {
+      "type": "manual",
+      "label": "Audition"
+    },
+    "pages": [
+      63
+    ]
+  },
+  {
+    "slug": "ap-music-theory",
+    "rules": {
+      "type": "manual",
+      "label": "Recommendation of teacher and supervisor"
+    },
+    "pages": [
+      65
+    ]
+  },
+  {
+    "slug": "graphic-design-ii",
+    "rules": {
+      "type": "completed",
+      "courses": [
+        "graphic-design-i"
+      ]
+    },
+    "pages": [
+      66
+    ]
+  },
+  {
+    "slug": "honors-engineering-design-i",
+    "rules": {
+      "type": "any",
+      "rules": [
+        {
+          "type": "gradeLevel",
+          "in": [
+            10,
+            11,
+            12
+          ]
+        },
+        {
+          "type": "coreq",
+          "courses": [
+            "honors-biology"
+          ],
+          "note": "Required for 9th grade students."
+        }
+      ]
+    },
+    "pages": [
+      67
+    ]
+  },
+  {
+    "slug": "honors-engineering-design-ii",
+    "rules": {
+      "type": "completed",
+      "courses": [
+        "honors-engineering-design-i"
+      ]
+    },
+    "pages": [
+      67
+    ]
+  },
+  {
+    "slug": "advanced-video-production",
+    "rules": {
+      "type": "all",
+      "rules": [
+        {
+          "type": "completed",
+          "courses": [
+            "video-production"
+          ]
+        },
+        {
+          "type": "manual",
+          "label": "Teacher recommendation"
+        }
+      ]
+    },
+    "pages": [
+      68
+    ]
+  },
+  {
+    "slug": "honors-broadcast-television-production",
+    "rules": {
+      "type": "all",
+      "rules": [
+        {
+          "type": "completed",
+          "courses": [
+            "video-production"
+          ]
+        },
+        {
+          "type": "manual",
+          "label": "Teacher recommendation"
+        }
+      ]
+    },
+    "pages": [
+      68
+    ]
+  },
+  {
+    "slug": "honors-research-in-innovation-and-design",
+    "rules": {
+      "type": "all",
+      "rules": [
+        {
+          "type": "completed",
+          "courses": [
+            "creative-design-principles-in-stem",
+            "graphic-design-i",
+            "graphic-design-ii",
+            "architecture",
+            "robotics-and-game-design",
+            "honors-engineering-design-i",
+            "honors-engineering-design-ii",
+            "video-production",
+            "advanced-video-production",
+            "honors-broadcast-television-production"
+          ],
+          "note": "One or more Technology Education courses."
+        },
+        {
+          "type": "manual",
+          "label": "Teacher recommendation"
+        }
+      ]
+    },
+    "pages": [
+      69
+    ]
+  }
+]

@@ -2,6 +2,8 @@
 export const instant = false;
 
 import { PageHeader, Section } from "@/components/ui/page";
+import { GraduationForm } from "@/components/admin/graduation-form";
+import { getGraduationConfig } from "@/lib/requirements/config";
 import { AddDomainForm, DomainRow, SignupModeForm } from "@/components/admin/settings-forms";
 import { requirePageRole } from "@/lib/auth/page";
 import { getSignupMode } from "@/lib/auth/service";
@@ -9,7 +11,11 @@ import { db } from "@/lib/db";
 
 export default async function AdminSettings() {
   await requirePageRole("ADMIN");
-  const [mode, domains] = await Promise.all([getSignupMode(), db.allowedDomain.findMany({ orderBy: { domain: "asc" } })]);
+  const [mode, domains, grad] = await Promise.all([
+    getSignupMode(),
+    db.allowedDomain.findMany({ orderBy: { domain: "asc" } }),
+    getGraduationConfig(),
+  ]);
 
   return (
     <div>
@@ -25,6 +31,9 @@ export default async function AdminSettings() {
               <DomainRow key={d.id} id={d.id} domain={d.domain} cohort={d.cohort} enabled={d.enabled} />
             ))}
           </ul>
+        </Section>
+        <Section title="Graduation requirements" description="Credits for each requirement and the yearly minimums. Changes apply to every plan immediately.">
+          <GraduationForm rules={grad.rules} settings={grad.settings} />
         </Section>
       </div>
     </div>
