@@ -7,7 +7,7 @@ import { canUseStudentWorkspace } from "@/lib/auth/student-access";
 import { ForbiddenError } from "@/lib/auth/guards";
 import { db } from "@/lib/db";
 import { bestFitOf } from "./fit";
-import { notify } from "@/lib/notifications";
+import { notify } from "@/lib/notify";
 import { RateLimitError, enforceLimit } from "@/lib/rate-limit";
 import { id } from "@/lib/plans/schemas";
 import { canReview, canTransition, checkWindow, isEditable, isWithdrawable, snapshotUnmet, type WindowEvent } from "./rules";
@@ -176,7 +176,11 @@ export async function startReview(appealId: unknown): Promise<ActionResult> {
   const appeal = await db.appeal.findUnique({ where: { id: aid.data }, select: { id: true, status: true, department: true } });
   if (!appeal || !canReview(actor, appeal.department)) throw new ForbiddenError();
   if (!canTransition(appeal.status, "UNDER_REVIEW")) return fail("That request is not waiting for review.");
-  await db.appeal.update({ where: { id: appeal.id }, data: { status: "UNDER_REVIEW" } });
+  const full = await db.appeal.findUnique({ where: { id: appeal.id }, select: { studentId: true, targetCourse: { select: { name: true } } } });
+  await db.$transaction(async (tx) => {
+    await tx.appeal.update({ where: { id: appeal.id }, data: { status: "UNDER_REVIEW" } });
+    if (full) await notify(tx, [{ userId: full.studentId, kind: "APPEAL_ASSIGNED", title: "A supervisor is reviewing your request", body: `Your request for ${full.targetCourse.name} is being reviewed.`, url: `/appeals/${appeal.id}` }]);
+  });
   revalidatePath("/review");
   return { ok: true };
 }

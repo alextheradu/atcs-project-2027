@@ -6,6 +6,7 @@ import { requireRole } from "@/lib/auth";
 import { canDemoteAdmin } from "@/lib/auth/guards";
 import { STAFF_DOMAIN, emailDomain, isStaffRole, type Role } from "@/lib/auth/policy";
 import { db } from "@/lib/db";
+import { notify } from "@/lib/notify";
 import { changeRoleSchema, createGrantSchema, searchSchema } from "./schemas";
 
 export type ActionResult<T = undefined> = { ok: true; data?: T } | { ok: false; error: string };
@@ -64,6 +65,9 @@ export async function changeUserRole(input: unknown): Promise<ActionResult> {
         },
         tx,
       );
+      if (after.role !== target.role) {
+        await notify(tx, [{ userId, kind: "ROLE_CHANGED", title: "Your role changed", body: "An admin changed your role in the course planner. Sign in again if something looks different.", url: "/dashboard" }]);
+      }
       return { ok: true };
     },
     { isolationLevel: "Serializable" },

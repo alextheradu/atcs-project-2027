@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
-import { Menu, X } from "lucide-react";
+import { Bell, Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { signOutAction } from "@/lib/account/actions";
 import { cn } from "@/lib/utils";
@@ -11,6 +11,7 @@ import { cn } from "@/lib/utils";
 interface ShellProps {
   nav: { href: string; label: string; group: string }[];
   user: { name: string | null; email: string; role: string };
+  unread?: number;
   children: React.ReactNode;
 }
 
@@ -33,7 +34,7 @@ function Breadcrumbs() {
   );
 }
 
-export function AppShell({ nav, user, children }: ShellProps) {
+export function AppShell({ nav, user, unread = 0, children }: ShellProps) {
   const [open, setOpen] = useState(false);
   const pathname = usePathname();
 
@@ -146,6 +147,10 @@ export function AppShell({ nav, user, children }: ShellProps) {
             <Menu size={16} />
           </Button>
           <Breadcrumbs />
+          <Link href="/notifications" className="ml-auto flex h-9 items-center gap-2 rounded-md px-2 text-[13px] text-muted transition-colors hover:text-fg" aria-label={unread ? `Notifications, ${unread} unread` : "Notifications"}>
+            <Bell size={15} aria-hidden />
+            {unread > 0 && <span className="num rounded-full bg-accent px-1.5 text-[11px] font-medium text-bg">{unread > 99 ? "99+" : unread}</span>}
+          </Link>
         </header>
         <main id="content" key={pathname} className={cn("page-enter mx-auto px-4 pb-28 pt-8 md:px-8 md:pb-16 md:pt-10", /^\/(plans\/[^/]+|pathways)/.test(pathname) ? "max-w-[1440px]" : "max-w-[1100px]")}>{children}</main>
       </div>

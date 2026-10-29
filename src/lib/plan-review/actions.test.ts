@@ -11,7 +11,7 @@ vi.mock("@/lib/auth", async () => {
 });
 vi.mock("next/cache", () => ({ revalidatePath: vi.fn() }));
 vi.mock("@/lib/audit", () => ({ writeAudit: vi.fn() }));
-vi.mock("@/lib/notifications", () => ({ notify: vi.fn() }));
+vi.mock("@/lib/notify", () => ({ notify: vi.fn() }));
 const fakeDb = vi.hoisted(() => {
   const m = () => ({ findUnique: vi.fn(), findFirst: vi.fn(), findMany: vi.fn(), create: vi.fn(), update: vi.fn() });
   const db = { plan: m(), planEntry: m(), planComment: m(), user: m(), $transaction: vi.fn() };
@@ -20,7 +20,7 @@ const fakeDb = vi.hoisted(() => {
 });
 vi.mock("@/lib/db", () => ({ db: fakeDb }));
 
-import { notify } from "@/lib/notifications";
+import { notify } from "@/lib/notify";
 import * as review from "./actions";
 
 let n = 0;

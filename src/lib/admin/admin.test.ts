@@ -13,6 +13,7 @@ vi.mock("@/lib/auth", async () => {
 
 vi.mock("next/cache", () => ({ revalidatePath: vi.fn() }));
 vi.mock("@/lib/audit", () => ({ writeAudit: vi.fn() }));
+vi.mock("@/lib/notify", () => ({ notify: vi.fn() }));
 
 const fakeDb = vi.hoisted(() => {
   const m = () => ({
@@ -38,6 +39,7 @@ const fakeDb = vi.hoisted(() => {
 vi.mock("@/lib/db", () => ({ db: fakeDb }));
 
 import { writeAudit } from "@/lib/audit";
+import { notify } from "@/lib/notify";
 import * as graduation from "./graduation";
 import * as settings from "./settings";
 import * as users from "./users";
@@ -140,6 +142,18 @@ describe("changeUserRole", () => {
       expect.objectContaining({ action: "user.role_changed", entityId: "t" }),
       expect.anything(),
     );
+  });
+
+  it("tells the user when their role changes, and stays quiet when it does not", async () => {
+    fakeDb.user.findUnique.mockResolvedValue({ id: "t", email: "t@pascack.org", role: "STUDENT", departments: [] });
+    fakeDb.user.count.mockResolvedValue(2);
+    fakeDb.user.update.mockResolvedValue({ role: "COUNSELOR", departments: [] });
+    await users.changeUserRole({ userId: "t", role: "COUNSELOR", departments: [] });
+    expect(notify).toHaveBeenCalledWith(expect.anything(), [expect.objectContaining({ userId: "t", kind: "ROLE_CHANGED" })]);
+    vi.mocked(notify).mockClear();
+    fakeDb.user.update.mockResolvedValue({ role: "STUDENT", departments: [] });
+    await users.changeUserRole({ userId: "t", role: "STUDENT", departments: [] });
+    expect(notify).not.toHaveBeenCalled();
   });
 
   it("refuses a staff role for a non-pascack address", async () => {

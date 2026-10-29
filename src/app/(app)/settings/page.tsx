@@ -5,7 +5,9 @@ import { Button } from "@/components/ui/button";
 import { Dl, PageHeader, Section } from "@/components/ui/page";
 import { removeLinkedEmail, startLinkEmail } from "@/lib/account/actions";
 import { requirePageUser } from "@/lib/auth/page";
+import { NotificationSettings } from "@/components/settings/notification-settings";
 import { db } from "@/lib/db";
+import { KINDS, defaultPref, kindsFor, type Pref } from "@/lib/notify/policy";
 
 const LINK_MESSAGES: Record<string, string> = {
   ok: "Email linked.",
@@ -17,7 +19,13 @@ const LINK_MESSAGES: Record<string, string> = {
 export default async function Settings({ searchParams }: { searchParams: Promise<{ link?: string }> }) {
   const user = await requirePageUser();
   const { link } = await searchParams;
-  const linked = await db.linkedEmail.findMany({ where: { userId: user.id }, orderBy: { createdAt: "asc" } });
+  const [linked, saved, devices] = await Promise.all([
+    db.linkedEmail.findMany({ where: { userId: user.id }, orderBy: { createdAt: "asc" } }),
+    db.notificationPreference.findMany({ where: { userId: user.id } }),
+    db.pushSubscription.count({ where: { userId: user.id } }),
+  ]);
+  const prefs = Object.fromEntries(KINDS.map((k) => [k, defaultPref(k)])) as Record<string, Pref>;
+  for (const p of saved) prefs[p.kind] = { inApp: true, email: p.email, push: p.push };
 
   return (
     <div>
@@ -26,6 +34,10 @@ export default async function Settings({ searchParams }: { searchParams: Promise
       <div className="space-y-10">
         <Section title="Account">
           <Dl items={[{ label: "Email", value: <span className="num">{user.email}</span> }, { label: "Role", value: <span className="num">{user.role.toLowerCase()}</span> }]} />
+        </Section>
+
+        <Section title="Notifications" description="Choose how you hear about reviews, plans and dates. In app messages are always on.">
+          <NotificationSettings kinds={kindsFor(user.role)} initial={prefs} devices={devices} />
         </Section>
 
         <Section
