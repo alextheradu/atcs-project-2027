@@ -2,6 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import { useState, useTransition } from "react";
+import { DraftNotice, SAVE_INTERRUPTED, useDraftState } from "@/components/draft-state";
 import { Button } from "@/components/ui/button";
 import { LEARN_CARDS } from "@/lib/learn/content";
 import { acceptPolicies, chooseGrade, finishOnboarding, saveCurrentBackground, saveIncomingBackground, saveMajor, setStep } from "@/lib/onboarding/actions";
@@ -42,18 +43,24 @@ export function Wizard({ startStep, cohort: startCohort, policies, interests, ne
   const [ageOk, setAgeOk] = useState(false);
   const [agreed, setAgreed] = useState(false);
   const [card, setCard] = useState(0);
-  const [form, setForm] = useState({ eighthMath: "", eighthMathGrade: "", scienceGrade: "", englishGrade: "", historyGrade: "", languageStudied: "none", languageLevel: 1, start: "blank" as "blank" | "import" });
-  const [picked, setPicked] = useState<string[]>([]);
+  const [form, setForm, backgroundDraft] = useDraftState("onboarding:background", { eighthMath: "", eighthMathGrade: "", scienceGrade: "", englishGrade: "", historyGrade: "", languageStudied: "none", languageLevel: 1, start: "blank" as "blank" | "import" });
+  const [picked, setPicked, interestDraft] = useDraftState<string[]>("onboarding:interests", []);
   const [honest, setHonest] = useState(false);
-  const [major, setMajor] = useState("");
+  const [major, setMajor, majorDraft] = useDraftState("onboarding:major", "");
 
   const go = (n: number) => { setError(null); setStepState(n); };
   function run(fn: () => Promise<{ ok: boolean; error?: string }>, next: number) {
     setError(null);
     start(async () => {
+      try {
       const r = await fn();
       if (!r.ok) setError(r.error ?? "That did not work.");
-      else go(next);
+      else {
+        if (step === 3) { backgroundDraft.commit(form); interestDraft.commit(picked); }
+        if (step === 4) majorDraft.commit(major);
+        go(next);
+      }
+      } catch { setError(SAVE_INTERRUPTED); }
     });
   }
   const set = (k: keyof typeof form, v: string | number) => setForm((f) => ({ ...f, [k]: v }));
@@ -68,6 +75,7 @@ export function Wizard({ startStep, cohort: startCohort, policies, interests, ne
       </div>
 
       <div className="mt-10 space-y-6">
+        <DraftNotice drafts={[backgroundDraft, interestDraft, majorDraft]} />
         {step === 0 && (
           <>
             <h1 className="text-2xl font-semibold tracking-tight">What grade are you in?</h1>

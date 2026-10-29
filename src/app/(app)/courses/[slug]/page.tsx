@@ -4,6 +4,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Badge } from "@/components/ui/badge";
 import { Dl, PageHeader, Section } from "@/components/ui/page";
+import { StartAppealButton } from "@/components/appeals/start-button";
 import { CourseFitList } from "@/components/eligibility/course-fit";
 import { requirePageUser } from "@/lib/auth/page";
 import { db } from "@/lib/db";
@@ -35,7 +36,10 @@ export default async function CoursePage({ params }: { params: Promise<{ slug: s
     key: e.id, slug: e.course.slug, name: e.course.name, gradeLevel: e.gradeLevel, status: e.status, grade: e.grade,
     rules: null, prereqText: null, approvedAppeal: e.overrideAppealId !== null,
   }));
-  const fits = plan && rules ? courseFit({ slug: course.slug, gradesOffered: course.gradesOffered, rules, prereqText: course.prereqText }, placements, { prior: profile ?? {}, names }) : [];
+  const approvedAppeal = plan ? await db.appeal.findFirst({ where: { studentId: user.id, targetCourseId: course.id, status: "APPROVED" }, select: { id: true } }) : null;
+  const fits = plan && rules ? courseFit({ slug: course.slug, gradesOffered: course.gradesOffered, rules, prereqText: course.prereqText }, placements, { prior: profile ?? {}, names, approved: !!approvedAppeal }) : [];
+  // Offer a review when no grade qualifies outright but at least one is close enough to ask about.
+  const canAsk = fits.length > 0 && !approvedAppeal && !fits.some((f) => f.result.status === "ELIGIBLE") && fits.some((f) => f.result.status === "NOT_ELIGIBLE_APPEALABLE" || f.result.status === "ELIGIBLE_WITH_WARNING");
 
   return (
     <article>
@@ -62,6 +66,9 @@ export default async function CoursePage({ params }: { params: Promise<{ slug: s
           {fits.length > 0 && (
             <Section title="Your plan">
               <CourseFitList fits={fits} />
+              {canAsk && (
+                <div className="mt-4"><StartAppealButton slug={course.slug} /></div>
+              )}
             </Section>
           )}
           {rules && !plan && user.role !== "COUNSELOR" && user.role !== "ADMIN" && user.role !== "SUPERVISOR" && (

@@ -26,6 +26,10 @@ Owner submits as a student and decides as a supervisor.
 
 ## Done when
 
-- [ ] Window rules and department scoping fully tested.
-- [ ] No hardcoded dates.
-- [ ] Approved appeal visibly overrides the warning.
+- [x] Window rules and department scoping fully tested.
+- [x] No hardcoded dates.
+- [x] Approved appeal visibly overrides the warning.
+
+## Remaining for the checkpoint
+
+- [ ] Owner submits as a student and decides as a supervisor.

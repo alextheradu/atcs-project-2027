@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useMemo, useRef, useState, useTransition } from "react";
+import { DraftNotice, SAVE_INTERRUPTED, useDraftState } from "@/components/draft-state";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { bulkAddCourses, confirmImport, type ImportSummary } from "@/lib/transcript/actions";
@@ -46,10 +47,10 @@ const BAND: Record<Band, { label: string; tone: "eligible" | "warning" | "locked
 };
 
 export function ImportFlow({ plans, courses, aliases }: Props) {
-  const [tab, setTab] = useState<"pdf" | "hand">("pdf");
-  const [planId, setPlanId] = useState(plans.find((p) => p.isPrimary)?.id ?? plans[0]?.id ?? "");
-  const [parsed, setParsed] = useState<ParsedTranscript | null>(null);
-  const [lines, setLines] = useState<Line[]>([]);
+  const [tab, setTab] = useDraftState<"pdf" | "hand">("import:tab", "pdf");
+  const [planId, setPlanId] = useDraftState("import:plan", plans.find((p) => p.isPrimary)?.id ?? plans[0]?.id ?? "");
+  const [parsed, setParsed, parsedDraft] = useDraftState<ParsedTranscript | null>(`import:${planId}:parsed`, null);
+  const [lines, setLines, lineDraft] = useDraftState<Line[]>(`import:${planId}:lines`, []);
   const [error, setError] = useState<string | null>(null);
   const [done, setDone] = useState<ImportSummary | null>(null);
   const [busy, setBusy] = useState(false);
@@ -107,9 +108,11 @@ export function ImportFlow({ plans, courses, aliases }: Props) {
     // A hand mapping is any choice that differs from what the matcher picked on its own.
     const suggestions = chosen.filter((l) => l.courseId !== l.autoCourseId || l.via === "fuzzy").map((l) => ({ title: l.title, courseId: l.courseId }));
     start(async () => {
+      try {
       const r = await confirmImport({ planId, rows, suggestions, missing: missing.map((l) => ({ title: l.title })) });
-      if (r.ok) setDone(r.data ?? null);
+      if (r.ok) { parsedDraft.discard(); lineDraft.discard(); setDone(r.data ?? null); }
       else setError(r.error);
+      } catch { setError(SAVE_INTERRUPTED); }
     });
   }
 
@@ -119,6 +122,7 @@ export function ImportFlow({ plans, courses, aliases }: Props) {
 
   return (
     <div className="space-y-8">
+      <DraftNotice drafts={[parsedDraft, lineDraft]} />
       <div role="tablist" aria-label="How to add courses" className="flex gap-5 border-b border-line">
         {([["pdf", "From a transcript"], ["hand", "Add by hand"]] as const).map(([k, label]) => (
           <button key={k} role="tab" aria-selected={tab === k} onClick={() => setTab(k)} className={`-mb-px border-b py-2 text-[13px] transition-colors ${tab === k ? "border-fg text-fg" : "border-transparent text-muted hover:text-fg"}`}>
@@ -210,7 +214,7 @@ export function ImportFlow({ plans, courses, aliases }: Props) {
           )}
         </>
       ) : (
-        <ByHand planId={planId} courses={sorted} onDone={setDone} onError={setError} />
+        <ByHand key={planId} planId={planId} courses={sorted} onDone={setDone} onError={setError} />
       )}
     </div>
   );
@@ -226,7 +230,7 @@ interface HandRow {
 }
 
 function ByHand({ planId, courses, onDone, onError }: { planId: string; courses: CatalogCourse[]; onDone: (s: ImportSummary | null) => void; onError: (e: string | null) => void }) {
-  const [rows, setRows] = useState<HandRow[]>([{ key: 1, text: "", courseId: "", gradeLevel: 9, status: "COMPLETED", grade: "" }]);
+  const [rows, setRows, handDraft] = useDraftState<HandRow[]>(`import:${planId}:hand`, [{ key: 1, text: "", courseId: "", gradeLevel: 9, status: "COMPLETED", grade: "" }]);
   const [pending, start] = useTransition();
   const byName = useMemo(() => new Map(courses.map((c) => [matchKey(c.name), c.id])), [courses]);
   const patch = (key: number, p: Partial<HandRow>) => setRows((rs) => rs.map((r) => (r.key === key ? { ...r, ...p } : r)));
@@ -236,19 +240,22 @@ function ByHand({ planId, courses, onDone, onError }: { planId: string; courses:
     onError(null);
     onDone(null);
     start(async () => {
+      try {
       const r = await bulkAddCourses({
         planId,
         rows: ready.map((x) => ({ courseId: x.courseId, gradeLevel: x.gradeLevel, status: x.status, grade: x.status === "COMPLETED" && x.grade ? x.grade : null, credits: null })),
       });
       if (r.ok) {
         onDone(r.data ?? null);
-        setRows([{ key: Date.now(), text: "", courseId: "", gradeLevel: 9, status: "COMPLETED", grade: "" }]);
+        handDraft.discard();
       } else onError(r.error);
+      } catch { onError(SAVE_INTERRUPTED); }
     });
   }
 
   return (
     <section className="space-y-4">
+      <DraftNotice drafts={[handDraft]} />
       <p className="max-w-[60ch] text-sm text-muted">Search for a course, pick the year and the grade you got. Credits come from the catalog.</p>
       <datalist id="hand-courses">{courses.filter((c) => !c.archived).map((c) => <option key={c.id} value={c.name} />)}</datalist>
       <ul className="space-y-3">

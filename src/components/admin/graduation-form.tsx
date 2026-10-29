@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useTransition } from "react";
+import { DraftNotice, SAVE_INTERRUPTED, useDraftState } from "@/components/draft-state";
 import { Button } from "@/components/ui/button";
 import { updateGraduationConfig } from "@/lib/admin/graduation";
 import type { GraduationSettings, RequirementRuleInput } from "@/lib/requirements";
@@ -13,8 +14,8 @@ const SETTING_FIELDS: { key: keyof GraduationSettings; label: string; help: stri
 ];
 
 export function GraduationForm({ rules, settings }: { rules: RequirementRuleInput[]; settings: GraduationSettings }) {
-  const [r, setR] = useState(rules);
-  const [s, setS] = useState(settings);
+  const [r, setR, ruleDraft] = useDraftState("graduation:rules", rules);
+  const [s, setS, settingsDraft] = useDraftState("graduation:settings", settings);
   const [msg, setMsg] = useState<{ ok: boolean; text: string } | null>(null);
   const [pending, start] = useTransition();
 
@@ -24,11 +25,15 @@ export function GraduationForm({ rules, settings }: { rules: RequirementRuleInpu
       onSubmit={(e) => {
         e.preventDefault();
         start(async () => {
+          try {
           const res = await updateGraduationConfig({ rules: r.map(({ kind, requiredCredits }) => ({ kind, requiredCredits })), settings: s });
+          if (res.ok) { ruleDraft.commit(r); settingsDraft.commit(s); }
           setMsg(res.ok ? { ok: true, text: "Saved. Plans use the new numbers right away." } : { ok: false, text: res.error });
+          } catch { setMsg({ ok: false, text: SAVE_INTERRUPTED }); }
         });
       }}
     >
+      <DraftNotice drafts={[ruleDraft, settingsDraft]} />
       <div>
         <h3 className="mb-1 text-[13px] font-medium">Credits needed per requirement</h3>
         <ul className="list">

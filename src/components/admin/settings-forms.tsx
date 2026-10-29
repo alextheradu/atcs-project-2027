@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useTransition } from "react";
+import { DraftNotice, SAVE_INTERRUPTED, useDraftState } from "@/components/draft-state";
 import { Button } from "@/components/ui/button";
 import { addAllowedDomain, removeAllowedDomain, setDomainEnabled, setSignupMode } from "@/lib/admin/settings";
 
@@ -11,12 +12,13 @@ const MODES = [
 ] as const;
 
 export function SignupModeForm({ current }: { current: string }) {
-  const [mode, setMode] = useState(current);
+  const [mode, setMode, modeDraft] = useDraftState("settings:signup-mode", current);
   const [msg, setMsg] = useState<string | null>(null);
   const [pending, start] = useTransition();
 
   return (
     <div className="space-y-3">
+      <DraftNotice drafts={[modeDraft]} />
       {MODES.map(([value, label, help]) => (
         <label key={value} className="flex cursor-pointer items-start gap-3">
           <input
@@ -38,8 +40,11 @@ export function SignupModeForm({ current }: { current: string }) {
           disabled={pending || mode === current}
           onClick={() =>
             start(async () => {
+              try {
               const r = await setSignupMode(mode);
+              if (r.ok) modeDraft.commit(mode);
               setMsg(r.ok ? "Saved" : r.error);
+              } catch { setMsg(SAVE_INTERRUPTED); }
             })
           }
         >
@@ -52,8 +57,8 @@ export function SignupModeForm({ current }: { current: string }) {
 }
 
 export function AddDomainForm() {
-  const [domain, setDomain] = useState("");
-  const [cohort, setCohort] = useState<"CURRENT" | "INCOMING_8">("INCOMING_8");
+  const [domain, setDomain, domainDraft] = useDraftState("settings:domain", "");
+  const [cohort, setCohort, cohortDraft] = useDraftState<"CURRENT" | "INCOMING_8">("settings:cohort", "INCOMING_8");
   const [msg, setMsg] = useState<{ ok: boolean; text: string } | null>(null);
   const [pending, start] = useTransition();
 
@@ -63,12 +68,15 @@ export function AddDomainForm() {
       onSubmit={(e) => {
         e.preventDefault();
         start(async () => {
+          try {
           const r = await addAllowedDomain({ domain, cohort });
           setMsg(r.ok ? { ok: true, text: "Added" } : { ok: false, text: r.error });
-          if (r.ok) setDomain("");
+          if (r.ok) { domainDraft.discard(); cohortDraft.commit(cohort); }
+          } catch { setMsg({ ok: false, text: SAVE_INTERRUPTED }); }
         });
       }}
     >
+      <DraftNotice drafts={[domainDraft, cohortDraft]} />
       <input className="input !w-64" placeholder="district.org" value={domain} onChange={(e) => setDomain(e.target.value)} aria-label="Domain" required />
       <select className="input !w-auto" value={cohort} onChange={(e) => setCohort(e.target.value as typeof cohort)} aria-label="Cohort">
         <option value="CURRENT">CURRENT (high school)</option>

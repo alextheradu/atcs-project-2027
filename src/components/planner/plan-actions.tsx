@@ -2,13 +2,14 @@
 
 import { useRouter } from "next/navigation";
 import { useState, useTransition } from "react";
+import { DraftNotice, SAVE_INTERRUPTED, useDraftState } from "@/components/draft-state";
 import { Button } from "@/components/ui/button";
 import { clonePlan, deletePlan, renamePlan, setPrimaryPlan } from "@/lib/plans/actions";
 
 export function PlanActions({ planId, name, isPrimary, editable }: { planId: string; name: string; isPrimary: boolean; editable: boolean }) {
   const router = useRouter();
   const [renaming, setRenaming] = useState(false);
-  const [value, setValue] = useState(name);
+  const [value, setValue, draft] = useDraftState(`plan:${planId}:name`, name);
   const [confirming, setConfirming] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [pending, start] = useTransition();
@@ -16,25 +17,28 @@ export function PlanActions({ planId, name, isPrimary, editable }: { planId: str
   const run = (fn: () => Promise<{ ok: boolean; error?: string } | { ok: true; data?: { id: string } }>, then?: (r: { ok: true; data?: { id: string } }) => void) =>
     start(async () => {
       setError(null);
+      try {
       const r = await fn();
       if (!r.ok) setError("error" in r ? (r.error ?? "That did not work.") : "That did not work.");
       else then?.(r as { ok: true; data?: { id: string } });
+      } catch { setError(SAVE_INTERRUPTED); }
     });
 
   return (
     <div className="flex flex-col items-end gap-2">
+      <DraftNotice drafts={[draft]} />
       <div className="flex flex-wrap items-center justify-end gap-2">
-        {renaming ? (
+        {(renaming || draft.dirty) ? (
           <form
             className="flex items-center gap-2"
             onSubmit={(e) => {
               e.preventDefault();
-              run(() => renamePlan(planId, value), () => setRenaming(false));
+              run(() => renamePlan(planId, value), () => { draft.commit(value); setRenaming(false); });
             }}
           >
             <input className="input !w-44" value={value} maxLength={60} autoFocus aria-label="Plan name" onChange={(e) => setValue(e.target.value)} />
             <Button size="sm" variant="primary" type="submit" disabled={pending}>Save</Button>
-            <Button size="sm" variant="ghost" type="button" onClick={() => { setRenaming(false); setValue(name); }}>Cancel</Button>
+            <Button size="sm" variant="ghost" type="button" onClick={() => { setRenaming(false); draft.discard(); }}>Cancel</Button>
           </form>
         ) : (
           <>

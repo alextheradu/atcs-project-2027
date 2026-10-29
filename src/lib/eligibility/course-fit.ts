@@ -11,13 +11,13 @@ export interface GradeFit {
 export function courseFit(
   course: { slug: string; gradesOffered: number[]; rules: Rule | null; prereqText: string | null },
   plan: PlanCourse[],
-  opts: { prior?: StudentPrior; names?: Record<string, string> } = {},
+  opts: { prior?: StudentPrior; names?: Record<string, string>; /** An approved appeal exists even if the course is not on the plan yet. */ approved?: boolean } = {},
 ): GradeFit[] {
   const own = plan.find((p) => p.slug === course.slug);
   const others = plan.filter((p) => p.slug !== course.slug);
   const grades = course.gradesOffered.filter((g) => g >= 9 && g <= 12);
   return grades.map((grade) => ({
     grade,
-    result: evaluateCourse(course, buildContext(grade, others, { ...opts, approvedAppeal: own?.approvedAppeal })),
+    result: evaluateCourse(course, buildContext(grade, others, { ...opts, approvedAppeal: opts.approved || own?.approvedAppeal })),
   }));
 }

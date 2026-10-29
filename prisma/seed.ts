@@ -113,6 +113,32 @@ async function main() {
     });
   }
 
+  // Defaults for appeals. Only when nothing exists yet, so admin edits are never overwritten.
+  if ((await db.appealQuestion.count()) === 0) {
+    const qs: [string, "TEXT" | "LONG_TEXT" | "YES_NO", string?][] = [
+      ["Why do you want this course?", "LONG_TEXT"],
+      ["What is your current test and quiz average in the prerequisite?", "TEXT", "A number or a letter is fine."],
+      ["Did you take the placement exam? What was the result?", "TEXT", "Say if there was no exam."],
+      ["Has your teacher recommended this course?", "YES_NO"],
+      ["How will you handle the added workload?", "LONG_TEXT"],
+      ["Do your parents or guardians know about this request?", "YES_NO"],
+    ];
+    await db.appealQuestion.createMany({ data: qs.map(([prompt, type, helpText], i) => ({ prompt, type, helpText: helpText ?? null, required: true, sortOrder: (i + 1) * 10 })) });
+  }
+  // Last cycle's dates from the Program of Studies, kept as labeled examples. Admins add the next cycle.
+  if ((await db.timelineEvent.count()) === 0) {
+    const d = (s: string) => new Date(`${s}T00:00:00Z`);
+    await db.timelineEvent.createMany({
+      data: [
+        { kind: "GRADES_DUE", audience: "ALL", label: "Example from 2025-26: semester 1 grades due", schoolYear: "2025-26", opensAt: d("2026-02-06") },
+        { kind: "COURSE_SELECTION", audience: "ALL", label: "Example from 2025-26: course selection", schoolYear: "2025-26", opensAt: d("2026-02-09"), closesAt: d("2026-03-27") },
+        { kind: "APPEAL_WINDOW", audience: "INCOMING", label: "Example from 2025-26: placement review window", schoolYear: "2025-26", opensAt: d("2026-02-09"), closesAt: d("2026-03-27") },
+        { kind: "OTHER", audience: "CURRENT", label: "Example from 2025-26: level change forms due", schoolYear: "2025-26", opensAt: d("2026-03-02") },
+        { kind: "APPEAL_DECISIONS", audience: "ALL", label: "Example from 2025-26: decisions by", schoolYear: "2025-26", opensAt: d("2026-06-19") },
+      ],
+    });
+  }
+
   const rules = await seedRules();
   console.log(`seed ok: ${created} new courses, ${aliases} aliases checked, ${rules}`);
 }

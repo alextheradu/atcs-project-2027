@@ -2,17 +2,19 @@
 
 import { useRouter } from "next/navigation";
 import { useState, useTransition } from "react";
+import { DraftNotice, SAVE_INTERRUPTED, useDraftState } from "@/components/draft-state";
 import { Button } from "@/components/ui/button";
 import { addAlias, removeAlias } from "@/lib/catalog/admin";
 
 export function AliasManager({ courseId, aliases }: { courseId: string; aliases: { id: string; alias: string }[] }) {
   const router = useRouter();
-  const [alias, setAlias] = useState("");
+  const [alias, setAlias, draft] = useDraftState(`catalog:${courseId}:alias`, "");
   const [msg, setMsg] = useState<string | null>(null);
   const [pending, start] = useTransition();
 
   return (
     <section className="space-y-4 border-t border-line pt-6">
+      <DraftNotice drafts={[draft]} />
       <div>
         <h2 className="text-sm font-medium">Transcript aliases</h2>
         <p className="mt-1 text-[13px] text-muted">Other titles that should match this course when a transcript is imported. Stored in a normalized form.</p>
@@ -31,9 +33,11 @@ export function AliasManager({ courseId, aliases }: { courseId: string; aliases:
         onSubmit={(e) => {
           e.preventDefault();
           start(async () => {
+            try {
             const r = await addAlias({ courseId, alias });
             setMsg(r.ok ? null : r.error);
-            if (r.ok) { setAlias(""); router.refresh(); }
+            if (r.ok) { draft.discard(); router.refresh(); }
+            } catch { setMsg(SAVE_INTERRUPTED); }
           });
         }}
       >
