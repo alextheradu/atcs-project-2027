@@ -14,7 +14,7 @@ vi.mock("@/lib/audit", () => ({ writeAudit: vi.fn() }));
 
 const fakeDb = vi.hoisted(() => {
   const m = () => ({ findUnique: vi.fn(), findFirst: vi.fn(), findMany: vi.fn(), create: vi.fn(), update: vi.fn() });
-  const db = { plan: m(), course: m(), planEntry: m(), courseAlias: m(), $transaction: vi.fn() };
+  const db = { plan: m(), course: m(), planEntry: m(), courseAlias: m(), importRequest: m(), $transaction: vi.fn() };
   db.$transaction.mockImplementation(async (cb: (tx: typeof db) => unknown) => cb(db));
   return db;
 });
@@ -37,6 +37,7 @@ beforeEach(() => {
   );
   fakeDb.planEntry.findMany.mockResolvedValue([]);
   fakeDb.courseAlias.findUnique.mockResolvedValue(null);
+  fakeDb.importRequest.findUnique.mockResolvedValue(null);
   fakeDb.course.findMany.mockImplementation(async (a: { where?: { id: { in: string[] } } }) =>
     a.where ? a.where.id.in.map((id) => ({ id, name: `Course ${id}`, credits: 5, plannable: id !== "ms" })) : [{ name: "English I" }],
   );
@@ -70,7 +71,7 @@ describe("confirmImport", () => {
       { planId: "p1", rows: [row("c1", { gradeLevel: 13 })] },
       { planId: "p1", rows: [row("c1", { grade: "Z" })] },
       { planId: "p1", rows: [row("c1", { credits: 99 })] },
-      { planId: "p1", rows: [row("c1")], aliases: [{ title: "x".repeat(500), courseId: "c1" }] },
+      { planId: "p1", rows: [row("c1")], suggestions: [{ title: "x".repeat(500), courseId: "c1" }] },
       null,
     ]) {
       expect((await actions.confirmImport(bad)).ok).toBe(false);
@@ -83,7 +84,7 @@ describe("confirmImport", () => {
       planId: "p1",
       rows: [row("c1", { credits: 6, grade: "B_PLUS" }), row("c2", { status: "IN_PROGRESS", grade: null, credits: null, gradeLevel: 11 })],
     });
-    expect(r).toEqual({ ok: true, data: { added: 2, skipped: [], aliasesSaved: 0 } });
+    expect(r).toEqual({ ok: true, data: { added: 2, skipped: [], sentToStaff: 0 } });
     const [a, b] = fakeDb.planEntry.create.mock.calls.map((c) => c[0].data);
     expect(a).toMatchObject({ courseId: "c1", source: "IMPORT", status: "COMPLETED", grade: "B_PLUS", credits: 6 });
     expect(b).toMatchObject({ courseId: "c2", source: "IMPORT", status: "IN_PROGRESS", grade: null, credits: 5 });
@@ -104,15 +105,38 @@ describe("confirmImport", () => {
     expect((await actions.confirmImport({ planId: "p1", rows: [row("c1"), row("c2")] })).ok).toBe(false);
   });
 
-  it("saves manual mappings as aliases but never overwrites an existing alias", async () => {
-    fakeDb.courseAlias.findUnique.mockResolvedValueOnce(null).mockResolvedValueOnce({ id: "a" });
+  it("never writes the shared alias table from a student import", async () => {
+    await actions.confirmImport({
+      planId: "p1", rows: [row("c1")],
+      suggestions: [{ title: "Hon Eng III Class/Contemp Lit", courseId: "c1" }], missing: [{ title: "Brand New Course" }],
+    });
+    expect(fakeDb.courseAlias.create).not.toHaveBeenCalled();
+  });
+
+  it("sends a hand match and a missing course to staff as pending requests", async () => {
     const r = await actions.confirmImport({
       planId: "p1", rows: [row("c1")],
-      aliases: [{ title: "Hon Eng III Class/Contemp Lit", courseId: "c1" }, { title: "Already Mapped", courseId: "c1" }],
+      suggestions: [{ title: "Hon Eng III Class/Contemp Lit", courseId: "c1" }], missing: [{ title: "Brand New Course" }],
     });
-    expect(r).toMatchObject({ ok: true, data: { aliasesSaved: 1 } });
-    expect(fakeDb.courseAlias.create).toHaveBeenCalledTimes(1);
-    expect(fakeDb.courseAlias.create.mock.calls[0][0].data).toMatchObject({ alias: "honors english iii class contemp lit", createdById: (state.user as { id: string }).id });
+    expect(r).toMatchObject({ ok: true, data: { added: 1, sentToStaff: 2 } });
+    const [a, b] = fakeDb.importRequest.create.mock.calls.map((c) => c[0].data);
+    expect(a).toMatchObject({ normalizedTitle: "honors english iii class contemp lit", courseId: "c1" });
+    expect(b).toMatchObject({ normalizedTitle: "brand new course", courseId: null });
+    expect(a.studentId).toBe((state.user as { id: string }).id);
+  });
+
+  it("a missing course alone is enough to submit, and adds nothing to the plan", async () => {
+    const r = await actions.confirmImport({ planId: "p1", rows: [], missing: [{ title: "Brand New Course" }] });
+    expect(r).toMatchObject({ ok: true, data: { added: 0, sentToStaff: 1 } });
+    expect(fakeDb.planEntry.create).not.toHaveBeenCalled();
+  });
+
+  it("does not ask twice for the same title, or for one that already has an alias", async () => {
+    fakeDb.importRequest.findUnique.mockResolvedValueOnce({ id: "r" });
+    fakeDb.courseAlias.findUnique.mockResolvedValueOnce(null).mockResolvedValueOnce({ id: "a" });
+    const r = await actions.confirmImport({ planId: "p1", rows: [], missing: [{ title: "Seen Before" }, { title: "Has Alias" }] });
+    expect(r).toMatchObject({ data: { sentToStaff: 0 } });
+    expect(fakeDb.importRequest.create).not.toHaveBeenCalled();
   });
 
   it("is rate limited", async () => {
@@ -124,32 +148,31 @@ describe("confirmImport", () => {
 
   it("keeps titles and grades out of the audit log", async () => {
     await actions.confirmImport({ planId: "p1", rows: [row("c1")] });
-    expect(writeAudit).toHaveBeenCalledWith(expect.objectContaining({ action: "plan.import", after: { added: 1, aliases: 0 } }), expect.anything());
+    expect(writeAudit).toHaveBeenCalledWith(expect.objectContaining({ action: "plan.import", after: { added: 1, requests: 0 } }), expect.anything());
   });
 });
 
-describe("alias safety", () => {
+describe("request safety", () => {
   it("refuses staff roles", async () => {
     state.user = { ...user, id: "staff", role: "COUNSELOR" };
     expect((await actions.confirmImport({ planId: "p1", rows: [row("c1")] })).ok).toBe(false);
     expect(fakeDb.planEntry.create).not.toHaveBeenCalled();
   });
-  it("ignores an alias that points at a course not in the import", async () => {
-    const r = await actions.confirmImport({ planId: "p1", rows: [row("c1")], aliases: [{ title: "Free Money Course", courseId: "c9" }] });
-    expect(r).toMatchObject({ ok: true, data: { aliasesSaved: 0 } });
-    expect(fakeDb.courseAlias.create).not.toHaveBeenCalled();
+  it("ignores a suggestion that points at a course not in the import", async () => {
+    const r = await actions.confirmImport({ planId: "p1", rows: [row("c1")], suggestions: [{ title: "Free Money Course", courseId: "c9" }] });
+    expect(r).toMatchObject({ ok: true, data: { sentToStaff: 0 } });
+    expect(fakeDb.importRequest.create).not.toHaveBeenCalled();
   });
-  it("never lets an alias shadow an existing catalog name", async () => {
-    const r = await actions.confirmImport({ planId: "p1", rows: [row("c1")], aliases: [{ title: "English I", courseId: "c1" }] });
-    expect(r).toMatchObject({ ok: true, data: { aliasesSaved: 0 } });
-    expect(fakeDb.courseAlias.create).not.toHaveBeenCalled();
+  it("never files a request for a title that is already a catalog course name", async () => {
+    const r = await actions.confirmImport({ planId: "p1", rows: [row("c1")], suggestions: [{ title: "English I", courseId: "c1" }] });
+    expect(r).toMatchObject({ ok: true, data: { sentToStaff: 0 } });
   });
 });
 
 describe("bulkAddCourses", () => {
   it("saves as MANUAL and never writes aliases", async () => {
-    const r = await actions.bulkAddCourses({ planId: "p1", rows: [row("c1", { status: "PLANNED", grade: null, credits: null })], aliases: [{ title: "Whatever", courseId: "c1" }] });
-    expect(r).toMatchObject({ ok: true, data: { added: 1, aliasesSaved: 0 } });
+    const r = await actions.bulkAddCourses({ planId: "p1", rows: [row("c1", { status: "PLANNED", grade: null, credits: null })], suggestions: [{ title: "Whatever", courseId: "c1" }] });
+    expect(r).toMatchObject({ ok: true, data: { added: 1, sentToStaff: 0 } });
     expect(fakeDb.planEntry.create.mock.calls[0][0].data.source).toBe("MANUAL");
     expect(fakeDb.courseAlias.create).not.toHaveBeenCalled();
   });

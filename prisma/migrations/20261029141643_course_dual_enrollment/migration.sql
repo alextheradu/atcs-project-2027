@@ -15,3 +15,8 @@ COMMIT;
 
 -- AlterTable
 ALTER TABLE "Course" ADD COLUMN     "dualEnrollment" BOOLEAN NOT NULL DEFAULT false;
+
+-- Preserve the existing dual enrollment options without changing base levels.
+UPDATE "Course"
+SET "dualEnrollment" = true
+WHERE NULLIF(BTRIM("dualEnrollmentNote"), '') IS NOT NULL;

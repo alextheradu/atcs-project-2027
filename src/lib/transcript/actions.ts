@@ -15,7 +15,8 @@ const fail = (error: string): ActionResult => ({ ok: false, error });
 export interface ImportSummary {
   added: number;
   skipped: string[];
-  aliasesSaved: number;
+  /** Titles sent to a counselor for review. */
+  sentToStaff: number;
 }
 
 async function save(input: unknown, source: "IMPORT" | "MANUAL"): Promise<ActionResult<ImportSummary>> {
@@ -31,7 +32,7 @@ async function save(input: unknown, source: "IMPORT" | "MANUAL"): Promise<Action
 
   const parsed = importSchema.safeParse(input);
   if (!parsed.success) return fail(parsed.error.issues[0]?.message ?? "Check the courses and try again.");
-  const { planId, rows, aliases } = parsed.data;
+  const { planId, rows, suggestions, missing } = parsed.data;
 
   // Ownership is part of the query, so another student's plan is simply not found.
   const plan = await db.plan.findFirst({ where: { id: planId, ownerId: user.id }, select: { id: true, status: true } });
@@ -40,7 +41,7 @@ async function save(input: unknown, source: "IMPORT" | "MANUAL"): Promise<Action
 
   // An alias must point at a course in this same import, so a student cannot map a title to an unrelated course.
   const rowCourses = new Set(rows.map((r) => r.courseId));
-  const safeAliases = aliases.filter((a) => rowCourses.has(a.courseId));
+  const safeSuggestions = suggestions.filter((a) => rowCourses.has(a.courseId));
   const ids = [...new Set(rows.map((r) => r.courseId))];
   const courses = await db.course.findMany({ where: { id: { in: ids } }, select: { id: true, name: true, credits: true, plannable: true } });
   const byId = new Map(courses.map((c) => [c.id, c]));
@@ -59,10 +60,10 @@ async function save(input: unknown, source: "IMPORT" | "MANUAL"): Promise<Action
   });
   if (existing.length + fresh.length > MAX_ENTRIES_PER_PLAN) return fail(`A plan can hold up to ${MAX_ENTRIES_PER_PLAN} courses.`);
 
-  // Titles that already equal a catalog course name must never be redirected by an alias.
+  // A title that already names a catalog course or has an alias needs no review.
   const catalogKeys = new Set((await db.course.findMany({ select: { name: true } })).map((c) => matchKey(c.name)));
 
-  let aliasesSaved = 0;
+  let sentToStaff = 0;
   await db.$transaction(async (tx) => {
     for (const r of fresh) {
       const c = byId.get(r.courseId)!;
@@ -76,23 +77,26 @@ async function save(input: unknown, source: "IMPORT" | "MANUAL"): Promise<Action
       });
     }
     if (source === "IMPORT") {
-      for (const a of safeAliases) {
-        const alias = matchKey(a.title);
-        if (alias.length < 2 || catalogKeys.has(alias)) continue;
-        // Never overwrite an alias a counselor set. Only add new ones.
-        if (await tx.courseAlias.findUnique({ where: { alias } })) continue;
-        await tx.courseAlias.create({ data: { alias, courseId: a.courseId, createdById: user.id } });
-        aliasesSaved++;
+      // Nothing here touches the shared alias table. Staff approve each request first.
+      const asks = [...safeSuggestions.map((s) => ({ title: s.title, courseId: s.courseId as string | null })), ...missing.map((m) => ({ title: m.title, courseId: null as string | null }))];
+      for (const ask of asks) {
+        const normalizedTitle = matchKey(ask.title);
+        if (normalizedTitle.length < 2 || catalogKeys.has(normalizedTitle)) continue;
+        if (await tx.courseAlias.findUnique({ where: { alias: normalizedTitle } })) continue;
+        const existing = await tx.importRequest.findUnique({ where: { studentId_normalizedTitle: { studentId: user.id, normalizedTitle } } });
+        if (existing) continue;
+        await tx.importRequest.create({ data: { studentId: user.id, title: ask.title, normalizedTitle, courseId: ask.courseId } });
+        sentToStaff++;
       }
     }
     await tx.plan.update({ where: { id: planId }, data: { updatedAt: new Date() } });
     // Counts only. The titles and grades stay out of the audit log.
-    await writeAudit({ actor: user, action: source === "IMPORT" ? "plan.import" : "plan.bulk_add", entityType: "Plan", entityId: planId, after: { added: fresh.length, aliases: aliasesSaved } }, tx);
+    await writeAudit({ actor: user, action: source === "IMPORT" ? "plan.import" : "plan.bulk_add", entityType: "Plan", entityId: planId, after: { added: fresh.length, requests: sentToStaff } }, tx);
   });
 
   revalidatePath("/plans");
   revalidatePath(`/plans/${planId}`);
-  return { ok: true, data: { added: fresh.length, skipped, aliasesSaved } };
+  return { ok: true, data: { added: fresh.length, skipped, sentToStaff } };
 }
 
 /** Confirmed rows from the import review screen. Only course rows arrive here, never the PDF. */

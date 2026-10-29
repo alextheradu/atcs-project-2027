@@ -42,6 +42,7 @@ Plans: `docs/plans/phase-NN-*.md`.
 
 ## Log
 
+- 2026-10-29: Catalog update: dual enrollment is an independent checkbox alongside a course's base level. Existing partner notes were migrated for 28 courses without changing levels. CSV exports include the flag and older imports still work. Typecheck, lint and all 574 tests pass. Browser verified Honors plus dual enrollment, save and reload, display without a note, and clearing the checkbox while preserving the note.
 - 2026-10-28: Phase 0 built. Next 16.4.3, Prisma 7.10.1, schema and init migration applied, design tokens, `/styleguide`. Spec split into `docs/spec/*`, agent docs written.
 - 2026-10-28: Phase 1 built. Policy, guards, rate limiter, link-intent, signIn decision, role application and all admin actions are unit tested (124 tests). Live Google sign-in and the link-email flow are not tested yet (no credentials). Admin flows verified in a browser through the dev login. Plan item 9 "origin check helper for route handlers" is deferred to Phase 11 (no custom route handlers take state-changing input yet).
 - 2026-10-28: Phase 2 built. 226 courses seeded from the PDF with requirement tags (55 provisional), 11 interest tags, 16 aliases. Browse and detail pages for everyone, counselor and admin catalog editor with archive, guarded hard delete, aliases, CSV import and export, audit with before and after. 233 tests. Docker image now seeds reference data on boot. New open items added to `docs/spec/14-open-items.md`.

@@ -13,7 +13,7 @@ export default async function CatalogAdmin({ searchParams }: { searchParams: Pro
   const { q = "", review } = await searchParams;
   const needle = q.slice(0, 100);
 
-  const [courses, provisional] = await Promise.all([
+  const [courses, provisional, waiting] = await Promise.all([
     db.course.findMany({
       where: {
         ...(needle ? { OR: [{ name: { contains: needle, mode: "insensitive" } }, { slug: { contains: needle, mode: "insensitive" } }] } : {}),
@@ -23,6 +23,7 @@ export default async function CatalogAdmin({ searchParams }: { searchParams: Pro
       include: { requirements: { select: { kind: true, provisional: true } } },
     }),
     db.courseRequirement.count({ where: { provisional: true } }),
+    db.importRequest.count({ where: { status: "PENDING" } }),
   ]);
 
   return (
@@ -32,6 +33,7 @@ export default async function CatalogAdmin({ searchParams }: { searchParams: Pro
         description="Add, edit and archive courses. Every change is audited."
         actions={
           <>
+            <Link className="btn btn-sm" href="/admin/catalog/requests">Import requests{waiting > 0 ? ` (${waiting})` : ""}</Link>
             <a className="btn btn-sm" href="/admin/catalog/export" download>Export CSV</a>
             <Link className="btn btn-sm btn-primary" href="/admin/catalog/new">New course</Link>
           </>

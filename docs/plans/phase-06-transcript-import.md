@@ -35,6 +35,6 @@ Owner imports a transcript locally and checks the result.
 
 - [x] Network check: the only request on confirm is a 2 KB course list, no PDF bytes.
 - [x] No PII fields in parser output types (tested).
-- [x] Aliases improve a second import (checked in the browser).
+- [x] After a counselor approves a request, a second import matches it (checked in the browser).
 - [ ] Owner imports a real transcript locally and checks the result. (Parsed the owner's transcript during layout work: 26 rows, no warnings, all matched.)
 
