@@ -15,6 +15,9 @@ COPY . .
 # prisma generate only reads the schema, it does not connect. The URL just has to parse.
 RUN DATABASE_URL="postgresql://build:build@localhost:5432/build" npx prisma generate
 ARG NEXT_DEPLOYMENT_ID
+# The public VAPID key is baked into the browser bundle, so push needs it at build time.
+ARG NEXT_PUBLIC_VAPID_PUBLIC_KEY
+ENV NEXT_PUBLIC_VAPID_PUBLIC_KEY=${NEXT_PUBLIC_VAPID_PUBLIC_KEY}
 # A fresh release gets a unique ID so open tabs can detect a deployment change.
 RUN NEXT_DEPLOYMENT_ID="${NEXT_DEPLOYMENT_ID:-$(node -e 'process.stdout.write(require("node:crypto").randomUUID())')}" npm run build
 # Bundle the seed into one file so the runtime image can load reference data without tsx or the

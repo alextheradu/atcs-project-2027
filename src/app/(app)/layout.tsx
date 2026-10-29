@@ -4,13 +4,15 @@ import { AppShell } from "@/components/app-shell";
 import { DraftProvider } from "@/components/draft-state";
 import { requirePageUser } from "@/lib/auth/page";
 import { navFor } from "@/lib/nav";
+import { db } from "@/lib/db";
 import { needsOnboarding } from "@/lib/onboarding/gate";
 
 async function Shell({ children }: { children: React.ReactNode }) {
   const user = await requirePageUser();
   if (await needsOnboarding(user)) redirect("/onboarding");
+  const unread = await db.notification.count({ where: { userId: user.id, readAt: null } });
   return (
-    <AppShell nav={navFor(user.role).map(({ href, label, group }) => ({ href, label, group }))} user={{ name: user.name, email: user.email, role: user.role }}>
+    <AppShell nav={navFor(user.role).map(({ href, label, group }) => ({ href, label, group }))} user={{ name: user.name, email: user.email, role: user.role }} unread={unread}>
       <DraftProvider userId={user.id}>{children}</DraftProvider>
     </AppShell>
   );

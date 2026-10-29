@@ -5,7 +5,7 @@ import { z } from "zod";
 import { writeAudit } from "@/lib/audit";
 import { requireRole, requireUser } from "@/lib/auth";
 import { db } from "@/lib/db";
-import { notify } from "@/lib/notifications";
+import { notify } from "@/lib/notify";
 import { RateLimitError, enforceLimit } from "@/lib/rate-limit";
 import { id } from "@/lib/plans/schemas";
 import { MAX_COMMENT, canComment, canTransition, commentAudience, type PlanStatus } from "./index";
@@ -55,7 +55,7 @@ export async function submitPlan(planId: unknown): Promise<ActionResult> {
   const user = await requireUser();
   const ids = await reviewerIds();
   return ownerMove(planId, "SUBMITTED", "plan.submitted", async (plan, tx) => {
-    await notify(tx, ids.filter((r) => r !== user.id).map((userId) => ({ userId, kind: "SYSTEM" as const, title: "Plan ready for review", body: `${plan.name} was sent for review.`, url: `/counselor/plans/${plan.id}` })));
+    await notify(tx, ids.filter((r) => r !== user.id).map((userId) => ({ userId, kind: "PLAN_SUBMITTED" as const, title: "Plan ready for review", body: `${plan.name} was sent for review.`, url: `/counselor/plans/${plan.id}` })));
   });
 }
 
@@ -85,7 +85,7 @@ async function decide(planId: unknown, note: unknown, to: "APPROVED" | "CHANGES_
     await tx.plan.update({ where: { id: plan.id }, data: { status: to, reviewerId: actor.id, decidedAt: new Date() } });
     if (body) await tx.planComment.create({ data: { planId: plan.id, authorId: actor.id, body } });
     await notify(tx, [{
-      userId: plan.ownerId, kind: "SYSTEM", title: to === "APPROVED" ? "Plan approved" : "Changes requested on your plan",
+      userId: plan.ownerId, kind: to === "APPROVED" ? "PLAN_APPROVED" : "PLAN_CHANGES_REQUESTED", title: to === "APPROVED" ? "Plan approved" : "Changes requested on your plan",
       body: to === "APPROVED" ? `${plan.name} was approved.` : `A counselor asked for changes to ${plan.name}. Open it to read the comment.`, url: `/plans/${plan.id}`,
     }]);
     await writeAudit({ actor, action: to === "APPROVED" ? "plan.approved" : "plan.changes_requested", entityType: "Plan", entityId: plan.id }, tx);
@@ -122,7 +122,7 @@ export async function addComment(input: unknown): Promise<ActionResult> {
   const ids = toOwner ? [plan.ownerId] : await reviewerIds();
   await db.$transaction(async (tx) => {
     await tx.planComment.create({ data: { planId: plan.id, entryId: p.data.entryId ?? null, authorId: user.id, body: p.data.body } });
-    await notify(tx, ids.filter((u) => u !== user.id).map((userId) => ({ userId, kind: "SYSTEM" as const, title: "New comment on a plan", body: `There is a new comment on ${plan.name}.`, url: toOwner ? `/plans/${plan.id}` : `/counselor/plans/${plan.id}` })));
+    await notify(tx, ids.filter((u) => u !== user.id).map((userId) => ({ userId, kind: "PLAN_COMMENT" as const, title: "New comment on a plan", body: `There is a new comment on ${plan.name}.`, url: toOwner ? `/plans/${plan.id}` : `/counselor/plans/${plan.id}` })));
   });
   refresh(plan.id);
   return { ok: true };

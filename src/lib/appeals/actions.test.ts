@@ -11,7 +11,7 @@ vi.mock("@/lib/auth", async () => {
 });
 vi.mock("next/cache", () => ({ revalidatePath: vi.fn() }));
 vi.mock("@/lib/audit", () => ({ writeAudit: vi.fn() }));
-vi.mock("@/lib/notifications", () => ({ notify: vi.fn() }));
+vi.mock("@/lib/notify", () => ({ notify: vi.fn() }));
 vi.mock("./fit", () => ({ bestFitOf: vi.fn() }));
 
 const fakeDb = vi.hoisted(() => {
@@ -22,7 +22,7 @@ const fakeDb = vi.hoisted(() => {
 });
 vi.mock("@/lib/db", () => ({ db: fakeDb }));
 
-import { notify } from "@/lib/notifications";
+import { notify } from "@/lib/notify";
 import * as actions from "./actions";
 import { bestFitOf } from "./fit";
 

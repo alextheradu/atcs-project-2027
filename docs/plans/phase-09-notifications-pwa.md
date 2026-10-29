@@ -26,6 +26,10 @@ Owner receives an email and a push on a real device.
 
 ## Done when
 
-- [ ] Service worker cache holds no API responses.
-- [ ] Failed sends retry then stop.
-- [ ] Cron routes unreachable without the secret.
+- [x] Service worker cache holds no API responses.
+- [x] Failed sends retry then stop.
+- [x] Cron routes unreachable without the secret.
+
+## Remaining for the checkpoint
+
+- [ ] Owner sets `RESEND_API_KEY`, `EMAIL_FROM` and production VAPID keys, then receives an email and a push on a real device.

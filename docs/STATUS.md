@@ -15,7 +15,7 @@ Update this file at the end of every phase or session.
 | 6 | Transcript import | built, awaiting owner checkpoint (import your own transcript locally) |
 | 7 | Appeals | built, awaiting owner checkpoint (submit as a student, decide as a supervisor) |
 | 8 | Review and dashboards | built, awaiting owner checkpoint (counselor walkthrough) |
-| 9 | Notifications and PWA | not started |
+| 9 | Notifications and PWA | built, awaiting owner checkpoint (needs a Resend key and a real phone for email and push) |
 | 10 | Privacy and export | not started |
 | 11 | Ship | not started |
 
