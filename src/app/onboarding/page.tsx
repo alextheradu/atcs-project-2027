@@ -2,6 +2,7 @@ export const instant = false;
 
 import { redirect } from "next/navigation";
 import { Wizard } from "@/components/onboarding/wizard";
+import { DraftProvider } from "@/components/draft-state";
 import { requirePageUser } from "@/lib/auth/page";
 import { db } from "@/lib/db";
 import { needsOnboarding, latestPolicies } from "@/lib/onboarding/gate";
@@ -28,13 +29,13 @@ export default async function Onboarding() {
   const startStep = row?.onboardedAt ? 1 : (progress?.step ?? 0);
   return (
     <main className="min-h-dvh px-4 py-14">
-      <Wizard
+      <DraftProvider userId={user.id}><Wizard
         startStep={profile ? Math.max(startStep, 0) : 0}
         cohort={profile?.cohort ?? null}
         needsAgeBox
         interests={interests}
         policies={policies.map((p) => ({ id: p.id, kind: p.kind, title: p.title, summary: SUMMARY[p.kind] ?? "", href: p.kind === "PRIVACY" ? "/privacy" : "/terms" }))}
-      />
+      /></DraftProvider>
     </main>
   );
 }

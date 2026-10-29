@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useTransition } from "react";
+import { DraftNotice, SAVE_INTERRUPTED, useDraftState } from "@/components/draft-state";
 import { Button } from "@/components/ui/button";
 import { createGrant, deleteGrant } from "@/lib/admin/users";
 import { ROLES, DEPARTMENTS } from "@/lib/admin/schemas";
@@ -10,23 +11,26 @@ type Role = (typeof ROLES)[number];
 type Dept = (typeof DEPARTMENTS)[number];
 
 export function GrantForm() {
-  const [email, setEmail] = useState("");
-  const [role, setRole] = useState<Role>("COUNSELOR");
-  const [depts, setDepts] = useState<Dept[]>([]);
+  const [email, setEmail, emailDraft] = useDraftState("grant:email", "");
+  const [role, setRole, roleDraft] = useDraftState<Role>("grant:role", "COUNSELOR");
+  const [depts, setDepts, deptDraft] = useDraftState<Dept[]>("grant:departments", []);
   const [msg, setMsg] = useState<{ ok: boolean; text: string } | null>(null);
   const [pending, start] = useTransition();
 
   const submit = (e: React.FormEvent) => {
     e.preventDefault();
     start(async () => {
+      try {
       const r = await createGrant({ email, role, departments: depts });
       setMsg(r.ok ? { ok: true, text: "Grant saved" } : { ok: false, text: r.error });
-      if (r.ok) setEmail("");
+      if (r.ok) { emailDraft.discard(); roleDraft.commit(role); deptDraft.commit(depts); }
+      } catch { setMsg({ ok: false, text: SAVE_INTERRUPTED }); }
     });
   };
 
   return (
     <form onSubmit={submit} className="space-y-3">
+      <DraftNotice drafts={[emailDraft, roleDraft, deptDraft]} />
       <div className="flex flex-wrap items-center gap-2">
         <input
           className="input !w-64"

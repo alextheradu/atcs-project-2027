@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useTransition } from "react";
+import { DraftNotice, SAVE_INTERRUPTED, useDraftState } from "@/components/draft-state";
 import { Button } from "@/components/ui/button";
 import { changeUserRole } from "@/lib/admin/users";
 import { DEPARTMENTS, ROLES } from "@/lib/admin/schemas";
@@ -9,19 +10,23 @@ type Role = (typeof ROLES)[number];
 type Dept = (typeof DEPARTMENTS)[number];
 
 export function UserRoleForm({ userId, role: initial, departments: initialDepts }: { userId: string; role: Role; departments: Dept[] }) {
-  const [role, setRole] = useState<Role>(initial);
-  const [depts, setDepts] = useState<Dept[]>(initialDepts);
+  const [role, setRole, roleDraft] = useDraftState<Role>(`user:${userId}:role`, initial);
+  const [depts, setDepts, deptDraft] = useDraftState<Dept[]>(`user:${userId}:departments`, initialDepts);
   const [msg, setMsg] = useState<{ ok: boolean; text: string } | null>(null);
   const [pending, start] = useTransition();
 
   const save = () =>
     start(async () => {
+      try {
       const r = await changeUserRole({ userId, role, departments: depts });
+      if (r.ok) { roleDraft.commit(role); deptDraft.commit(depts); }
       setMsg(r.ok ? { ok: true, text: "Saved" } : { ok: false, text: r.error });
+      } catch { setMsg({ ok: false, text: SAVE_INTERRUPTED }); }
     });
 
   return (
     <div className="space-y-2">
+      <DraftNotice drafts={[roleDraft, deptDraft]} />
       <div className="flex items-center gap-2">
         <select className="input !h-8 !w-auto" value={role} onChange={(e) => setRole(e.target.value as Role)} aria-label="Role">
           {ROLES.map((r) => (

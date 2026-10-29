@@ -43,3 +43,9 @@ Edit any of these in `/admin/rules`. Each is a reading call, not something the P
 - Which world language the starter plan should suggest when an 8th grader gives none. It currently shows the first beginner course and says it is a guess.
 - Appeal windows for incoming students (`TimelineEvent`, audience `INCOMING`). Until one exists, snapshots expire August 31.
 
+## Added in Phase 7
+
+- What "their students" means for counselors (a counselor to student link or grade ranges). Counselors get no appeal access until this is decided in Phase 8.
+- The real appeal window dates for the next cycle (add them in `/admin/timeline`).
+- Whether a supervisor may approve a course the engine marks locked. Today a locked course cannot be requested.
+

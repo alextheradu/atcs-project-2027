@@ -2,6 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import { useState, useTransition } from "react";
+import { DraftNotice, SAVE_INTERRUPTED, useDraftState } from "@/components/draft-state";
 import { Button } from "@/components/ui/button";
 import { DEPARTMENTS } from "@/lib/admin/schemas";
 import { createCourse, deleteCourse, setCourseArchived, updateCourse } from "@/lib/catalog/admin";
@@ -21,7 +22,7 @@ const label = "text-[13px] font-medium";
 
 export function CourseForm({ mode, courseId, archived, initial, interestOptions }: Props) {
   const router = useRouter();
-  const [c, setC] = useState<CourseInput>(initial);
+  const [c, setC, draft] = useDraftState<CourseInput>(`catalog:${courseId ?? "new"}`, initial);
   const [msg, setMsg] = useState<{ ok: boolean; text: string } | null>(null);
   const [pending, start] = useTransition();
   const set = <K extends keyof CourseInput>(k: K, v: CourseInput[K]) => setC((p) => ({ ...p, [k]: v }));
@@ -35,19 +36,22 @@ export function CourseForm({ mode, courseId, archived, initial, interestOptions 
 
   const save = () =>
     start(async () => {
+      try {
       if (mode === "new") {
         const r = await createCourse(c);
-        if (r.ok && r.data) router.push(`/admin/catalog/${r.data.id}`);
+        if (r.ok && r.data) { draft.commit(c); router.push(`/admin/catalog/${r.data.id}`); }
         else setMsg({ ok: false, text: r.ok ? "Saved" : r.error });
       } else {
         const r = await updateCourse(courseId!, c);
         setMsg(r.ok ? { ok: true, text: "Saved" } : { ok: false, text: r.error });
-        if (r.ok) router.refresh();
+        if (r.ok) { draft.commit(c); router.refresh(); }
       }
+      } catch { setMsg({ ok: false, text: SAVE_INTERRUPTED }); }
     });
 
   return (
     <div className="space-y-10">
+      <DraftNotice drafts={[draft]} />
       <section className="grid gap-5 sm:grid-cols-2">
         <label className={field}>
           <span className={label}>Name</span>
@@ -181,7 +185,7 @@ export function CourseForm({ mode, courseId, archived, initial, interestOptions 
                 if (!confirm("Delete this course permanently? This only works if nothing uses it.")) return;
                 start(async () => {
                   const r = await deleteCourse(courseId);
-                  if (r.ok) router.push("/admin/catalog");
+                  if (r.ok) { draft.discard(); router.push("/admin/catalog"); }
                   else setMsg({ ok: false, text: r.error });
                 });
               }}

@@ -5,6 +5,7 @@ import dagre from "dagre";
 import Link from "next/link";
 import { useMemo, useState } from "react";
 import { Background, Handle, MarkerType, Position, ReactFlow, type Edge, type Node, type NodeProps } from "@xyflow/react";
+import { StartAppealButton } from "@/components/appeals/start-button";
 import { Breakdown } from "@/components/eligibility/breakdown";
 import { DEPT_LABEL, LEVEL_LABEL } from "@/lib/catalog/labels";
 import { KIND_LABEL, TRACKS, TRACK_LABEL, type NodeKind, type Track } from "@/lib/pathways";
@@ -202,18 +203,14 @@ export function PathwayGraph({ nodes, edges, hasPlan }: { nodes: PathNode[]; edg
             )}
             {advanceOnly && <p className="text-xs text-muted">This is a move up a level, so a supervisor may need to approve it.</p>}
             <div className="flex items-center gap-3">
-              {(node.kind === "appeal" || node.kind === "locked") && (
-                <button type="button" className="btn btn-sm" disabled title="Placement reviews open with appeals in a later update">
-                  Request placement review
-                </button>
+              {node.kind === "appeal" && (
+                <StartAppealButton slug={node.slug} />
               )}
               <Link href={`/courses/${node.slug}`} className="text-[13px] text-muted underline-offset-4 hover:text-fg hover:underline">
                 View course
               </Link>
             </div>
-            {(node.kind === "appeal" || node.kind === "locked") && (
-              <p className="text-xs text-muted">Placement reviews open with appeals in a later update.</p>
-            )}
+            {node.kind === "locked" && <p className="text-xs text-muted">Finish the earlier course in the sequence first. A locked course cannot be appealed.</p>}
           </div>
         ) : (
           <p className="text-[13px] text-muted">Select a course to see its requirements.</p>

@@ -18,7 +18,7 @@ const fakeDb = vi.hoisted(() => {
     findFirst: vi.fn(), findMany: vi.fn(), findUnique: vi.fn(), count: vi.fn(), create: vi.fn(),
     createMany: vi.fn(), update: vi.fn(), updateMany: vi.fn(), delete: vi.fn(),
   });
-  const db = { plan: m(), planEntry: m(), course: m(), $transaction: vi.fn() };
+  const db = { plan: m(), planEntry: m(), course: m(), appeal: m(), $transaction: vi.fn() };
   db.$transaction.mockImplementation(async (cb: (tx: typeof db) => unknown) => cb(db));
   return db;
 });
@@ -273,5 +273,20 @@ describe("updateEntry", () => {
   it("rejects unknown statuses and grades", async () => {
     expect((await plans.updateEntry({ entryId: "e1", status: "DONE" })).ok).toBe(false);
     expect((await plans.updateEntry({ entryId: "e1", status: "COMPLETED", grade: "E" })).ok).toBe(false);
+  });
+});
+
+describe("addEntry and approved appeals", () => {
+  it("links an approved appeal so the course reads Approved via appeal from the start", async () => {
+    state.user = { id: "u1", role: "STUDENT", departments: [], email: "u@x.org", name: null };
+    fakeDb.plan.findFirst.mockResolvedValue({ id: "p1", status: "DRAFT" });
+    fakeDb.course.findUnique.mockResolvedValue({ id: "c1", name: "Calculus", archived: false, plannable: true, credits: 5 });
+    fakeDb.planEntry.findFirst.mockResolvedValue(null);
+    fakeDb.planEntry.count.mockResolvedValue(0);
+    fakeDb.appeal.findFirst.mockResolvedValue({ id: "ap1" });
+    fakeDb.planEntry.create.mockResolvedValue({ id: "e1" });
+    await plans.addEntry({ planId: "p1", courseId: "c1", gradeLevel: 11 });
+    expect(fakeDb.appeal.findFirst).toHaveBeenCalledWith(expect.objectContaining({ where: { studentId: "u1", targetCourseId: "c1", status: "APPROVED" } }));
+    expect(fakeDb.planEntry.create.mock.calls.at(-1)?.[0].data.overrideAppealId).toBe("ap1");
   });
 });

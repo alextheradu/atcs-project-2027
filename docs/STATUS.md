@@ -13,7 +13,7 @@ Update this file at the end of every phase or session.
 | 4 | Eligibility and pathways | built, awaiting owner checkpoint (try real course choices and the pathway graph) |
 | 5 | Onboarding | built, awaiting owner checkpoint (walk the 9th grade and 8th grade paths) |
 | 6 | Transcript import | built, awaiting owner checkpoint (import your own transcript locally) |
-| 7 | Appeals | not started |
+| 7 | Appeals | built, awaiting owner checkpoint (submit as a student, decide as a supervisor) |
 | 8 | Review and dashboards | not started |
 | 9 | Notifications and PWA | not started |
 | 10 | Privacy and export | not started |

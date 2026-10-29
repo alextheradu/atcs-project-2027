@@ -1,6 +1,7 @@
 "use client";
 
 import { useId, useMemo, useState, useTransition } from "react";
+import { DraftNotice, SAVE_INTERRUPTED, useDraftState } from "@/components/draft-state";
 import { Button } from "@/components/ui/button";
 import { GRADES, gradeText, type LeafRule, type Rule } from "@/lib/eligibility";
 import { saveCourseRules } from "@/lib/rules/actions";
@@ -200,7 +201,7 @@ function Node({ rule, path, root, setRoot, options }: { rule: Rule; path: Path; 
 }
 
 export function RuleBuilder({ courseId, initial, options }: { courseId: string; initial: Rule | null; options: CourseOption[] }) {
-  const [root, setRoot] = useState<Rule>(() => asGroup(initial));
+  const [root, setRoot, draft] = useDraftState<Rule>(`rules:${courseId}`, asGroup(initial));
   const [saved, setSaved] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [pending, start] = useTransition();
@@ -213,14 +214,17 @@ export function RuleBuilder({ courseId, initial, options }: { courseId: string; 
     setError(null);
     setSaved(null);
     start(async () => {
+      try {
       const r = await saveCourseRules({ courseId, rules: clean });
-      if (r.ok) setSaved(clean ? "Saved." : "Rules cleared. The catalog text is now only a note.");
+      if (r.ok) { draft.commit(root); setSaved(clean ? "Saved." : "Rules cleared. The catalog text is now only a note."); }
       else setError(r.error);
+      } catch { setError(SAVE_INTERRUPTED); }
     });
   }
 
   return (
     <div className="space-y-8">
+      <DraftNotice drafts={[draft]} />
       <Node rule={root} path={[]} root={root} setRoot={(r) => { setRoot(r); setSaved(null); }} options={options} />
 
       <div>
@@ -240,7 +244,7 @@ export function RuleBuilder({ courseId, initial, options }: { courseId: string; 
 
       <div className="flex gap-2">
         <Button variant="primary" disabled={pending || issues.length > 0} onClick={save}>{pending ? "Saving" : "Save rules"}</Button>
-        <Button variant="ghost" disabled={pending} onClick={() => { setRoot(asGroup(initial)); setSaved(null); setError(null); }}>Reset</Button>
+        <Button variant="ghost" disabled={pending} onClick={() => { draft.discard(); setSaved(null); setError(null); }}>Reset</Button>
       </div>
     </div>
   );

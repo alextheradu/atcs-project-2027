@@ -153,8 +153,10 @@ export async function addEntry(input: unknown): Promise<ActionResult<{ id: strin
   }
 
   try {
+    // A course a supervisor already approved reads "Approved via appeal" from the start.
+    const approved = await db.appeal.findFirst({ where: { studentId: user.id, targetCourseId: courseId, status: "APPROVED" }, select: { id: true } });
     const entry = await db.planEntry.create({
-      data: { planId, courseId, gradeLevel, credits: course.credits, status: "PLANNED", source: "MANUAL" },
+      data: { planId, courseId, gradeLevel, credits: course.credits, status: "PLANNED", source: "MANUAL", overrideAppealId: approved?.id ?? null },
       select: { id: true },
     });
     await db.plan.update({ where: { id: planId }, data: { updatedAt: new Date() } });

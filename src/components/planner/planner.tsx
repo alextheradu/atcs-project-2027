@@ -5,6 +5,7 @@ import {
   type CollisionDetection, type DragEndEvent, type DragStartEvent,
 } from "@dnd-kit/core";
 import { useMemo, useState, useTransition } from "react";
+import { DraftNotice, SAVE_INTERRUPTED, useDraftState } from "@/components/draft-state";
 import { Button } from "@/components/ui/button";
 import { formatCredits } from "@/lib/credits";
 import { eligibilityWarnings, evaluatePlan, type PlanCourse, type StudentPrior } from "@/lib/eligibility";
@@ -14,6 +15,7 @@ import { isEditable } from "@/lib/plans/schemas";
 import { toTracked, toWarnEntry, type EntryView } from "@/lib/plans/view";
 import { summarize, type GraduationSettings, type RequirementRuleInput } from "@/lib/requirements";
 import { cn } from "@/lib/utils";
+import { recoverPlanChange, type PlanChange } from "@/lib/drafts/planner";
 import { AddCoursePanel, type PanelCourse } from "./add-course-panel";
 import { CourseRow, RowBody, type RowActions } from "./course-row";
 import { RequirementRail } from "./requirement-rail";
@@ -63,12 +65,13 @@ function Column({ grade, credits, need, editable, count, onAdd, children }: {
 }
 
 export function Planner({ plan, entries: serverEntries, courses, interests, rules, settings, prior }: Props) {
-  const editable = isEditable(plan.status);
+  const [change, setChange, changeDraft] = useDraftState<PlanChange | null>(`plan:${plan.id}:pending`, null);
+  const [pending, startTransition] = useTransition();
+  const editable = isEditable(plan.status) && !change && !pending;
   const [entries, setEntries] = useState(serverEntries);
   const [error, setError] = useState<string | null>(null);
   const [activeId, setActiveId] = useState<string | null>(null);
   const [panel, setPanel] = useState<{ open: boolean; grade: number }>({ open: false, grade: 9 });
-  const [, startTransition] = useTransition();
 
   // The server is the source of truth. When it sends fresh data, it replaces the optimistic copy.
   const [seen, setSeen] = useState(serverEntries);
@@ -101,23 +104,46 @@ export function Planner({ plan, entries: serverEntries, courses, interests, rule
   );
 
   /** Show the change now, ask the server, and fall back to the server's copy if it says no. */
-  function run(optimistic: () => void, action: () => Promise<ActionResult<unknown>>) {
+  function run(next: PlanChange, optimistic: () => void, action: () => Promise<ActionResult<unknown>>) {
+    if (!editable) return;
     setError(null);
+    setChange(next);
     optimistic();
     startTransition(async () => {
+      try {
       const r = await action();
       if (!r.ok) {
         setError(r.error);
         setEntries(serverEntries);
-      }
+      } else changeDraft.discard();
+      } catch { setError(SAVE_INTERRUPTED); setEntries(serverEntries); }
+    });
+  }
+
+  function retry() {
+    if (pending || !isEditable(plan.status)) return;
+    const action = recoverPlanChange(change, serverEntries);
+    if (!action) { changeDraft.discard(); setError(null); return; }
+    if ("conflict" in action) { setError("This course has changed. Check the saved plan, then discard this pending change and edit the course again."); return; }
+    setError(null);
+    startTransition(async () => {
+      try {
+        const result = action.kind === "add" ? await addEntry({ planId: plan.id, courseId: action.courseId, gradeLevel: action.gradeLevel })
+          : action.kind === "move" ? await moveEntry({ entryId: action.entryId, gradeLevel: action.gradeLevel })
+          : action.kind === "remove" ? await removeEntry(action.entryId)
+          : await updateEntry({ entryId: action.entryId, ...action.patch });
+        if (result.ok) changeDraft.discard();
+        else setError(result.error);
+      } catch { setError(SAVE_INTERRUPTED); }
     });
   }
 
   const actions: RowActions = {
-    onMove: (id, grade) => run(() => setEntries((es) => es.map((e) => (e.id === id ? { ...e, gradeLevel: grade } : e))), () => moveEntry({ entryId: id, gradeLevel: grade })),
-    onRemove: (id) => run(() => setEntries((es) => es.filter((e) => e.id !== id)), () => removeEntry(id)),
+    onMove: (id, grade) => run({ kind: "move", courseId: entries.find((e) => e.id === id)!.courseId, gradeLevel: grade }, () => setEntries((es) => es.map((e) => (e.id === id ? { ...e, gradeLevel: grade } : e))), () => moveEntry({ entryId: id, gradeLevel: grade })),
+    onRemove: (id) => run({ kind: "remove", courseId: entries.find((e) => e.id === id)!.courseId }, () => setEntries((es) => es.filter((e) => e.id !== id)), () => removeEntry(id)),
     onUpdate: (id, patch) =>
       run(
+        { kind: "update", courseId: entries.find((e) => e.id === id)!.courseId, patch: patch as Extract<PlanChange, { kind: "update" }>["patch"] },
         () =>
           setEntries((es) =>
             es.map((e) => {
@@ -142,7 +168,7 @@ export function Planner({ plan, entries: serverEntries, courses, interests, rule
       courseCredits: course.courseCredits, gradesOffered: course.gradesOffered,
       tags: course.tags as EntryView["tags"], rules: course.rules, prereqText: course.prereqText, approvedAppeal: false,
     };
-    run(() => setEntries((es) => [...es, temp]), () => addEntry({ planId: plan.id, courseId: course.id, gradeLevel: grade }));
+    run({ kind: "add", courseId: course.id, gradeLevel: grade }, () => setEntries((es) => [...es, temp]), () => addEntry({ planId: plan.id, courseId: course.id, gradeLevel: grade }));
   }
 
   function onDragStart(e: DragStartEvent) {
@@ -162,10 +188,20 @@ export function Planner({ plan, entries: serverEntries, courses, interests, rule
   return (
     <div className="grid gap-12 xl:grid-cols-[minmax(0,1fr)_300px]">
       <div>
-        {!editable && (
+        {!isEditable(plan.status) && (
           <p className="mb-6 border-y border-line py-3 text-[13px] text-muted">
             This plan is in review, so it is read-only. You can still look around.
           </p>
+        )}
+        {change && !pending && (
+          <div className="mb-6 space-y-3 border-y border-line py-3">
+            <DraftNotice drafts={[changeDraft]} />
+            <p className="text-[13px] text-muted">A course change has not been confirmed. Retry checks whether it was already saved.</p>
+            <div className="flex gap-2">
+              <Button size="sm" onClick={retry} disabled={!isEditable(plan.status)}>Retry change</Button>
+              <Button size="sm" variant="ghost" onClick={() => { changeDraft.discard(); setEntries(serverEntries); setError(null); }}>Discard pending change</Button>
+            </div>
+          </div>
         )}
         {error && (
           <p role="alert" className="mb-6 text-[13px] text-red">
@@ -207,7 +243,7 @@ export function Planner({ plan, entries: serverEntries, courses, interests, rule
       <RequirementRail summary={summary} warnings={warnings} />
 
       <AddCoursePanel
-        open={panel.open}
+        open={panel.open && editable}
         grade={panel.grade}
         onGradeChange={(g) => setPanel((p) => ({ ...p, grade: g }))}
         onClose={() => setPanel((p) => ({ ...p, open: false }))}
