@@ -32,9 +32,11 @@ export default async function Courses({ searchParams }: { searchParams: Params }
     db.interestTag.findMany({ orderBy: { label: "asc" } }),
   ]);
 
+  // Already sorted by department, so grouping keeps the catalog order.
+  const groups = [...Map.groupBy(courses, (c) => c.department)];
   const sel = "input !w-auto max-w-[11rem]";
   return (
-    <div>
+    <div className="max-w-[960px]">
       <PageHeader title="Courses" description="From the 2026-2027 Program of Studies. Not every course runs every year." />
 
       <form className="flex flex-wrap items-center gap-2" action="/courses">
@@ -64,30 +66,40 @@ export default async function Courses({ searchParams }: { searchParams: Params }
         <Link className="btn btn-sm btn-ghost" href="/courses">Reset</Link>
       </form>
 
-      <p className="num mb-3 mt-8 text-muted">{courses.length} courses</p>
-      <ul className="list list-hover">
-        {courses.map((c) => (
-          <li key={c.id}>
-            <Link href={`/courses/${c.slug}`} className="flex items-baseline justify-between gap-6 py-3">
-              <span className="min-w-0">
-                <span className="block truncate text-sm font-medium">{c.name}</span>
-                <span className="mt-0.5 block text-[13px] text-muted">
-                  {DEPT_LABEL[c.department]} · {LEVEL_LABEL[c.level]}
-                  {(() => {
-                    // Only say it when it adds information (Theater Arts counts toward Arts, not English).
-                    const kinds = [...new Set(c.requirements.map((r) => KIND_LABEL[r.kind]))].filter((k) => k !== DEPT_LABEL[c.department]);
-                    return kinds.length > 0 ? <> · counts toward {kinds.join(", ")}</> : null;
-                  })()}
-                </span>
-              </span>
-              <span className="num shrink-0 text-right text-muted">
-                <span className="block text-fg">{fmtCredits(c.credits)} cr</span>
-                <span className="block">grade {c.gradesOffered.join(" ")}</span>
-              </span>
-            </Link>
-          </li>
-        ))}
-        </ul>
+      <p className="num mt-8 text-muted">{courses.length} courses</p>
+      {groups.map(([dept, rows]) => (
+        <section key={dept} aria-labelledby={`dept-${dept}`} className="mt-8">
+          <div className="sticky top-12 z-[5] grid grid-cols-[1fr_auto] items-baseline gap-6 border-b border-line bg-bg py-2 sm:grid-cols-[1fr_8rem_4rem]">
+            <h2 id={`dept-${dept}`} className="eyebrow">
+              {DEPT_LABEL[dept]} <span className="num ml-1">{rows.length}</span>
+            </h2>
+            <span aria-hidden className="eyebrow hidden sm:block">Grades</span>
+            <span aria-hidden className="eyebrow text-right">Credits</span>
+          </div>
+          <ul className="list-hover">
+            {rows.map((c) => (
+              <li key={c.id} className="border-b border-line">
+                <Link href={`/courses/${c.slug}`} className="grid grid-cols-[1fr_auto] items-baseline gap-6 py-2.5 sm:grid-cols-[1fr_8rem_4rem]">
+                  <span className="min-w-0">
+                    <span className="block truncate text-sm font-medium">{c.name}</span>
+                    <span className="mt-0.5 block text-[13px] text-muted">
+                      {LEVEL_LABEL[c.level]}
+                      {(() => {
+                        // Only say it when it adds information (Theater Arts counts toward Arts, not English).
+                        const kinds = [...new Set(c.requirements.map((r) => KIND_LABEL[r.kind]))].filter((k) => k !== DEPT_LABEL[c.department]);
+                        return kinds.length > 0 ? <> · counts toward {kinds.join(", ")}</> : null;
+                      })()}
+                      <span className="sm:hidden"> · grade {c.gradesOffered.join(" ")}</span>
+                    </span>
+                  </span>
+                  <span className="num hidden text-muted sm:block">{c.gradesOffered.join(" ")}</span>
+                  <span className="num text-right">{fmtCredits(c.credits)}</span>
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </section>
+      ))}
       {courses.length === 0 && (
         <EmptyState
           title="No courses match those filters"

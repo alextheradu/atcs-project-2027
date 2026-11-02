@@ -107,7 +107,7 @@ export function EdgeEditor({ edges, options }: { edges: EdgeRow[]; options: Opti
       </ul>
 
       <section aria-label="Add a step" className="space-y-3 border-t border-line pt-6">
-        <h2 className="text-sm font-medium">Add a step to {TRACK_LABEL[track]}</h2>
+        <h2 className="eyebrow">Add a step to {TRACK_LABEL[track]}</h2>
         <datalist id={listId}>{options.map((o) => <option key={o.id} value={o.name} />)}</datalist>
         <div className="grid gap-2 sm:grid-cols-2">
           <input className="input" list={listId} aria-label="From course" placeholder="From course" value={from} onChange={(e) => setFrom(e.target.value)} />

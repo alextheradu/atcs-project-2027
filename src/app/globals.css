@@ -2,18 +2,22 @@
 
 :root {
   color-scheme: dark;
-  --bg: #0a0a0a;
-  --bg-raised: #141414;
-  --bg-elevated: #1c1c1c;
-  --line: #2b2b2b;
-  --line-strong: #3d3d3d;
-  --fg: #ededed;
-  --muted: #a1a1a1;
+  /* Warm off-black, like paper under a lamp. Neutrals lean slightly yellow; blue stays on actions only. */
+  --bg: #12110f;
+  --bg-raised: #1b1a17;
+  --bg-elevated: #24221e;
+  --line: #2e2b27;
+  --line-strong: #423e38;
+  --line-hover: #5c574f;
+  --fg: #ece8e1;
+  --muted: #a39d93;
+  --placeholder: #6f6a62;
+  --lip: rgb(0 0 0 / 0.55);
 
   --accent: #338eda;
   --accent-hover: #4a9fe6;
   --accent-lip: #1f5b94;
-  --accent-fg: #0a0a0a;
+  --accent-fg: #12110f;
 
   --green: #33d6a6;
   --yellow: #f1c40f;
@@ -40,8 +44,8 @@
   --color-yellow: var(--yellow);
   --color-orange: var(--orange);
   --color-red: var(--red);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --font-sans: var(--font-plex-sans);
+  --font-mono: var(--font-plex-mono);
 }
 
 html {
@@ -51,14 +55,13 @@ html {
 body {
   background: var(--bg);
   color: var(--fg);
-  font-family: var(--font-geist-sans), system-ui, sans-serif;
-  letter-spacing: -0.006em;
+  font-family: var(--font-plex-sans), system-ui, sans-serif;
   -webkit-font-smoothing: antialiased;
 }
 
 h1, h2, h3 {
   text-wrap: balance;
-  letter-spacing: -0.02em;
+  letter-spacing: -0.01em;
 }
 p {
   text-wrap: pretty;
@@ -74,10 +77,6 @@ code, .font-mono {
 @keyframes rise {
   from { opacity: 0; transform: translateY(6px); }
   to { opacity: 1; transform: none; }
-}
-@keyframes blur-in {
-  from { opacity: 0; transform: translateY(14px); filter: blur(8px); }
-  to { opacity: 1; transform: none; filter: blur(0); }
 }
 
 /* Route entrance: the header rises first, sections and list rows follow in a short cascade (under 300ms total). */
@@ -98,12 +97,6 @@ code, .font-mono {
 .page-enter .list > li:nth-child(6) { animation-delay: 120ms; }
 .page-enter .list > li:nth-child(n + 7) { animation-delay: 136ms; }
 
-/* Sign-in hero: slower, blur-to-sharp reveal. Used once per visit. */
-.hero-in {
-  animation: blur-in 0.8s var(--ease-expo) both;
-  animation-delay: var(--d, 0ms);
-}
-
 
 /* ---------- no native chrome (pattern from hackclub/contd) ---------- */
 html {
@@ -123,7 +116,7 @@ html {
   border-radius: 999px;
   background: var(--line-strong) padding-box;
 }
-::-webkit-scrollbar-thumb:hover { background-color: #555; }
+::-webkit-scrollbar-thumb:hover { background-color: var(--line-hover); }
 
 /* Checkboxes are drawn, not OS-rendered. */
 input[type="checkbox"] {
@@ -150,7 +143,7 @@ input[type="checkbox"]::before {
   opacity: 0;
   transition: transform 0.14s var(--ease-out), opacity 0.14s var(--ease-out);
 }
-input[type="checkbox"]:hover { border-color: #5a5a5a; }
+input[type="checkbox"]:hover { border-color: var(--line-hover); }
 input[type="checkbox"]:checked {
   border-color: var(--accent);
   background: var(--accent);
@@ -182,7 +175,7 @@ input[type="radio"]::before {
   transform: scale(0);
   transition: transform 0.14s var(--ease-out);
 }
-input[type="radio"]:hover { border-color: #5a5a5a; }
+input[type="radio"]:hover { border-color: var(--line-hover); }
 input[type="radio"]:checked { border-color: var(--accent); }
 input[type="radio"]:checked::before { transform: scale(1); }
 
@@ -190,7 +183,7 @@ input[type="radio"]:checked::before { transform: scale(1); }
 select.input {
   appearance: none;
   padding-right: 30px;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12'%3E%3Cpath d='m3 4.5 3 3 3-3' fill='none' stroke='%23a1a1a1' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12'%3E%3Cpath d='m3 4.5 3 3 3-3' fill='none' stroke='%23a39d93' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
   background-position: right 10px center;
   background-repeat: no-repeat;
   background-size: 12px;
@@ -259,7 +252,7 @@ input[type="search"]::-webkit-search-decoration { appearance: none; }
     font-weight: 500;
     white-space: nowrap;
     cursor: pointer;
-    box-shadow: 0 3px 0 rgb(0 0 0 / 0.55);
+    box-shadow: 0 3px 0 var(--lip);
     transition:
       transform 0.2s var(--spring),
       box-shadow 0.2s,
@@ -269,13 +262,13 @@ input[type="search"]::-webkit-search-decoration { appearance: none; }
   @media (hover: hover) {
     .btn:hover:not(:disabled) {
       transform: translateY(-2px);
-      box-shadow: 0 5px 0 rgb(0 0 0 / 0.55);
+      box-shadow: 0 5px 0 var(--lip);
       border-color: var(--line-strong);
     }
   }
   .btn:active:not(:disabled) {
     transform: translateY(2px);
-    box-shadow: 0 1px 0 rgb(0 0 0 / 0.55);
+    box-shadow: 0 1px 0 var(--lip);
   }
   .btn:disabled {
     opacity: 0.55;
@@ -392,7 +385,7 @@ input[type="search"]::-webkit-search-decoration { appearance: none; }
     resize: vertical;
   }
   .input::placeholder {
-    color: #6b6b6b;
+    color: var(--placeholder);
   }
   .input:hover {
     border-color: var(--line-strong);
@@ -412,14 +405,17 @@ input[type="search"]::-webkit-search-decoration { appearance: none; }
     padding-right: 6px;
   }
 
+  /* Ledger column header: small mono capitals. */
   .eyebrow {
-    font-size: 12px;
+    font-family: var(--font-plex-mono), ui-monospace, monospace;
+    font-size: 11px;
     font-weight: 500;
     color: var(--muted);
-    letter-spacing: 0;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
   }
   .num {
-    font-family: var(--font-geist-mono), ui-monospace, monospace;
+    font-family: var(--font-plex-mono), ui-monospace, monospace;
     font-variant-numeric: tabular-nums;
     font-size: 12px;
   }
@@ -428,16 +424,8 @@ input[type="search"]::-webkit-search-decoration { appearance: none; }
   .auth-texture {
     background:
       repeating-conic-gradient(rgb(255 255 255 / 0.035) 0 25%, transparent 0 50%) 0 0 / 8px 8px,
-      rgb(20 20 20 / 0.7);
+      rgb(27 26 23 / 0.7);
     backdrop-filter: blur(8px);
-  }
-  /* A quiet hairline grid, faded toward the edges. Neutral, no color. */
-  .grid-backdrop {
-    background-image:
-      linear-gradient(to right, rgb(255 255 255 / 0.04) 1px, transparent 1px),
-      linear-gradient(to bottom, rgb(255 255 255 / 0.04) 1px, transparent 1px);
-    background-size: 56px 56px;
-    mask-image: radial-gradient(ellipse 70% 60% at 50% 40%, #000 20%, transparent 75%);
   }
 
   /* Status: a colored dot and a plain label. */
@@ -494,7 +482,6 @@ input[type="search"]::-webkit-search-decoration { appearance: none; }
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
   .page-enter > * > *, .page-enter .list > li { animation: fade-only 0.15s linear both; animation-delay: 0ms; }
-  .hero-in { animation: fade-only 0.3s linear both; animation-delay: 0ms; }
   .btn { transition: background-color 0.12s, border-color 0.12s; }
   .btn:hover, .btn:active { transform: none; }
   .star-border::before { animation: none; }

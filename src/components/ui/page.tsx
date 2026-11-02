@@ -24,7 +24,7 @@ export function PageHeader({
       <div className="flex flex-wrap items-end justify-between gap-4">
         <div className="min-w-0">
           <div className="flex flex-wrap items-center gap-3">
-            <h1 className="text-[28px] font-semibold leading-[1.1] tracking-[-0.035em]">{title}</h1>
+            <h1 className="text-[32px] font-semibold leading-[1.1] tracking-[-0.02em]">{title}</h1>
             {badge}
           </div>
           {description && <p className="mt-1.5 max-w-xl text-sm text-muted">{description}</p>}
@@ -51,7 +51,7 @@ export function Section({
     <section className={cn("border-t border-line pt-6", className)}>
       {title && (
         <div className="mb-4">
-          <h2 className="text-sm font-medium">{title}</h2>
+          <h2 className="eyebrow">{title}</h2>
           {description && <p className="mt-1 max-w-xl text-[13px] text-muted">{description}</p>}
         </div>
       )}

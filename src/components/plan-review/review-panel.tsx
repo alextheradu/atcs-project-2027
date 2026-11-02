@@ -48,7 +48,7 @@ export function ReviewPanel({ planId, status, isOwner, canReview, comments, entr
 
   return (
     <section aria-label="Review" className="mt-14 max-w-[760px] space-y-6 border-t border-line pt-8">
-      <h2 className="text-sm font-medium">Review</h2>
+      <h2 className="eyebrow">Review</h2>
 
       {isOwner && (
         <div className="flex flex-wrap items-center gap-3">

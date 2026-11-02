@@ -21,8 +21,8 @@ export function SignInCard() {
   const error = useSearchParams().get("error");
 
   return (
-    <div className="w-full max-w-[320px]">
-      <h2 className="text-[15px] font-medium tracking-tight">Sign in</h2>
+    <div className="w-full max-w-[360px]">
+      <h2 className="text-[15px] font-medium">Sign in</h2>
       <p className="mt-1 text-[13px] text-muted">Use your Google account.</p>
 
       {answer === "under13" ? (

@@ -4,13 +4,13 @@ import { PageHeader, Section } from "@/components/ui/page";
 import { StarBorder } from "@/components/ui/star-border";
 
 const surfaces = [
-  ["--bg", "#0a0a0a"],
-  ["--bg-raised", "#141414"],
-  ["--bg-elevated", "#1c1c1c"],
-  ["--line", "#2b2b2b"],
-  ["--line-strong", "#3d3d3d"],
-  ["--fg", "#ededed"],
-  ["--muted", "#a1a1a1"],
+  ["--bg", "#12110f"],
+  ["--bg-raised", "#1b1a17"],
+  ["--bg-elevated", "#24221e"],
+  ["--line", "#2e2b27"],
+  ["--line-strong", "#423e38"],
+  ["--fg", "#ece8e1"],
+  ["--muted", "#a39d93"],
 ];
 const accents = [
   ["--accent", "#338eda"],
@@ -53,8 +53,9 @@ export default function Styleguide() {
 
         <Section title="Type">
           <div className="space-y-2">
-            <div className="text-[44px] font-semibold leading-[1.05] tracking-[-0.045em]">Display, Geist Sans</div>
-            <div className="text-[26px] font-semibold tracking-[-0.03em]">Page title</div>
+            <div className="text-[48px] font-semibold leading-[1.08] tracking-[-0.02em]">Display, IBM Plex Sans</div>
+            <div className="text-[32px] font-semibold tracking-[-0.02em]">Page title</div>
+            <h2 className="eyebrow">Section title, ledger header</h2>
             <p className="text-sm">Body text at 14px. Plan your four years, track credits, and see what is missing.</p>
             <p className="text-[13px] text-muted">Secondary text for hints and captions.</p>
             <p className="num">MATH-201 &nbsp; 5.0 cr &nbsp; B+ &nbsp; 2027-02-09</p>

@@ -172,7 +172,7 @@ export function ImportFlow({ plans, courses, aliases }: Props) {
               )}
               {[...new Set(lines.map((l) => l.gradeLevel))].map((g) => (
                 <div key={g}>
-                  <h2 className="mb-1 text-sm font-medium">Grade {g}</h2>
+                  <h2 className="mb-1 eyebrow">Grade {g}</h2>
                   <ul className="list">
                     {lines.filter((l) => l.gradeLevel === g).map((l) => (
                       <li key={l.key} className="grid gap-2 py-3 md:grid-cols-[minmax(0,1fr)_auto_minmax(0,1.2fr)] md:items-center md:gap-4">

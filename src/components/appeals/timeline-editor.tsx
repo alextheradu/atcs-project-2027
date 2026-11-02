@@ -41,7 +41,7 @@ export function TimelineEditor({ rows }: { rows: TRow[] }) {
       </ul>
 
       <section aria-label="Add dates" className="grid gap-2.5 sm:grid-cols-2">
-        <h2 className="text-sm font-medium sm:col-span-2">Add dates</h2>
+        <h2 className="eyebrow sm:col-span-2">Add dates</h2>
         <select className="input" aria-label="Kind" value={f.kind} onChange={(e) => set("kind", e.target.value)}>{KINDS.map(([v, l]) => <option key={v} value={v}>{l}</option>)}</select>
         <select className="input" aria-label="Audience" value={f.audience} onChange={(e) => set("audience", e.target.value)}><option value="INCOMING">Incoming 8th graders</option><option value="CURRENT">Current students</option><option value="ALL">Everyone</option></select>
         <input className="input sm:col-span-2" aria-label="Label" placeholder="Label, for example Spring 2028 course selection" maxLength={120} value={f.label} onChange={(e) => set("label", e.target.value)} />

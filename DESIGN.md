@@ -1,45 +1,47 @@
 ---
 name: Pascack Course Planner
-description: Calm, flat, dark course planner. Neutral black surfaces, hairline rules, one blue accent on things you can act on, expressive pill buttons.
+description: Calm, flat, dark course planner. Warm off-black surfaces, hairline rules, one blue accent on things you can act on, expressive pill buttons.
 colors:
-  background: "#0a0a0a"
-  surface: "#141414"
-  surface-elevated: "#1c1c1c"
-  hairline: "#2b2b2b"
-  hairline-strong: "#3d3d3d"
-  foreground: "#ededed"
-  muted: "#a1a1a1"
+  background: "#12110f"
+  surface: "#1b1a17"
+  surface-elevated: "#24221e"
+  hairline: "#2e2b27"
+  hairline-strong: "#423e38"
+  hairline-hover: "#5c574f"
+  foreground: "#ece8e1"
+  muted: "#a39d93"
+  placeholder: "#6f6a62"
   accent: "#338eda"
   accent-hover: "#4a9fe6"
   accent-lip: "#1f5b94"
-  accent-foreground: "#0a0a0a"
+  accent-foreground: "#12110f"
   success: "#33d6a6"
   warning: "#f1c40f"
   appeal: "#ff8c37"
   danger: "#ec3750"
 typography:
   display:
-    fontFamily: "Geist Sans, system-ui, sans-serif"
-    fontSize: "64px"
+    fontFamily: "IBM Plex Sans, system-ui, sans-serif"
+    fontSize: "48px"
     fontWeight: 600
-    lineHeight: 1.02
-    letterSpacing: "-0.045em"
+    lineHeight: 1.08
+    letterSpacing: "-0.02em"
   title:
-    fontFamily: "Geist Sans, system-ui, sans-serif"
-    fontSize: "28px"
+    fontFamily: "IBM Plex Sans, system-ui, sans-serif"
+    fontSize: "32px"
     fontWeight: 600
     lineHeight: 1.1
-    letterSpacing: "-0.035em"
+    letterSpacing: "-0.02em"
   body:
-    fontFamily: "Geist Sans, system-ui, sans-serif"
+    fontFamily: "IBM Plex Sans, system-ui, sans-serif"
     fontSize: "14px"
     lineHeight: 1.5
   label:
-    fontFamily: "Geist Sans, system-ui, sans-serif"
+    fontFamily: "IBM Plex Sans, system-ui, sans-serif"
     fontSize: "13px"
     fontWeight: 500
   data:
-    fontFamily: "Geist Mono, ui-monospace, monospace"
+    fontFamily: "IBM Plex Mono, ui-monospace, monospace"
     fontSize: "12px"
 rounded:
   control: "6px"
@@ -76,7 +78,7 @@ components:
 
 A well kept ledger: ruled lines, tight columns, numbers you can add up at a glance. Nothing sits in a box that does not need one. Structure comes from hairlines and spacing; the only loud thing on screen is the pill button with its hard lip, which is the system's one expressive gesture.
 
-Dark only, neutral black and charcoal (equal R, G and B). Blue appears only where something can be acted on or is selected. The system explicitly rejects generic AI dashboards: bordered rounded cards everywhere, tinted pill badges, gradients, glass, side stripes.
+Dark only, warm off-black and charcoal, like a ruled sheet under a lamp in the evening. Blue appears only where something can be acted on or is selected. The system explicitly rejects generic AI dashboards: bordered rounded cards everywhere, tinted pill badges, gradients, glass, side stripes.
 
 Influences: the Vercel dashboard (flat, mono for data), Linear (dense, restrained), Raycast and Arc (detail polish), and two sibling projects, `pioneersTeam1676/command` (solid bars, mono-for-numbers, dashed empty states) and `hackclub/contd` (the buttons, drawn form controls, gentler reduced motion). Contd's tilt and rotation are deliberately not used.
 
@@ -88,15 +90,15 @@ Influences: the Vercel dashboard (flat, mono for data), Linear (dense, restraine
 
 ## 2. Colors
 
-Restrained: neutral grays plus one accent.
+Restrained: warm grays plus one accent.
 
 ### Primary
-- **Interactive Blue** (#338eda): primary buttons, focus rings, selection dots, links, progress. Never a surface fill.
+- **Interactive Blue** (#338eda): primary buttons, focus rings, row selection dots, links, progress. Never a surface fill.
 
 ### Neutral
-- **Ink Black** (#0a0a0a): page background. **Raised** (#141414), **Elevated** (#1c1c1c): hover and selected fills.
-- **Hairline** (#2b2b2b) for every rule, **Hairline Strong** (#3d3d3d) on hover.
-- **Ink** (#ededed) text, **Quiet Ink** (#a1a1a1) secondary text.
+- **Lamp Black** (#12110f): page background. **Raised** (#1b1a17), **Elevated** (#24221e): hover and selected fills.
+- **Hairline** (#2e2b27) for every rule, **Hairline Strong** (#423e38) on hover, **Hairline Hover** (#5c574f) for drawn controls.
+- **Ink** (#ece8e1) text, **Quiet Ink** (#a39d93) secondary text, **Placeholder** (#6f6a62).
 
 ### Semantic
 - Green eligible or approved, yellow warning, orange needs appeal, red locked or denied, blue in review. Always a dot plus a word.
@@ -107,15 +109,15 @@ Restrained: neutral grays plus one accent.
 
 ## 3. Typography
 
-**Family:** Geist Sans for everything, Geist Mono for data.
+**Family:** IBM Plex Sans for everything, IBM Plex Mono for data and section headers. Self-hosted from `@fontsource` (offline builds).
 
 ### Hierarchy
-- **Display** (600, 44 to 64px, -0.045em): sign-in headline only.
-- **Title** (600, 28px, -0.035em): page titles.
-- **Section** (500, 14px): block titles.
+- **Display** (600, 40 to 48px, -0.02em): sign-in headline only, one color.
+- **Title** (600, 32px, -0.02em): page titles.
+- **Section** (`.eyebrow`: Plex Mono 500, 11px, capitals, 0.08em tracking, Quiet Ink): block titles, read like ledger column headers.
 - **Body** (400, 14px, 1.5): default. Prose caps at 65ch.
 - **Label and caption** (500 or 400, 13px, Quiet Ink for secondary).
-- **Data** (Geist Mono, 12px, tabular figures).
+- **Data** (Plex Mono, 12px, tabular figures).
 
 ### Named Rules
 **The Mono-For-Numbers Rule.** Anything a user compares or adds up is monospace.
@@ -142,7 +144,10 @@ Pill, 36px, hard no-blur lip (`0 3px 0`), spring lift on hover (-2px), sink on p
 6px dot plus label, 6px radius outline.
 
 ### Navigation
-232px sidebar with grouped labels (Workspace, Admin) and a dot on the active item. On phones: opaque bottom tab bar plus a More drawer.
+232px sidebar with grouped ledger-header labels (Workspace, Admin). Active item is semibold Ink, no dot and no fill. A mono count marks work waiting. On phones: opaque bottom tab bar plus a More drawer.
+
+### Sign-in
+Wordmark, one-color headline, the sign-in form, and a made-up example plan beside it. No grid backdrop, glow, pill nav or staged reveal.
 
 ### Empty state
 Dashed outline, one line of purpose, one action.
@@ -157,6 +162,7 @@ Dashed outline, one line of purpose, one action.
 
 ### Don't:
 - **Don't** use cards, nested containers, tinted pills, gradient text or glass.
-- **Don't** use colored side stripes; selection is a dot.
-- **Don't** put blue, navy or any tint into surfaces.
+- **Don't** use colored side stripes; row selection is a dot, nav selection is weight.
+- **Don't** bring back the default AI dark look: Geist on pure black, two-tone headlines, grid backdrops, radial glows, floating pill nav.
+- **Don't** put blue or navy into surfaces. The only tint is the warm lean of the neutrals.
 - **Don't** animate repeated or keyboard driven actions, or use em dashes in copy.

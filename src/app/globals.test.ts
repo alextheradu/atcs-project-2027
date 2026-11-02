@@ -9,7 +9,7 @@ describe("design system stylesheet", () => {
     for (const cls of [
       ".btn", ".btn-primary", ".btn-ghost", ".btn-danger", ".btn-sm", ".btn-lg", ".btn-icon",
       ".list", ".list-hover", ".row-selected", ".input", ".badge", ".badge-eligible", ".badge-locked",
-      ".auth-texture", ".grid-backdrop", ".star-border", ".num", ".eyebrow", ".page-enter", ".hero-in", ".skip-link",
+      ".auth-texture", ".star-border", ".num", ".eyebrow", ".page-enter", ".skip-link",
     ]) {
       expect(css, cls).toContain(`${cls} `);
     }

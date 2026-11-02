@@ -241,7 +241,7 @@ export function RuleBuilder({ courseId, initial, options }: { courseId: string; 
       <Node rule={root} path={[]} root={root} setRoot={(r) => { setRoot(r); setSaved(null); }} options={options} />
 
       <div>
-        <h2 className="mb-1 text-sm font-medium">Reads as</h2>
+        <h2 className="mb-1 eyebrow">Reads as</h2>
         <p className="max-w-[65ch] text-[13px] leading-relaxed text-muted" aria-live="polite">
           {clean ? describeRule(clean, names) : "No rule. Students see the catalog text as a note and are not checked automatically."}
         </p>

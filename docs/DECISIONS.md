@@ -2,6 +2,18 @@
 
 Settled choices and deviations from the original spec. Add a dated entry when you make a new one. Do not re-litigate without the owner.
 
+## 2026-11-02 (identity pass)
+
+- **The base read as a generic dark dashboard** (Geist, `#0a0a0a`, Vercel-style hairlines, grid backdrop, two-tone hero). The owner chose a new identity over layout-only fixes.
+- **IBM Plex Sans and IBM Plex Mono replace Geist.** Loaded with `next/font/local` from the `@fontsource/ibm-plex-sans` and `@fontsource/ibm-plex-mono` packages (`src/app/fonts.ts`), so builds still work offline. The `geist` package is gone. Supersedes the 2026-10-28 Geist entry.
+- **Surfaces are warm off-black** (`--bg #12110f`, raised `#1b1a17`, elevated `#24221e`), no longer equal R, G, B. Still no navy or blue tint; blue stays on interactive elements only.
+- **Section titles are ledger headers**: the `.eyebrow` class, 11px Plex Mono capitals with 0.08em tracking. Page titles are 32px.
+- **Sidebar active item is semibold bright text**, no dot and no fill. A mono count shows work waiting (own open placement reviews, reviews to decide, plans sent for review), scoped like the page it links to. Rows keep the 6px selection dot.
+- **Sign-in has no grid, glow, pill nav or blur reveal.** It is a plain wordmark, a one-color headline, the sign-in form, and a made-up example plan beside it. `.grid-backdrop` and `.hero-in` are removed. Supersedes the blur reveal in design pass 2.
+- **The dashboard answers "am I on track"**: requirements left in words, the primary plan by grade, open placement reviews, dates, and a "Waiting on you" block for staff. The link list is gone.
+- **Courses are grouped by department** under sticky headers with aligned grades and credits columns. The catalog has no course codes, so none are shown.
+- **The requirement rail sorts open requirements by credits left** and folds finished ones into "N complete". "What is missing" is gone (it repeated the rail). Per-grade credit totals turn yellow only once a grade has a course.
+
 ## 2026-10-29 (admin student access)
 
 - **Admins can use every student page with their own data.** Import and placement review navigation, page guards and server actions share an explicit student workspace role list (`STUDENT`, `INCOMING`, `ADMIN`). Admin pathways use their own primary plan. Ownership checks still apply, and staff review views retain their existing permissions.

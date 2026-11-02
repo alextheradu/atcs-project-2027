@@ -44,7 +44,8 @@ function Column({ grade, credits, need, editable, count, onAdd, children }: {
   grade: number; credits: number; need: number; editable: boolean; count: number; onAdd: () => void; children: React.ReactNode;
 }) {
   const { setNodeRef, isOver } = useDroppable({ id: `grade-${grade}` });
-  const under = credits < need;
+  // An empty year is not a problem yet. Flag the minimum once the student has started filling it.
+  const under = count > 0 && credits < need;
   return (
     <section
       ref={setNodeRef}
@@ -53,9 +54,9 @@ function Column({ grade, credits, need, editable, count, onAdd, children }: {
     >
       <header className="flex items-center justify-between gap-2 pb-2">
         <div className="flex items-baseline gap-2.5">
-          <h2 className="text-sm font-medium">Grade {grade}</h2>
+          <h2 className="eyebrow">Grade {grade}</h2>
           <span className={cn("num", under ? "text-yellow" : "text-muted")} title={under ? `Minimum is ${need} credits` : undefined}>
-            {formatCredits(credits)} cr
+            {formatCredits(credits)}{under && ` / ${need}`} cr
           </span>
         </div>
         {editable && <Button size="sm" variant="ghost" onClick={onAdd}>Add</Button>}

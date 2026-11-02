@@ -27,7 +27,7 @@ export function GuidanceForm({ initial }: { initial: GuidanceConfig }) {
   return (
     <div className="space-y-10">
       <section>
-        <h2 className="mb-2 text-sm font-medium">Recommended years for every college bound student</h2>
+        <h2 className="mb-2 eyebrow">Recommended years for every college bound student</h2>
         <div className="grid gap-3 sm:grid-cols-5">
           {SUBJECTS.map((s) => (
             <label key={s} className="space-y-1 text-[13px]"><span className="text-muted">{SUBJECT_LABEL[s]}</span>
@@ -38,7 +38,7 @@ export function GuidanceForm({ initial }: { initial: GuidanceConfig }) {
       </section>
 
       <section className="space-y-5">
-        <h2 className="text-sm font-medium">Intended majors that need more</h2>
+        <h2 className="eyebrow">Intended majors that need more</h2>
         {majors.map((m, i) => (
           <div key={i} className="space-y-2.5 border-t border-line pt-4">
             <input className="input" aria-label="Group name" value={m.label} onChange={(e) => setMajors(majors.map((x, j) => (j === i ? { ...x, label: e.target.value } : x)))} />

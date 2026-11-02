@@ -131,7 +131,7 @@ export function CourseForm({ mode, courseId, archived, initial, interestOptions 
       </section>
 
       <section className="space-y-4 border-t border-line pt-6">
-        <h2 className="text-sm font-medium">Graduation requirement tags</h2>
+        <h2 className="eyebrow">Graduation requirement tags</h2>
         <ul className="list">
           {REQUIREMENT_KINDS.map((kind) => {
             const t = tag(kind);
@@ -160,7 +160,7 @@ export function CourseForm({ mode, courseId, archived, initial, interestOptions 
       </section>
 
       <section className="space-y-4 border-t border-line pt-6">
-        <h2 className="text-sm font-medium">Interest tags</h2>
+        <h2 className="eyebrow">Interest tags</h2>
         <div className="flex flex-wrap gap-x-6 gap-y-2.5">
           {interestOptions.map((i) => (
             <label key={i.slug} className="flex items-center gap-2 text-sm">

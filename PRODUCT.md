@@ -19,7 +19,8 @@ Calm, precise, quietly confident. Three words: crisp, calm, trustworthy. The int
 ## Anti-references
 
 - Generic AI dashboards: everything in bordered rounded cards, three equal feature tiles, tinted pill badges, purple or blue gradients, glassy panels.
-- Blue-tinted or navy surfaces. Surfaces are neutral black and charcoal only.
+- Blue-tinted or navy surfaces. Surfaces are warm off-black and charcoal only.
+- The default AI dark look: Geist on pure black, two-tone hero headlines, grid backdrops with a radial glow, floating pill nav, dot-marked sidebar items.
 - Heavy shadows and big gradients on surfaces.
 - School-district portal energy: dense grey tables, beige forms, clip art.
 - Playful "student app" styling with mascots or confetti inside task screens.

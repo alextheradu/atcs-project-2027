@@ -17,63 +17,45 @@ const EXAMPLE: { grade: number; courses: [string, string][] }[] = [
 ];
 
 export default function Home() {
+  const total = EXAMPLE.reduce((n, col) => n + col.courses.reduce((m, [, c]) => m + Number(c), 0), 0);
   return (
-    <main className="relative min-h-dvh overflow-hidden">
-      <div aria-hidden className="grid-backdrop pointer-events-none absolute inset-0" />
-      <div
-        aria-hidden
-        className="pointer-events-none absolute inset-x-0 top-0 h-[520px] bg-[radial-gradient(ellipse_55%_70%_at_50%_0%,rgb(255_255_255/0.07),transparent_70%)]"
-      />
-
-      <header className="fixed inset-x-0 top-5 z-40 flex justify-center px-4">
-        <div className="flex items-center gap-3 rounded-full border border-line bg-raised py-1.5 pl-2 pr-4 text-[13px]">
-          <span aria-hidden className="grid size-6 place-items-center rounded-full bg-fg font-mono text-[11px] font-bold text-bg">
-            C
-          </span>
-          <span className="font-medium tracking-tight">Course Planner</span>
-          <span aria-hidden className="h-3.5 w-px bg-white/15" />
-          <span className="text-muted">Unofficial student project</span>
-        </div>
+    <main className="min-h-dvh">
+      <header className="mx-auto flex h-14 max-w-[1100px] items-center justify-between px-6">
+        <span className="text-[14px] font-semibold">Course Planner</span>
+        <span className="text-[13px] text-muted">Unofficial student project</span>
       </header>
 
-      <div className="relative mx-auto max-w-[1100px] px-6">
-        <div className="flex min-h-dvh flex-col justify-center gap-14 pb-16 pt-32 md:flex-row md:items-center md:justify-between">
-          <section className="max-w-xl">
-            <h1 className="text-[44px] font-semibold leading-[1.02] tracking-[-0.045em] md:text-[64px]">
-              <span className="hero-in block" style={{ ["--d" as string]: "0ms" }}>
-                Plan four years.
-              </span>
-              <span className="hero-in block text-muted" style={{ ["--d" as string]: "90ms" }}>
-                Know what graduation needs.
-              </span>
-            </h1>
-            <p className="hero-in mt-7 max-w-md text-[15px] leading-relaxed text-muted" style={{ ["--d" as string]: "220ms" }}>
-              Build a course plan, track credits against the requirements, and see which classes you qualify for.
-            </p>
-          </section>
+      <div className="mx-auto grid max-w-[1100px] gap-16 px-6 pb-20 pt-12 lg:grid-cols-[360px_1fr] lg:gap-20 lg:pt-24">
+        <section>
+          <h1 className="text-[40px] font-semibold leading-[1.08] tracking-[-0.02em] md:text-[48px]">
+            Plan four years. Know what graduation needs.
+          </h1>
+          <p className="mt-5 text-[15px] leading-relaxed text-muted">
+            Build a course plan, track credits against the requirements, and see which classes you qualify for.
+          </p>
           <Suspense>
             <RedirectIfSignedIn />
           </Suspense>
-          <div className="hero-in w-full max-w-[320px]" style={{ ["--d" as string]: "340ms" }}>
+          <div className="mt-10 border-t border-line pt-6">
             <Suspense fallback={<div className="h-48" />}>
               <SignInCard />
             </Suspense>
           </div>
-        </div>
+        </section>
 
-        <section aria-label="Example plan" className="hero-in pb-24" style={{ ["--d" as string]: "480ms" }}>
-          <div className="mb-4 flex items-baseline justify-between border-t border-line pt-4">
-            <h2 className="text-sm font-medium">What a plan looks like</h2>
-            <span className="num text-muted">example, not a real student</span>
+        <section aria-label="Example plan">
+          <div className="flex items-baseline justify-between border-b border-line pb-3">
+            <h2 className="eyebrow">Example plan</h2>
+            <span className="num text-muted">made up, not a real student</span>
           </div>
-          <div className="grid gap-x-10 gap-y-8 sm:grid-cols-2 lg:grid-cols-4">
+          <div className="grid gap-x-10 sm:grid-cols-2">
             {EXAMPLE.map((col) => {
-              const total = col.courses.reduce((n, [, c]) => n + Number(c), 0);
+              const sum = col.courses.reduce((n, [, c]) => n + Number(c), 0);
               return (
-                <div key={col.grade}>
+                <div key={col.grade} className="pt-6">
                   <div className="flex items-baseline justify-between pb-2">
-                    <span className="text-[13px] font-medium">Grade {col.grade}</span>
-                    <span className="num text-muted">{total} cr</span>
+                    <span className="eyebrow">Grade {col.grade}</span>
+                    <span className="num text-muted">{sum} cr</span>
                   </div>
                   <ul className="list text-[13px]">
                     {col.courses.map(([name, cr]) => (
@@ -87,11 +69,20 @@ export default function Home() {
               );
             })}
           </div>
-          <p className="mt-8 text-xs text-muted">
-            Not affiliated with Pascack Valley Regional High School District. Plans are not official placements.
-          </p>
+          <div className="mt-6 flex flex-wrap items-center justify-between gap-3 border-t border-line pt-4">
+            <span className="badge badge-warning">1 requirement left</span>
+            <span className="text-[13px] text-muted">
+              <span className="num text-fg">{total}</span> of <span className="num">120</span> credits. Needs 10 more Physical Education and Health.
+            </span>
+          </div>
         </section>
       </div>
+
+      <footer className="mx-auto max-w-[1100px] px-6 pb-10">
+        <p className="text-xs text-muted">
+          Not affiliated with Pascack Valley Regional High School District. Plans are not official placements.
+        </p>
+      </footer>
     </main>
   );
 }

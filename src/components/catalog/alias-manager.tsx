@@ -16,7 +16,7 @@ export function AliasManager({ courseId, aliases }: { courseId: string; aliases:
     <section className="space-y-4 border-t border-line pt-6">
       <DraftNotice drafts={[draft]} />
       <div>
-        <h2 className="text-sm font-medium">Transcript aliases</h2>
+        <h2 className="eyebrow">Transcript aliases</h2>
         <p className="mt-1 text-[13px] text-muted">Other titles that should match this course when a transcript is imported. Stored in a normalized form.</p>
       </div>
       <ul className="list">

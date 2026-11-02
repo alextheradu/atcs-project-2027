@@ -2,7 +2,7 @@ import { HINTS } from "@/lib/learn/content";
 import { formatCredits } from "@/lib/credits";
 import { describeWarning, type PlanWarning } from "@/lib/plan-warnings";
 import type { GuidanceResult } from "@/lib/guidance";
-import type { GraduationSummary } from "@/lib/requirements";
+import type { GraduationSummary, KindProgress } from "@/lib/requirements";
 
 function Meter({ earned, scheduled, required, label }: { earned: number; scheduled: number; required: number; label: string }) {
   const e = required > 0 ? Math.min(100, (earned / required) * 100) : 0;
@@ -15,13 +15,36 @@ function Meter({ earned, scheduled, required, label }: { earned: number; schedul
   );
 }
 
+function KindRow({ k }: { k: KindProgress }) {
+  return (
+    <li className="py-2.5">
+      <div className="flex items-baseline justify-between gap-3 text-[13px]">
+        <span>
+          {k.label}
+          {k.provisional > 0 && <span className="text-muted" title="Some of these courses are not confirmed by a counselor yet"> *</span>}
+        </span>
+        <span className="num">
+          <span className={k.met ? "text-green" : "text-fg"}>{formatCredits(k.total)}</span>
+          <span className="text-muted"> / {formatCredits(k.required)}</span>
+        </span>
+      </div>
+      <div className="mt-1.5">
+        <Meter earned={k.earned} scheduled={k.scheduled} required={k.required} label={`${k.label}: ${formatCredits(k.total)} of ${formatCredits(k.required)} credits`} />
+      </div>
+    </li>
+  );
+}
+
 export function RequirementRail({ summary, warnings, advice }: { summary: GraduationSummary; warnings: PlanWarning[]; advice?: GuidanceResult | null }) {
   const unconfirmed = summary.kinds.some((k) => k.provisional > 0);
+  // Most work left first; finished requirements fold away so the open ones stay in view.
+  const open = summary.kinds.filter((k) => !k.met).sort((a, b) => b.missing - a.missing);
+  const met = summary.kinds.filter((k) => k.met);
   return (
     <aside aria-label="Graduation progress" className="space-y-8 xl:sticky xl:top-20 xl:self-start">
       <section>
         <div className="flex items-baseline justify-between">
-          <h2 className="text-sm font-medium" title={HINTS.credits}>Credits</h2>
+          <h2 className="eyebrow" title={HINTS.credits}>Credits</h2>
           <span className="num">
             <span className="text-fg">{formatCredits(summary.total)}</span>
             <span className="text-muted"> / {formatCredits(summary.totalRequired)}</span>
@@ -49,44 +72,29 @@ export function RequirementRail({ summary, warnings, advice }: { summary: Gradua
       </section>
 
       <section>
-        <h2 className="mb-1 text-sm font-medium">Requirements</h2>
-        <ul className="list">
-          {summary.kinds.map((k) => (
-            <li key={k.kind} className="py-2.5">
-              <div className="flex items-baseline justify-between gap-3 text-[13px]">
-                <span className={k.met ? "text-muted" : "text-fg"}>
-                  {k.label}
-                  {k.provisional > 0 && <span className="text-muted" title="Some of these courses are not confirmed by a counselor yet"> *</span>}
-                </span>
-                <span className="num">
-                  <span className={k.met ? "text-green" : "text-fg"}>{formatCredits(k.total)}</span>
-                  <span className="text-muted"> / {formatCredits(k.required)}</span>
-                </span>
-              </div>
-              <div className="mt-1.5">
-                <Meter earned={k.earned} scheduled={k.scheduled} required={k.required} label={`${k.label}: ${formatCredits(k.total)} of ${formatCredits(k.required)} credits`} />
-              </div>
-            </li>
-          ))}
-        </ul>
+        <h2 className="mb-1 eyebrow">Requirements</h2>
+        {open.length > 0 && (
+          <ul className="list">
+            {open.map((k) => <KindRow key={k.kind} k={k} />)}
+          </ul>
+        )}
+        {met.length > 0 && (
+          <details className="group border-b border-line" open={open.length === 0}>
+            <summary className="flex cursor-pointer list-none items-baseline justify-between py-2.5 text-[13px] text-muted transition-colors duration-150 hover:text-fg [&::-webkit-details-marker]:hidden">
+              <span><span className="num text-green">{met.length}</span> complete</span>
+              <span aria-hidden className="text-xs group-open:hidden">Show</span>
+              <span aria-hidden className="hidden text-xs group-open:inline">Hide</span>
+            </summary>
+            <ul className="list">
+              {met.map((k) => <KindRow key={k.kind} k={k} />)}
+            </ul>
+          </details>
+        )}
         {unconfirmed && <p className="mt-2 text-xs text-muted">* Counts toward this requirement, but a counselor has not confirmed which courses qualify yet.</p>}
       </section>
 
-      {summary.missingList.length > 0 && (
-        <section>
-          <h2 className="mb-2 text-sm font-medium">What is missing</h2>
-          <ul className="space-y-1.5 text-[13px] text-muted">
-            {summary.missingList.map((m) => (
-              <li key={m.kind}>
-                <span className="num text-fg">{formatCredits(m.missing)}</span> more {m.label.toLowerCase()} credits
-              </li>
-            ))}
-          </ul>
-        </section>
-      )}
-
       <section>
-        <h2 className="mb-2 text-sm font-medium">Heads up</h2>
+        <h2 className="mb-2 eyebrow">Heads up</h2>
         {warnings.length === 0 ? (
           <p className="text-[13px] text-muted">Nothing to flag.</p>
         ) : (
@@ -103,14 +111,14 @@ export function RequirementRail({ summary, warnings, advice }: { summary: Gradua
       </section>
           {advice && (
         <section>
-          <h2 className="mb-1 text-sm font-medium">For college</h2>
+          <h2 className="mb-1 eyebrow">For college</h2>
           <p className="mb-2 text-xs text-muted">
             Years of each subject colleges usually look for{advice.matched.length > 0 ? `, raised for ${advice.matched.join(" and ").toLowerCase()} majors` : ""}. A recommendation, not a graduation rule.
           </p>
           <ul className="list">
             {advice.lines.map((l) => (
               <li key={l.subject} className="flex items-baseline justify-between py-2 text-[13px]">
-                <span className={l.met ? "text-muted" : "text-fg"}>{l.label}</span>
+                <span>{l.label}</span>
                 <span className="num"><span className={l.met ? "text-green" : "text-fg"}>{l.have}</span><span className="text-muted"> / {l.need} years</span></span>
               </li>
             ))}

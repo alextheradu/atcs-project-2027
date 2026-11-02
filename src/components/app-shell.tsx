@@ -9,7 +9,7 @@ import { signOutAction } from "@/lib/account/actions";
 import { cn } from "@/lib/utils";
 
 interface ShellProps {
-  nav: { href: string; label: string; group: string }[];
+  nav: { href: string; label: string; group: string; count?: number }[];
   user: { name: string | null; email: string; role: string };
   unread?: number;
   children: React.ReactNode;
@@ -18,10 +18,12 @@ interface ShellProps {
 const LABEL_AFTER: Record<string, string> = { plans: "Plan", catalog: "Course" };
 /** A database id in the URL is not something to show. Name it after what it is. */
 const isId = (s: string) => /^[a-z0-9]{20,}$/i.test(s) && /\d/.test(s);
+/** A course slug title-cases badly ("Ap Language And Composition"); the page heading has the real name. */
+const isCourseSlug = (raw: string[], i: number) => i === 1 && raw[0] === "courses";
 
 function Breadcrumbs() {
   const raw = usePathname().split("/").filter(Boolean);
-  const parts = raw.map((p, i) => (isId(p) ? (LABEL_AFTER[raw[i - 1]] ?? "Details") : p));
+  const parts = raw.map((p, i) => (isId(p) ? (LABEL_AFTER[raw[i - 1]] ?? "Details") : isCourseSlug(raw, i) ? "Course" : p));
   return (
     <nav aria-label="Breadcrumb" className="flex items-center gap-2 text-[13px] text-muted">
       {parts.map((p, i) => (
@@ -48,10 +50,7 @@ export function AppShell({ nav, user, unread = 0, children }: ShellProps) {
         )}
       >
         <div className="flex h-12 items-center justify-between px-4">
-          <Link href="/dashboard" className="flex items-center gap-2 text-[13px] font-semibold tracking-tight">
-            <span aria-hidden className="grid size-5 place-items-center rounded-[5px] bg-fg font-mono text-[10px] font-bold text-bg">
-              C
-            </span>
+          <Link href="/dashboard" className="text-[14px] font-semibold">
             Course Planner
           </Link>
           <Button variant="ghost" size="icon" className="md:hidden" aria-label="Close menu" onClick={() => setOpen(false)}>
@@ -74,12 +73,14 @@ export function AppShell({ nav, user, unread = 0, children }: ShellProps) {
                         onClick={() => setOpen(false)}
                         aria-current={active ? "page" : undefined}
                         className={cn(
-                          "relative flex h-8 items-center rounded-md pl-7 pr-3 text-[13px] text-muted transition-colors duration-150 ease-out hover:bg-raised hover:text-fg",
-                          active && "bg-raised font-medium text-fg",
+                          "flex h-8 items-center justify-between gap-3 px-3 text-[13px] text-muted transition-colors duration-150 ease-out hover:text-fg",
+                          active && "font-semibold text-fg",
                         )}
                       >
-                        {active && <span aria-hidden className="absolute left-3 size-1.5 rounded-full bg-accent" />}
                         {item.label}
+                        {item.count !== undefined && (
+                          <span className="num text-muted" aria-label={`${item.count} open`}>{item.count}</span>
+                        )}
                       </Link>
                     );
                   })}
@@ -126,7 +127,6 @@ export function AppShell({ nav, user, unread = 0, children }: ShellProps) {
                   active ? "font-medium text-fg" : "text-muted",
                 )}
               >
-                <span aria-hidden className={cn("size-1.5 rounded-full transition-colors duration-150", active ? "bg-accent" : "bg-transparent")} />
                 {item.label}
               </Link>
             );
@@ -136,7 +136,6 @@ export function AppShell({ nav, user, unread = 0, children }: ShellProps) {
           onClick={() => setOpen(true)}
           className="flex h-14 flex-1 flex-col items-center justify-center gap-1 text-[12px] text-muted"
         >
-          <span aria-hidden className="size-1.5" />
           More
         </button>
       </nav>
