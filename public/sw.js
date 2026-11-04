@@ -1,7 +1,9 @@
 /* Service worker. It does two things only: show push notifications, and keep the static app shell
- * (built scripts, styles, fonts and icons) so the app starts fast. It never caches pages, API responses
+ * (built scripts, styles, fonts and icons) so the app still starts offline. It never caches pages, API responses
  * or anything tied to a student. Every other request goes straight to the network. */
-const CACHE = "shell-v1";
+// v2: network first. v1 served the cache first, which pinned old styles and scripts whenever a file
+// name stayed the same (always in development). Bumping the name deletes the v1 cache on activate.
+const CACHE = "shell-v2";
 const STATIC = /^\/(_next\/static\/|icons\/)/;
 
 self.addEventListener("install", () => self.skipWaiting());
@@ -18,13 +20,19 @@ self.addEventListener("fetch", (event) => {
   const url = new URL(req.url);
   // Only same-origin static assets. Pages, /api, server actions and everything else are left alone.
   if (url.origin !== self.location.origin || !STATIC.test(url.pathname)) return;
+  // The browser's own HTTP cache already keeps hashed production assets, so going to the network first
+  // costs little online. The shell cache is the offline fallback.
   event.respondWith(
     caches.open(CACHE).then(async (cache) => {
-      const hit = await cache.match(req);
-      if (hit) return hit;
-      const res = await fetch(req);
-      if (res.ok && res.type === "basic") cache.put(req, res.clone());
-      return res;
+      try {
+        const res = await fetch(req);
+        if (res.ok && res.type === "basic") cache.put(req, res.clone());
+        return res;
+      } catch (err) {
+        const hit = await cache.match(req);
+        if (hit) return hit;
+        throw err;
+      }
     }),
   );
 });

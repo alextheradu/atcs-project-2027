@@ -38,6 +38,26 @@ describe("service worker", () => {
     expect(await sw.request("/icons/icon-192.png")).toBe(true);
     expect(sw.cache.put).toHaveBeenCalledTimes(2);
   });
+  it("goes to the network first, so a cached copy never hides a newer file with the same name", async () => {
+    const sw = load();
+    const stale = { stale: true };
+    sw.cache.match.mockResolvedValue(stale);
+    let served: unknown;
+    sw.handlers.fetch({ request: { url: "https://app.example.com/_next/static/chunks/app.css", method: "GET" }, respondWith: (p: Promise<unknown>) => { void p.then((r) => { served = r; }); } });
+    await new Promise((r) => setTimeout(r, 0));
+    expect(sw.fetchMock).toHaveBeenCalledTimes(1);
+    expect(served).not.toBe(stale);
+  });
+  it("falls back to the cached copy when offline", async () => {
+    const sw = load();
+    const cached = { cached: true };
+    sw.cache.match.mockResolvedValue(cached);
+    sw.fetchMock.mockRejectedValueOnce(new TypeError("offline"));
+    let served: unknown;
+    sw.handlers.fetch({ request: { url: "https://app.example.com/_next/static/chunks/app.css", method: "GET" }, respondWith: (p: Promise<unknown>) => { void p.then((r) => { served = r; }); } });
+    await new Promise((r) => setTimeout(r, 0));
+    expect(served).toBe(cached);
+  });
   it("ignores non-GET requests, even to static paths, and other origins", async () => {
     const sw = load();
     expect(await sw.request("/_next/static/x.js", "POST")).toBe(false);
