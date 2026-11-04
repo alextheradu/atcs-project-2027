@@ -8,7 +8,6 @@ async function RedirectIfSignedIn() {
   return null;
 }
 
-// A made-up plan, only here to show what the planner looks like.
 const EXAMPLE: { grade: number; courses: [string, string][] }[] = [
   { grade: 9, courses: [["English I", "5"], ["Geometry", "5"], ["Biology", "5"], ["World History", "5"], ["Spanish I", "5"], ["Physical Education/Health 9", "5"]] },
   { grade: 10, courses: [["Honors English II", "5"], ["Algebra II", "5"], ["Chemistry", "5"], ["U.S. History I", "5"], ["Spanish II", "5"], ["Financial Literacy", "2.5"]] },

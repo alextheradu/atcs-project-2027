@@ -6,6 +6,7 @@ import { useState } from "react";
 import { Bell, Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { signOutAction } from "@/lib/account/actions";
+import { phoneTabs } from "@/lib/nav";
 import { cn } from "@/lib/utils";
 
 interface ShellProps {
@@ -36,9 +37,30 @@ function Breadcrumbs() {
   );
 }
 
+/** Phone tab text. The waiting count sits as a superscript so it never steals width from the label. */
+function TabLabel({ label, count }: { label: string; count?: number }) {
+  return (
+    <span className="relative min-w-0">
+      <span className="block truncate">{label}</span>
+      {count !== undefined && (
+        <>
+          <span aria-hidden className="num absolute -right-2.5 -top-2 text-[10px] font-normal text-muted">{count > 99 ? "99+" : count}</span>
+          <span className="sr-only">, {count} open</span>
+        </>
+      )}
+    </span>
+  );
+}
+
 export function AppShell({ nav, user, unread = 0, children }: ShellProps) {
   const [open, setOpen] = useState(false);
   const pathname = usePathname();
+  const isActive = (href: string) => pathname === href || pathname.startsWith(`${href}/`);
+  const tabs = phoneTabs(nav);
+  const rest = nav.filter((n) => !tabs.includes(n));
+  // More stands in for every page that has no tab of its own, so it carries their active state and waiting work.
+  const moreActive = rest.some((n) => isActive(n.href));
+  const moreCount = rest.reduce((sum, n) => sum + (n.count ?? 0), 0);
 
   return (
     <div className="min-h-dvh">
@@ -65,7 +87,7 @@ export function AppShell({ nav, user, unread = 0, children }: ShellProps) {
                 {nav
                   .filter((n) => n.group === group)
                   .map((item) => {
-                    const active = pathname === item.href || pathname.startsWith(`${item.href}/`);
+                    const active = isActive(item.href);
                     return (
                       <Link
                         key={item.href}
@@ -113,30 +135,31 @@ export function AppShell({ nav, user, unread = 0, children }: ShellProps) {
         aria-label="Primary"
         className="fixed inset-x-0 bottom-0 z-20 flex border-t border-line bg-bg pb-[env(safe-area-inset-bottom)] md:hidden print:hidden"
       >
-        {nav
-          .filter((n) => n.group === "Workspace")
-          .map((item) => {
-            const active = pathname === item.href || pathname.startsWith(`${item.href}/`);
-            return (
-              <Link
-                key={item.href}
-                href={item.href}
-                aria-current={active ? "page" : undefined}
-                className={cn(
-                  "relative flex h-14 flex-1 flex-col items-center justify-center gap-1 text-[12px] transition-colors duration-150 ease-out",
-                  active ? "font-medium text-fg" : "text-muted",
-                )}
-              >
-                {item.label}
-              </Link>
-            );
-          })}
+        {tabs.map((item) => {
+          const active = isActive(item.href);
+          return (
+            <Link
+              key={item.href}
+              href={item.href}
+              aria-current={active ? "page" : undefined}
+              className={cn(
+                "flex h-14 min-w-0 flex-1 items-center justify-center px-1 text-[12px] transition-colors duration-150 ease-out",
+                active ? "font-semibold text-fg" : "text-muted",
+              )}
+            >
+              <TabLabel label={item.label} count={item.count} />
+            </Link>
+          );
+        })}
         <button
           type="button"
           onClick={() => setOpen(true)}
-          className="flex h-14 flex-1 flex-col items-center justify-center gap-1 text-[12px] text-muted"
+          className={cn(
+            "flex h-14 min-w-0 flex-1 items-center justify-center px-1 text-[12px] transition-colors duration-150 ease-out",
+            moreActive ? "font-semibold text-fg" : "text-muted",
+          )}
         >
-          More
+          <TabLabel label="More" count={moreCount || undefined} />
         </button>
       </nav>
 

@@ -33,3 +33,14 @@ export const NAV: NavItem[] = [
 export function navFor(role: Role): NavItem[] {
   return NAV.filter((i) => !i.roles || i.roles.includes(role));
 }
+
+/** Four labelled tabs plus More is what fits a 360px phone without shrinking text below 12px. */
+export const MAX_PHONE_TABS = 4;
+
+/** Phone tab order. A staff work queue comes right after the dashboard, ahead of the student planning pages,
+ * because that is what staff open the app for. Everything else lives in the More drawer. */
+const PHONE_TAB_PRIORITY = ["/dashboard", "/counselor", "/review", "/plans", "/courses", "/pathways"];
+
+export function phoneTabs<T extends { href: string }>(nav: T[]): T[] {
+  return PHONE_TAB_PRIORITY.flatMap((href) => nav.filter((n) => n.href === href)).slice(0, MAX_PHONE_TABS);
+}

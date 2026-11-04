@@ -55,7 +55,7 @@ Settled choices and deviations from the original spec. Add a dated entry when yo
 - **Session reads call `connection()` first** in `getCurrentUser` (Auth.js uses `crypto.getRandomValues` before reading request data, which `cacheComponents` rejects during prerender).
 - **Authed pages export `instant = false`.** Layout level is not enough, each page needs it. Remove it from a page only if that page can stream behind its own Suspense.
 - **Unauthorized pages stream a 404 body with HTTP 200** because the role check runs behind Suspense. No admin data is sent (verified). API and server actions throw proper errors.
-- **Baseline CSP uses `'unsafe-inline'` for scripts** (no nonces, so static shells still work). Phase 11 tightens it with SRI or nonces.
+- **Baseline CSP uses `'unsafe-inline'` for scripts** (no nonces, so static shells still work). Phase 11 tested SRI and nonces and kept it, see the Phase 11 section.
 - **Dev login** is `GET /api/dev-login?email=&role=&dept=`, only when `NODE_ENV` is development or test and `DEV_AUTH=true`. It creates a database session directly.
 
 ## 2026-10-28 (Docker)
@@ -191,3 +191,12 @@ Settled choices and deviations from the original spec. Add a dated entry when yo
 - **Print** (`/plans/[id]/print`): own plans only. It is a white and black sheet laid over the app on screen and printed in normal flow with the sidebar and header hidden (`print:hidden` on the shell). It fits a typical plan on one Letter page (checked). The spec says `/plan/[id]/print`. The real path is `/plans/[id]/print` to match the existing routes.
 - **Policies v2** replace the drafts (v1 stays, so past acceptances remain). Existing students are re-prompted at the policy step. `PolicyBody` now renders `- ` bullet lists. Placeholders left for the owner: `[OPERATOR NAME]`, `[CONTACT EMAIL]`, `[HOSTING PROVIDER]`, `[BACKUP RETENTION]`.
 - **Help** already replays the onboarding explainers from the shared `LEARN_CARDS` module (Phase 5), so no new work there.
+
+## 2026-11-04 (Phase 11, ship)
+
+- **Script CSP keeps `'unsafe-inline'`, no nonces, no SRI.** Tested: with `experimental.sri` and `script-src 'self'`, a production build blocks the inline scripts the App Router streams (`self.__next_f.push`, `$RC`), and pages never hydrate. SRI only hashes script files. Nonces would cover inline scripts, but they need a fresh value per request, so every page renders dynamically, and the Next 16 docs state Partial Prerendering does not work with them. This app relies on Cache Components and PPR. Compensating controls: `script-src` allows only same-origin files, `script-src-attr 'none'` blocks injected `onclick=` style handlers (React never emits them), `object-src 'none'`, `base-uri 'self'`, `frame-ancestors 'none'`, no `dangerouslySetInnerHTML` anywhere in `src`, and React escapes all rendered text. Revisit if Next adds hash support for streamed inline scripts.
+- **`style-src` keeps `'unsafe-inline'`.** React Flow, drag and drop and Tailwind runtime values set `style` attributes.
+- **`Cross-Origin-Opener-Policy: same-origin`.** Google sign-in is a full-page redirect from a server action, not a popup.
+- **Route handler origin checks: none needed today.** The only state-changing handlers are the two cron routes, which require `CRON_SECRET` and are called by the scheduler, not a browser. Auth.js checks its own CSRF token. Everything else uses server actions, which Next protects. Add an origin check to any future cookie-authenticated POST handler.
+- **Removed unused packages**: `react-hook-form`, `@hookform/resolvers`, `@dnd-kit/sortable`, `@dnd-kit/utilities`. Forms are server actions with zod and `useDraftState`, not react-hook-form (spec 01 predates that).
+- **`npm audit`**: zero findings in production dependencies. The remaining moderate finding is `minimatch` inside the eslint toolchain (dev only, patterns are ours). The suggested fix downgrades eslint to v4, so it stays until eslint ships a patched range.
