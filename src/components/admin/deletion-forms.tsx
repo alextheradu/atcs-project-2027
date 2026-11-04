@@ -3,7 +3,7 @@
 import { useState, useTransition } from "react";
 import { DraftNotice, SAVE_INTERRUPTED, useDraftState } from "@/components/draft-state";
 import { Button } from "@/components/ui/button";
-import { adminCancelDeletion, recordGuardianRequest } from "@/lib/deletion/actions";
+import { adminCancelDeletion, adminDeleteUser, recordGuardianRequest } from "@/lib/deletion/actions";
 
 export function GuardianForm() {
   const [email, setEmail, draft] = useDraftState("admin:guardian-deletion", "");
@@ -44,5 +44,36 @@ export function CancelDeletionButton({ id }: { id: string }) {
         } catch { setErr(SAVE_INTERRUPTED); }
       })}>Cancel</Button>
     </span>
+  );
+}
+
+/** Deletes an account now. Opens a confirm step where the admin types the account's email. */
+export function DeleteUserButton({ userId, email }: { userId: string; email: string }) {
+  const [open, setOpen] = useState(false);
+  const [typed, setTyped] = useState("");
+  const [err, setErr] = useState<string | null>(null);
+  const [pending, start] = useTransition();
+  const matches = typed.trim().toLowerCase() === email.toLowerCase();
+
+  if (!open) return <Button size="sm" variant="ghost" className="text-red" onClick={() => setOpen(true)}>Delete</Button>;
+  return (
+    <form
+      className="flex w-full flex-wrap items-center gap-2"
+      onSubmit={(e) => {
+        e.preventDefault();
+        start(async () => {
+          try {
+            const r = await adminDeleteUser({ userId, confirmEmail: typed });
+            setErr(r.ok ? null : r.error);
+          } catch { setErr(SAVE_INTERRUPTED); }
+        });
+      }}
+    >
+      <p className="w-full text-[13px] text-muted">This erases the account and everything in it now. It cannot be undone. Type <span className="num text-fg">{email}</span> to confirm.</p>
+      <input className="input !h-8 !w-72" value={typed} onChange={(e) => setTyped(e.target.value)} aria-label={`Type ${email} to confirm`} autoComplete="off" spellCheck={false} maxLength={254} autoFocus />
+      <Button type="submit" size="sm" variant="danger" disabled={pending || !matches}>Delete permanently</Button>
+      <Button size="sm" variant="ghost" disabled={pending} onClick={() => { setOpen(false); setTyped(""); setErr(null); }}>Keep account</Button>
+      {err && <span role="alert" className="text-xs text-red">{err}</span>}
+    </form>
   );
 }

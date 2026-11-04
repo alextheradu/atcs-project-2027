@@ -7,6 +7,7 @@ import { PageHeader, Section } from "@/components/ui/page";
 import { requirePageRole } from "@/lib/auth/page";
 import { db } from "@/lib/db";
 
+const SOURCE_LABEL: Record<string, string> = { self: "Student request", guardian: "Guardian request", admin: "Deleted by an admin" };
 const date = (d: Date | null) => (d ? d.toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" }) : "none");
 
 export default async function Deletions() {
@@ -23,7 +24,7 @@ export default async function Deletions() {
 
   return (
     <div>
-      <PageHeader title="Deletion requests" description="A request waits for the student to confirm by email, then runs 14 days later. Finished requests keep only a hash of the email." />
+      <PageHeader title="Deletion requests" description="A request waits for the student to confirm by email, then runs 14 days later. To delete an account right away, use Users. Finished requests keep only a hash of the email." />
       <div className="space-y-10">
         <Section title="Open requests">
           {pending.length === 0 ? (
@@ -57,7 +58,7 @@ export default async function Deletions() {
             <ul className="list">
               {finished.map((r) => (
                 <li key={r.id} className="flex items-center justify-between gap-3 py-2.5 text-[13px]">
-                  <span className="text-muted">{r.source === "guardian" ? "Guardian request" : "Student request"} from <span className="num">{date(r.requestedAt)}</span></span>
+                  <span className="text-muted">{SOURCE_LABEL[r.source] ?? "Student request"} from <span className="num">{date(r.requestedAt)}</span></span>
                   <span className="num">{r.status === "COMPLETED" ? `deleted ${date(r.completedAt)}` : `cancelled ${date(r.cancelledAt)}`}</span>
                 </li>
               ))}

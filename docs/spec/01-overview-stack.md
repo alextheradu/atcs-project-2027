@@ -32,5 +32,5 @@ Put these in `docs/source/` (gitignored, may contain personal data):
 - Next.js (App Router, TypeScript, server actions), Tailwind, shadcn/ui (Radix), Geist Sans and Geist Mono.
 - Auth.js (next-auth v5) with the Google provider and the Prisma adapter, database sessions. Keep all auth code behind `src/lib/auth/` so it can be swapped later. Auth.js is now maintained by the Better Auth team, who recommend Better Auth for new projects. We are using Auth.js on purpose, so verify its current status and keep the abstraction thin.
 - PostgreSQL with Prisma (see `docs/DECISIONS.md`: pinned to 7.10.1, driver adapter, config in `prisma.config.ts`).
-- zod for validation, react-hook-form for forms, @dnd-kit for drag and drop, @xyflow/react (React Flow) with dagre layout for the pathway graph, Fuse.js for fuzzy matching, pdfjs-dist for client-side transcript parsing, web-push for push, Resend for email, vitest and Playwright for tests.
+- zod for validation, react-hook-form for forms, @dnd-kit for drag and drop, @xyflow/react (React Flow) with dagre layout for the pathway graph, Fuse.js for fuzzy matching, pdfjs-dist for client-side transcript parsing, web-push for push, SMTP via nodemailer for email, vitest and Playwright for tests.
 - Deploy on Dokploy (Docker, Traefik, Let's Encrypt). Postgres runs as a Dokploy database service.

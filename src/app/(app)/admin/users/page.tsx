@@ -1,6 +1,7 @@
 // Depends on the signed-in user, so it blocks on the session by design.
 export const instant = false;
 
+import { DeleteUserButton } from "@/components/admin/deletion-forms";
 import { DeleteGrantButton, GrantForm } from "@/components/admin/grant-form";
 import { PageHeader, Section } from "@/components/ui/page";
 import { UserRoleForm } from "@/components/admin/user-role-form";
@@ -9,7 +10,7 @@ import { requirePageRole } from "@/lib/auth/page";
 import { db } from "@/lib/db";
 
 export default async function AdminUsers({ searchParams }: { searchParams: Promise<{ q?: string }> }) {
-  await requirePageRole("ADMIN");
+  const me = await requirePageRole("ADMIN");
   const { q = "" } = await searchParams;
   const [users, grants] = await Promise.all([
     searchUsers(q.slice(0, 100)),
@@ -18,7 +19,7 @@ export default async function AdminUsers({ searchParams }: { searchParams: Promi
 
   return (
     <div>
-      <PageHeader title="Users" description="Roles for staff only come from grants. Every change is audited." />
+      <PageHeader title="Users" description="Roles for staff only come from grants. Every change and deletion is audited." />
 
       <div className="space-y-10">
         <Section title="Pre-approved grants">
@@ -53,7 +54,10 @@ export default async function AdminUsers({ searchParams }: { searchParams: Promi
                   <div className="truncate text-sm">{u.name ?? "No name"}</div>
                   <div className="num truncate text-muted">{u.email}</div>
                 </div>
-                <UserRoleForm userId={u.id} role={u.role} departments={u.departments} />
+                <div className="flex flex-wrap items-start gap-3">
+                  <UserRoleForm userId={u.id} role={u.role} departments={u.departments} />
+                  {u.id !== me.id && <DeleteUserButton userId={u.id} email={u.email} />}
+                </div>
               </li>
             ))}
             {users.length === 0 && <li className="py-8 text-center text-sm text-muted">No users found.</li>}

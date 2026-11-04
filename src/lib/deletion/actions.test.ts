@@ -18,11 +18,13 @@ const fakeDb = vi.hoisted(() => {
   return db;
 });
 vi.mock("@/lib/db", () => ({ db: fakeDb }));
+vi.mock("./erase", () => ({ eraseUser: vi.fn(async () => true) }));
 
 import { writeAudit } from "@/lib/audit";
 import { notify } from "@/lib/notify";
 import { enforceLimit } from "@/lib/rate-limit";
 import * as actions from "./actions";
+import { eraseUser } from "./erase";
 import { hashEmail, signConfirm } from "./index";
 
 vi.mock("@/lib/rate-limit", async (orig) => ({ ...(await orig<typeof import("@/lib/rate-limit")>()), enforceLimit: vi.fn() }));
@@ -175,5 +177,62 @@ describe("admin actions", () => {
     expect(await actions.adminCancelDeletion("req1")).toEqual({ ok: true });
     fakeDb.deletionRequest.findUnique.mockResolvedValue({ id: "req1", status: "COMPLETED", source: "self", scheduledFor: null });
     expect(await actions.adminCancelDeletion("req1")).toMatchObject({ ok: false });
+  });
+});
+
+describe("adminDeleteUser", () => {
+  const target = { id: "stu2", email: "Kid@Example.org", role: "STUDENT" };
+  const input = { userId: "stu2", confirmEmail: "kid@example.org" };
+  beforeEach(() => {
+    state.user = make("ADMIN", "adm", "adm@pascack.org");
+    fakeDb.user.findUnique.mockResolvedValue(target);
+  });
+
+  it("is admin only", async () => {
+    for (const role of ["STUDENT", "INCOMING", "COUNSELOR", "SUPERVISOR"]) {
+      state.user = make(role, "x");
+      await expect(actions.adminDeleteUser(input)).rejects.toBeInstanceOf(ForbiddenError);
+    }
+    state.user = null;
+    await expect(actions.adminDeleteUser(input)).rejects.toBeInstanceOf(UnauthenticatedError);
+    expect(eraseUser).not.toHaveBeenCalled();
+  });
+  it("needs the typed email to match the account, checked on the server", async () => {
+    expect(await actions.adminDeleteUser({ ...input, confirmEmail: "someone@example.org" })).toMatchObject({ ok: false });
+    expect(await actions.adminDeleteUser({ userId: "stu2" })).toMatchObject({ ok: false });
+    expect(eraseUser).not.toHaveBeenCalled();
+  });
+  it("refuses an unknown account", async () => {
+    fakeDb.user.findUnique.mockResolvedValue(null);
+    expect(await actions.adminDeleteUser(input)).toMatchObject({ ok: false });
+    expect(eraseUser).not.toHaveBeenCalled();
+  });
+  it("refuses the admin's own account, which goes through Settings", async () => {
+    fakeDb.user.findUnique.mockResolvedValue({ id: "adm", email: "adm@pascack.org", role: "ADMIN" });
+    expect(await actions.adminDeleteUser({ userId: "adm", confirmEmail: "adm@pascack.org" })).toMatchObject({ ok: false, error: expect.stringContaining("Settings") });
+    expect(eraseUser).not.toHaveBeenCalled();
+  });
+  it("refuses the last admin", async () => {
+    fakeDb.user.findUnique.mockResolvedValue({ ...target, role: "ADMIN" });
+    fakeDb.user.count.mockResolvedValue(0);
+    expect(await actions.adminDeleteUser(input)).toMatchObject({ ok: false });
+    expect(eraseUser).not.toHaveBeenCalled();
+  });
+  it("erases right away and keeps only a hashed record", async () => {
+    expect(await actions.adminDeleteUser(input)).toEqual({ ok: true });
+    expect(eraseUser).toHaveBeenCalledWith(fakeDb, "stu2");
+    const data = fakeDb.deletionRequest.create.mock.calls[0][0].data;
+    expect(data).toMatchObject({ userId: "stu2", source: "admin", status: "COMPLETED", emailHash: hashEmail("kid@example.org", "test-secret") });
+    expect(data.completedAt).toBeInstanceOf(Date);
+    expect(JSON.stringify(data).toLowerCase()).not.toContain("kid@example.org");
+    expect(writeAudit).toHaveBeenCalledWith(expect.objectContaining({ action: "user.deleted_by_admin" }), fakeDb);
+  });
+  it("closes an open request instead of leaving it to run later", async () => {
+    fakeDb.deletionRequest.findFirst.mockResolvedValue({ id: "open1", status: "SCHEDULED" });
+    fakeDb.deletionRequest.update.mockResolvedValue({ id: "open1" });
+    expect(await actions.adminDeleteUser(input)).toEqual({ ok: true });
+    expect(fakeDb.deletionRequest.create).not.toHaveBeenCalled();
+    expect(fakeDb.deletionRequest.update).toHaveBeenCalledWith(expect.objectContaining({ where: { id: "open1" }, data: expect.objectContaining({ status: "COMPLETED" }) }));
+    expect(eraseUser).toHaveBeenCalledWith(fakeDb, "stu2");
   });
 });

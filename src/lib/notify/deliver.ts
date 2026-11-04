@@ -1,9 +1,10 @@
-import { Resend } from "resend";
+import nodemailer, { type Transporter } from "nodemailer";
 import webpush from "web-push";
 import { db } from "@/lib/db";
 import { emailOutcome, pushOutcome, type EmailResult, type Outcome, type PushResult } from "./outcome";
 import { isAllowedPushEndpoint } from "./endpoint";
 import { pushPayload, redactEmail } from "./policy";
+import { isPermanentSmtpError, smtpConfig, type SmtpConfig } from "./smtp";
 
 const BATCH = 50;
 /** A claimed delivery that is not finished within this long becomes available again. */
@@ -31,20 +32,32 @@ export async function claimDue(limit = BATCH): Promise<string[]> {
 
 const appUrl = () => (process.env.APP_URL ?? process.env.AUTH_URL ?? "").replace(/\/$/, "");
 
+/** One transport per settings, reused across the batch, rebuilt only if the settings change. */
+let mailer: { key: string; transport: Transporter } | null = null;
+function transportFor(cfg: SmtpConfig): Transporter {
+  const key = JSON.stringify(cfg);
+  if (mailer?.key !== key) {
+    const { host, port, secure, requireTLS, auth } = cfg;
+    mailer = { key, transport: nodemailer.createTransport({ host, port, secure, requireTLS, auth, connectionTimeout: 15_000, greetingTimeout: 15_000, socketTimeout: 30_000 }) };
+  }
+  return mailer.transport;
+}
+
 async function sendEmail(to: string, n: { title: string; body: string; url: string | null }): Promise<EmailResult> {
-  const key = process.env.RESEND_API_KEY;
-  const from = process.env.EMAIL_FROM;
-  if (!key || !from) return { ok: false, permanent: true, error: "email is not configured" };
+  const cfg = smtpConfig(process.env);
+  if (!cfg) return { ok: false, permanent: true, error: "email is not configured" };
   const link = n.url && appUrl() ? `\n\nOpen it: ${appUrl()}${n.url}` : "";
   try {
-    const r = await new Resend(key).emails.send({
-      from, to, subject: n.title,
+    const info = await transportFor(cfg).sendMail({
+      from: cfg.from, to, subject: n.title,
       text: `${n.body}${link}\n\nThis is an unofficial student planning tool. Change which emails you get in Settings.`,
     });
-    if (r.error) return { ok: false, permanent: r.error.name === "validation_error", error: r.error.message };
+    if (info.rejected?.length) return { ok: false, permanent: true, error: "recipient rejected" };
     return { ok: true };
   } catch (e) {
-    return { ok: false, error: e instanceof Error ? e.message : "send failed" };
+    // Only the code and reply number are kept. Server replies can quote the recipient's address.
+    const { code, responseCode } = (e ?? {}) as { code?: string; responseCode?: number };
+    return { ok: false, permanent: isPermanentSmtpError(e), error: `smtp ${[code, responseCode].filter(Boolean).join(" ") || "send failed"}` };
   }
 }
 

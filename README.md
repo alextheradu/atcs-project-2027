@@ -37,7 +37,7 @@ npm run e2e                   # Playwright, needs Postgres and DEV_AUTH=true
 | `AUTH_GOOGLE_ID`, `AUTH_GOOGLE_SECRET` | yes | Google OAuth client, see below. |
 | `ADMIN_EMAILS` | first deploy | Comma separated. These accounts become admins on first sign-in. |
 | `SIGNUP_MODE_DEFAULT` | no | `DOMAIN_ALLOWLIST` (default), `OPEN` or `INVITE_ONLY`. Admins can change it later. |
-| `RESEND_API_KEY`, `EMAIL_FROM` | for email | Without them, email deliveries are marked failed and not retried. In-app notifications still work. |
+| `SMTP_HOST`, `SMTP_PORT`, `SMTP_USER`, `SMTP_PASSWORD`, `EMAIL_FROM` | for email | Any SMTP server. Port 587 (default) must offer STARTTLS; 465 uses implicit TLS. `SMTP_SECURE=true` forces implicit TLS on another port. Without a host and sender, email deliveries are marked failed and not retried. In-app notifications still work. |
 | `VAPID_PUBLIC_KEY`, `VAPID_PRIVATE_KEY`, `VAPID_SUBJECT` | for push | `npx web-push generate-vapid-keys`. Subject is a `mailto:` contact. |
 | `NEXT_PUBLIC_VAPID_PUBLIC_KEY` | for push | Same value as `VAPID_PUBLIC_KEY`. Baked in at build time, so pass it as a Docker build argument. |
 | `CRON_SECRET` | yes | At least 16 characters (`openssl rand -hex 32`). Shorter or empty rejects every cron call. |
@@ -78,7 +78,7 @@ Releases: redeploying keeps the database and `AUTH_SECRET`. Do not recreate the 
 
 ## Email and push
 
-- **Resend**: verify a sending domain you control, create an API key, set `RESEND_API_KEY` and `EMAIL_FROM` (for example `Course Planner <planner@your-domain>`).
+- **Email (SMTP)**: use any provider that offers SMTP (your mail host, Postmark, Mailgun, Amazon SES, a Google Workspace relay). Send from a domain you control with SPF and DKIM set, never a school address. Set `SMTP_HOST`, `SMTP_PORT`, `SMTP_USER`, `SMTP_PASSWORD` and `EMAIL_FROM` (for example `Course Planner <planner@your-domain>`). A login or connection failure is retried for a while, so fixing the password still delivers queued email; a recipient the server rejects is not retried. Name the provider in the privacy policy (`[EMAIL PROVIDER]`).
 - **Push**: generate VAPID keys once and keep them. Changing them invalidates every existing push subscription. Students turn push on in Settings. Phones need the site installed to the home screen on iOS.
 
 ## Backups

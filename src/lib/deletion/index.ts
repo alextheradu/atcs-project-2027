@@ -7,7 +7,7 @@ export const CONFIRM_TTL_MS = 24 * 60 * 60_000;
 export const DELETED_LABEL = "deleted user";
 
 export type DeletionStatus = "AWAITING_CONFIRMATION" | "SCHEDULED" | "CANCELLED" | "COMPLETED";
-export type DeletionSource = "self" | "guardian";
+export type DeletionSource = "self" | "guardian" | "admin";
 
 export interface DeletionState {
   status: DeletionStatus;

@@ -28,7 +28,7 @@
 
 ## Environment variables
 
-`DATABASE_URL`, `AUTH_SECRET`, `AUTH_URL`, `AUTH_TRUST_HOST=true`, `AUTH_GOOGLE_ID`, `AUTH_GOOGLE_SECRET`, `ADMIN_EMAILS`, `SIGNUP_MODE_DEFAULT`, `RESEND_API_KEY`, `EMAIL_FROM`, `VAPID_PUBLIC_KEY`, `VAPID_PRIVATE_KEY`, `VAPID_SUBJECT` (mailto), `NEXT_PUBLIC_VAPID_PUBLIC_KEY`, `CRON_SECRET`. `.env.example` exists. Generate VAPID keys with `npx web-push generate-vapid-keys`.
+`DATABASE_URL`, `AUTH_SECRET`, `AUTH_URL`, `AUTH_TRUST_HOST=true`, `AUTH_GOOGLE_ID`, `AUTH_GOOGLE_SECRET`, `ADMIN_EMAILS`, `SIGNUP_MODE_DEFAULT`, `SMTP_HOST`, `SMTP_PORT`, `SMTP_USER`, `SMTP_PASSWORD`, `EMAIL_FROM`, `VAPID_PUBLIC_KEY`, `VAPID_PRIVATE_KEY`, `VAPID_SUBJECT` (mailto), `NEXT_PUBLIC_VAPID_PUBLIC_KEY`, `CRON_SECRET`. `.env.example` exists. Generate VAPID keys with `npx web-push generate-vapid-keys`.
 
 ## Deployment (Dokploy)
 

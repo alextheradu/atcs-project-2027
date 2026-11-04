@@ -7,6 +7,7 @@ import { requireRole, requireUser } from "@/lib/auth";
 import { db } from "@/lib/db";
 import { notify } from "@/lib/notify";
 import { RateLimitError, enforceLimit } from "@/lib/rate-limit";
+import { eraseUser } from "./erase";
 import { cancel, confirm, daysLeft, guardianStart, hashEmail, isActive, signConfirm, verifyConfirm, type DeletionSource, type DeletionStatus } from "./index";
 
 export type ActionResult = { ok: true } | { ok: false; error: string };
@@ -19,6 +20,7 @@ const secret = () => {
 const refresh = () => {
   revalidatePath("/settings");
   revalidatePath("/admin/deletions");
+  revalidatePath("/admin/users");
 };
 
 const LAST_ADMIN = "You are the only admin. Make someone else an admin before deleting this account.";
@@ -147,6 +149,39 @@ export async function adminCancelDeletion(requestId: unknown): Promise<ActionRes
   await db.$transaction(async (tx) => {
     await tx.deletionRequest.updateMany({ where: { id: req.id, status: { in: ["AWAITING_CONFIRMATION", "SCHEDULED"] } }, data: { status: "CANCELLED", cancelledAt: new Date(), scheduledFor: null } });
     await writeAudit({ actor, action: "user.deletion_cancelled_by_admin", entityType: "DeletionRequest", entityId: req.id }, tx);
+  });
+  refresh();
+  return { ok: true };
+}
+
+const adminDelete = z.object({ userId: z.string().min(1).max(64), confirmEmail: z.string().trim().toLowerCase().max(254) });
+
+/**
+ * An admin deletes an account now, with no email step and no grace period. The admin types the account's
+ * email to confirm, and that is checked here, not only in the browser. Admins delete their own account
+ * from Settings, so this can never remove the person clicking. A completed request with only a hash of
+ * the email stays behind as the record.
+ */
+export async function adminDeleteUser(input: unknown): Promise<ActionResult> {
+  const actor = await requireRole("ADMIN");
+  const p = adminDelete.safeParse(input);
+  if (!p.success) return fail("Type the account's email to confirm.");
+  const target = await db.user.findUnique({ where: { id: p.data.userId }, select: { id: true, email: true, role: true } });
+  if (!target) return fail("That account no longer exists.");
+  if (target.email.toLowerCase() !== p.data.confirmEmail) return fail("The email you typed does not match this account.");
+  if (target.id === actor.id) return fail("Delete your own account from Settings.");
+  if (await isLastAdmin(target.id)) return fail("That is the only admin account.");
+
+  const now = new Date();
+  await db.$transaction(async (tx) => {
+    const open = await tx.deletionRequest.findFirst({ where: { userId: target.id, status: { in: ["AWAITING_CONFIRMATION", "SCHEDULED"] } } });
+    const req = open
+      ? await tx.deletionRequest.update({ where: { id: open.id }, data: { status: "COMPLETED", completedAt: now, scheduledFor: null } })
+      : await tx.deletionRequest.create({
+          data: { userId: target.id, emailHash: hashEmail(target.email, secret()), source: "admin" satisfies DeletionSource, status: "COMPLETED", confirmedAt: now, completedAt: now },
+        });
+    await writeAudit({ actor, action: "user.deleted_by_admin", entityType: "DeletionRequest", entityId: req.id }, tx);
+    await eraseUser(tx, target.id);
   });
   refresh();
   return { ok: true };

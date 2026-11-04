@@ -694,7 +694,7 @@ model DeletionRequest {
   id           String         @id @default(cuid())
   userId       String?
   emailHash    String
-  source       String         @default("self") // self or guardian
+  source       String         @default("self") // self, guardian or admin
   status       DeletionStatus @default(AWAITING_CONFIRMATION)
   requestedAt  DateTime       @default(now())
   confirmedAt  DateTime?

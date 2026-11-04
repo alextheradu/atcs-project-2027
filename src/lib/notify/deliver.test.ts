@@ -1,7 +1,7 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
 const send = vi.hoisted(() => ({ email: vi.fn(), push: vi.fn(), setVapid: vi.fn() }));
-vi.mock("resend", () => ({ Resend: class { emails = { send: send.email }; } }));
+vi.mock("nodemailer", () => ({ default: { createTransport: vi.fn(() => ({ sendMail: send.email })) } }));
 vi.mock("web-push", () => ({ default: { setVapidDetails: send.setVapid, sendNotification: send.push } }));
 const fakeDb = vi.hoisted(() => {
   const db = {
@@ -25,7 +25,9 @@ const now = new Date("2027-01-01T00:00:00Z");
 
 beforeEach(() => {
   vi.clearAllMocks();
-  process.env.RESEND_API_KEY = "re_test";
+  process.env.SMTP_HOST = "smtp.example.com";
+  process.env.SMTP_USER = "planner";
+  process.env.SMTP_PASSWORD = "pw";
   process.env.EMAIL_FROM = "Planner <noreply@example.com>";
   process.env.VAPID_PUBLIC_KEY = "pub-key";
   process.env.VAPID_PRIVATE_KEY = "priv-key";
@@ -35,7 +37,7 @@ beforeEach(() => {
 describe("email deliveries", () => {
   it("sends and marks the delivery sent", async () => {
     fakeDb.notificationDelivery.findUnique.mockResolvedValue(row("EMAIL"));
-    send.email.mockResolvedValue({ data: { id: "x" }, error: null });
+    send.email.mockResolvedValue({ accepted: ["student@pascack.org"], rejected: [] });
     expect(await processDelivery("d1", now)).toMatchObject({ status: "SENT" });
     expect(send.email).toHaveBeenCalledWith(expect.objectContaining({ to: "student@pascack.org", subject: "Approved" }));
     expect(fakeDb.notificationDelivery.update.mock.calls[0][0].data).toMatchObject({ status: "SENT", attempts: 1, sentAt: now });
@@ -44,7 +46,7 @@ describe("email deliveries", () => {
     fakeDb.notificationDelivery.findUnique.mockResolvedValue(row("EMAIL"));
     send.email.mockRejectedValue(new Error("network down"));
     const o = await processDelivery("d1", now);
-    expect(o).toMatchObject({ status: "PENDING", lastError: "network down" });
+    expect(o).toMatchObject({ status: "PENDING", lastError: "smtp send failed" });
     const data = fakeDb.notificationDelivery.update.mock.calls[0][0].data;
     expect(data.attempts).toBe(1);
     expect(data.nextAttemptAt.getTime()).toBeGreaterThan(now.getTime());
@@ -55,10 +57,27 @@ describe("email deliveries", () => {
     expect(await processDelivery("d1", now)).toMatchObject({ status: "FAILED" });
   });
   it("fails at once, without retrying, when email is not configured", async () => {
-    delete process.env.RESEND_API_KEY;
+    delete process.env.SMTP_HOST;
     fakeDb.notificationDelivery.findUnique.mockResolvedValue(row("EMAIL"));
     expect(await processDelivery("d1", now)).toMatchObject({ status: "FAILED", lastError: "email is not configured" });
     expect(send.email).not.toHaveBeenCalled();
+  });
+  it("gives up at once when the server rejects the recipient", async () => {
+    fakeDb.notificationDelivery.findUnique.mockResolvedValue(row("EMAIL"));
+    send.email.mockRejectedValue(Object.assign(new Error("550 5.1.1 <student@pascack.org> no such user"), { code: "EENVELOPE", responseCode: 550 }));
+    const o = await processDelivery("d1", now);
+    expect(o).toMatchObject({ status: "FAILED", lastError: "smtp EENVELOPE 550" });
+    expect(o?.lastError).not.toContain("@");
+  });
+  it("retries a login failure, so fixing the password still delivers", async () => {
+    fakeDb.notificationDelivery.findUnique.mockResolvedValue(row("EMAIL"));
+    send.email.mockRejectedValue(Object.assign(new Error("Invalid login"), { code: "EAUTH", responseCode: 535 }));
+    expect(await processDelivery("d1", now)).toMatchObject({ status: "PENDING" });
+  });
+  it("fails a delivery the server accepted but whose recipient it rejected", async () => {
+    fakeDb.notificationDelivery.findUnique.mockResolvedValue(row("EMAIL"));
+    send.email.mockResolvedValue({ accepted: [], rejected: ["student@pascack.org"] });
+    expect(await processDelivery("d1", now)).toMatchObject({ status: "FAILED", lastError: "recipient rejected" });
   });
   it("never logs the full address", async () => {
     const warn = vi.spyOn(console, "warn").mockImplementation(() => {});
