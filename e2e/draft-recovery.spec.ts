@@ -58,12 +58,11 @@ test("a different signed-in account cannot recover another account's draft", asy
 
 test("an interrupted planner change survives reload without duplicating a saved course", async ({ page }) => {
   await page.request.get(`/api/dev-login?email=draft-recovery-student-${Date.now()}@example.test&role=STUDENT`);
-  await page.goto("/plans");
-  await page.getByRole("button", { name: "Create Plan A", exact: true }).click();
-  await expect(page).toHaveURL(/\/plans\/[^/]+$/);
-  const planUrl = page.url();
-  await page.getByRole("region", { name: "Grade 9", exact: true }).getByRole("button", { name: "Add", exact: true }).click();
+  await page.goto("/board");
+  await page.getByRole("button", { name: "Start your board", exact: true }).click();
+  await page.getByRole("button", { name: "Add a class", exact: true }).click();
   const dialog = page.getByRole("dialog", { name: "Add a course" });
+  await dialog.getByRole("combobox", { name: "Grade to add to", exact: true }).selectOption("9");
   const first = dialog.getByRole("listitem").first();
   const course = await first.locator(".font-medium").first().textContent();
   expect(course).toBeTruthy();
@@ -77,14 +76,12 @@ test("an interrupted planner change survives reload without duplicating a saved 
   await first.getByRole("button", { name: "Add", exact: true }).click();
   await expect(page.getByRole("button", { name: "Retry change", exact: true })).toBeVisible();
   await page.unroute("**/*");
-  await page.goto(planUrl);
+  await page.goto("/board");
   await expect(page.getByRole("button", { name: "Retry change", exact: true })).toBeVisible();
   await page.getByRole("button", { name: "Retry change", exact: true }).click();
   await expect(page.getByRole("button", { name: "Retry change", exact: true })).toHaveCount(0);
-  await expect(page.getByRole("region", { name: "Grade 9", exact: true }).getByText(course!, { exact: true })).toHaveCount(1);
-  await page.getByRole("button", { name: "Delete", exact: true }).click();
-  await page.getByRole("button", { name: "Delete for good", exact: true }).click();
-  await expect(page).toHaveURL(/\/plans$/);
+  const escaped = course!.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+  await expect(page.getByRole("group", { name: /, 9th grade$/ }).getByRole("button", { name: new RegExp(`^${escaped}, `) })).toHaveCount(1);
 });
 
 test("typing during a save remains recoverable after that save finishes", async ({ page }) => {

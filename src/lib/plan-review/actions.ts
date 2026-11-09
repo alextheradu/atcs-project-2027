@@ -16,8 +16,10 @@ const NOT_FOUND = "Plan not found.";
 
 function refresh(planId: string) {
   revalidatePath("/plans");
+  revalidatePath("/board");
   revalidatePath(`/plans/${planId}`);
   revalidatePath("/counselor");
+  revalidatePath("/students");
 }
 
 /** The student's own plan. Ownership is part of the query. */

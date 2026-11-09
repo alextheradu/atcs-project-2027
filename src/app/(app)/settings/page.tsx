@@ -36,7 +36,7 @@ export default async function Settings({ searchParams }: { searchParams: Promise
   for (const p of saved) prefs[p.kind] = { inApp: true, email: p.email, push: p.push };
 
   return (
-    <div>
+    <div className="max-w-[860px]">
       <PageHeader title="Settings" />
 
       <div className="space-y-10">

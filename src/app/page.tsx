@@ -1,86 +1,52 @@
 import { Suspense } from "react";
+import Link from "next/link";
 import { redirect } from "next/navigation";
+import { MiniBoard } from "@/components/landing/mini-board";
 import { SignInCard } from "@/components/sign-in-card";
 import { getCurrentUser } from "@/lib/auth";
+import { homeFor } from "@/lib/nav";
 
 async function RedirectIfSignedIn() {
-  if (await getCurrentUser()) redirect("/dashboard");
+  const user = await getCurrentUser();
+  if (user) redirect(homeFor(user.role));
   return null;
 }
 
-const EXAMPLE: { grade: number; courses: [string, string][] }[] = [
-  { grade: 9, courses: [["English I", "5"], ["Geometry", "5"], ["Biology", "5"], ["World History", "5"], ["Spanish I", "5"], ["Physical Education/Health 9", "5"]] },
-  { grade: 10, courses: [["Honors English II", "5"], ["Algebra II", "5"], ["Chemistry", "5"], ["U.S. History I", "5"], ["Spanish II", "5"], ["Financial Literacy", "2.5"]] },
-  { grade: 11, courses: [["English III", "5"], ["Pre-Calculus", "5"], ["Physics", "5"], ["U.S. History II", "5"], ["Studio Art I", "5"], ["Spanish III", "5"]] },
-  { grade: 12, courses: [["English IV", "5"], ["AP Statistics", "5"], ["AP Computer Science A", "5"], ["Psychology", "5"], ["Culinary Arts I", "5"], ["Physical Education/Health 12", "5"]] },
-];
-
 export default function Home() {
-  const total = EXAMPLE.reduce((n, col) => n + col.courses.reduce((m, [, c]) => m + Number(c), 0), 0);
   return (
     <main className="min-h-dvh">
-      <header className="mx-auto flex h-14 max-w-[1100px] items-center justify-between px-6">
-        <span className="text-[14px] font-semibold">Course Planner</span>
-        <span className="text-[13px] text-muted">Unofficial student project</span>
+      <header className="mx-auto flex h-16 max-w-[1180px] items-center justify-between px-4 md:px-8">
+        <span className="text-[16px] font-bold tracking-[-0.02em]">Course Planner</span>
+        <a href="#sign-in" className="text-[14px] font-medium text-muted transition-colors hover:text-fg">Sign in</a>
       </header>
 
-      <div className="mx-auto grid max-w-[1100px] gap-16 px-6 pb-20 pt-12 lg:grid-cols-[360px_1fr] lg:gap-20 lg:pt-24">
+      <div className="mx-auto grid max-w-[1180px] items-center gap-12 px-4 pb-16 pt-10 md:px-8 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.05fr)] lg:gap-16 lg:pt-20">
         <section>
-          <h1 className="text-[40px] font-semibold leading-[1.08] tracking-[-0.02em] md:text-[48px]">
-            Plan four years. Know what graduation needs.
+          <h1 className="max-w-[14ch] text-[40px] font-bold leading-[1.04] tracking-[-0.035em] md:text-[52px]">
+            Your whole high school plan on one board.
           </h1>
-          <p className="mt-5 text-[15px] leading-relaxed text-muted">
-            Build a course plan, track credits against the requirements, and see which classes you qualify for.
+          <p className="mt-5 max-w-[44ch] text-[17px] leading-relaxed text-muted">
+            Every subject, every year. Empty spots show what you still need to graduate, and each class tells you if you can take it.
           </p>
           <Suspense>
             <RedirectIfSignedIn />
           </Suspense>
-          <div className="mt-10 border-t border-line pt-6">
+          <div id="sign-in" className="mt-8 scroll-mt-20">
             <Suspense fallback={<div className="h-48" />}>
               <SignInCard />
             </Suspense>
           </div>
         </section>
 
-        <section aria-label="Example plan">
-          <div className="flex items-baseline justify-between border-b border-line pb-3">
-            <h2 className="eyebrow">Example plan</h2>
-            <span className="num text-muted">made up, not a real student</span>
-          </div>
-          <div className="grid gap-x-10 sm:grid-cols-2">
-            {EXAMPLE.map((col) => {
-              const sum = col.courses.reduce((n, [, c]) => n + Number(c), 0);
-              return (
-                <div key={col.grade} className="pt-6">
-                  <div className="flex items-baseline justify-between pb-2">
-                    <span className="eyebrow">Grade {col.grade}</span>
-                    <span className="num text-muted">{sum} cr</span>
-                  </div>
-                  <ul className="list text-[13px]">
-                    {col.courses.map(([name, cr]) => (
-                      <li key={name} className="flex items-baseline justify-between gap-3 py-2">
-                        <span className="truncate">{name}</span>
-                        <span className="num text-muted">{cr}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              );
-            })}
-          </div>
-          <div className="mt-6 flex flex-wrap items-center justify-between gap-3 border-t border-line pt-4">
-            <span className="badge badge-warning">1 requirement left</span>
-            <span className="text-[13px] text-muted">
-              <span className="num text-fg">{total}</span> of <span className="num">120</span> credits. Needs 10 more Physical Education and Health.
-            </span>
-          </div>
-        </section>
+        <MiniBoard />
       </div>
 
-      <footer className="mx-auto max-w-[1100px] px-6 pb-10">
-        <p className="text-xs text-muted">
-          Not affiliated with Pascack Valley Regional High School District. Plans are not official placements.
-        </p>
+      <footer className="mx-auto flex max-w-[1180px] flex-wrap items-center justify-between gap-3 px-4 pb-10 md:px-8">
+        <p className="text-[13px] text-muted">Unofficial. Not affiliated with the Pascack Valley Regional High School District. Plans are not official placements.</p>
+        <nav aria-label="Legal" className="flex gap-4 text-[13px]">
+          <Link href="/privacy" className="text-muted hover:text-fg">Privacy</Link>
+          <Link href="/terms" className="text-muted hover:text-fg">Terms</Link>
+        </nav>
       </footer>
     </main>
   );

@@ -15,19 +15,19 @@ export function PageHeader({
   badge?: React.ReactNode;
 }) {
   return (
-    <header className="mb-10">
+    <header className="mb-8">
       {back && (
-        <Link href={back.href} className="mb-4 inline-block text-[13px] text-muted transition-colors hover:text-fg">
+        <Link href={back.href} className="mb-3 inline-block text-[14px] text-muted transition-colors hover:text-fg">
           ← {back.label}
         </Link>
       )}
       <div className="flex flex-wrap items-end justify-between gap-4">
         <div className="min-w-0">
           <div className="flex flex-wrap items-center gap-3">
-            <h1 className="text-[32px] font-semibold leading-[1.1] tracking-[-0.02em]">{title}</h1>
+            <h1 className="text-[28px] font-bold leading-[1.15] tracking-[-0.025em]">{title}</h1>
             {badge}
           </div>
-          {description && <p className="mt-1.5 max-w-xl text-sm text-muted">{description}</p>}
+          {description && <p className="mt-1.5 max-w-xl text-[15px] text-muted">{description}</p>}
         </div>
         {actions && <div className="flex flex-wrap items-center gap-2">{actions}</div>}
       </div>
@@ -35,7 +35,7 @@ export function PageHeader({
   );
 }
 
-/** A titled block separated from the one above by a hairline. No box. */
+/** A titled block. Space separates it from the one above; there is no line or box. */
 export function Section({
   title,
   description,
@@ -48,11 +48,11 @@ export function Section({
   className?: string;
 }) {
   return (
-    <section className={cn("border-t border-line pt-6", className)}>
+    <section className={cn("pt-2", className)}>
       {title && (
-        <div className="mb-4">
+        <div className="mb-3">
           <h2 className="eyebrow">{title}</h2>
-          {description && <p className="mt-1 max-w-xl text-[13px] text-muted">{description}</p>}
+          {description && <p className="mt-1 max-w-xl text-[14px] text-muted">{description}</p>}
         </div>
       )}
       {children}
@@ -60,12 +60,12 @@ export function Section({
   );
 }
 
-/** Label and value rows divided by hairlines. */
+/** Facts about one thing: label on the left, value on the right, rows separated by space. */
 export function Dl({ items }: { items: { label: string; value: React.ReactNode }[] }) {
   return (
-    <dl className="border-t border-line text-[13px]">
+    <dl className="soft px-4 py-2 text-[14px]">
       {items.map((i) => (
-        <div key={i.label} className="flex items-baseline justify-between gap-4 border-b border-line py-2.5">
+        <div key={i.label} className="flex items-baseline justify-between gap-4 py-2">
           <dt className="text-muted">{i.label}</dt>
           <dd className="text-right">{i.value}</dd>
         </div>

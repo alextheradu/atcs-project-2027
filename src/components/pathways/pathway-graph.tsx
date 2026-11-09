@@ -31,10 +31,10 @@ function CourseNode({ data }: NodeProps<Node<CourseData>>) {
   return (
     <div
       className={cn(
-        "flex h-[46px] w-[156px] items-center gap-2 rounded-md border bg-raised px-2.5 text-left transition-colors duration-150",
-        node.kind === "appeal" ? "border-dashed border-orange/70" : "border-line-strong",
+        "flex h-[46px] w-[156px] items-center gap-2 rounded-[10px] border bg-fill-2 px-2.5 text-left transition-colors duration-150",
+        node.kind === "appeal" ? "border-dashed border-orange/70" : "border-transparent",
         node.kind === "locked" && "opacity-60",
-        selected && "border-accent bg-elevated",
+        selected && "border-accent bg-fill-3",
       )}
     >
       <Handle type="target" position={Position.Top} className="!size-1 !border-0 !bg-line-strong" />
@@ -111,7 +111,7 @@ export function PathwayGraph({ nodes, edges, hasPlan }: { nodes: PathNode[]; edg
   return (
     <div className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_320px]">
       <div className="min-w-0">
-        <div role="tablist" aria-label="Pathway" className="mb-4 flex flex-wrap gap-x-5 gap-y-1 border-b border-line">
+        <div role="tablist" aria-label="Pathway" className="mb-4 flex flex-wrap gap-1">
           {TRACKS.map((t) => (
             <button
               key={t}
@@ -122,8 +122,8 @@ export function PathwayGraph({ nodes, edges, hasPlan }: { nodes: PathNode[]; edg
                 setSelected(null);
               }}
               className={cn(
-                "-mb-px border-b py-2 text-[13px] transition-colors",
-                t === track ? "border-fg text-fg" : "border-transparent text-muted hover:text-fg",
+                "h-9 rounded-full px-3.5 text-[14px] transition-colors",
+                t === track ? "bg-fill-2 font-semibold text-fg" : "text-muted hover:text-fg",
               )}
             >
               {TRACK_LABEL[t]}
@@ -132,16 +132,16 @@ export function PathwayGraph({ nodes, edges, hasPlan }: { nodes: PathNode[]; edg
         </div>
 
         {track === "WORLD_LANGUAGE" && (
-          <div role="group" aria-label="Language" className="mb-3 flex gap-4 text-[13px]">
+          <div role="group" aria-label="Language" className="mb-3 flex gap-1 text-[14px]">
             {LANGUAGES.map((l) => (
-              <button key={l} type="button" aria-pressed={l === language} onClick={() => { setLanguage(l); setSelected(null); }} className={cn("capitalize transition-colors", l === language ? "text-fg" : "text-muted hover:text-fg")}>
+              <button key={l} type="button" aria-pressed={l === language} onClick={() => { setLanguage(l); setSelected(null); }} className={cn("h-8 rounded-full px-3 capitalize transition-colors", l === language ? "bg-fill-2 font-semibold text-fg" : "text-muted hover:text-fg")}>
                 {l}
               </button>
             ))}
           </div>
         )}
 
-        <div className="h-[640px] overflow-hidden rounded-md border border-line bg-bg" aria-label={`${TRACK_LABEL[track]} pathway graph`}>
+        <div className="h-[640px] overflow-hidden rounded-[14px] bg-fill" aria-label={`${TRACK_LABEL[track]} pathway graph`}>
           <ReactFlow
             key={`${track}-${language}`}
             nodes={view.nodes}

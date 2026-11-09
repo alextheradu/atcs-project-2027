@@ -1,6 +1,6 @@
 import { cn } from "@/lib/utils";
 
-/** Dashed outline, one line on what this place is for, one action. */
+/** An outlined empty place: one line on what goes here, one action. Same outline as an empty Board spot. */
 export function EmptyState({
   title,
   description,
@@ -13,9 +13,9 @@ export function EmptyState({
   className?: string;
 }) {
   return (
-    <div className={cn("rounded-md border border-dashed border-line-strong px-6 py-12 text-center", className)}>
-      <p className="text-sm font-medium">{title}</p>
-      {description && <p className="mx-auto mt-1 max-w-sm text-[13px] text-muted">{description}</p>}
+    <div className={cn("rounded-[14px] px-6 py-12 text-center shadow-[inset_0_0_0_1.5px_var(--line-strong)]", className)}>
+      <p className="text-[15px] font-semibold">{title}</p>
+      {description && <p className="mx-auto mt-1 max-w-sm text-[14px] text-muted">{description}</p>}
       {action && <div className="mt-5 flex justify-center">{action}</div>}
     </div>
   );

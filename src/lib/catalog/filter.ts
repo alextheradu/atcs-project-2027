@@ -10,6 +10,8 @@ export interface PickerCourse {
   credits: number;
   gradesOffered: number[];
   interests: string[];
+  /** Graduation requirements this course counts toward, when known. */
+  tags?: { kind: string }[];
 }
 
 export interface PickerFilter {
@@ -20,6 +22,8 @@ export interface PickerFilter {
   credits?: number;
   grade?: number;
   interest?: string;
+  /** A requirement kind, e.g. SCI_PHYS. Courses without tags never match. */
+  requirement?: string;
   exclude?: Set<string>;
 }
 
@@ -33,6 +37,7 @@ export function filterCourses<T extends PickerCourse>(courses: T[], f: PickerFil
     if (f.credits !== undefined && c.credits !== f.credits) return false;
     if (f.grade && !c.gradesOffered.includes(f.grade)) return false;
     if (f.interest && !c.interests.includes(f.interest)) return false;
+    if (f.requirement && !c.tags?.some((t) => t.kind === f.requirement)) return false;
     if (q && !c.name.toLowerCase().includes(q)) return false;
     return true;
   });

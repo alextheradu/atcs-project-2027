@@ -65,14 +65,14 @@ export function EdgeEditor({ edges, options }: { edges: EdgeRow[]; options: Opti
   return (
     <div className="space-y-8">
       <DraftNotice drafts={[fromDraft, toDraft, noteDraft, kindDraft]} />
-      <div role="tablist" aria-label="Pathway" className="flex flex-wrap gap-x-5 gap-y-1 border-b border-line">
+      <div role="tablist" aria-label="Pathway" className="flex flex-wrap gap-1">
         {TRACKS.map((t) => (
           <button
             key={t}
             role="tab"
             aria-selected={t === track}
             onClick={() => setTrack(t)}
-            className={`-mb-px border-b py-2 text-[13px] transition-colors ${t === track ? "border-fg text-fg" : "border-transparent text-muted hover:text-fg"}`}
+            className={`h-9 rounded-full px-3.5 text-[14px] transition-colors ${t === track ? "bg-fill-2 font-semibold text-fg" : "text-muted hover:text-fg"}`}
           >
             {TRACK_LABEL[t]}
           </button>
@@ -106,7 +106,7 @@ export function EdgeEditor({ edges, options }: { edges: EdgeRow[]; options: Opti
         {shown.length === 0 && <li className="py-6 text-[13px] text-muted">No steps in this pathway yet.</li>}
       </ul>
 
-      <section aria-label="Add a step" className="space-y-3 border-t border-line pt-6">
+      <section aria-label="Add a step" className="space-y-3 pt-6">
         <h2 className="eyebrow">Add a step to {TRACK_LABEL[track]}</h2>
         <datalist id={listId}>{options.map((o) => <option key={o.id} value={o.name} />)}</datalist>
         <div className="grid gap-2 sm:grid-cols-2">

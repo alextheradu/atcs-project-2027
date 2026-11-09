@@ -9,7 +9,7 @@ describe("design system stylesheet", () => {
     for (const cls of [
       ".btn", ".btn-primary", ".btn-ghost", ".btn-danger", ".btn-sm", ".btn-lg", ".btn-icon",
       ".list", ".list-hover", ".row-selected", ".input", ".badge", ".badge-eligible", ".badge-locked",
-      ".auth-texture", ".star-border", ".num", ".eyebrow", ".page-enter", ".skip-link",
+      ".star-border", ".num", ".eyebrow", ".page-enter", ".skip-link", ".tile", ".tile-empty", ".soft",
     ]) {
       expect(css, cls).toContain(`${cls} `);
     }
@@ -19,12 +19,31 @@ describe("design system stylesheet", () => {
     for (const ch of css) depth += ch === "{" ? 1 : ch === "}" ? -1 : 0;
     expect(depth).toBe(0);
   });
-  it("never uses a colored side stripe or a pure blue surface", () => {
-    expect(css).not.toMatch(/border-left:\s*[2-9]px/);
-    expect(css).not.toMatch(/inset\s+[2-9]px\s+0\s+0\s+0\s+var\(--accent\)/);
+  it("uses the neutral palette and Figtree, no mono", () => {
+    expect(css).toMatch(/--bg:\s*#161616/);
+    expect(css).toMatch(/--accent:\s*#2f6fe4/);
+    expect(css).not.toMatch(/#12110f|#1b1a17|Plex/i);
+    expect(css).not.toMatch(/font-family:[^;]*mono/i);
   });
-  it("buttons keep the hard lip and no rotation", () => {
-    expect(css).toMatch(/box-shadow:\s*0 3px 0 var\(--accent-lip\)/);
-    expect(css).not.toMatch(/\.btn[^{]*\{[^}]*rotate\(/);
+  it("has no gradients or blur", () => {
+    expect(css).not.toMatch(/gradient\(/);
+    expect(css).not.toMatch(/backdrop-filter/);
+  });
+  it("primary button has the 4px lip and press", () => {
+    expect(css).toMatch(/box-shadow:\s*0 4px 0 var\(--accent-lip\)/);
+    expect(css).toMatch(/prefers-reduced-motion/);
+  });
+  it("defines every subject color", () => {
+    for (const k of ["english", "math", "science", "social", "language", "pe", "arts", "life", "finlit", "elective"]) {
+      expect(css).toContain(`--subject-${k}:`);
+      expect(css).toContain(`--subject-${k}-ink:`);
+    }
+  });
+  it("exposes every fill step to Tailwind, so bg-fill-3 exists", () => {
+    const theme = css.slice(css.indexOf("@theme inline"), css.indexOf("}", css.indexOf("@theme inline")));
+    for (const t of ["fill", "fill-2", "fill-3"]) expect(theme, t).toContain(`--color-${t}:`);
+  });
+  it("never uses a colored side stripe", () => {
+    expect(css).not.toMatch(/border-left:\s*[2-9]px/);
   });
 });

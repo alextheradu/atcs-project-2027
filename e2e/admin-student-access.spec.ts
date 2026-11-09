@@ -8,13 +8,13 @@ test.beforeEach(async ({ page }) => {
 
 test("admins can use student navigation, import courses and manage their own placement draft", async ({ page }) => {
   await page.goto("/dashboard");
+  await expect(page).toHaveURL(/\/board$/);
   const nav = page.getByRole("navigation", { name: "Main" });
-  await expect(nav.getByRole("link", { name: "Import", exact: true })).toBeVisible();
-  await expect(nav.getByRole("link", { name: "Placement reviews", exact: true })).toBeVisible();
-  await page.goto("/plans");
-  await page.getByRole("button", { name: "Create Plan A", exact: true }).click();
-  await expect(page).toHaveURL(/\/plans\/[^/]+$/);
-  const planUrl = page.url();
+  for (const item of ["Board", "Classes", "Students", "Admin"]) await expect(nav.getByRole("link", { name: new RegExp(`^${item}\\b`) })).toBeVisible();
+  await page.locator('header button[aria-haspopup="true"]').click();
+  await expect(page.getByRole("link", { name: "Import transcript", exact: true })).toBeVisible();
+  await page.getByRole("button", { name: "Start your board", exact: true }).click();
+  await expect(page.getByText(/^[\d.]+ of [\d.]+ credits\./)).toBeVisible();
 
   await page.goto("/import");
   await expect(page.getByRole("heading", { name: "Import courses", exact: true })).toBeVisible();
@@ -22,8 +22,8 @@ test("admins can use student navigation, import courses and manage their own pla
   await page.getByRole("combobox", { name: "Course", exact: true }).fill("English I");
   await page.getByRole("button", { name: "Add 1 course", exact: true }).click();
   await expect(page.getByRole("status").filter({ hasText: "Added 1 course." })).toBeVisible();
-  await page.goto(planUrl);
-  await expect(page.getByRole("region", { name: "Grade 9", exact: true }).getByText("English I", { exact: true })).toBeVisible();
+  await page.goto("/board");
+  await expect(page.getByRole("group", { name: "English, 9th grade", exact: true }).getByRole("button", { name: /^English I, / })).toBeVisible();
 
   await page.goto("/import");
   await page.getByRole("tab", { name: "From a transcript", exact: true }).click();
@@ -33,9 +33,9 @@ test("admins can use student navigation, import courses and manage their own pla
   await expect(page.getByRole("status").filter({ hasText: /Added \d+ courses?\./ })).toBeVisible();
 
   await page.goto("/pathways");
-  await expect(page.getByRole("heading", { name: "Pathways", exact: true })).toBeVisible();
+  await expect(page).toHaveURL(/\/courses\?view=pathways$/);
   await page.goto("/courses/chamber-choir");
-  await page.getByRole("button", { name: "Request placement review", exact: true }).click();
+  await page.getByRole("button", { name: "Ask for a placement review", exact: true }).click();
   await expect(page).toHaveURL(/\/appeals\/[^/]+$/);
   await page.getByRole("button", { name: "Save draft", exact: true }).click();
   await expect(page.getByRole("status").filter({ hasText: "Draft saved." })).toBeVisible();
@@ -43,11 +43,6 @@ test("admins can use student navigation, import courses and manage their own pla
   await expect(page.getByRole("button", { name: "Save draft", exact: true })).toBeVisible();
   await page.getByRole("button", { name: "Delete draft", exact: true }).click();
   await expect(page).toHaveURL(/\/appeals$/);
-
-  await page.goto(planUrl);
-  await page.getByRole("button", { name: "Delete", exact: true }).click();
-  await page.getByRole("button", { name: "Delete for good", exact: true }).click();
-  await expect(page).toHaveURL(/\/plans$/);
 });
 
 test("optional onboarding sets up an admin's plan without losing admin access", async ({ page }) => {
@@ -63,14 +58,9 @@ test("optional onboarding sets up an admin's plan without losing admin access", 
   await page.getByRole("textbox", { name: "Intended major or career", exact: true }).fill("Engineering");
   await page.getByRole("button", { name: "Continue", exact: true }).click();
   await page.getByRole("button", { name: "Continue", exact: true }).click();
-  await page.getByRole("button", { name: "Open my plan", exact: true }).click();
-  await expect(page).toHaveURL(/\/plans\/[^/]+\?tour=1$/);
-  const planUrl = page.url();
+  await page.getByRole("button", { name: "Open my board", exact: true }).click();
+  await expect(page).toHaveURL(/\/board\?tour=1$/);
+  await expect(page.getByText(/^[\d.]+ of [\d.]+ credits\./)).toBeVisible();
   await page.goto("/admin/users");
   await expect(page.getByRole("heading", { name: "Users", exact: true })).toBeVisible();
-
-  await page.goto(planUrl);
-  await page.getByRole("button", { name: "Delete", exact: true }).click();
-  await page.getByRole("button", { name: "Delete for good", exact: true }).click();
-  await expect(page).toHaveURL(/\/plans$/);
 });

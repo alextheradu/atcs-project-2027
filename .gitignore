@@ -24,6 +24,8 @@
 .DS_Store
 *.pem
 .playwright-mcp
+.superpowers
+/docs/superpowers
 
 # debug
 npm-debug.log*
@@ -48,3 +50,6 @@ next-env.d.ts
 docs/source/
 /test-results
 /playwright-report
+
+# local database backups
+/backups

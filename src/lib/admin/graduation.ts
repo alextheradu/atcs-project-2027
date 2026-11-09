@@ -55,5 +55,6 @@ export async function updateGraduationConfig(input: unknown): Promise<ActionResu
   });
   revalidatePath("/admin/settings");
   revalidatePath("/plans", "layout");
+  revalidatePath("/board");
   return { ok: true };
 }

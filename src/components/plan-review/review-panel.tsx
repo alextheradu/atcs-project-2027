@@ -47,7 +47,7 @@ export function ReviewPanel({ planId, status, isOwner, canReview, comments, entr
   };
 
   return (
-    <section aria-label="Review" className="mt-14 max-w-[760px] space-y-6 border-t border-line pt-8">
+    <section aria-label="Review" className="mt-14 max-w-[760px] space-y-6 pt-8">
       <h2 className="eyebrow">Review</h2>
 
       {isOwner && (
@@ -74,7 +74,7 @@ export function ReviewPanel({ planId, status, isOwner, canReview, comments, entr
       )}
 
       {canReview && status === "SUBMITTED" && (
-        <div className="space-y-2.5 border-y border-line py-4">
+        <div className="space-y-2.5 soft px-4 py-4">
           <label className="block space-y-1 text-[13px]">
             <span className="text-muted">Note to the student (needed if you ask for changes)</span>
             <textarea className="input" rows={3} maxLength={1000} value={note} onChange={(e) => setNote(e.target.value)} />

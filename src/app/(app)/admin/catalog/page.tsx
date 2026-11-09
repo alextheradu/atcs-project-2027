@@ -40,7 +40,7 @@ export default async function CatalogAdmin({ searchParams }: { searchParams: Pro
         }
       />
 
-      <div className="flex flex-wrap items-center justify-between gap-4 border-y border-line py-3 text-[13px]">
+      <div className="flex flex-wrap items-center justify-between gap-4 soft px-4 py-3 text-[13px]">
         <p>
           <span className="num text-fg">{provisional}</span> <span className="text-muted">requirement tags need counselor review. They count toward the graduation meters but show as unconfirmed.</span>
         </p>

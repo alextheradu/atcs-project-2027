@@ -23,7 +23,7 @@ const TITLES = ["Your grade", "Privacy and terms", "The basics", "About you", "Y
 
 function GradeSelect({ label, value, onChange }: { label: string; value: string; onChange: (v: string) => void }) {
   return (
-    <label className="space-y-1 text-[13px]">
+    <label className="space-y-1 text-[14px]">
       <span className="text-muted">{label}</span>
       <select className="input" value={value} onChange={(e) => onChange(e.target.value)}>
         <option value="">I don&apos;t know yet / prefer not to say</option>
@@ -78,8 +78,8 @@ export function Wizard({ startStep, cohort: startCohort, policies, interests, ne
         <DraftNotice drafts={[backgroundDraft, interestDraft, majorDraft]} />
         {step === 0 && (
           <>
-            <h1 className="text-2xl font-semibold tracking-tight">What grade are you in?</h1>
-            <p className="text-[13px] text-muted">This sets up your plan. Pick the grade you are in right now.</p>
+            <h1 className="text-[28px] font-bold leading-tight tracking-[-0.025em]">What grade are you in?</h1>
+            <p className="text-[14px] text-muted">This sets up your board. Pick the grade you are in right now.</p>
             <div className="grid grid-cols-5 gap-2">
               {[8, 9, 10, 11, 12].map((g) => (
                 <Button key={g} variant="default" disabled={pending} onClick={() => run(async () => { const r = await chooseGrade({ grade: g }, ageOk); if (r.ok) setCohort(g === 8 ? "INCOMING_8" : "CURRENT"); return r; }, 1)}>
@@ -88,7 +88,7 @@ export function Wizard({ startStep, cohort: startCohort, policies, interests, ne
               ))}
             </div>
             {needsAgeBox && (
-              <label className="flex items-center gap-2 text-[13px]">
+              <label className="flex items-center gap-2 text-[14px]">
                 <input type="checkbox" checked={ageOk} onChange={(e) => setAgeOk(e.target.checked)} /> I am 13 or older
               </label>
             )}
@@ -97,16 +97,16 @@ export function Wizard({ startStep, cohort: startCohort, policies, interests, ne
 
         {step === 1 && (
           <>
-            <h1 className="text-2xl font-semibold tracking-tight">Privacy and terms</h1>
+            <h1 className="text-[28px] font-bold leading-tight tracking-[-0.025em]">Privacy and terms</h1>
             <ul className="list">
               {policies.map((p) => (
                 <li key={p.id} className="py-3">
                   <a href={p.href} target="_blank" rel="noreferrer" className="text-sm font-medium underline-offset-4 hover:underline">{p.title}</a>
-                  <p className="mt-1 text-[13px] text-muted">{p.summary}</p>
+                  <p className="mt-1 text-[14px] text-muted">{p.summary}</p>
                 </li>
               ))}
             </ul>
-            <label className="flex items-start gap-2 text-[13px]">
+            <label className="flex items-start gap-2 text-[14px]">
               <input type="checkbox" className="mt-0.5" checked={agreed} onChange={(e) => setAgreed(e.target.checked)} />
               I have read the privacy policy and terms and I agree.
             </label>
@@ -116,7 +116,7 @@ export function Wizard({ startStep, cohort: startCohort, policies, interests, ne
 
         {step === 2 && (
           <>
-            <h1 className="text-2xl font-semibold tracking-tight">{LEARN_CARDS[card].title}</h1>
+            <h1 className="text-[28px] font-bold leading-tight tracking-[-0.025em]">{LEARN_CARDS[card].title}</h1>
             <div className="min-h-[7rem] space-y-3 text-sm leading-relaxed" aria-live="polite">
               {LEARN_CARDS[card].body.map((p) => <p key={p}>{p}</p>)}
             </div>
@@ -130,15 +130,15 @@ export function Wizard({ startStep, cohort: startCohort, policies, interests, ne
                 </Button>
               </span>
             </div>
-            <p className="text-xs text-muted">You can read these again any time in Help.</p>
+            <p className="text-[13px] text-muted">You can read these again any time in Help.</p>
           </>
         )}
 
         {step === 3 && cohort === "CURRENT" && (
           <>
-            <h1 className="text-2xl font-semibold tracking-tight">A little about your past courses</h1>
-            <p className="text-[13px] text-muted">This helps the planner start your math path in the right place.</p>
-            <label className="block space-y-1 text-[13px]">
+            <h1 className="text-[28px] font-bold leading-tight tracking-[-0.025em]">A little about your past courses</h1>
+            <p className="text-[14px] text-muted">This helps us check which math classes you can take.</p>
+            <label className="block space-y-1 text-[14px]">
               <span className="text-muted">Math in 8th grade</span>
               <select className="input" value={form.eighthMath} onChange={(e) => set("eighthMath", e.target.value)}>
                 <option value="">Choose one</option>
@@ -147,17 +147,17 @@ export function Wizard({ startStep, cohort: startCohort, policies, interests, ne
                 <option value="UNSURE">Not sure</option>
               </select>
             </label>
-            <label className="block space-y-1 text-[13px]">
+            <label className="block space-y-1 text-[14px]">
               <span className="text-muted">World language you studied before high school</span>
               <select className="input" value={form.languageStudied} onChange={(e) => set("languageStudied", e.target.value)}>
                 <option value="none">None</option>
                 {["chinese", "french", "italian", "spanish"].map((l) => <option key={l} value={l} className="capitalize">{l[0].toUpperCase() + l.slice(1)}</option>)}
               </select>
             </label>
-            <fieldset className="space-y-2 text-[13px]">
-              <legend className="text-muted">Your plan</legend>
-              <label className="flex items-center gap-2"><input type="radio" name="start" checked={form.start === "blank"} onChange={() => set("start", "blank")} /> Start with a blank plan</label>
-              <label className="flex items-center gap-2"><input type="radio" name="start" checked={form.start === "import"} onChange={() => set("start", "import")} /> Import a transcript (arrives in a later update, we will start you blank)</label>
+            <fieldset className="space-y-2 text-[14px]">
+              <legend className="text-muted">Got a transcript?</legend>
+              <label className="flex items-center gap-2"><input type="radio" name="start" checked={form.start === "blank"} onChange={() => set("start", "blank")} /> No, start with an empty board</label>
+              <label className="flex items-center gap-2"><input type="radio" name="start" checked={form.start === "import"} onChange={() => set("start", "import")} /> Yes, import my transcript at the end</label>
             </fieldset>
             <Button variant="primary" disabled={!form.eighthMath || pending} onClick={() => run(() => saveCurrentBackground({ eighthMath: form.eighthMath, languageStudied: form.languageStudied, languageLevel: lang.languageLevel, start: form.start }), 4)}>Continue</Button>
           </>
@@ -165,10 +165,10 @@ export function Wizard({ startStep, cohort: startCohort, policies, interests, ne
 
         {step === 3 && cohort === "INCOMING_8" && (
           <>
-            <h1 className="text-2xl font-semibold tracking-tight">Tell us about you</h1>
-            <p role="note" className="border-y border-line py-3 text-[13px] leading-relaxed">{HONESTY_TEXT}</p>
+            <h1 className="text-[28px] font-bold leading-tight tracking-[-0.025em]">Tell us about you</h1>
+            <p role="note" className="soft p-4 text-[14px] leading-relaxed">{HONESTY_TEXT}</p>
             <fieldset>
-              <legend className="mb-2 text-[13px] text-muted">What are you interested in? Pick any.</legend>
+              <legend className="mb-2 text-[14px] text-muted">What are you interested in? Pick any.</legend>
               <div className="flex flex-wrap gap-2">
                 {interests.map((i) => (
                   <button key={i.slug} type="button" aria-pressed={picked.includes(i.slug)} onClick={() => setPicked((p) => (p.includes(i.slug) ? p.filter((x) => x !== i.slug) : [...p, i.slug]))}
@@ -179,7 +179,7 @@ export function Wizard({ startStep, cohort: startCohort, policies, interests, ne
               </div>
             </fieldset>
             <div className="grid gap-3 sm:grid-cols-2">
-              <label className="space-y-1 text-[13px] sm:col-span-2">
+              <label className="space-y-1 text-[14px] sm:col-span-2">
                 <span className="text-muted">Math in 8th grade</span>
                 <select className="input" value={form.eighthMath} onChange={(e) => set("eighthMath", e.target.value)}>
                   <option value="">Choose one</option>
@@ -192,7 +192,7 @@ export function Wizard({ startStep, cohort: startCohort, policies, interests, ne
               <GradeSelect label="Science grade" value={form.scienceGrade} onChange={(v) => set("scienceGrade", v)} />
               <GradeSelect label="English grade" value={form.englishGrade} onChange={(v) => set("englishGrade", v)} />
               <GradeSelect label="History grade" value={form.historyGrade} onChange={(v) => set("historyGrade", v)} />
-              <label className="space-y-1 text-[13px]">
+              <label className="space-y-1 text-[14px]">
                 <span className="text-muted">World language (optional)</span>
                 <select className="input" value={form.languageStudied} onChange={(e) => set("languageStudied", e.target.value)}>
                   <option value="none">None</option>
@@ -200,7 +200,7 @@ export function Wizard({ startStep, cohort: startCohort, policies, interests, ne
                 </select>
               </label>
               {form.languageStudied !== "none" && (
-                <label className="space-y-1 text-[13px]">
+                <label className="space-y-1 text-[14px]">
                   <span className="text-muted">Level</span>
                   <select className="input" value={form.languageLevel} onChange={(e) => set("languageLevel", Number(e.target.value))}>
                     {[1, 2, 3].map((n) => <option key={n} value={n}>Level {n}</option>)}
@@ -208,16 +208,16 @@ export function Wizard({ startStep, cohort: startCohort, policies, interests, ne
                 </label>
               )}
             </div>
-            <p className="text-xs text-muted">What you enter here is private, labeled self-reported, and deleted at the end of your first appeal cycle. See the privacy policy.</p>
-            <label className="flex items-center gap-2 text-[13px]"><input type="checkbox" checked={honest} onChange={(e) => setHonest(e.target.checked)} /> I&apos;m answering honestly</label>
+            <p className="text-[13px] text-muted">What you enter here is private, labeled self-reported, and deleted at the end of your first appeal cycle. See the privacy policy.</p>
+            <label className="flex items-center gap-2 text-[14px]"><input type="checkbox" checked={honest} onChange={(e) => setHonest(e.target.checked)} /> I&apos;m answering honestly</label>
             <Button variant="primary" disabled={!form.eighthMath || !honest || pending} onClick={() => run(() => saveIncomingBackground({ interests: picked, eighthMath: form.eighthMath, eighthMathGrade: form.eighthMathGrade, scienceGrade: form.scienceGrade, englishGrade: form.englishGrade, historyGrade: form.historyGrade, languageStudied: form.languageStudied, languageLevel: lang.languageLevel, honest }), 4)}>Continue</Button>
           </>
         )}
 
         {step === 4 && (
           <>
-            <h1 className="text-2xl font-semibold tracking-tight">Anything you want to study or work in?</h1>
-            <p className="text-[13px] text-muted">Optional. It helps with college requirement tips later.</p>
+            <h1 className="text-[28px] font-bold leading-tight tracking-[-0.025em]">Anything you want to study or work in?</h1>
+            <p className="text-[14px] text-muted">Optional. It helps with college requirement tips later.</p>
             <input className="input" aria-label="Intended major or career" maxLength={120} placeholder="For example: nursing, engineering, undecided" value={major} onChange={(e) => setMajor(e.target.value)} />
             <div className="flex gap-2">
               <Button variant="primary" disabled={pending} onClick={() => run(() => saveMajor({ intendedMajor: major }), 5)}>Continue</Button>
@@ -228,26 +228,35 @@ export function Wizard({ startStep, cohort: startCohort, policies, interests, ne
 
         {step === 5 && (
           <>
-            <h1 className="text-2xl font-semibold tracking-tight">Notifications and install</h1>
-            <p className="text-[13px] text-muted">Email and push reminders for deadlines and appeal decisions arrive in a later update, and you will choose them in Settings.</p>
-            <p className="text-[13px] text-muted">You will be able to install this as an app. On iPhone, push only works after you tap Share, then Add to Home Screen, on iOS 16.4 or later.</p>
+            <h1 className="text-[28px] font-bold leading-tight tracking-[-0.025em]">Notifications and install</h1>
+            <p className="text-[14px] text-muted">You can turn on email and push reminders for deadlines and placement review decisions in Settings, under your name.</p>
+            <p className="text-[14px] text-muted">You can also install this as an app. On iPhone, push only works after you tap Share, then Add to Home Screen, on iOS 16.4 or later.</p>
             <Button variant="primary" disabled={pending} onClick={() => run(() => setStep(6), 6)}>Continue</Button>
           </>
         )}
 
         {step >= 6 && (
           <>
-            <h1 className="text-2xl font-semibold tracking-tight">You are set up</h1>
-            <p className="text-[13px] text-muted">
+            <h1 className="text-[28px] font-bold leading-tight tracking-[-0.025em]">You are set up</h1>
+            <p className="text-[14px] text-muted">
               {cohort === "INCOMING_8"
-                ? "We made a starter Plan A for 9th grade. It is a draft based on self-reported info. Anything marked worth considering is up to a supervisor, not a placement."
-                : "We made a blank Plan A for you. Add courses by hand or drag them in."}
+                ? "We started your board with a draft for 9th grade, based on what you told us. It is not a placement. A supervisor decides your real classes."
+                : cohort === "CURRENT" && form.start === "import"
+                  ? "Your board is ready. Next, import your transcript so the classes you already took fill in."
+                  : "Your board is ready. Empty spots show what you need to graduate. Click one to pick a class."}
             </p>
-            <Button variant="primary" disabled={pending} onClick={() => start(async () => { const r = await finishOnboarding(); if (r.ok) router.push(`/plans/${r.data?.planId}?tour=1`); else setError(r.error); })}>Open my plan</Button>
+            {cohort === "CURRENT" && form.start === "import" ? (
+              <div className="flex flex-wrap gap-2">
+                <Button variant="primary" disabled={pending} onClick={() => start(async () => { const r = await finishOnboarding(); if (r.ok) router.push("/import"); else setError(r.error); })}>Import my transcript</Button>
+                <Button variant="ghost" disabled={pending} onClick={() => start(async () => { const r = await finishOnboarding(); if (r.ok) router.push("/board?tour=1"); else setError(r.error); })}>Skip, open my board</Button>
+              </div>
+            ) : (
+              <Button variant="primary" disabled={pending} onClick={() => start(async () => { const r = await finishOnboarding(); if (r.ok) router.push("/board?tour=1"); else setError(r.error); })}>Open my board</Button>
+            )}
           </>
         )}
 
-        {error && <p role="alert" className="text-[13px] text-red">{error}</p>}
+        {error && <p role="alert" className="text-[14px] text-red">{error}</p>}
       </div>
     </div>
   );

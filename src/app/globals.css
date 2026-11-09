@@ -2,66 +2,103 @@
 
 :root {
   color-scheme: dark;
-  /* Warm off-black, like paper under a lamp. Neutrals lean slightly yellow; blue stays on actions only. */
-  --bg: #12110f;
-  --bg-raised: #1b1a17;
-  --bg-elevated: #24221e;
-  --line: #2e2b27;
-  --line-strong: #423e38;
-  --line-hover: #5c574f;
-  --fg: #ece8e1;
-  --muted: #a39d93;
-  --placeholder: #6f6a62;
-  --lip: rgb(0 0 0 / 0.55);
+  /* Neutral charcoal. No warm lean, no blue tint. Blue is only for things you can click. */
+  --bg: #161616;
+  --fill: #202020;
+  --fill-2: #2a2a2a;
+  --fill-3: #333333;
+  --fg: #efefef;
+  --muted: #a3a3a3;
+  --dim: #6e6e6e;
+  /* Outlines for empty spots and drawn controls. Never used as row separators. */
+  --line: #2a2a2a;
+  --line-strong: #3a3a3a;
+  --line-hover: #4a4a4a;
 
-  --accent: #338eda;
-  --accent-hover: #4a9fe6;
-  --accent-lip: #1f5b94;
-  --accent-fg: #12110f;
+  --accent: #2f6fe4;
+  --accent-hover: #3d7bf0;
+  --accent-lip: #1a4499;
+  --accent-fg: #ffffff;
+  /* Blue text on the dark page needs to be lighter than the button fill to stay readable. */
+  --accent-ink: #7aa5ff;
 
   --green: #33d6a6;
   --yellow: #f1c40f;
   --orange: #ff8c37;
   --red: #ec3750;
 
+  /* Subject colors: a soft fill for the tile and a readable ink for its label. Only used on classes. */
+  --subject-english: #2b2536;
+  --subject-english-ink: #c8b5ff;
+  --subject-math: #1b2f2c;
+  --subject-math-ink: #79d7c2;
+  --subject-science: #232f1d;
+  --subject-science-ink: #a9da86;
+  --subject-social: #33291b;
+  --subject-social-ink: #f0c27a;
+  --subject-language: #33202a;
+  --subject-language-ink: #f2a2c0;
+  --subject-pe: #33231b;
+  --subject-pe-ink: #ffab7a;
+  --subject-arts: #2f2134;
+  --subject-arts-ink: #e6a3ef;
+  --subject-life: #2d2b17;
+  --subject-life-ink: #e2d36b;
+  --subject-finlit: #182a31;
+  --subject-finlit-ink: #82d0ec;
+  --subject-elective: #262626;
+  --subject-elective-ink: #cfcfcf;
+
   --radius-pill: 999px;
   --spring: cubic-bezier(0.3, 1.6, 0.6, 1); /* buttons only */
   --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
-  --ease-expo: cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 @theme inline {
   --color-bg: var(--bg);
-  --color-raised: var(--bg-raised);
-  --color-elevated: var(--bg-elevated);
+  --color-fill: var(--fill);
+  --color-fill-2: var(--fill-2);
+  --color-fill-3: var(--fill-3);
+  --color-raised: var(--fill);
+  --color-elevated: var(--fill-2);
   --color-line: var(--line);
   --color-line-strong: var(--line-strong);
   --color-fg: var(--fg);
   --color-muted: var(--muted);
+  --color-dim: var(--dim);
   --color-accent: var(--accent);
   --color-accent-hover: var(--accent-hover);
+  --color-accent-ink: var(--accent-ink);
   --color-green: var(--green);
   --color-yellow: var(--yellow);
   --color-orange: var(--orange);
   --color-red: var(--red);
-  --font-sans: var(--font-plex-sans);
-  --font-mono: var(--font-plex-mono);
+  --font-sans: var(--font-figtree);
+  --font-mono: var(--font-figtree);
+  /* The root is 14px for spacing, so pin text sizes: small text stays readable for students. */
+  --text-xs: 12px;
+  --text-sm: 14px;
+  --text-base: 15px;
 }
 
 html {
   font-size: 14px;
+  color-scheme: dark;
+  scroll-behavior: smooth;
+  -webkit-tap-highlight-color: transparent;
+  text-size-adjust: 100%;
 }
 
 body {
   background: var(--bg);
   color: var(--fg);
-  font-family: var(--font-plex-sans), system-ui, sans-serif;
+  font-family: var(--font-figtree), system-ui, sans-serif;
   -webkit-font-smoothing: antialiased;
 }
 
 h1, h2, h3 {
   text-wrap: balance;
-  letter-spacing: -0.01em;
+  letter-spacing: -0.015em;
 }
 p {
   text-wrap: pretty;
@@ -69,42 +106,25 @@ p {
 code, .font-mono {
   font-variant-numeric: tabular-nums;
 }
+::selection {
+  background: rgb(47 111 228 / 0.45);
+}
+:focus-visible {
+  outline: 2px solid var(--accent-ink);
+  outline-offset: 2px;
+}
 
 @keyframes fade-only {
   from { opacity: 0; }
   to { opacity: 1; }
 }
-@keyframes rise {
-  from { opacity: 0; transform: translateY(6px); }
-  to { opacity: 1; transform: none; }
-}
 
-/* Route entrance: the header rises first, sections and list rows follow in a short cascade (under 300ms total). */
+/* Route entrance: a short fade. Nothing moves. */
 .page-enter > * > * {
-  animation: rise 0.24s var(--ease-out) both;
+  animation: fade-only 0.2s var(--ease-out) both;
 }
-.page-enter > * > *:nth-child(2) { animation-delay: 30ms; }
-.page-enter > * > *:nth-child(3) { animation-delay: 60ms; }
-.page-enter > * > *:nth-child(n + 4) { animation-delay: 90ms; }
-.page-enter .list > li {
-  animation: rise 0.22s var(--ease-out) both;
-}
-.page-enter .list > li:nth-child(1) { animation-delay: 40ms; }
-.page-enter .list > li:nth-child(2) { animation-delay: 56ms; }
-.page-enter .list > li:nth-child(3) { animation-delay: 72ms; }
-.page-enter .list > li:nth-child(4) { animation-delay: 88ms; }
-.page-enter .list > li:nth-child(5) { animation-delay: 104ms; }
-.page-enter .list > li:nth-child(6) { animation-delay: 120ms; }
-.page-enter .list > li:nth-child(n + 7) { animation-delay: 136ms; }
-
 
 /* ---------- no native chrome (pattern from hackclub/contd) ---------- */
-html {
-  color-scheme: dark;
-  scroll-behavior: smooth;
-  -webkit-tap-highlight-color: transparent;
-  text-size-adjust: 100%;
-}
 * {
   scrollbar-width: thin;
   scrollbar-color: var(--line-strong) transparent;
@@ -124,19 +144,19 @@ input[type="checkbox"] {
   display: inline-grid;
   flex: none;
   place-content: center;
-  width: 16px;
-  height: 16px;
+  width: 18px;
+  height: 18px;
   margin: 0;
-  border: 1px solid var(--line-strong);
-  border-radius: 4px;
-  background: var(--bg);
+  border: 1.5px solid var(--line-strong);
+  border-radius: 5px;
+  background: var(--fill);
   cursor: pointer;
   transition: background-color 0.12s var(--ease-out), border-color 0.12s var(--ease-out);
 }
 input[type="checkbox"]::before {
   content: "";
-  width: 10px;
-  height: 10px;
+  width: 11px;
+  height: 11px;
   background: var(--accent-fg);
   mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12'%3E%3Cpath d='m2.5 6.2 2.3 2.3 4.7-5' fill='none' stroke='%23000' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center / contain no-repeat;
   transform: scale(0.6);
@@ -157,12 +177,12 @@ input[type="radio"] {
   display: inline-grid;
   flex: none;
   place-content: center;
-  width: 16px;
-  height: 16px;
+  width: 18px;
+  height: 18px;
   margin: 0;
-  border: 1px solid var(--line-strong);
+  border: 1.5px solid var(--line-strong);
   border-radius: 999px;
-  background: var(--bg);
+  background: var(--fill);
   cursor: pointer;
   transition: border-color 0.12s var(--ease-out);
 }
@@ -171,25 +191,25 @@ input[type="radio"]::before {
   width: 8px;
   height: 8px;
   border-radius: 999px;
-  background: var(--accent);
+  background: var(--accent-fg);
   transform: scale(0);
   transition: transform 0.14s var(--ease-out);
 }
 input[type="radio"]:hover { border-color: var(--line-hover); }
-input[type="radio"]:checked { border-color: var(--accent); }
+input[type="radio"]:checked { border-color: var(--accent); background: var(--accent); }
 input[type="radio"]:checked::before { transform: scale(1); }
 
 /* Selects get one quiet chevron. */
 select.input {
   appearance: none;
-  padding-right: 30px;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12'%3E%3Cpath d='m3 4.5 3 3 3-3' fill='none' stroke='%23a39d93' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
-  background-position: right 10px center;
+  padding-right: 32px;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12'%3E%3Cpath d='m3 4.5 3 3 3-3' fill='none' stroke='%23a3a3a3' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-position: right 12px center;
   background-repeat: no-repeat;
   background-size: 12px;
   cursor: pointer;
 }
-select.input option { background: var(--bg-raised); color: var(--fg); }
+select.input option { background: var(--fill); color: var(--fg); }
 
 /* Number fields: no spinner buttons. */
 input[type="number"] { appearance: textfield; }
@@ -202,7 +222,7 @@ input:-webkit-autofill:hover,
 input:-webkit-autofill:focus {
   -webkit-text-fill-color: var(--fg);
   caret-color: var(--fg);
-  box-shadow: 0 0 0 1000px var(--bg) inset;
+  box-shadow: 0 0 0 1000px var(--fill) inset;
   transition: background-color 9999s;
 }
 input[type="search"]::-webkit-search-cancel-button,
@@ -211,7 +231,7 @@ input[type="search"]::-webkit-search-decoration { appearance: none; }
 /* Touch: 16px text stops iOS zoom on focus, and targets reach 44px. */
 @media (pointer: coarse) {
   .input { min-height: 44px; font-size: 16px; }
-  .btn { min-height: 40px; }
+  .btn { min-height: 42px; }
   .btn-sm { min-height: 36px; }
 }
 
@@ -220,15 +240,15 @@ input[type="search"]::-webkit-search-decoration { appearance: none; }
   left: 12px;
   top: -48px;
   z-index: 60;
-  height: 34px;
+  height: 36px;
   display: inline-flex;
   align-items: center;
-  padding: 0 14px;
+  padding: 0 16px;
   border-radius: 999px;
   background: var(--fg);
   color: var(--bg);
-  font-size: 13px;
-  font-weight: 500;
+  font-size: 14px;
+  font-weight: 600;
   transition: top 0.2s var(--ease-out);
 }
 .skip-link:focus-visible {
@@ -236,94 +256,86 @@ input[type="search"]::-webkit-search-decoration { appearance: none; }
 }
 
 @layer components {
-  /* ---- Buttons: pill, hard lip, spring press. No tilt. (Do not change.) ---- */
+  /* ---- Buttons. Primary is the contd sticker button: solid blue pill, hard lip, lifts and tilts on hover,
+     squishes on press. Everything else is a quiet filled pill with no lip. ---- */
   .btn {
     display: inline-flex;
     align-items: center;
     justify-content: center;
     gap: 8px;
-    height: 36px;
-    padding: 0 16px;
+    height: 38px;
+    padding: 0 18px;
     border-radius: var(--radius-pill);
-    border: 1px solid var(--line);
-    background: var(--bg-raised);
+    border: 0;
+    background: var(--fill-2);
     color: var(--fg);
-    font-size: 13px;
-    font-weight: 500;
+    font-size: 14px;
+    font-weight: 600;
     white-space: nowrap;
     cursor: pointer;
-    box-shadow: 0 3px 0 var(--lip);
     transition:
-      transform 0.2s var(--spring),
-      box-shadow 0.2s,
-      background 0.15s,
-      border-color 0.15s;
+      transform 0.18s var(--spring),
+      box-shadow 0.18s,
+      background-color 0.15s;
   }
   @media (hover: hover) {
     .btn:hover:not(:disabled) {
-      transform: translateY(-2px);
-      box-shadow: 0 5px 0 var(--lip);
-      border-color: var(--line-strong);
+      background: var(--fill-3);
+      transform: translateY(-1px);
     }
   }
   .btn:active:not(:disabled) {
-    transform: translateY(2px);
-    box-shadow: 0 1px 0 var(--lip);
+    transform: translateY(1px);
   }
   .btn:disabled {
-    opacity: 0.55;
+    opacity: 0.5;
     cursor: not-allowed;
   }
   .btn-sm {
-    height: 30px;
-    padding: 0 12px;
-    font-size: 12px;
+    height: 32px;
+    padding: 0 14px;
+    font-size: 13px;
   }
   .btn-lg {
-    height: 42px;
-    padding: 0 22px;
-    font-size: 14px;
+    height: 44px;
+    padding: 0 24px;
+    font-size: 15px;
   }
   .btn-icon {
-    width: 36px;
+    width: 38px;
     padding: 0;
   }
 
   .btn-primary {
     background: var(--accent);
-    border-color: var(--accent);
     color: var(--accent-fg);
-    box-shadow: 0 3px 0 var(--accent-lip);
+    box-shadow: 0 4px 0 var(--accent-lip);
   }
   @media (hover: hover) {
     .btn-primary:hover:not(:disabled) {
       background: var(--accent-hover);
-      border-color: var(--accent-hover);
-      box-shadow: 0 5px 0 var(--accent-lip);
+      transform: translateY(-2px) rotate(-1deg);
+      box-shadow: 0 6px 0 var(--accent-lip);
     }
   }
   .btn-primary:active:not(:disabled) {
+    transform: translateY(3px);
     box-shadow: 0 1px 0 var(--accent-lip);
   }
 
   .btn-ghost {
     background: transparent;
-    border-color: transparent;
-    box-shadow: none;
     color: var(--muted);
   }
   @media (hover: hover) {
     .btn-ghost:hover:not(:disabled) {
-      background: var(--bg-elevated);
+      background: var(--fill-2);
       color: var(--fg);
-      box-shadow: none;
       transform: none;
-      border-color: transparent;
     }
   }
   .btn-ghost:active:not(:disabled) {
     transform: none;
-    box-shadow: none;
   }
 
   .btn-danger {
@@ -331,35 +343,38 @@ input[type="search"]::-webkit-search-decoration { appearance: none; }
   }
   @media (hover: hover) {
     .btn-danger:hover:not(:disabled) {
-      border-color: rgb(236 55 80 / 0.6);
-      background: rgb(236 55 80 / 0.1);
+      background: rgb(236 55 80 / 0.15);
     }
   }
 
-  /* ---- Flat lists: hairline rules instead of boxes ---- */
+  /* ---- Lists: rows separated by space, not lines. A row fills softly on hover. ---- */
   .list {
-    border-top: 1px solid var(--line);
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
   }
   .list > li {
-    border-bottom: 1px solid var(--line);
+    border-radius: 10px;
+    padding-inline: 12px;
+    margin-inline: -12px;
   }
   .list-hover > li {
     transition: background-color 0.15s var(--ease-out);
   }
   @media (hover: hover) {
     .list-hover > li:hover {
-      background: var(--bg-raised);
+      background: var(--fill);
     }
   }
-  /* Selected: neutral fill and a small accent dot at the start. No side stripe. */
+  /* Selected: a filled row and a small blue dot at the start. */
   .row-selected {
     position: relative;
-    background: var(--bg-raised);
+    background: var(--fill-2);
   }
   .row-selected::before {
     content: "";
     position: absolute;
-    left: 10px;
+    left: 3px;
     top: 50%;
     width: 6px;
     height: 6px;
@@ -368,86 +383,133 @@ input[type="search"]::-webkit-search-decoration { appearance: none; }
     background: var(--accent);
   }
 
-  .input {
-    height: 34px;
+  /* A soft filled block for grouping. Use when spacing alone is not enough. */
+  .soft {
+    background: var(--fill);
+    border-radius: 14px;
+  }
+
+  /* A class on the Board. Set --tile-fill and --tile-ink with a .subject-* class. */
+  .tile {
+    display: block;
     width: 100%;
-    padding: 0 10px;
-    border-radius: 6px;
-    border: 1px solid var(--line);
-    background: var(--bg);
+    min-height: 40px;
+    padding: 8px 10px;
+    border-radius: 10px;
+    background: var(--tile-fill, var(--fill));
     color: var(--fg);
     font-size: 13px;
-    transition: border-color 0.15s var(--ease-out), background-color 0.15s var(--ease-out);
+    font-weight: 500;
+    line-height: 1.25;
+    text-align: left;
+    transition: transform 0.15s var(--ease-out), background-color 0.15s;
+  }
+  button.tile { cursor: pointer; }
+  @media (hover: hover) {
+    button.tile:hover:not(:disabled) {
+      transform: translateY(-1px);
+    }
+  }
+  /* An empty spot that still needs a class: an outline, not a fill. */
+  .tile-empty {
+    display: block;
+    width: 100%;
+    min-height: 40px;
+    padding: 8px 10px;
+    border-radius: 10px;
+    background: transparent;
+    box-shadow: inset 0 0 0 1.5px var(--line-strong);
+    color: var(--muted);
+    font-size: 13px;
+    font-weight: 500;
+    line-height: 1.25;
+    text-align: left;
+    transition: box-shadow 0.15s var(--ease-out), color 0.15s;
+  }
+  button.tile-empty { cursor: pointer; }
+  @media (hover: hover) {
+    button.tile-empty:hover:not(:disabled) {
+      box-shadow: inset 0 0 0 1.5px var(--accent);
+      color: var(--fg);
+    }
+  }
+  .subject-english { --tile-fill: var(--subject-english); --tile-ink: var(--subject-english-ink); }
+  .subject-math { --tile-fill: var(--subject-math); --tile-ink: var(--subject-math-ink); }
+  .subject-science { --tile-fill: var(--subject-science); --tile-ink: var(--subject-science-ink); }
+  .subject-social { --tile-fill: var(--subject-social); --tile-ink: var(--subject-social-ink); }
+  .subject-language { --tile-fill: var(--subject-language); --tile-ink: var(--subject-language-ink); }
+  .subject-pe { --tile-fill: var(--subject-pe); --tile-ink: var(--subject-pe-ink); }
+  .subject-arts { --tile-fill: var(--subject-arts); --tile-ink: var(--subject-arts-ink); }
+  .subject-life { --tile-fill: var(--subject-life); --tile-ink: var(--subject-life-ink); }
+  .subject-finlit { --tile-fill: var(--subject-finlit); --tile-ink: var(--subject-finlit-ink); }
+  .subject-elective { --tile-fill: var(--subject-elective); --tile-ink: var(--subject-elective-ink); }
+  .ink { color: var(--tile-ink, var(--muted)); }
+
+  .input {
+    height: 38px;
+    width: 100%;
+    padding: 0 12px;
+    border-radius: 10px;
+    border: 1px solid transparent;
+    background: var(--fill);
+    color: var(--fg);
+    font-size: 14px;
+    transition: border-color 0.15s var(--ease-out), background-color 0.15s var(--ease-out), box-shadow 0.15s var(--ease-out);
   }
   textarea.input {
     height: auto;
+    padding-block: 10px;
     line-height: 1.5;
     resize: vertical;
   }
   .input::placeholder {
-    color: var(--placeholder);
+    color: var(--dim);
   }
   .input:hover {
-    border-color: var(--line-strong);
+    background: var(--fill-2);
   }
   .input:focus-visible {
+    outline: none;
     border-color: var(--accent);
-    box-shadow: 0 0 0 3px rgb(51 142 218 / 0.2);
+    box-shadow: 0 0 0 3px rgb(47 111 228 / 0.3);
   }
   .input[aria-invalid="true"] {
     border-color: var(--red);
   }
   .input:disabled {
-    opacity: 0.55;
+    opacity: 0.5;
     cursor: not-allowed;
   }
-  select.input {
-    padding-right: 6px;
-  }
 
-  /* Ledger column header: small mono capitals. */
+  /* Block heading. Kept as a class name so every page picks up the new style. */
   .eyebrow {
-    font-family: var(--font-plex-mono), ui-monospace, monospace;
-    font-size: 11px;
-    font-weight: 500;
-    color: var(--muted);
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--fg);
+    letter-spacing: -0.01em;
   }
+  /* Numbers line up in columns. Same font as everything else. */
   .num {
-    font-family: var(--font-plex-mono), ui-monospace, monospace;
     font-variant-numeric: tabular-nums;
-    font-size: 12px;
   }
 
-  /* Sign-in and onboarding controls only */
-  .auth-texture {
-    background:
-      repeating-conic-gradient(rgb(255 255 255 / 0.035) 0 25%, transparent 0 50%) 0 0 / 8px 8px,
-      rgb(27 26 23 / 0.7);
-    backdrop-filter: blur(8px);
-  }
-
-  /* Status: a colored dot and a plain label. */
+  /* Status: a colored dot and a plain word. */
   .badge {
     display: inline-flex;
     align-items: center;
-    gap: 6px;
-    height: 20px;
-    padding: 0 8px;
-    border-radius: 6px;
-    border: 1px solid var(--line);
+    gap: 7px;
     color: var(--fg);
-    font-size: 12px;
+    font-size: 13px;
     font-weight: 500;
     white-space: nowrap;
   }
   .badge::before {
     content: "";
-    width: 6px;
-    height: 6px;
+    flex: none;
+    width: 8px;
+    height: 8px;
     border-radius: 999px;
-    background: var(--badge-c, var(--line-strong));
+    background: var(--badge-c, var(--dim));
   }
   .badge-eligible { --badge-c: var(--green); }
   .badge-warning { --badge-c: var(--yellow); }
@@ -455,36 +517,18 @@ input[type="search"]::-webkit-search-decoration { appearance: none; }
   .badge-locked { --badge-c: var(--red); }
   .badge-review { --badge-c: var(--accent); }
 
+  /* Formerly a travelling glint. The design has no glows, so it only wraps its child now. */
   .star-border {
-    position: relative;
     display: inline-block;
-    border-radius: var(--radius-pill);
-    overflow: hidden;
-    padding: 1px;
   }
-  .star-border::before {
-    content: "";
-    position: absolute;
-    inset: -150%;
-    background: conic-gradient(from 0deg, transparent 0 80%, rgb(255 255 255 / 0.9) 92%, transparent 100%);
-    animation: star-spin 3.5s linear infinite;
-  }
-  .star-border > .btn {
-    position: relative;
-  }
-}
-
-@keyframes star-spin {
-  to { transform: rotate(360deg); }
 }
 
 /* Reduced motion means gentler, not dead: movement goes, quick color and opacity feedback stays. */
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
-  .page-enter > * > *, .page-enter .list > li { animation: fade-only 0.15s linear both; animation-delay: 0ms; }
-  .btn { transition: background-color 0.12s, border-color 0.12s; }
-  .btn:hover, .btn:active { transform: none; }
-  .star-border::before { animation: none; }
+  .page-enter > * > * { animation: fade-only 0.15s linear both; }
+  .btn, .tile, .tile-empty { transition: background-color 0.12s, box-shadow 0.12s, color 0.12s; }
+  .btn:hover, .btn:active, .btn-primary:hover, .btn-primary:active, button.tile:hover { transform: none; }
 }
 
 /* Print: the plan sheet is the one place that is black on white, to save ink. */

@@ -23,7 +23,7 @@ export const LEARN_CARDS: LearnCard[] = [
     hint: "120 credits, with minimums in English, math, science, social studies, world language, arts, health and more.",
     body: [
       "Besides 120 total credits, each subject has a minimum: English, math, science, social studies, world language, the arts, financial literacy, health and physical education, and 21st century life and careers.",
-      "The planner shows each one as a bar so you can see what is still missing.",
+      "Your board has a row for each one. Outlined spots show what is still missing, and clicking one shows the classes that fill it.",
     ],
   },
   {
@@ -50,7 +50,7 @@ export const LEARN_CARDS: LearnCard[] = [
     hint: "An appeal asks a supervisor to place you in a course you do not automatically qualify for. It opens during a set window each year.",
     body: [
       "An appeal asks a department supervisor to place you in a course you do not automatically qualify for. You explain why, and they decide.",
-      "Appeals open during a window each year. We will tell you when it opens.",
+      "Appeals open during a window each year. We will tell you when it opens. To start one, open the class and choose Ask for a placement review.",
     ],
   },
 ];

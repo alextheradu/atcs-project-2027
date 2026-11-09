@@ -2,6 +2,20 @@
 
 Settled choices and deviations from the original spec. Add a dated entry when you make a new one. Do not re-litigate without the owner.
 
+## 2026-11-09 (frontend redesign: the Board)
+
+- **The owner found the ledger look and the 8 to 18 item nav confusing and not to their taste.** Chosen in a mockup round: neutral charcoal like BetterCanvas dark mode, dev-tool layouts (Vercel, Supabase, Railway, Render, memeity), the contd buttons, and the plan as a subject-by-grade Board. Supersedes the 2026-11-02 identity pass.
+- **Figtree replaces IBM Plex Sans and Plex Mono**, self-hosted from `@fontsource/figtree` (`src/app/fonts.ts`). No mono font anywhere; `.num` is tabular figures. Tailwind `text-sm`/`text-xs` are pinned to 14px/12px.
+- **Surfaces are neutral**: `#161616`, Fill `#202020`, Fill 2 `#2a2a2a`. No warm lean. Blue `#2f6fe4` stands in for Pascack Hills blue, with a white label; `#7aa5ff` for blue text.
+- **No hairline separators, gradients or glows.** Space and soft fills separate things. Exceptions: tree guide lines and the printed Board. `StarBorder` no longer draws a glint (it only wraps its child).
+- **Primary button is the contd sticker**: `0 4px 0` lip, hover lifts 2px and tilts -1deg, press sinks. This lifts the old "no rotation" rule. Secondary buttons have no lip.
+- **Subject colors** (one fill and one ink per Board row) mark classes only.
+- **One plan per student in the UI.** The Board shows the primary plan, otherwise the most recently changed one (`boardPlanId`). Rename, clone, delete and the plans list are gone from the UI. The database keeps multi-plan support. Staff queues, counts and course demand count primary plans only.
+- **Navigation:** students Board and Classes; counselors and supervisors Classes, Students and Admin (tabs by role); admins all four. Settings, Help and Import transcript live in a menu under the user's name. Old URLs (`/dashboard`, `/plans`, `/plans/[id]`, `/pathways`, `/notifications`, `/counselor`, `/review`) redirect; `/dashboard` stays the role-aware entry point.
+- **Empty spots** come only from the graduation summary (`src/lib/board`): missing credits in one-class spots, placed from the current grade on, extras in 12th. No new graduation rules.
+- **Notifications** show as dismissable notes on the Board (students) and under Needs a look (staff). The bell and the notifications page are gone.
+- **The class page answers "Can you take this?" first** (`canTakeAnswer`), with Add to my board and Ask for a placement review as actions.
+
 ## 2026-11-02 (identity pass)
 
 - **The base read as a generic dark dashboard** (Geist, `#0a0a0a`, Vercel-style hairlines, grid backdrop, two-tone hero). The owner chose a new identity over layout-only fixes.

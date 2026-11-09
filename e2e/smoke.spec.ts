@@ -18,34 +18,30 @@ async function clickAndSettle(page: Page, target: Locator) {
   await answered;
 }
 
-async function createPlan(page: Page) {
-  await page.goto("/plans");
-  await page.getByRole("button", { name: "Create Plan A", exact: true }).click();
-  await expect(page).toHaveURL(/\/plans\/[^/]+$/);
-  return page.url();
+const escape = (s: string) => s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+const status = (page: Page) => page.getByText(/^[\d.]+ of [\d.]+ credits\./);
+
+/** Every student has one plan, shown on the Board. */
+async function startBoard(page: Page) {
+  await page.goto("/board");
+  await page.getByRole("button", { name: "Start your board", exact: true }).click();
+  await expect(status(page)).toBeVisible();
 }
 
-/** Adds English I to grade 9 and returns the credits the catalog lists for it. */
+/** Adds English I to 9th grade and returns the credits the catalog lists for it. */
 async function addEnglishI(page: Page) {
-  await page.getByRole("region", { name: "Grade 9", exact: true }).getByRole("button", { name: "Add", exact: true }).click();
+  await page.getByRole("button", { name: "Add a class", exact: true }).click();
   const dialog = page.getByRole("dialog", { name: "Add a course" });
+  await dialog.getByRole("combobox", { name: "Grade to add to", exact: true }).selectOption("9");
   await dialog.getByRole("textbox", { name: "Search courses", exact: true }).fill("English I");
   const row = dialog.getByRole("listitem").filter({ has: page.getByText("English I", { exact: true }) });
   const credits = (await row.getByText(/^[\d.]+ cr$/).textContent())!.replace(" cr", "");
   await clickAndSettle(page, row.getByRole("button", { name: "Add", exact: true }));
-  const grade9 = page.getByRole("region", { name: "Grade 9", exact: true });
-  await expect(grade9.getByText("English I", { exact: true })).toBeVisible();
-  // The column's Add button comes back once the server has saved the change.
-  await expect(grade9.getByRole("button", { name: "Add", exact: true })).toBeVisible();
+  await expect(page.getByRole("group", { name: "English, 9th grade", exact: true }).getByRole("button", { name: new RegExp(`^${escape("English I")}, `) })).toBeVisible();
+  // The Add button comes back once the server has saved the change.
+  await expect(page.getByRole("button", { name: "Add a class", exact: true })).toBeEnabled();
   await expect(page.getByRole("button", { name: "Retry change", exact: true })).toHaveCount(0);
   return credits;
-}
-
-async function deletePlan(page: Page, planUrl: string) {
-  await page.goto(planUrl);
-  await page.getByRole("button", { name: "Delete", exact: true }).click();
-  await page.getByRole("button", { name: "Delete for good", exact: true }).click();
-  await expect(page).toHaveURL(/\/plans$/);
 }
 
 test("landing page asks for age before sign-in, and onboarding asks again", async ({ page }) => {
@@ -78,23 +74,19 @@ test("landing page asks for age before sign-in, and onboarding asks again", asyn
 
 test("a student builds a plan and the credit total updates", async ({ page }) => {
   await signIn(page, `smoke-plan-${stamp()}@example.test`, "STUDENT");
-  const planUrl = await createPlan(page);
-  const rail = page.getByRole("complementary", { name: "Graduation progress" });
-  const total = rail.getByRole("img", { name: /^[\d.]+ of [\d.]+ credits$/ });
-  await expect(total).toHaveAccessibleName(/^0 of [\d.]+ credits$/);
-  const required = (await total.getAttribute("aria-label"))!.split(" of ")[1];
+  await startBoard(page);
+  await expect(status(page)).toHaveText(/^0 of [\d.]+ credits\./);
+  const required = (await status(page).textContent())!.match(/of ([\d.]+) credits/)![1];
 
   const credits = await addEnglishI(page);
-  await expect(total).toHaveAccessibleName(`${credits} of ${required}`);
+  await expect(status(page)).toHaveText(new RegExp(`^${escape(credits)} of ${escape(required)} credits\\.`));
   await page.reload();
-  await expect(total).toHaveAccessibleName(`${credits} of ${required}`);
-
-  await deletePlan(page, planUrl);
+  await expect(status(page)).toHaveText(new RegExp(`^${escape(credits)} of ${escape(required)} credits\\.`));
 });
 
 test("a student imports the synthetic fixture transcript", async ({ page }) => {
   await signIn(page, `smoke-import-${stamp()}@example.test`, "STUDENT");
-  const planUrl = await createPlan(page);
+  await startBoard(page);
   await page.goto("/import");
   await expect(page.getByRole("heading", { name: "Import courses", exact: true })).toBeVisible();
   await page.getByRole("tab", { name: "From a transcript", exact: true }).click();
@@ -103,18 +95,16 @@ test("a student imports the synthetic fixture transcript", async ({ page }) => {
   await page.getByRole("button", { name: /^Add \d+ courses?$/ }).click();
   await expect(page.getByRole("status").filter({ hasText: /Added \d+ courses?\./ })).toBeVisible();
 
-  await page.goto(planUrl);
-  const rail = page.getByRole("complementary", { name: "Graduation progress" });
-  await expect(rail.getByRole("img", { name: /^[\d.]+ of [\d.]+ credits$/ })).not.toHaveAccessibleName(/^0 of /);
-  await deletePlan(page, planUrl);
+  await page.goto("/board");
+  await expect(status(page)).not.toHaveText(/^0 of /);
 });
 
 test("a student submits a placement review request", async ({ page }) => {
   await signIn(page, `smoke-appeal-${stamp()}@example.test`, "STUDENT");
   // The course page only offers a review once the student has a plan to check against.
-  const planUrl = await createPlan(page);
+  await startBoard(page);
   await page.goto("/courses/chamber-choir");
-  await page.getByRole("button", { name: "Request placement review", exact: true }).click();
+  await page.getByRole("button", { name: "Ask for a placement review", exact: true }).click();
   await expect(page).toHaveURL(/\/appeals\/[^/]+$/);
   await expect(page.getByRole("heading", { name: "Chamber Choir", exact: true })).toBeVisible();
 
@@ -128,17 +118,24 @@ test("a student submits a placement review request", async ({ page }) => {
   await expect(page.getByText("Submitted", { exact: true })).toBeVisible();
   await expect(page.getByText("Synthetic smoke test answer.").first()).toBeVisible();
 
+  // The class page points back to the request, and so does the menu under the student's name.
+  const appealUrl = page.url();
+  await page.goto("/courses/chamber-choir");
+  await expect(page.getByRole("link", { name: "Your placement review", exact: true })).toHaveAttribute("href", new URL(appealUrl).pathname);
+  await page.locator('header button[aria-haspopup="true"]').click();
+  await expect(page.getByRole("link", { name: "Placement reviews", exact: true })).toBeVisible();
+  await page.goto(appealUrl);
+
   // Leave the reviewers' queue as it was.
   await page.getByRole("button", { name: "Withdraw request", exact: true }).click();
   await expect(page.getByText("Withdrawn", { exact: true })).toBeVisible();
-  await deletePlan(page, planUrl);
 });
 
 test("a counselor approves a plan a student sent for review", async ({ page }) => {
   const id = stamp();
   const student = `smoke-review-${id}`;
   await signIn(page, `${student}@example.test`, "STUDENT");
-  const planUrl = await createPlan(page);
+  await startBoard(page);
   await addEnglishI(page);
   const review = page.getByRole("region", { name: "Review", exact: true });
   await review.getByRole("button", { name: "Send for review", exact: true }).click();
@@ -146,17 +143,17 @@ test("a counselor approves a plan a student sent for review", async ({ page }) =
   await expect(page.getByText("In review", { exact: true })).toBeVisible();
 
   await signIn(page, `smoke-counselor-${id}@pascack.org`, "COUNSELOR");
-  await page.goto("/counselor");
-  await page.getByRole("link", { name: new RegExp(`^${student} · Plan A`) }).click();
+  await page.goto("/students");
+  await page.getByRole("link", { name: new RegExp(`^${student} sent`) }).click();
   await expect(page).toHaveURL(/\/counselor\/plans\/[^/]+$/);
   await page.getByRole("region", { name: "Review", exact: true }).getByRole("button", { name: "Approve", exact: true }).click();
   await expect(page.getByText("Approved", { exact: true })).toBeVisible();
 
-  // The student sees the approval, then the synthetic plan is removed.
+  // The student sees the approval on their board.
   await signIn(page, `${student}@example.test`, "STUDENT");
-  await page.goto(planUrl);
+  await page.goto("/board");
   await expect(page.getByText("Approved", { exact: true })).toBeVisible();
-  await deletePlan(page, planUrl);
+  await expect(page.getByText(/in review/)).toHaveCount(0);
 });
 
 test("a student requests deletion from settings and cancels it", async ({ page }) => {

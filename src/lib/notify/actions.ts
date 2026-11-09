@@ -18,12 +18,16 @@ export async function markRead(notificationId: unknown): Promise<void> {
   if (!nid.success) return;
   await db.notification.updateMany({ where: { id: nid.data, userId: user.id, readAt: null }, data: { readAt: new Date() } });
   revalidatePath("/notifications");
+  revalidatePath("/board");
+  revalidatePath("/students");
 }
 
 export async function markAllRead(): Promise<void> {
   const user = await requireUser();
   await db.notification.updateMany({ where: { userId: user.id, readAt: null }, data: { readAt: new Date() } });
   revalidatePath("/notifications");
+  revalidatePath("/board");
+  revalidatePath("/students");
 }
 
 const prefsSchema = z.array(z.object({ kind: z.enum(KINDS), inApp: z.boolean(), email: z.boolean(), push: z.boolean() })).max(KINDS.length);

@@ -36,7 +36,7 @@ export function DataControls({ open }: { open: OpenDeletion | null }) {
         <a href="/api/export" download className={buttonVariants({ size: "sm" })}>Download JSON</a>
       </div>
 
-      <div className="space-y-2 border-t border-line pt-6">
+      <div className="space-y-2 pt-6">
         <h3 className="text-sm font-medium">Delete my data</h3>
         {!open && (
           <>

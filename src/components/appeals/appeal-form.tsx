@@ -95,7 +95,7 @@ export function AppealForm({ appealId, questions, initialAnswers, reportedGrade,
       ))}
 
       <p className="text-xs text-muted">Your answers and grades are self-reported. A supervisor checks them against your real records.</p>
-      {blocked && <p role="status" className="border-y border-line py-3 text-[13px] text-yellow">{blocked}</p>}
+      {blocked && <p role="status" className="soft px-4 py-3 text-[13px] text-yellow">{blocked}</p>}
       {msg && <p role={msg.tone === "error" ? "alert" : "status"} className={msg.tone === "error" ? "text-[13px] text-red" : "text-[13px] text-green"}>{msg.text}</p>}
 
       <div className="flex flex-wrap gap-2">

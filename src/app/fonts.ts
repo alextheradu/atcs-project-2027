@@ -1,25 +1,17 @@
 import localFont from "next/font/local";
 
-// IBM Plex from the @fontsource packages, so builds stay offline (see docs/DECISIONS.md).
+// Figtree from @fontsource, so builds stay offline and the CSP can keep font-src 'self' (see docs/DECISIONS.md).
 // next/font reads these arguments at compile time, so the paths must be literal.
 
-export const plexSans = localFont({
+export const figtree = localFont({
   src: [
-    { path: "../../node_modules/@fontsource/ibm-plex-sans/files/ibm-plex-sans-latin-400-normal.woff2", weight: "400", style: "normal" },
-    { path: "../../node_modules/@fontsource/ibm-plex-sans/files/ibm-plex-sans-latin-500-normal.woff2", weight: "500", style: "normal" },
-    { path: "../../node_modules/@fontsource/ibm-plex-sans/files/ibm-plex-sans-latin-600-normal.woff2", weight: "600", style: "normal" },
+    { path: "../../node_modules/@fontsource/figtree/files/figtree-latin-400-normal.woff2", weight: "400", style: "normal" },
+    { path: "../../node_modules/@fontsource/figtree/files/figtree-latin-500-normal.woff2", weight: "500", style: "normal" },
+    { path: "../../node_modules/@fontsource/figtree/files/figtree-latin-600-normal.woff2", weight: "600", style: "normal" },
+    { path: "../../node_modules/@fontsource/figtree/files/figtree-latin-700-normal.woff2", weight: "700", style: "normal" },
   ],
-  variable: "--font-plex-sans",
+  variable: "--font-figtree",
   display: "swap",
 });
 
-export const plexMono = localFont({
-  src: [
-    { path: "../../node_modules/@fontsource/ibm-plex-mono/files/ibm-plex-mono-latin-400-normal.woff2", weight: "400", style: "normal" },
-    { path: "../../node_modules/@fontsource/ibm-plex-mono/files/ibm-plex-mono-latin-500-normal.woff2", weight: "500", style: "normal" },
-  ],
-  variable: "--font-plex-mono",
-  display: "swap",
-});
-
-export const fontVariables = `${plexSans.variable} ${plexMono.variable}`;
+export const fontVariables = figtree.variable;

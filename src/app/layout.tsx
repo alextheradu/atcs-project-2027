@@ -10,7 +10,7 @@ export const metadata: Metadata = {
   icons: { apple: "/icons/apple-touch-icon.png" },
 };
 
-export const viewport: Viewport = { themeColor: "#12110f" };
+export const viewport: Viewport = { themeColor: "#161616" };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (

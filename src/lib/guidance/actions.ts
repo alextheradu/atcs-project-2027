@@ -24,6 +24,7 @@ export async function saveGuidance(input: unknown): Promise<ActionResult> {
     await writeAudit({ actor, action: "settings.guidance", entityType: "AppSetting", entityId: GUIDANCE_KEY, before: before ? (parseGuidance(before.value) as unknown as Prisma.InputJsonValue) : null, after: p.data as unknown as Prisma.InputJsonValue }, tx);
   });
   revalidatePath("/plans");
+  revalidatePath("/board");
   revalidatePath("/admin/major-guidance");
   return { ok: true };
 }

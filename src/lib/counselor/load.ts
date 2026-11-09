@@ -11,7 +11,7 @@ export async function loadCounselor(opts: { gradYear?: number; sort: DemandSort 
   const [config, pending, primaries, demandRows, years] = await Promise.all([
     getGraduationConfig(),
     db.plan.findMany({
-      where: { status: "SUBMITTED" },
+      where: { status: "SUBMITTED", isPrimary: true },
       orderBy: { submittedAt: "asc" },
       take: 100,
       select: { id: true, name: true, submittedAt: true, owner: { select: { name: true, email: true } } },
@@ -27,7 +27,7 @@ export async function loadCounselor(opts: { gradYear?: number; sort: DemandSort 
       },
     }),
     db.planEntry.findMany({
-      where: { plan: { OR: [{ isPrimary: true }, { status: { in: ["SUBMITTED", "APPROVED"] } }], owner: { role: "STUDENT" } } },
+      where: { plan: { isPrimary: true, owner: { role: "STUDENT" } } },
       select: { courseId: true, gradeLevel: true, plan: { select: { ownerId: true, status: true, isPrimary: true } } },
     }),
     db.studentProfile.findMany({ where: { gradYear: { not: null }, user: { role: "STUDENT" } }, distinct: ["gradYear"], select: { gradYear: true }, orderBy: { gradYear: "asc" } }),

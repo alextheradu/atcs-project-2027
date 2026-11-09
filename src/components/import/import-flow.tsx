@@ -117,15 +117,15 @@ export function ImportFlow({ plans, courses, aliases }: Props) {
   }
 
   if (plans.length === 0) {
-    return <p className="text-sm text-muted">Create a plan first, then come back to import into it. <Link className="underline underline-offset-4" href="/plans">Go to plans</Link></p>;
+    return <p className="text-sm text-muted">Start your board first, then come back to import into it. <Link className="underline underline-offset-4" href="/board">Go to my board</Link></p>;
   }
 
   return (
     <div className="space-y-8">
       <DraftNotice drafts={[parsedDraft, lineDraft]} />
-      <div role="tablist" aria-label="How to add courses" className="flex gap-5 border-b border-line">
+      <div role="tablist" aria-label="How to add courses" className="flex gap-1">
         {([["pdf", "From a transcript"], ["hand", "Add by hand"]] as const).map(([k, label]) => (
-          <button key={k} role="tab" aria-selected={tab === k} onClick={() => setTab(k)} className={`-mb-px border-b py-2 text-[13px] transition-colors ${tab === k ? "border-fg text-fg" : "border-transparent text-muted hover:text-fg"}`}>
+          <button key={k} role="tab" aria-selected={tab === k} onClick={() => setTab(k)} className={`h-9 rounded-full px-3.5 text-[14px] transition-colors ${tab === k ? "bg-fill-2 font-semibold text-fg" : "text-muted hover:text-fg"}`}>
             {label}
           </button>
         ))}
@@ -139,13 +139,13 @@ export function ImportFlow({ plans, courses, aliases }: Props) {
       </label>
 
       {done && (
-        <div role="status" className="border-y border-line py-3 text-[13px]">
+        <div role="status" className="soft px-4 py-3 text-[13px]">
           <p>
             Added <span className="num">{done.added}</span> {done.added === 1 ? "course" : "courses"}.
             {done.skipped.length > 0 && <> Skipped {done.skipped.join(", ")} because {done.skipped.length === 1 ? "it was" : "they were"} already in the plan.</>}
             {done.sentToStaff > 0 && <> Sent <span className="num">{done.sentToStaff}</span> {done.sentToStaff === 1 ? "title" : "titles"} to a counselor to review. Courses that are not in the catalog yet were not added. You can add them by hand once they exist.</>}
           </p>
-          <Link href={`/plans/${planId}`} className="mt-2 inline-block underline underline-offset-4">Open the plan</Link>
+          <Link href="/board" className="mt-2 inline-block underline underline-offset-4">Open my board</Link>
         </div>
       )}
       {error && <p role="alert" className="text-[13px] text-red">{error}</p>}
@@ -166,7 +166,7 @@ export function ImportFlow({ plans, courses, aliases }: Props) {
             <section className="space-y-6" aria-label="Review">
               {parsed.classOf && <p className="text-[13px] text-muted">Class of <span className="num text-fg">{parsed.classOf}</span></p>}
               {parsed.warnings.length > 0 && (
-                <ul className="space-y-1 border-y border-line py-3 text-[13px] text-yellow" role="status">
+                <ul className="space-y-1 soft px-4 py-3 text-[13px] text-yellow" role="status">
                   {parsed.warnings.map((w) => <li key={w}>{w}</li>)}
                 </ul>
               )}

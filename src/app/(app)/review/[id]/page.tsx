@@ -29,7 +29,7 @@ export default async function ReviewDetail({ params }: { params: Promise<{ id: s
       <PageHeader
         title={appeal.targetCourse.name}
         description={`${DEPT_LABEL[appeal.department]} · ${appeal.student.name ?? appeal.student.email}`}
-        back={{ href: "/review", label: "Reviews" }}
+        back={{ href: "/students", label: "Students" }}
         badge={<Badge tone={TONE[status]}>{STATUS_LABEL[status]}</Badge>}
       />
       <div className="space-y-10">

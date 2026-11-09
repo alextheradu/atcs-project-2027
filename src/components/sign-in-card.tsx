@@ -21,27 +21,27 @@ export function SignInCard() {
   const error = useSearchParams().get("error");
 
   return (
-    <div className="w-full max-w-[360px]">
-      <h2 className="text-[15px] font-medium">Sign in</h2>
-      <p className="mt-1 text-[13px] text-muted">Use your Google account.</p>
+    <div className="soft w-full max-w-[400px] p-5">
+      <h2 className="text-[17px] font-bold">Sign in</h2>
+      <p className="mt-0.5 text-[14px] text-muted">Use your school Google account.</p>
 
       {answer === "under13" ? (
         <div className="mt-6" role="status">
-          <p className="text-[13px] font-medium">Come back when you are 13.</p>
-          <p className="mt-1 text-[13px] text-muted">This tool is for students 13 and older. We did not save anything. Ask a parent or your school if you need help with course selection.</p>
+          <p className="text-[15px] font-semibold">Come back when you are 13.</p>
+          <p className="mt-1 text-[14px] text-muted">This tool is for students 13 and older. We did not save anything. Ask a parent or your school if you need help with course selection.</p>
         </div>
       ) : (
-        <fieldset className="mt-6">
-          <legend className="text-[13px] text-muted">How old are you?</legend>
+        <fieldset className="mt-5">
+          <legend className="text-[14px] text-muted">How old are you?</legend>
           <div className="mt-2 grid grid-cols-2 gap-2">
-            <button type="button" className="btn btn-sm" aria-pressed={answer === "over13"} onClick={() => { setAnswer("over13"); void answerAge(true); }}>13 or older</button>
-            <button type="button" className="btn btn-sm" onClick={() => { setAnswer("under13"); void answerAge(false); }}>Under 13</button>
+            <button type="button" className="btn bg-fill-2 aria-pressed:bg-fg aria-pressed:text-bg" aria-pressed={answer === "over13"} onClick={() => { setAnswer("over13"); void answerAge(true); }}>13 or older</button>
+            <button type="button" className="btn bg-fill-2" onClick={() => { setAnswer("under13"); void answerAge(false); }}>Under 13</button>
           </div>
         </fieldset>
       )}
 
       {error && (
-        <p role="alert" className="mt-4 text-[13px] text-red">
+        <p role="alert" className="mt-4 text-[14px] text-red">
           {ERRORS[error] ?? "Could not sign you in."}
         </p>
       )}

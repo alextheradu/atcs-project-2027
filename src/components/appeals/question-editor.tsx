@@ -40,7 +40,7 @@ function Editor({ row, departments, canAll, onDone }: { row: QRow | null; depart
   }
 
   return (
-    <div className="grid gap-2.5 border-y border-line py-4 sm:grid-cols-2">
+    <div className="grid gap-2.5 soft px-4 py-4 sm:grid-cols-2">
       <input className="input sm:col-span-2" aria-label="Question" placeholder="Question" maxLength={300} value={q.prompt} onChange={(e) => set("prompt", e.target.value)} />
       <input className="input sm:col-span-2" aria-label="Help text" placeholder="Help text (optional)" maxLength={300} value={q.helpText ?? ""} onChange={(e) => set("helpText", e.target.value || null)} />
       <select className="input" aria-label="Department" value={q.department ?? ""} disabled={!!row} onChange={(e) => set("department", e.target.value || null)}>

@@ -16,12 +16,11 @@ export interface Demand {
 }
 
 /**
- * Course demand for enrollment decisions. A plan counts when it is the student's primary plan or
- * has been submitted or approved. Other drafts are what-ifs and do not count. A student counts once
- * per course, however many plans hold it.
+ * Course demand for enrollment decisions. Only primary plans count: a student has one plan, the one on their
+ * Board, and staff never see a plan the student cannot open. A student counts once per course.
  */
 export function courseDemand(rows: DemandRow[]): Demand[] {
-  const counted = rows.filter((r) => r.isPrimary || r.planStatus === "SUBMITTED" || r.planStatus === "APPROVED");
+  const counted = rows.filter((r) => r.isPrimary);
   const byCourse = new Map<string, Map<string, number>>();
   for (const r of counted) {
     const m = byCourse.get(r.courseId) ?? new Map<string, number>();

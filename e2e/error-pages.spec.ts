@@ -18,7 +18,7 @@ test("the 404 works on a small phone without JavaScript", async ({ browser }) =>
     const response = await page.goto("http://localhost:3100/this-page-does-not-exist");
     expect(response?.status()).toBe(404);
     await expect(page.getByRole("heading", { name: "This page is out of reach." })).toBeVisible();
-    await expect(page.getByRole("link", { name: "Go to dashboard", exact: true })).toBeVisible();
+    await expect(page.getByRole("link", { name: "Go to my home page", exact: true })).toBeVisible();
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
     await page.getByRole("link", { name: "Go home", exact: true }).click();
     await expect(page).toHaveURL("http://localhost:3100/");
@@ -27,15 +27,15 @@ test("the 404 works on a small phone without JavaScript", async ({ browser }) =>
   }
 });
 
-test("a missing plan keeps workspace navigation and returns to the dashboard", async ({ page }) => {
+test("a missing class keeps workspace navigation and returns home", async ({ page }) => {
   const login = await page.request.get("/api/dev-login?email=error-pages-admin@example.test&role=ADMIN");
   test.skip(login.status() === 404, "Requires DEV_AUTH=true outside production.");
   expect(login.ok()).toBeTruthy();
-  await page.goto("/plans/thisplandoesnotexist");
+  await page.goto("/courses/this-class-does-not-exist");
   await expect(page.getByRole("heading", { name: "This page is out of reach." })).toBeVisible();
   await expect(page.getByRole("navigation", { name: "Main", exact: true })).toBeVisible();
   await expect(page.getByRole("main")).toHaveCount(1);
-  await page.getByRole("link", { name: "Go to dashboard", exact: true }).click();
-  await expect(page).toHaveURL("/dashboard");
+  await page.getByRole("link", { name: "Go to my home page", exact: true }).click();
+  await expect(page).toHaveURL("/board");
   await expect(page.getByRole("heading", { name: "This page is out of reach." })).toHaveCount(0);
 });

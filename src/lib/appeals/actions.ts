@@ -132,6 +132,7 @@ export async function submitAppeal(appealId: unknown): Promise<ActionResult> {
   });
   revalidatePath("/appeals");
   revalidatePath("/review");
+  revalidatePath("/students");
   return { ok: true };
 }
 
@@ -149,6 +150,7 @@ export async function withdrawAppeal(appealId: unknown): Promise<ActionResult> {
   });
   revalidatePath("/appeals");
   revalidatePath("/review");
+  revalidatePath("/students");
   return { ok: true };
 }
 
@@ -182,6 +184,7 @@ export async function startReview(appealId: unknown): Promise<ActionResult> {
     if (full) await notify(tx, [{ userId: full.studentId, kind: "APPEAL_ASSIGNED", title: "A supervisor is reviewing your request", body: `Your request for ${full.targetCourse.name} is being reviewed.`, url: `/appeals/${appeal.id}` }]);
   });
   revalidatePath("/review");
+  revalidatePath("/students");
   return { ok: true };
 }
 
@@ -208,7 +211,9 @@ export async function decideAppeal(input: unknown): Promise<ActionResult> {
     await writeAudit({ actor, action: `appeal.${p.data.decision.toLowerCase()}`, entityType: "Appeal", entityId: appeal.id, after: { decision: p.data.decision } }, tx);
   });
   revalidatePath("/review");
+  revalidatePath("/students");
   revalidatePath("/appeals");
   revalidatePath("/plans");
+  revalidatePath("/board");
   return { ok: true };
 }

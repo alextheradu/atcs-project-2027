@@ -68,3 +68,9 @@ export async function loadPickerCourses(): Promise<(PickerCourse & { tags: { kin
     prereqText: c.prereqText,
   }));
 }
+
+/** The plan shown on a student's Board: their primary plan, otherwise the one they changed most recently. */
+export async function boardPlanId(ownerId: string): Promise<string | null> {
+  const plan = await db.plan.findFirst({ where: { ownerId }, orderBy: [{ isPrimary: "desc" }, { updatedAt: "desc" }], select: { id: true } });
+  return plan?.id ?? null;
+}

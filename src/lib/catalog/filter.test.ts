@@ -43,3 +43,18 @@ describe("filterCourses", () => {
     expect(filterCourses(list, { q: "zzzz" })).toEqual([]);
   });
 });
+
+describe("filterCourses by requirement", () => {
+  const tagged = [
+    { ...c({ name: "Physics" }), tags: [{ kind: "SCI_PHYS" }] },
+    { ...c({ name: "Chemistry" }), tags: [{ kind: "SCI_CHEM" }] },
+    { ...c({ name: "Applied Physics" }), tags: [{ kind: "SCI_PHYS" }, { kind: "LIFE_CAREERS" }] },
+    c({ name: "Untagged" }),
+  ];
+  it("keeps only courses that count toward that requirement", () => {
+    expect(names(filterCourses(tagged, { requirement: "SCI_PHYS" }))).toEqual(["Applied Physics", "Physics"]);
+  });
+  it("drops courses with no tags when a requirement is set", () => {
+    expect(names(filterCourses(tagged, { requirement: "LIFE_CAREERS" }))).toEqual(["Applied Physics"]);
+  });
+});

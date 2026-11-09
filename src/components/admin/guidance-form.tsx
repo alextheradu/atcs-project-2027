@@ -40,7 +40,7 @@ export function GuidanceForm({ initial }: { initial: GuidanceConfig }) {
       <section className="space-y-5">
         <h2 className="eyebrow">Intended majors that need more</h2>
         {majors.map((m, i) => (
-          <div key={i} className="space-y-2.5 border-t border-line pt-4">
+          <div key={i} className="space-y-2.5 pt-4">
             <input className="input" aria-label="Group name" value={m.label} onChange={(e) => setMajors(majors.map((x, j) => (j === i ? { ...x, label: e.target.value } : x)))} />
             <input className="input" aria-label="Words that match" placeholder="Words a student might type, separated by commas" value={m.keywordsText} onChange={(e) => setMajors(majors.map((x, j) => (j === i ? { ...x, keywordsText: e.target.value } : x)))} />
             <div className="grid gap-3 sm:grid-cols-5">

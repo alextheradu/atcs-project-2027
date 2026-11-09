@@ -12,7 +12,7 @@ export function StartAppealButton({ slug, className = "btn btn-sm" }: { slug: st
   return (
     <span className="inline-flex flex-col items-start gap-1">
       <button type="button" className={className} disabled={pending} onClick={() => { setError(null); start(async () => { const r = await startAppeal(slug); if (r.ok && r.data) router.push(`/appeals/${r.data.id}`); else if (!r.ok) setError(r.error); }); }}>
-        {pending ? "Opening" : "Request placement review"}
+        {pending ? "Opening" : "Ask for a placement review"}
       </button>
       {error && <span role="alert" className="text-xs text-red">{error}</span>}
     </span>

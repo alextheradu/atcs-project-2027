@@ -59,7 +59,7 @@ export function CourseForm({ mode, courseId, archived, initial, interestOptions 
         </label>
         <label className={field}>
           <span className={label}>Slug {mode === "edit" && "(fixed)"}</span>
-          <input className="input font-mono" value={c.slug} disabled={mode === "edit"} onChange={(e) => set("slug", e.target.value)} />
+          <input className="input" value={c.slug} disabled={mode === "edit"} onChange={(e) => set("slug", e.target.value)} />
         </label>
         <label className={field}>
           <span className={label}>Department</span>
@@ -89,7 +89,7 @@ export function CourseForm({ mode, courseId, archived, initial, interestOptions 
         </label>
         <label className={field}>
           <span className={label}>Credits</span>
-          <input className="input font-mono" type="number" step="0.5" min={0} max={30} value={c.credits} onChange={(e) => set("credits", Number(e.target.value))} />
+          <input className="input" type="number" step="0.5" min={0} max={30} value={c.credits} onChange={(e) => set("credits", Number(e.target.value))} />
         </label>
         <fieldset className={field}>
           <legend className={label}>Grades offered</legend>
@@ -109,7 +109,7 @@ export function CourseForm({ mode, courseId, archived, initial, interestOptions 
         </fieldset>
         <label className={field}>
           <span className={label}>PDF page</span>
-          <input className="input font-mono" type="number" min={1} value={c.sourcePage ?? ""} onChange={(e) => set("sourcePage", e.target.value === "" ? null : Number(e.target.value))} />
+          <input className="input" type="number" min={1} value={c.sourcePage ?? ""} onChange={(e) => set("sourcePage", e.target.value === "" ? null : Number(e.target.value))} />
         </label>
         <div className="flex flex-wrap gap-6 sm:col-span-2">
           <label className="flex items-center gap-2 text-sm"><input type="checkbox" className="accent-[var(--accent)]" checked={c.plannable} onChange={(e) => set("plannable", e.target.checked)} />Plannable</label>
@@ -130,7 +130,7 @@ export function CourseForm({ mode, courseId, archived, initial, interestOptions 
         </label>
       </section>
 
-      <section className="space-y-4 border-t border-line pt-6">
+      <section className="space-y-4 pt-6">
         <h2 className="eyebrow">Graduation requirement tags</h2>
         <ul className="list">
           {REQUIREMENT_KINDS.map((kind) => {
@@ -145,7 +145,7 @@ export function CourseForm({ mode, courseId, archived, initial, interestOptions 
                   <>
                     <label className="flex items-center gap-2 text-xs text-muted">
                       Credits
-                      <input className="input !h-8 !w-20 font-mono" type="number" step="0.5" min={0} max={30} value={t.credits} onChange={(e) => setTag(kind, { ...t, credits: Number(e.target.value) })} />
+                      <input className="input !h-8 !w-20" type="number" step="0.5" min={0} max={30} value={t.credits} onChange={(e) => setTag(kind, { ...t, credits: Number(e.target.value) })} />
                     </label>
                     <label className="flex items-center gap-2 text-xs text-muted">
                       <input type="checkbox" className="accent-[var(--accent)]" checked={t.provisional} onChange={(e) => setTag(kind, { ...t, provisional: e.target.checked })} />
@@ -159,7 +159,7 @@ export function CourseForm({ mode, courseId, archived, initial, interestOptions 
         </ul>
       </section>
 
-      <section className="space-y-4 border-t border-line pt-6">
+      <section className="space-y-4 pt-6">
         <h2 className="eyebrow">Interest tags</h2>
         <div className="flex flex-wrap gap-x-6 gap-y-2.5">
           {interestOptions.map((i) => (
@@ -171,7 +171,7 @@ export function CourseForm({ mode, courseId, archived, initial, interestOptions 
         </div>
       </section>
 
-      <div className="flex flex-wrap items-center gap-3 border-t border-line pt-6">
+      <div className="flex flex-wrap items-center gap-3 pt-6">
         <Button variant="primary" onClick={save} disabled={pending}>{mode === "new" ? "Create course" : "Save changes"}</Button>
         {mode === "edit" && courseId && (
           <>

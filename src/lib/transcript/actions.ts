@@ -95,6 +95,8 @@ async function save(input: unknown, source: "IMPORT" | "MANUAL"): Promise<Action
   });
 
   revalidatePath("/plans");
+
+  revalidatePath("/board");
   revalidatePath(`/plans/${planId}`);
   return { ok: true, data: { added: fresh.length, skipped, sentToStaff } };
 }

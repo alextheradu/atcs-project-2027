@@ -104,19 +104,19 @@ export function NotificationSettings({ kinds, initial, devices }: Props) {
   return (
     <div className="space-y-8">
       <div>
-        <table className="w-full text-left text-[13px]">
+        <table className="soft w-full text-left text-[14px]">
           <thead>
-            <tr className="text-xs text-muted">
-              <th scope="col" className="pb-2 font-normal">Tell me when</th>
+            <tr className="text-[13px] text-muted">
+              <th scope="col" className="px-4 pb-2 pt-3 font-normal">Tell me when</th>
               <th scope="col" className="w-16 pb-2 font-normal">In app</th>
               <th scope="col" className="w-16 pb-2 font-normal">Email</th>
               <th scope="col" className="w-16 pb-2 font-normal">Push</th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-line border-y border-line">
+          <tbody>
             {kinds.map((k) => (
               <tr key={k}>
-                <th scope="row" className="py-2.5 pr-4 font-normal">{KIND_LABEL[k]}</th>
+                <th scope="row" className="py-2.5 pl-4 pr-4 font-normal">{KIND_LABEL[k]}</th>
                 <td><input type="checkbox" checked disabled aria-label={`${KIND_LABEL[k]}: in app, always on`} /></td>
                 <td><input type="checkbox" checked={prefs[k].email || isEmailLocked(k)} disabled={isEmailLocked(k)} onChange={(e) => set(k, "email", e.target.checked)} aria-label={`${KIND_LABEL[k]}: email`} /></td>
                 <td><input type="checkbox" checked={prefs[k].push} onChange={(e) => set(k, "push", e.target.checked)} aria-label={`${KIND_LABEL[k]}: push`} /></td>
@@ -130,7 +130,7 @@ export function NotificationSettings({ kinds, initial, devices }: Props) {
         </div>
       </div>
 
-      <div className="space-y-2 border-t border-line pt-6">
+      <div className="space-y-2 pt-6">
         <h3 className="text-sm font-medium">Push on this device</h3>
         {pushState === "unsupported" && <p className="text-[13px] text-muted">{ios && !standalone ? "On iPhone and iPad, push works only after you tap Share, then Add to Home Screen, and open the app from there. It needs iOS 16.4 or later." : "This browser does not support push."}</p>}
         {pushState === "denied" && <p className="text-[13px] text-muted">Notifications are blocked for this site. Allow them in your browser settings, then reload.</p>}
@@ -143,7 +143,7 @@ export function NotificationSettings({ kinds, initial, devices }: Props) {
         {ios && !standalone && pushState !== "unsupported" && <p className="text-xs text-muted">On iPhone, push only works from the Home Screen app (iOS 16.4 or later).</p>}
       </div>
 
-      <div className="space-y-2 border-t border-line pt-6">
+      <div className="space-y-2 pt-6">
         <h3 className="text-sm font-medium">Install the app</h3>
         {standalone ? <p className="text-[13px] text-muted">You are using the installed app.</p> : install ? (
           <Button disabled={pending} onClick={() => install.prompt().then(() => setInstall(null))}>Install</Button>

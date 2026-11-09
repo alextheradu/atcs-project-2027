@@ -44,7 +44,7 @@ function CoursePicker({ value, options, onChange }: { value: string[]; options: 
       {value.length > 0 && (
         <ul className="flex flex-wrap gap-1.5">
           {value.map((s) => (
-            <li key={s} className="flex items-center gap-1 rounded-md border border-line-strong px-2 py-0.5 text-xs">
+            <li key={s} className="flex items-center gap-1.5 rounded-full bg-fill-2 px-2.5 py-1 text-[13px]">
               {nameOf(s)}
               <button type="button" aria-label={`Remove ${nameOf(s)}`} className="text-muted hover:text-fg" onClick={() => onChange(value.filter((x) => x !== s))}>
                 ×
@@ -199,7 +199,7 @@ function Node({ rule, path, root, setRoot, options }: { rule: Rule; path: Path; 
     );
   }
   return (
-    <div className="space-y-2.5 rounded-md border border-line p-3">
+    <div className="space-y-2.5 rounded-[12px] bg-fill p-3">
       <div className="flex items-center justify-between gap-2">
         <h3 className="text-[13px] font-medium">{LEAF_LABEL[rule.type]}</h3>
         <Controls path={path} root={root} setRoot={setRoot} />

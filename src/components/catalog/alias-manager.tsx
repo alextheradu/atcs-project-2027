@@ -13,7 +13,7 @@ export function AliasManager({ courseId, aliases }: { courseId: string; aliases:
   const [pending, start] = useTransition();
 
   return (
-    <section className="space-y-4 border-t border-line pt-6">
+    <section className="space-y-4 pt-6">
       <DraftNotice drafts={[draft]} />
       <div>
         <h2 className="eyebrow">Transcript aliases</h2>

@@ -16,6 +16,7 @@ const READ_ONLY = "This plan was submitted for review, so it cannot be changed r
 
 function refresh(planId?: string) {
   revalidatePath("/plans");
+  revalidatePath("/board");
   if (planId) revalidatePath(`/plans/${planId}`);
 }
 

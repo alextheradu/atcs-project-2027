@@ -4,20 +4,20 @@ import { courseDemand, offTrackReasons, sortDemand, type DemandRow } from "./ind
 const r = (studentId: string, courseId: string, planStatus: string, isPrimary: boolean, gradeLevel = 10): DemandRow => ({ studentId, courseId, planStatus, isPrimary, gradeLevel });
 
 describe("courseDemand", () => {
-  it("counts primary plans and submitted or approved plans, not other drafts", () => {
+  it("counts only primary plans, the one each student sees on their Board", () => {
     const d = courseDemand([
       r("s1", "calc", "DRAFT", true),
-      r("s2", "calc", "DRAFT", false), // a what-if draft
+      r("s2", "calc", "DRAFT", false), // a plan the student can no longer open
       r("s3", "calc", "SUBMITTED", false),
       r("s4", "calc", "APPROVED", false),
-      r("s5", "calc", "CHANGES_REQUESTED", false), // not primary, not submitted
+      r("s5", "calc", "SUBMITTED", true),
     ]);
-    expect(d).toEqual([{ courseId: "calc", students: 3, byGrade: { 10: 3 } }]);
+    expect(d).toEqual([{ courseId: "calc", students: 2, byGrade: { 10: 2 } }]);
   });
-  it("counts a student once per course even across plans", () => {
-    const d = courseDemand([r("s1", "calc", "DRAFT", true, 11), r("s1", "calc", "SUBMITTED", false, 12)]);
+  it("uses the primary plan's grade when an older plan disagrees", () => {
+    const d = courseDemand([r("s1", "calc", "SUBMITTED", false, 11), r("s1", "calc", "DRAFT", true, 12)]);
     expect(d[0].students).toBe(1);
-    expect(d[0].byGrade).toEqual({ 11: 1 });
+    expect(d[0].byGrade).toEqual({ 12: 1 });
   });
   it("breaks the count down by grade", () => {
     const d = courseDemand([r("s1", "bio", "DRAFT", true, 9), r("s2", "bio", "DRAFT", true, 9), r("s3", "bio", "DRAFT", true, 10)]);
