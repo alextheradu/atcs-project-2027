@@ -10,7 +10,7 @@ Update this file at the end of every phase or session.
 | 1 | Auth and roles | built, awaiting owner checkpoint (needs Google credentials for the live flow) |
 | 2 | Catalog | built, awaiting owner review of the catalog and provisional tags |
 | 3 | Planner and tracker | built, awaiting owner checkpoint (build a plan, check totals) |
-| 4 | Eligibility and pathways | built, awaiting owner checkpoint (try real course choices and the pathway graph) |
+| 4 | Eligibility and pathways | built, awaiting owner checkpoint (try real course choices; Pathways redone 2026-11-10, look at each subject's map) |
 | 5 | Onboarding | built, awaiting owner checkpoint (walk the 9th grade and 8th grade paths) |
 | 6 | Transcript import | built, awaiting owner checkpoint (import your own transcript locally) |
 | 7 | Appeals | built, awaiting owner checkpoint (submit as a student, decide as a supervisor) |
@@ -39,10 +39,11 @@ Plans: `docs/plans/phase-NN-*.md`.
 - [ ] Whether school Google Workspaces allow the OAuth client
 - [ ] Next cycle dates for course selection and the appeal window
 - [ ] Counselor scope: do counselors see all students (current default) or only an assigned caseload? A caseload needs a new model.
-- [ ] Deadline or launch date, to decide an MVP cut line (candidates to cut first: rule builder UI, PWA push, pathway graph)
+- [ ] Deadline or launch date, to decide an MVP cut line (candidates to cut first: rule builder UI, PWA push)
 
 ## Log
 
+- 2026-11-10: Pathways redone. The React Flow graph is replaced by one map per subject (math from Algebra I or Pre-Algebra, science, English, social studies, each world language, computer science), drawn like the Program of Studies "Typical Paths" charts: years across, levels stacked, solid arrow for the usual next class, dashed for moving up or down. A three-item key explains the moves, and each map lists its department's level rules with page numbers. Students see "Done", "Taking now" or "In your plan" on their own classes; hovering or focusing a class lights its arrows. Phones get a narrower layout that scrolls sideways. Maps are hand written in `src/lib/pathways/maps.ts` with a pure layout in `layout.ts` (see DECISIONS 2026-11-10); `@xyflow/react`, `dagre` and `@types/dagre` removed. Typecheck, lint, 981 unit tests and the new `e2e/pathways.spec.ts` pass. Checked in a browser at 1440px and 375px. Owner checkpoint: walk each subject's map and check the rules text against the PDF.
 - 2026-11-10: Classes list folds each subject into a native `<details>` (name, count, chevron), closed by default so all 14 subjects fit on one screen. Every subject opens when the results are 20 classes or fewer, or all in one subject; a broad filter like "9th grade" stays folded. No client JS. Found while checking: Back from a class page remounts `/courses` (typed search text and opened subjects are lost), so Activity is not preserving this route in dev; not investigated further. Typecheck, lint and 911 unit tests pass. Checked in a browser at desktop and 375px.
 - 2026-11-09: Frontend redesign. Neutral charcoal, Figtree, contd sticker buttons, subject colors, no separators. Students get Board and Classes; staff add Students and Admin. New `src/lib/board` (rows, spots, status sentence) and `canTakeAnswer`, both with tests. One plan per student in the UI; staff counts use primary plans only. Old routes redirect. No schema change; catalog tables checked unchanged against a pre-work backup. Typecheck, lint, unit tests and all e2e tests pass. See DECISIONS 2026-11-09.
 - 2026-11-09: Removed `docs/superpowers/` and `.superpowers/` from all local Git history. The phase plans in `docs/plans/` remain, and existing local ignore edits were preserved. Verified every other tracked file is identical after the rewrite, no Superpowers paths remain reachable, and Git integrity checks pass. Typecheck, lint and all 863 unit tests pass. GitHub history has not been replaced.

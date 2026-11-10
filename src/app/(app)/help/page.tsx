@@ -6,7 +6,7 @@ import { LEARN_CARDS } from "@/lib/learn/content";
 
 const USING = [
   ["Board", "Your plan for all four years. Each row is a subject, each column a grade. Outlined spots are what you still need to graduate: click one to see the classes that fill it. Click a class to move it to another grade, mark it done, or remove it."],
-  ["Classes", "Every class in the Program of Studies. Each class page tells you first whether you can take it, and why not if you can't. Switch to Pathways to see the usual order of classes in a subject."],
+  ["Classes", "Every class in the Program of Studies. Each class page tells you first whether you can take it, and why not if you can't. Switch to Pathways to see the order of classes in each subject and how moving up or down a level works."],
   ["The menu under your name", "Import a transcript, change settings and notifications, and read this page."],
 ] as const;
 

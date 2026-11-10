@@ -7,7 +7,7 @@
 - `/dashboard` timeline widget, requirement summary, primary plan, pending appeals and notifications
 - `/plans`, `/plans/[id]` the four-year planner with requirement rail and warnings
 - `/courses`, `/courses/[slug]` browse and search with filters, eligibility badge, pathway links
-- `/pathways` pathway graph
+- `/pathways` redirects to `/courses?view=pathways`, the pathway maps
 - `/import` transcript import and manual bulk add
 - `/appeals`, `/appeals/new`, `/appeals/[id]`
 - `/review` supervisor queue for appeals, counselor queue for plans

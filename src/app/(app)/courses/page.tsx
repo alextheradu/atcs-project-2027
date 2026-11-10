@@ -2,7 +2,7 @@ export const instant = false;
 
 import { ChevronDown } from "lucide-react";
 import Link from "next/link";
-import { PathwayGraph } from "@/components/pathways/pathway-graph";
+import { PathwaysView } from "@/components/pathways/pathways-view";
 import { EmptyState } from "@/components/ui/empty-state";
 import { DEPARTMENTS } from "@/lib/admin/schemas";
 import { requirePageUser } from "@/lib/auth/page";
@@ -12,7 +12,6 @@ import { db } from "@/lib/db";
 import { buildCourseWhere } from "@/lib/catalog/queries";
 import { DEPT_LABEL, KIND_LABEL, LEVEL_LABEL, fmtCredits } from "@/lib/catalog/labels";
 import { LEVELS, courseFilterSchema } from "@/lib/catalog/schemas";
-import { loadPathways } from "@/lib/pathways/load";
 import type { RequirementKind } from "@/lib/requirements";
 import { cn } from "@/lib/utils";
 
@@ -48,13 +47,15 @@ export default async function Courses({ searchParams }: { searchParams: Params }
   );
 
   if (view === "pathways") {
-    const { nodes, edges, hasPlan } = await loadPathways(user.id, canUseStudentWorkspace(user.role));
     return (
       <div>
         {header}
         <ViewTabs view="pathways" />
-        <p className="mb-4 max-w-[65ch] text-[15px] text-muted">The usual order of classes in each subject. Solid lines are the normal next step. Dashed lines move up a level.</p>
-        <PathwayGraph nodes={nodes} edges={edges} hasPlan={hasPlan} />
+        <PathwaysView
+          userId={user.id}
+          student={canUseStudentWorkspace(user.role)}
+          query={{ subject: pick("subject"), start: pick("start"), lang: pick("lang") }}
+        />
       </div>
     );
   }

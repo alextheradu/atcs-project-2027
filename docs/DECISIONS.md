@@ -2,6 +2,14 @@
 
 Settled choices and deviations from the original spec. Add a dated entry when you make a new one. Do not re-litigate without the owner.
 
+## 2026-11-10 (Pathways redo)
+
+- **The owner found the pathway graph too complex for an average student.** What it should teach is how the school's levels work: the usual next class, and moving up or down a level between years. Supersedes the Phase 4 React Flow graph.
+- **Pathways draws the school's own "Typical Paths" charts** (math and computer science p. 36, science p. 45): years left to right, levels stacked with the highest on top, a solid arrow for the usual next class and dashed arrows for moving up or down. English, social studies and world language have no chart, so their maps follow the course order and the written level rules (p. 15 to 18, p. 23, p. 46 to 48). Moving down there is drawn because each department says what it takes to stay in Honors. Each map lists its level rules with printed page numbers.
+- **The maps are hand written in `src/lib/pathways/maps.ts`, not derived from `CourseEdge` rows.** The edges cannot say which 8th grade start a step belongs to (Geometry Enhanced leads to Algebra I Enhanced only for Pre-Algebra students), and they hold no moves down. Edges still feed "Usually comes after" and "Leads to" on class pages and the staff edge editor, so an edge edit does not change the map. Tests check every map class exists in the seed catalog; archived classes drop out at render.
+- **No eligibility states on the map.** A student sees "Done", "Taking now" or "In your plan" on classes from their Board, nothing else. Whether they qualify lives on each class page, one click away.
+- **React Flow and dagre removed.** The map is positioned on a fixed grid by a pure layout function and drawn as one SVG behind link tiles, server rendered except a small hover and focus highlight. Phones get a narrower layout without lane labels that scrolls sideways.
+
 ## 2026-11-09 (frontend redesign: the Board)
 
 - **The owner found the ledger look and the 8 to 18 item nav confusing and not to their taste.** Chosen in a mockup round: neutral charcoal like BetterCanvas dark mode, dev-tool layouts (Vercel, Supabase, Railway, Render, memeity), the contd buttons, and the plan as a subject-by-grade Board. Supersedes the 2026-11-02 identity pass.
@@ -209,7 +217,7 @@ Settled choices and deviations from the original spec. Add a dated entry when yo
 ## 2026-11-04 (Phase 11, ship)
 
 - **Script CSP keeps `'unsafe-inline'`, no nonces, no SRI.** Tested: with `experimental.sri` and `script-src 'self'`, a production build blocks the inline scripts the App Router streams (`self.__next_f.push`, `$RC`), and pages never hydrate. SRI only hashes script files. Nonces would cover inline scripts, but they need a fresh value per request, so every page renders dynamically, and the Next 16 docs state Partial Prerendering does not work with them. This app relies on Cache Components and PPR. Compensating controls: `script-src` allows only same-origin files, `script-src-attr 'none'` blocks injected `onclick=` style handlers (React never emits them), `object-src 'none'`, `base-uri 'self'`, `frame-ancestors 'none'`, no `dangerouslySetInnerHTML` anywhere in `src`, and React escapes all rendered text. Revisit if Next adds hash support for streamed inline scripts.
-- **`style-src` keeps `'unsafe-inline'`.** React Flow, drag and drop and Tailwind runtime values set `style` attributes.
+- **`style-src` keeps `'unsafe-inline'`.** Drag and drop, the pathway map's tile positions and Tailwind runtime values set `style` attributes.
 - **`Cross-Origin-Opener-Policy: same-origin`.** Google sign-in is a full-page redirect from a server action, not a popup.
 - **Route handler origin checks: none needed today.** The only state-changing handlers are the two cron routes, which require `CRON_SECRET` and are called by the scheduler, not a browser. Auth.js checks its own CSRF token. Everything else uses server actions, which Next protects. Add an origin check to any future cookie-authenticated POST handler.
 - **Removed unused packages**: `react-hook-form`, `@hookform/resolvers`, `@dnd-kit/sortable`, `@dnd-kit/utilities`. Forms are server actions with zod and `useDraftState`, not react-hook-form (spec 01 predates that).
