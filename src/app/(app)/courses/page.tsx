@@ -1,5 +1,6 @@
 export const instant = false;
 
+import { ChevronDown } from "lucide-react";
 import Link from "next/link";
 import { PathwayGraph } from "@/components/pathways/pathway-graph";
 import { EmptyState } from "@/components/ui/empty-state";
@@ -108,35 +109,41 @@ export default async function Courses({ searchParams }: { searchParams: Params }
       </form>
 
       <p className="mt-6 text-[14px] text-muted"><span className="num">{courses.length}</span> {courses.length === 1 ? "class" : "classes"}</p>
-      {groups.map(([dept, rows]) => (
-        <section key={dept} aria-labelledby={`dept-${dept}`} className="mt-8">
-          <h2 id={`dept-${dept}`} className="eyebrow mb-2">
-            {DEPT_LABEL[dept]} <span className="num font-normal text-muted">{rows.length}</span>
-          </h2>
-          <ul className="list list-hover">
-            {rows.map((c) => {
-              const tags = c.requirements.map((r) => ({ kind: r.kind as RequirementKind, credits: Number(r.credits), provisional: r.provisional }));
-              // Only say it when it adds information (Theater Arts counts toward Arts, not English).
-              const kinds = [...new Set(c.requirements.map((r) => KIND_LABEL[r.kind]))].filter((k) => k !== DEPT_LABEL[c.department]);
-              return (
-                <li key={c.id}>
-                  <Link href={`/courses/${c.slug}`} className={cn("flex items-center gap-3 py-2.5", `subject-${rowFor(tags)}`)}>
-                    <span aria-hidden className="size-2.5 shrink-0 rounded-full bg-[var(--tile-ink)]" />
-                    <span className="min-w-0 flex-1">
-                      <span className="block truncate text-[15px] font-medium">{c.name}</span>
-                      <span className="mt-0.5 block text-[13px] text-muted">
-                        {LEVEL_LABEL[c.level]}, grades <span className="num">{c.gradesOffered.join(", ")}</span>
-                        {kinds.length > 0 ? <>, counts toward {kinds.join(", ")}</> : tags.length === 0 ? <>, counts as an elective</> : null}
+      {/* The whole catalog is too long to scroll, so subjects start closed. A search or filter already
+          narrows it, so every match shows. */}
+      <div className="mt-3 flex flex-col gap-1">
+        {groups.map(([dept, rows]) => (
+          <details key={dept} open={filtered || groups.length === 1} className="group">
+            <summary className="-mx-3 flex cursor-pointer list-none items-center gap-3 rounded-[10px] px-3 py-3 transition-colors hover:bg-fill [&::-webkit-details-marker]:hidden">
+              <h2 className="eyebrow flex-1">{DEPT_LABEL[dept]}</h2>
+              <span className="num text-[14px] text-muted">{rows.length}</span>
+              <ChevronDown size={16} aria-hidden className="shrink-0 text-muted transition-transform duration-150 group-open:rotate-180" />
+            </summary>
+            <ul className="list list-hover pb-4">
+              {rows.map((c) => {
+                const tags = c.requirements.map((r) => ({ kind: r.kind as RequirementKind, credits: Number(r.credits), provisional: r.provisional }));
+                // Only say it when it adds information (Theater Arts counts toward Arts, not English).
+                const kinds = [...new Set(c.requirements.map((r) => KIND_LABEL[r.kind]))].filter((k) => k !== DEPT_LABEL[c.department]);
+                return (
+                  <li key={c.id}>
+                    <Link href={`/courses/${c.slug}`} className={cn("flex items-center gap-3 py-2.5", `subject-${rowFor(tags)}`)}>
+                      <span aria-hidden className="size-2.5 shrink-0 rounded-full bg-[var(--tile-ink)]" />
+                      <span className="min-w-0 flex-1">
+                        <span className="block truncate text-[15px] font-medium">{c.name}</span>
+                        <span className="mt-0.5 block text-[13px] text-muted">
+                          {LEVEL_LABEL[c.level]}, grades <span className="num">{c.gradesOffered.join(", ")}</span>
+                          {kinds.length > 0 ? <>, counts toward {kinds.join(", ")}</> : tags.length === 0 ? <>, counts as an elective</> : null}
+                        </span>
                       </span>
-                    </span>
-                    <span className="num shrink-0 text-[14px] text-muted">{fmtCredits(c.credits)} cr</span>
-                  </Link>
-                </li>
-              );
-            })}
-          </ul>
-        </section>
-      ))}
+                      <span className="num shrink-0 text-[14px] text-muted">{fmtCredits(c.credits)} cr</span>
+                    </Link>
+                  </li>
+                );
+              })}
+            </ul>
+          </details>
+        ))}
+      </div>
       {courses.length === 0 && (
         <EmptyState
           title="No classes match"
