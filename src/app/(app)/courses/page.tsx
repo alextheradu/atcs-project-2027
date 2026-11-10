@@ -18,6 +18,9 @@ import { cn } from "@/lib/utils";
 
 type Params = Promise<Record<string, string | string[] | undefined>>;
 
+// Results at or under this many classes open every subject.
+const OPEN_ALL_UP_TO = 20;
+
 function ViewTabs({ view }: { view: "list" | "pathways" }) {
   const tab = (v: "list" | "pathways", label: string) => (
     <Link
@@ -75,6 +78,9 @@ export default async function Courses({ searchParams }: { searchParams: Params }
 
   // Already sorted by department, so grouping keeps the catalog order.
   const groups = [...Map.groupBy(courses, (c) => c.department)];
+  // A short result (about a screen and a half of rows) or a single subject shows everything. Anything longer,
+  // including the whole catalog or a broad filter like "9th grade", starts with every subject closed.
+  const openAll = courses.length <= OPEN_ALL_UP_TO || groups.length === 1;
   const sel = "input !w-auto max-w-[12rem]";
   return (
     <div className="max-w-[960px]">
@@ -109,11 +115,9 @@ export default async function Courses({ searchParams }: { searchParams: Params }
       </form>
 
       <p className="mt-6 text-[14px] text-muted"><span className="num">{courses.length}</span> {courses.length === 1 ? "class" : "classes"}</p>
-      {/* The whole catalog is too long to scroll, so subjects start closed. A search or filter already
-          narrows it, so every match shows. */}
       <div className="mt-3 flex flex-col gap-1">
         {groups.map(([dept, rows]) => (
-          <details key={dept} open={filtered || groups.length === 1} className="group">
+          <details key={dept} open={openAll} className="group">
             <summary className="-mx-3 flex cursor-pointer list-none items-center gap-3 rounded-[10px] px-3 py-3 transition-colors hover:bg-fill [&::-webkit-details-marker]:hidden">
               <h2 className="eyebrow flex-1">{DEPT_LABEL[dept]}</h2>
               <span className="num text-[14px] text-muted">{rows.length}</span>
