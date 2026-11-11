@@ -84,7 +84,7 @@ export default async function Students({ searchParams }: { searchParams: Promise
   );
 
   return (
-    <div className="max-w-[960px]">
+    <div>
       <header className="mb-4">
         <h1 className="text-[28px] font-bold leading-[1.15] tracking-[-0.025em]">Students</h1>
       </header>

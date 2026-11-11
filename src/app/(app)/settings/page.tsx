@@ -3,7 +3,7 @@ export const instant = false;
 
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { Dl, PageHeader, Section } from "@/components/ui/page";
+import { Dl, PageHeader, Row, Rows, Section } from "@/components/ui/page";
 import { removeLinkedEmail, startLinkEmail } from "@/lib/account/actions";
 import { requirePageUser } from "@/lib/auth/page";
 import { NotificationSettings } from "@/components/settings/notification-settings";
@@ -36,19 +36,18 @@ export default async function Settings({ searchParams }: { searchParams: Promise
   for (const p of saved) prefs[p.kind] = { inApp: true, email: p.email, push: p.push };
 
   return (
-    <div className="max-w-[860px]">
+    <div>
       <PageHeader title="Settings" />
 
-      <div className="space-y-10">
-        <Section title="Account">
+      <div className="space-y-14">
+        <Section split title="Account" description="Your sign-in email and what you can do here.">
           <Dl items={[{ label: "Email", value: <span className="num">{user.email}</span> }, { label: "Role", value: <span className="num">{user.role.toLowerCase()}</span> }]} />
         </Section>
 
-        <Section title="Notifications" description="Choose how you hear about reviews, plans and dates. In app messages are always on.">
-          <NotificationSettings kinds={kindsFor(user.role)} initial={prefs} devices={devices} />
-        </Section>
+        <NotificationSettings kinds={kindsFor(user.role)} initial={prefs} devices={devices} />
 
         <Section
+          split
           title="Linked emails"
           description="Link a second Google account, for example a personal one from 8th grade. Signing in with either opens the same plans."
         >
@@ -57,24 +56,23 @@ export default async function Settings({ searchParams }: { searchParams: Promise
               {LINK_MESSAGES[link]}
             </p>
           )}
-          {linked.length > 0 && (
-            <ul className="list mb-4">
-              {linked.map((l) => (
-                <li key={l.id} className="flex items-center justify-between py-2.5 text-sm">
-                  <span className="num">{l.email}</span>
-                  <form action={removeLinkedEmail.bind(null, l.id)}>
-                    <Button size="sm" variant="danger" type="submit">Unlink</Button>
-                  </form>
-                </li>
-              ))}
-            </ul>
-          )}
-          <form action={startLinkEmail}>
-            <Button type="submit">Link another email</Button>
-          </form>
+          <Rows>
+            {linked.map((l) => (
+              <Row key={l.id} title={l.email}>
+                <form action={removeLinkedEmail.bind(null, l.id)}>
+                  <Button size="sm" variant="danger" type="submit">Unlink</Button>
+                </form>
+              </Row>
+            ))}
+            <Row title={linked.length ? "Add another" : "No linked emails"} description="You will sign in with Google to prove you own it.">
+              <form action={startLinkEmail}>
+                <Button size="sm" type="submit">Link an email</Button>
+              </form>
+            </Row>
+          </Rows>
         </Section>
 
-        <Section title="Your data" description={<>Download a copy or delete everything. The <Link href="/privacy" className="underline underline-offset-4 hover:text-fg">privacy policy</Link> says what is stored and why.</>}>
+        <Section split title="Your data" description={<>Download a copy or delete everything. The <Link href="/privacy" className="underline underline-offset-4 hover:text-fg">privacy policy</Link> says what is stored and why.</>}>
           <DataControls open={open} />
         </Section>
       </div>

@@ -34,6 +34,8 @@ export interface BoardProps {
   /** Server-rendered notes (unread notices, open reviews, dates) shown under the status line. */
   notes?: React.ReactNode;
   tour?: boolean;
+  /** Shown beside "For college" under the board, such as the review and comments. */
+  footer?: React.ReactNode;
 }
 
 const ordinal = (g: number) => `${g}th`;
@@ -72,12 +74,22 @@ function YearHead({ grade, ed, settings }: { grade: Grade; ed: PlanEditor; setti
   const count = ed.entries.filter((e) => e.gradeLevel === grade).length;
   const need = grade === 12 ? settings.minFinalYear : settings.minPerYear;
   const under = count > 0 && year.total < need;
+  // An overfull year is said here, in its own column, instead of in a list above the board.
+  const full = ed.warnings.find((w): w is Extract<PlanWarning, { code: "TOO_MANY_PERIODS" }> => w.code === "TOO_MANY_PERIODS" && w.grade === grade);
   return (
-    <div className="flex items-baseline justify-between gap-2 px-1 pb-1">
-      <span className="text-[15px] font-bold">{ordinal(grade)}</span>
-      <span className={cn("num text-[13px]", under ? "text-yellow" : "text-muted")} title={under ? `The minimum is ${need} credits` : undefined}>
-        {formatCredits(year.total)}{under && ` of ${need}`} cr
-      </span>
+    <div className="px-1 pb-1">
+      <div className="flex items-baseline justify-between gap-2">
+        <span className="text-[15px] font-bold">{ordinal(grade)}</span>
+        <span className={cn("num text-[13px]", under ? "text-yellow" : "text-muted")} title={under ? `The minimum is ${need} credits` : undefined}>
+          {formatCredits(year.total)}{under && ` of ${need}`} cr
+        </span>
+      </div>
+      {full && (
+        <p className="mt-0.5 flex items-center gap-1.5 text-[12px] text-yellow" title={describeWarning(full)}>
+          <span aria-hidden className="size-1.5 shrink-0 rounded-full bg-yellow" />
+          <span><span className="num">{full.periods}</span> periods, most fit <span className="num">{full.max}</span></span>
+        </p>
+      )}
     </div>
   );
 }
@@ -198,7 +210,7 @@ function Tour() {
 }
 
 export function Board(props: BoardProps) {
-  const { title, courses, interests, settings, prior, currentGrade, readOnly = false, notes, tour } = props;
+  const { title, courses, interests, settings, prior, currentGrade, readOnly = false, notes, tour, footer } = props;
   const ed = usePlanEditor(props);
   const [openId, setOpenId] = useState<string | null>(null);
   const [add, setAdd] = useState<AddTarget | null>(null);
@@ -207,8 +219,6 @@ export function Board(props: BoardProps) {
   const rows = useMemo(() => buildBoard(ed.entries, ed.summary, currentGrade), [ed.entries, ed.summary, currentGrade]);
   const spotCount = rows.reduce((n, r) => n + GRADES.reduce((m, g) => m + r.cells[g].spots.length, 0), 0);
   const sentence = statusSentence(ed.summary, spotCount);
-  // A light year already shows in its column header ("5 of 30 cr"), so only an overfull year becomes a note.
-  const yearNotes = ed.warnings.filter((w) => w.code === "TOO_MANY_PERIODS");
   const unconfirmed = ROWS.filter((r) => r.kinds.some((k) => (ed.summary.kinds.find((x) => x.kind === k)?.provisional ?? 0) > 0));
   const openEntry = ed.entries.find((e) => e.id === openId) ?? null;
   const warns = useMemo(() => {
@@ -262,7 +272,7 @@ export function Board(props: BoardProps) {
 
       {tour && !readOnly && <Tour />}
 
-      {(readOnly || !ed.canEdit || notes || yearNotes.length > 0) && (
+      {(readOnly || !ed.canEdit || notes) && (
         <ul className="mb-6 space-y-1.5 text-[14px]">
           {readOnly ? (
             <li className="text-muted">This is a student&apos;s board. You can look but not change it.</li>
@@ -272,12 +282,6 @@ export function Board(props: BoardProps) {
             <li className="text-muted">A counselor approved this plan, so it is locked. Ask your counselor if something needs to change.</li>
           ) : null}
           {notes}
-          {yearNotes.map((w, i) => (
-            <li key={i} className="flex items-start gap-2.5">
-              <span aria-hidden className="mt-[7px] size-2 shrink-0 rounded-full bg-yellow" />
-              <span>{describeWarning(w)}</span>
-            </li>
-          ))}
         </ul>
       )}
 
@@ -286,28 +290,31 @@ export function Board(props: BoardProps) {
       <Grid rows={rows} ed={ed} results={ed.results} warns={warns} settings={settings} onOpen={setOpenId} onPick={pick} />
       <PhoneBoard rows={rows} ed={ed} results={ed.results} warns={warns} settings={settings} start={start} onOpen={setOpenId} onPick={pick} />
 
-      {unconfirmed.length > 0 && (
-        <p className="mt-6 text-[13px] text-muted">
-          Not confirmed by a counselor yet: {unconfirmed.map((r) => r.label).join(", ")}. These classes count for now, but a counselor still has to check them.
-        </p>
-      )}
-      <p className="mt-2 text-[13px] text-muted">Warnings never block your plan. The school makes the final decision.</p>
+      <p className="mt-6 max-w-[90ch] text-[13px] leading-relaxed text-muted">
+        {unconfirmed.length > 0 && <>Not confirmed by a counselor yet: {unconfirmed.map((r) => r.label).join(", ")}. These classes count for now, but a counselor still has to check them. </>}
+        Warnings never block your plan. The school makes the final decision.
+      </p>
 
-      {ed.advice && (
-        <section className="mt-10 max-w-[560px]">
-          <h2 className="eyebrow">For college</h2>
-          <p className="mb-3 mt-1 text-[14px] text-muted">
-            Years of each subject colleges usually look for{ed.advice.matched.length > 0 ? `, raised for ${ed.advice.matched.join(" and ").toLowerCase()} majors` : ""}. A suggestion, not a graduation rule.
-          </p>
-          <ul className="soft px-4 py-2">
-            {ed.advice.lines.map((l) => (
-              <li key={l.subject} className="flex items-baseline justify-between py-1.5 text-[14px]">
-                <span>{l.label}</span>
-                <span className="num"><span className={l.met ? "text-green" : "text-fg"}>{l.have}</span><span className="text-muted"> of {l.need} years</span></span>
-              </li>
-            ))}
-          </ul>
-        </section>
+      {(ed.advice || footer) && (
+        <div className="mt-16 grid gap-14 lg:grid-cols-2 lg:gap-16">
+          {ed.advice && (
+            <section aria-labelledby="college-h">
+              <h2 id="college-h" className="eyebrow">For college</h2>
+              <p className="mb-4 mt-1 text-[14px] leading-relaxed text-muted">
+                Years of each subject colleges usually look for{ed.advice.matched.length > 0 ? `, raised for ${ed.advice.matched.join(" and ").toLowerCase()} majors` : ""}. A suggestion, not a graduation rule.
+              </p>
+              <ul className="soft px-4 py-2">
+                {ed.advice.lines.map((l) => (
+                  <li key={l.subject} className="flex items-baseline justify-between py-1.5 text-[14px]">
+                    <span>{l.label}</span>
+                    <span className="num"><span className={l.met ? "text-green" : "text-fg"}>{l.have}</span><span className="text-muted"> of {l.need} years</span></span>
+                  </li>
+                ))}
+              </ul>
+            </section>
+          )}
+          {footer}
+        </div>
       )}
 
       <AddCoursePanel

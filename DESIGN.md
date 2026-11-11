@@ -138,6 +138,13 @@ Flat. Depth is one step of fill (page, Fill, Fill 2). The only shadows are the p
 ### Buttons
 Primary: blue pill, 38px, `0 4px 0` lip, hover lifts 2px and tilts -1deg, press sinks 3px. One per screen. Secondary: Fill 2 pill, no lip. Ghost: text only. Danger: red text. Reduced motion removes movement and keeps color changes.
 
+### Page layout
+Every page uses the full shell width; no page sets its own max width. Three shapes cover everything:
+- **Wide**: the Board, Classes, Students and Pathways fill the width. Filters sit in a left column beside the results.
+- **Split sections** (`<Section split>`): the title and one line of description on the left (280px), the content on the right. Settings and Help use this. Settings and actions inside go in `Rows` (one soft block) with a `Row` each: what it is on the left, its control on the right.
+- **Detail**: a main column and a 300px aside on the right that holds facts the header does not already say (class pages).
+Long text keeps its own 65ch cap inside the column. A warning goes where it applies (an overfull year is said in that year's column header), not in a list above the page.
+
 ### Lists and rows
 `.list` rows are separated by 2px of space. `.list-hover` rows fill softly on hover. A selected row is Fill 2 plus a small blue dot.
 

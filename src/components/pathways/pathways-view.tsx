@@ -66,25 +66,7 @@ export async function PathwaysView({ userId, student, query }: { userId: string;
   const status: Record<string, MapStatus> = me?.status ?? {};
 
   return (
-    <div className="space-y-8">
-      <section aria-labelledby="key-title" className="max-w-[1040px]">
-        <h2 id="key-title" className="eyebrow">How levels work</h2>
-        <p className="mt-1 max-w-[65ch] text-[15px] text-muted">
-          Each subject comes in levels. Higher rows on the map are harder levels. Each year you take the next class, and you can change level between years.
-        </p>
-        <ul className="mt-4 grid gap-5 sm:grid-cols-3">
-          {KEY.map((k) => (
-            <li key={k.kind} className="flex gap-3">
-              <Sample kind={k.kind} />
-              <div>
-                <p className="text-[15px] font-semibold">{k.title}</p>
-                <p className="mt-0.5 text-[14px] text-muted">{k.text}</p>
-              </div>
-            </li>
-          ))}
-        </ul>
-      </section>
-
+    <div className="space-y-12">
       <section aria-label={`${SUBJECT_LABEL[picked.subject]} pathway`} className="space-y-4">
         <nav aria-label="Subject" className="flex flex-wrap gap-1">
           {SUBJECTS.map((s) => (
@@ -113,17 +95,37 @@ export async function PathwaysView({ userId, student, query }: { userId: string;
         </div>
       </section>
 
-      <section aria-labelledby="rules-title" className="max-w-[72ch]">
-        <h2 id="rules-title" className="eyebrow">Moving levels in {SUBJECT_LABEL[picked.subject].toLowerCase()}</h2>
-        <ul className="mt-3 space-y-2.5">
-          {map.rules.map((r) => (
-            <li key={r.text} className="text-[15px] leading-relaxed">
-              {r.text} <span className="num whitespace-nowrap text-[13px] text-muted">p. {r.page}</span>
-            </li>
-          ))}
-        </ul>
-        <p className="mt-5 text-[13px] text-muted">From the {map.source}. Click a class for its exact prerequisites. The school decides placement.</p>
-      </section>
+      <div className="grid gap-12 lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)] lg:gap-16">
+        <section aria-labelledby="key-title">
+          <h2 id="key-title" className="eyebrow">How levels work</h2>
+          <p className="mt-1 max-w-[52ch] text-[14px] leading-relaxed text-muted">
+            Each subject comes in levels. Higher rows on the map are harder levels. Each year you take the next class, and you can change level between years.
+          </p>
+          <ul className="mt-5 space-y-4">
+            {KEY.map((k) => (
+              <li key={k.kind} className="grid grid-cols-[48px_minmax(0,1fr)] gap-3">
+                <Sample kind={k.kind} />
+                <div>
+                  <p className="text-[15px] font-semibold">{k.title}</p>
+                  <p className="mt-0.5 text-[14px] leading-relaxed text-muted">{k.text}</p>
+                </div>
+              </li>
+            ))}
+          </ul>
+        </section>
+
+        <section aria-labelledby="rules-title">
+          <h2 id="rules-title" className="eyebrow">Moving levels in {SUBJECT_LABEL[picked.subject].toLowerCase()}</h2>
+          <ul className="mt-3 max-w-[68ch] space-y-2.5">
+            {map.rules.map((r) => (
+              <li key={r.text} className="text-[15px] leading-relaxed">
+                {r.text} <span className="num whitespace-nowrap text-[13px] text-muted">p. {r.page}</span>
+              </li>
+            ))}
+          </ul>
+          <p className="mt-5 text-[13px] text-muted">From the {map.source}. Click a class for its exact prerequisites. The school decides placement.</p>
+        </section>
+      </div>
     </div>
   );
 }

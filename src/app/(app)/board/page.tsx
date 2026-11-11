@@ -48,7 +48,7 @@ export default async function BoardPage({ searchParams }: { searchParams: Promis
   const { plan, entries } = data;
 
   return (
-    <div className="space-y-12">
+    <div>
       <Board
         title="My board"
         plan={plan}
@@ -61,6 +61,7 @@ export default async function BoardPage({ searchParams }: { searchParams: Promis
         currentGrade={profile?.currentGrade ?? null}
         guidance={{ config: guidanceConfig, intendedMajor: profile?.intendedMajor ?? null }}
         tour={tour === "1"}
+        footer={<ReviewPanel planId={plan.id} status={plan.status} isOwner canReview={false} comments={comments} entries={entries.map((e) => ({ id: e.id, name: e.name }))} />}
         notes={
           <>
             <UnreadNotes userId={user.id} />
@@ -68,7 +69,6 @@ export default async function BoardPage({ searchParams }: { searchParams: Promis
           </>
         }
       />
-      <ReviewPanel planId={plan.id} status={plan.status} isOwner canReview={false} comments={comments} entries={entries.map((e) => ({ id: e.id, name: e.name }))} />
     </div>
   );
 }

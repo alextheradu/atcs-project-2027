@@ -82,14 +82,15 @@ export default async function Courses({ searchParams }: { searchParams: Params }
   // A short result (about a screen and a half of rows) or a single subject shows everything. Anything longer,
   // including the whole catalog or a broad filter like "9th grade", starts with every subject closed.
   const openAll = courses.length <= OPEN_ALL_UP_TO || groups.length === 1;
-  const sel = "input !w-auto max-w-[12rem]";
+  const sel = "input";
   return (
-    <div className="max-w-[960px]">
+    <div>
       {header}
       <ViewTabs view="list" />
 
-      <form className="flex flex-wrap items-center gap-2" action="/courses">
-        <input className="input !w-full sm:!w-72" name="q" defaultValue={filter.q} placeholder="Search classes" aria-label="Search" />
+      <div className="grid gap-8 lg:grid-cols-[minmax(0,240px)_minmax(0,1fr)] lg:gap-12">
+      <form className="grid grid-cols-2 gap-2 self-start lg:sticky lg:top-24 lg:grid-cols-1" action="/courses" aria-label="Filter classes">
+        <input className="input col-span-2 lg:col-span-1" name="q" defaultValue={filter.q} placeholder="Search classes" aria-label="Search" />
         <select className={sel} name="department" defaultValue={filter.department ?? ""} aria-label="Subject">
           <option value="">Any subject</option>
           {DEPARTMENTS.map((d) => <option key={d} value={d}>{DEPT_LABEL[d]}</option>)}
@@ -107,15 +108,18 @@ export default async function Courses({ searchParams }: { searchParams: Params }
           <option value="FULL">Full year</option>
           <option value="HALF">Half year</option>
         </select>
-        <select className={sel} name="interest" defaultValue={filter.interest ?? ""} aria-label="Interest">
+        <select className={cn(sel, "col-span-2 lg:col-span-1")} name="interest" defaultValue={filter.interest ?? ""} aria-label="Interest">
           <option value="">Any interest</option>
           {interests.map((i) => <option key={i.id} value={i.slug}>{i.label}</option>)}
         </select>
-        <button className="btn" type="submit">Search</button>
-        {filtered && <Link className="btn btn-ghost" href="/courses">Clear</Link>}
+        <div className="col-span-2 mt-1 flex gap-2 lg:col-span-1">
+          <button className="btn flex-1" type="submit">Search</button>
+          {filtered && <Link className="btn btn-ghost" href="/courses">Clear</Link>}
+        </div>
       </form>
 
-      <p className="mt-6 text-[14px] text-muted"><span className="num">{courses.length}</span> {courses.length === 1 ? "class" : "classes"}</p>
+      <div className="min-w-0">
+      <p className="text-[14px] text-muted lg:pt-2.5"><span className="num">{courses.length}</span> {courses.length === 1 ? "class" : "classes"}</p>
       <div className="mt-3 flex flex-col gap-1">
         {groups.map(([dept, rows]) => (
           <details key={dept} open={openAll} className="group">
@@ -156,6 +160,8 @@ export default async function Courses({ searchParams }: { searchParams: Params }
           action={<Link className="btn btn-sm" href="/courses">Clear</Link>}
         />
       )}
+      </div>
+      </div>
     </div>
   );
 }

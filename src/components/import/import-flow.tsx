@@ -5,6 +5,7 @@ import { useMemo, useRef, useState, useTransition } from "react";
 import { DraftNotice, SAVE_INTERRUPTED, useDraftState } from "@/components/draft-state";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { EmptyState } from "@/components/ui/empty-state";
 import { bulkAddCourses, confirmImport, type ImportSummary } from "@/lib/transcript/actions";
 import { letterToEnum } from "@/lib/transcript/grades";
 import { createMatcher, matchKey, type AliasRow, type Band, type CatalogCourse } from "@/lib/transcript/match";
@@ -117,7 +118,13 @@ export function ImportFlow({ plans, courses, aliases }: Props) {
   }
 
   if (plans.length === 0) {
-    return <p className="text-sm text-muted">Start your board first, then come back to import into it. <Link className="underline underline-offset-4" href="/board">Go to my board</Link></p>;
+    return (
+      <EmptyState
+        title="Start your board first"
+        description="Imported classes go onto your board, so it needs to exist before you bring them in."
+        action={<Link className="btn btn-sm" href="/board">Go to my board</Link>}
+      />
+    );
   }
 
   return (
@@ -153,12 +160,13 @@ export function ImportFlow({ plans, courses, aliases }: Props) {
       {tab === "pdf" ? (
         <>
           {!parsed && (
-            <section className="space-y-3">
-              <p className="max-w-[60ch] text-sm text-muted">
-                Pick your transcript PDF. It is read inside this browser tab. The file is not uploaded, and your name, ID and birth date are never read or saved. You review every course before anything is added.
+            <section className="rounded-[14px] px-6 py-12 text-center shadow-[inset_0_0_0_1.5px_var(--line-strong)]">
+              <p className="text-[15px] font-semibold">Your transcript PDF</p>
+              <p className="mx-auto mt-1 max-w-[52ch] text-[14px] leading-relaxed text-muted">
+                It is read inside this browser tab. The file is not uploaded, and your name, ID and birth date are never read or saved. You review every course before anything is added.
               </p>
               <input ref={input} type="file" accept="application/pdf" className="sr-only" id="pdf" onChange={(e) => onFile(e.target.files?.[0])} />
-              <label htmlFor="pdf" className="btn btn-primary cursor-pointer">{busy ? "Reading" : "Choose a PDF"}</label>
+              <label htmlFor="pdf" className="btn btn-primary mt-5 cursor-pointer">{busy ? "Reading" : "Choose a PDF"}</label>
             </section>
           )}
 

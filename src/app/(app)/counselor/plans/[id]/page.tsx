@@ -47,9 +47,9 @@ export default async function CounselorPlan({ params }: { params: Promise<{ id: 
           plan={plan} entries={entries} courses={courses} interests={interests} rules={config.rules} settings={config.settings}
           prior={profile ?? {}} currentGrade={profile?.currentGrade ?? null} readOnly
           guidance={{ config: guidanceConfig, intendedMajor: profile?.intendedMajor ?? null }}
+          footer={<ReviewPanel planId={plan.id} status={plan.status} isOwner={false} canReview comments={comments} entries={entries.map((e) => ({ id: e.id, name: e.name }))} />}
         />
       </div>
-      <ReviewPanel planId={plan.id} status={plan.status} isOwner={false} canReview comments={comments} entries={entries.map((e) => ({ id: e.id, name: e.name }))} />
     </div>
   );
 }

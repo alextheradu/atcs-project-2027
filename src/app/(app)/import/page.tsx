@@ -15,7 +15,7 @@ export default async function Import() {
     db.courseAlias.findMany({ select: { alias: true, courseId: true } }),
   ]);
   return (
-    <div className="max-w-[860px]">
+    <div>
       <PageHeader title="Import courses" description="Bring in the courses you already took, then check each one before it is added." />
       <ImportFlow plans={plans.filter((p) => isEditable(p.status)).map(({ id, name, isPrimary }) => ({ id, name, isPrimary }))} courses={courses} aliases={aliases} />
     </div>

@@ -3,6 +3,7 @@
 import { useEffect, useState, useSyncExternalStore, useTransition } from "react";
 import { DraftNotice, SAVE_INTERRUPTED, useDraftState } from "@/components/draft-state";
 import { Button } from "@/components/ui/button";
+import { Row, Rows, Section } from "@/components/ui/page";
 import { KIND_LABEL, isEmailLocked, type Kind, type Pref } from "@/lib/notify/policy";
 import { removePushSubscription, savePreferences, savePushSubscription } from "@/lib/notify/actions";
 
@@ -20,6 +21,7 @@ const b64ToBytes = (s: string) => {
 };
 const toB64 = (buf: ArrayBuffer | null) => (buf ? btoa(String.fromCharCode(...new Uint8Array(buf))).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "") : "");
 
+type Msg = { ok: boolean; text: string; at: "save" | "device" };
 type Install = Event & { prompt: () => Promise<void> };
 
 interface Caps {
@@ -41,7 +43,7 @@ const noSubscribe = () => () => {};
 
 export function NotificationSettings({ kinds, initial, devices }: Props) {
   const [prefs, setPrefs, draft] = useDraftState("settings:notifications", initial);
-  const [msg, setMsg] = useState<{ ok: boolean; text: string } | null>(null);
+  const [msg, setMsg] = useState<Msg | null>(null);
   const [pending, start] = useTransition();
   const caps = useSyncExternalStore(noSubscribe, readCaps, () => null);
   const [subscribed, setSubscribed] = useState<boolean | null>(null);
@@ -70,8 +72,8 @@ export function NotificationSettings({ kinds, initial, devices }: Props) {
       try {
         const r = await savePreferences(kinds.map((k) => ({ kind: k, ...prefs[k] })));
         if (r.ok) draft.commit(prefs);
-        setMsg(r.ok ? { ok: true, text: "Saved." } : { ok: false, text: r.error });
-      } catch { setMsg({ ok: false, text: SAVE_INTERRUPTED }); }
+        setMsg(r.ok ? { ok: true, text: "Saved.", at: "save" } : { ok: false, text: r.error, at: "save" });
+      } catch { setMsg({ ok: false, text: SAVE_INTERRUPTED, at: "save" }); }
     });
   }
 
@@ -80,14 +82,14 @@ export function NotificationSettings({ kinds, initial, devices }: Props) {
     start(async () => {
       try {
         const key = process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY;
-        if (!key) return setMsg({ ok: false, text: "Push is not set up on this server yet." });
+        if (!key) return setMsg({ ok: false, text: "Push is not set up on this server yet.", at: "device" });
         const perm = await Notification.requestPermission();
-        if (perm !== "granted") { setBlocked(perm === "denied"); return setMsg({ ok: false, text: "Notifications are blocked for this site. Allow them in your browser settings, then try again." }); }
+        if (perm !== "granted") { setBlocked(perm === "denied"); return setMsg({ ok: false, text: "Notifications are blocked for this site. Allow them in your browser settings, then try again.", at: "device" }); }
         const reg = await navigator.serviceWorker.ready;
         const sub = (await reg.pushManager.getSubscription()) ?? (await reg.pushManager.subscribe({ userVisibleOnly: true, applicationServerKey: b64ToBytes(key) }));
         const r = await savePushSubscription({ endpoint: sub.endpoint, p256dh: toB64(sub.getKey("p256dh")), auth: toB64(sub.getKey("auth")), userAgent: navigator.userAgent.slice(0, 200) });
-        if (r.ok) { setSubscribed(true); setMsg({ ok: true, text: "Push is on for this device. Turn on Push for the messages you want below." }); } else setMsg({ ok: false, text: r.error });
-      } catch { setMsg({ ok: false, text: "This device could not be set up for push." }); }
+        if (r.ok) { setSubscribed(true); setMsg({ ok: true, text: "Push is on for this device. Tick Push for the messages you want under Notifications.", at: "device" }); } else setMsg({ ok: false, text: r.error, at: "device" });
+      } catch { setMsg({ ok: false, text: "This device could not be set up for push.", at: "device" }); }
     });
   }
 
@@ -97,20 +99,32 @@ export function NotificationSettings({ kinds, initial, devices }: Props) {
         const sub = await (await navigator.serviceWorker.ready).pushManager.getSubscription();
         if (sub) { await removePushSubscription(sub.endpoint); await sub.unsubscribe(); }
         setSubscribed(false);
-      } catch { setMsg({ ok: false, text: "Could not turn push off. Try again." }); }
+      } catch { setMsg({ ok: false, text: "Could not turn push off. Try again.", at: "device" }); }
     });
   }
 
+  const note = (at: Msg["at"]) =>
+    msg?.at === at && <p role={msg.ok ? "status" : "alert"} className={msg.ok ? "mt-3 text-[13px] text-green" : "mt-3 text-[13px] text-red"}>{msg.text}</p>;
+
+  const pushText =
+    pushState === "unsupported"
+      ? ios && !standalone
+        ? "On iPhone and iPad, push works only after you tap Share, then Add to Home Screen, and open the app from there. It needs iOS 16.4 or later."
+        : "This browser does not support push."
+      : pushState === "denied"
+        ? "Notifications are blocked for this site. Allow them in your browser settings, then reload."
+        : `${devices > 0 ? `${devices} ${devices === 1 ? "device" : "devices"} subscribed.` : "No device subscribed yet."}${ios && !standalone ? " On iPhone, push only works from the Home Screen app (iOS 16.4 or later)." : ""}`;
+
   return (
-    <div className="space-y-8">
-      <div>
+    <>
+      <Section split title="Notifications" description="Choose how you hear about reviews, plans and dates. In app messages are always on.">
         <table className="soft w-full text-left text-[14px]">
           <thead>
             <tr className="text-[13px] text-muted">
               <th scope="col" className="px-4 pb-2 pt-3 font-normal">Tell me when</th>
-              <th scope="col" className="w-16 pb-2 font-normal">In app</th>
-              <th scope="col" className="w-16 pb-2 font-normal">Email</th>
-              <th scope="col" className="w-16 pb-2 font-normal">Push</th>
+              <th scope="col" className="w-16 pb-2 pt-3 font-normal">In app</th>
+              <th scope="col" className="w-16 pb-2 pt-3 font-normal">Email</th>
+              <th scope="col" className="w-16 pb-2 pt-3 font-normal">Push</th>
             </tr>
           </thead>
           <tbody>
@@ -128,31 +142,24 @@ export function NotificationSettings({ kinds, initial, devices }: Props) {
           <Button variant="primary" disabled={pending} onClick={save}>Save</Button>
           <DraftNotice drafts={[draft]} />
         </div>
-      </div>
+        {note("save")}
+      </Section>
 
-      <div className="space-y-2 pt-6">
-        <h3 className="text-sm font-medium">Push on this device</h3>
-        {pushState === "unsupported" && <p className="text-[13px] text-muted">{ios && !standalone ? "On iPhone and iPad, push works only after you tap Share, then Add to Home Screen, and open the app from there. It needs iOS 16.4 or later." : "This browser does not support push."}</p>}
-        {pushState === "denied" && <p className="text-[13px] text-muted">Notifications are blocked for this site. Allow them in your browser settings, then reload.</p>}
-        {(pushState === "off" || pushState === "on") && (
-          <div className="flex flex-wrap items-center gap-3">
-            {pushState === "off" ? <Button disabled={pending} onClick={enablePush}>Turn on push here</Button> : <Button variant="danger" disabled={pending} onClick={disablePush}>Turn off push here</Button>}
-            <span className="text-[13px] text-muted">{devices > 0 ? `${devices} ${devices === 1 ? "device" : "devices"} subscribed` : "No device subscribed yet"}</span>
-          </div>
-        )}
-        {ios && !standalone && pushState !== "unsupported" && <p className="text-xs text-muted">On iPhone, push only works from the Home Screen app (iOS 16.4 or later).</p>}
-      </div>
-
-      <div className="space-y-2 pt-6">
-        <h3 className="text-sm font-medium">Install the app</h3>
-        {standalone ? <p className="text-[13px] text-muted">You are using the installed app.</p> : install ? (
-          <Button disabled={pending} onClick={() => install.prompt().then(() => setInstall(null))}>Install</Button>
-        ) : (
-          <p className="text-[13px] text-muted">{ios ? "Tap Share, then Add to Home Screen." : "Use your browser menu and choose Install app, or Add to Home Screen."}</p>
-        )}
-      </div>
-
-      {msg && <p role={msg.ok ? "status" : "alert"} className={msg.ok ? "text-[13px] text-green" : "text-[13px] text-red"}>{msg.text}</p>}
-    </div>
+      <Section split title="This device" description="Push and the installed app work per browser, so set them up on each phone or laptop you use.">
+        <Rows>
+          <Row title="Push notifications" description={pushText}>
+            {pushState === "off" && <Button size="sm" disabled={pending} onClick={enablePush}>Turn on</Button>}
+            {pushState === "on" && <Button size="sm" variant="danger" disabled={pending} onClick={disablePush}>Turn off</Button>}
+          </Row>
+          <Row
+            title="Install the app"
+            description={standalone ? "You are using the installed app." : install ? "Opens like an app, with its own icon." : ios ? "Tap Share, then Add to Home Screen." : "Use your browser menu and choose Install app, or Add to Home Screen."}
+          >
+            {!standalone && install && <Button size="sm" disabled={pending} onClick={() => install.prompt().then(() => setInstall(null))}>Install</Button>}
+          </Row>
+        </Rows>
+        {note("device")}
+      </Section>
+    </>
   );
 }

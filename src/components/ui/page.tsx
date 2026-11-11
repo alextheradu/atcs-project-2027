@@ -35,20 +35,39 @@ export function PageHeader({
   );
 }
 
-/** A titled block. Space separates it from the one above; there is no line or box. */
+/**
+ * A titled block. Space separates it from the one above; there is no line or box.
+ * `split` puts the title and description in a left column and the content beside it on wide
+ * screens, so settings and reading pages use the full width instead of hugging the left edge.
+ */
 export function Section({
   title,
   description,
   children,
   className,
+  split,
+  id,
 }: {
   title?: string;
   description?: React.ReactNode;
   children: React.ReactNode;
   className?: string;
+  split?: boolean;
+  id?: string;
 }) {
+  if (split) {
+    return (
+      <section id={id} className={cn("grid gap-x-12 gap-y-3 lg:grid-cols-[minmax(0,280px)_minmax(0,1fr)]", className)}>
+        <div className="lg:pt-0.5">
+          {title && <h2 className="eyebrow">{title}</h2>}
+          {description && <p className="mt-1 max-w-[36ch] text-[14px] leading-relaxed text-muted">{description}</p>}
+        </div>
+        <div className="min-w-0">{children}</div>
+      </section>
+    );
+  }
   return (
-    <section className={cn("pt-2", className)}>
+    <section id={id} className={cn("pt-2", className)}>
       {title && (
         <div className="mb-3">
           <h2 className="eyebrow">{title}</h2>
@@ -57,6 +76,24 @@ export function Section({
       )}
       {children}
     </section>
+  );
+}
+
+/** A group of `Row`s in one soft block. Space separates the rows, never a line. */
+export function Rows({ children, className }: { children: React.ReactNode; className?: string }) {
+  return <div className={cn("soft flex flex-col py-1.5", className)}>{children}</div>;
+}
+
+/** One setting or action: what it is on the left, its control on the right. Stacks on phones. */
+export function Row({ title, description, children }: { title: string; description?: React.ReactNode; children?: React.ReactNode }) {
+  return (
+    <div className="flex flex-col gap-3 px-4 py-3 sm:flex-row sm:items-center sm:justify-between sm:gap-8">
+      <div className="min-w-0">
+        <p className="text-[14px] font-medium">{title}</p>
+        {description && <div className="mt-0.5 max-w-[60ch] text-[13px] leading-relaxed text-muted">{description}</div>}
+      </div>
+      {children && <div className="flex shrink-0 flex-wrap items-center gap-2">{children}</div>}
+    </div>
   );
 }
 

@@ -1,6 +1,6 @@
 export const instant = false;
 
-import { PageHeader } from "@/components/ui/page";
+import { PageHeader, Section } from "@/components/ui/page";
 import { requirePageUser } from "@/lib/auth/page";
 import { LEARN_CARDS } from "@/lib/learn/content";
 
@@ -13,25 +13,25 @@ const USING = [
 export default async function Help() {
   await requirePageUser();
   return (
-    <div className="max-w-[680px]">
+    <div>
       <PageHeader title="Help" description="How the planner works, then the basics of credits and placement." />
-      <section aria-labelledby="using-h" className="soft mb-10 space-y-4 p-5">
-        <h2 id="using-h" className="eyebrow">Using the planner</h2>
-        {USING.map(([title, text]) => (
-          <div key={title}>
-            <h3 className="text-[15px] font-semibold">{title}</h3>
-            <p className="mt-0.5 max-w-[65ch] text-[15px] leading-relaxed text-muted">{text}</p>
-          </div>
-        ))}
-      </section>
-      <div className="space-y-8">
+      <div className="space-y-14">
+        <Section split title="Using the planner" description="Two places hold everything: your Board and the class list.">
+          <dl className="max-w-[65ch] space-y-4 text-[15px] leading-relaxed">
+            {USING.map(([title, text]) => (
+              <div key={title}>
+                <dt className="font-semibold">{title}</dt>
+                <dd className="mt-0.5 text-muted">{text}</dd>
+              </div>
+            ))}
+          </dl>
+        </Section>
         {LEARN_CARDS.map((c) => (
-          <section key={c.id} id={c.id} aria-labelledby={`${c.id}-h`}>
-            <h2 id={`${c.id}-h`} className="eyebrow">{c.title}</h2>
-            <div className="mt-1.5 space-y-2 text-[15px] leading-relaxed text-muted">
-              {c.body.map((p) => <p key={p} className="max-w-[65ch]">{p}</p>)}
+          <Section split key={c.id} id={c.id} title={c.title}>
+            <div className="max-w-[65ch] space-y-2.5 text-[15px] leading-relaxed text-muted">
+              {c.body.map((p) => <p key={p}>{p}</p>)}
             </div>
-          </section>
+          </Section>
         ))}
       </div>
     </div>

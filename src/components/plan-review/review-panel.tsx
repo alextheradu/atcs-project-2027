@@ -47,31 +47,28 @@ export function ReviewPanel({ planId, status, isOwner, canReview, comments, entr
   };
 
   return (
-    <section aria-label="Review" className="mt-14 max-w-[760px] space-y-6 pt-8">
-      <h2 className="eyebrow">Review</h2>
-
-      {isOwner && (
-        <div className="flex flex-wrap items-center gap-3">
-          {(status === "DRAFT" || status === "CHANGES_REQUESTED") && (
-            <>
+    <section aria-labelledby="review-h" className="space-y-6">
+      <div>
+        <h2 id="review-h" className="eyebrow">Review</h2>
+        {isOwner && (
+          <p className="mt-1 text-[14px] leading-relaxed text-muted">
+            {status === "SUBMITTED"
+              ? "Waiting for a counselor. You can take it back to keep editing."
+              : status === "APPROVED"
+                ? "A counselor approved this plan. Reopening clears the approval."
+                : "A counselor looks it over and can leave comments. The plan is read-only while it is in review."}
+          </p>
+        )}
+        {isOwner && (
+          <div className="mt-4">
+            {(status === "DRAFT" || status === "CHANGES_REQUESTED") && (
               <Button variant="primary" disabled={pending} onClick={() => run(() => submitPlan(planId))}>{status === "CHANGES_REQUESTED" ? "Send again for review" : "Send for review"}</Button>
-              <span className="text-[13px] text-muted">A counselor will look it over. The plan is read-only while it is in review.</span>
-            </>
-          )}
-          {status === "SUBMITTED" && (
-            <>
-              <Button disabled={pending} onClick={() => run(() => withdrawPlan(planId))}>Take it back to edit</Button>
-              <span className="text-[13px] text-muted">Waiting for a counselor.</span>
-            </>
-          )}
-          {status === "APPROVED" && (
-            <>
-              <Button disabled={pending} onClick={() => run(() => reopenPlan(planId))}>Reopen to make changes</Button>
-              <span className="text-[13px] text-muted">Reopening clears the approval.</span>
-            </>
-          )}
-        </div>
-      )}
+            )}
+            {status === "SUBMITTED" && <Button disabled={pending} onClick={() => run(() => withdrawPlan(planId))}>Take it back to edit</Button>}
+            {status === "APPROVED" && <Button disabled={pending} onClick={() => run(() => reopenPlan(planId))}>Reopen to make changes</Button>}
+          </div>
+        )}
+      </div>
 
       {canReview && status === "SUBMITTED" && (
         <div className="space-y-2.5 soft px-4 py-4">
@@ -86,30 +83,36 @@ export function ReviewPanel({ planId, status, isOwner, canReview, comments, entr
         </div>
       )}
 
-      <ul className="list">
-        {comments.map((c) => (
-          <li key={c.id} className="py-3">
-            <p className="text-xs text-muted">
-              <span className="text-fg">{c.author}</span> · {ROLE[c.authorRole] ?? c.authorRole} · <span className="num">{c.when}</span>
-              {c.entryName && <> · on {c.entryName}</>}
-            </p>
-            <p className="mt-1 whitespace-pre-wrap text-[13px]">{c.body}</p>
-          </li>
-        ))}
-        {comments.length === 0 && <li className="py-3 text-[13px] text-muted">No comments yet.</li>}
-      </ul>
+      <div className="space-y-3">
+        <h3 className="text-[14px] font-medium">Comments</h3>
+        {comments.length === 0 ? (
+          <p className="text-[13px] text-muted">No comments yet.</p>
+        ) : (
+          <ul className="list">
+            {comments.map((c) => (
+              <li key={c.id} className="py-2.5">
+                <p className="text-xs text-muted">
+                  <span className="text-fg">{c.author}</span> · {ROLE[c.authorRole] ?? c.authorRole} · <span className="num">{c.when}</span>
+                  {c.entryName && <> · on {c.entryName}</>}
+                </p>
+                <p className="mt-1 whitespace-pre-wrap text-[14px]">{c.body}</p>
+              </li>
+            ))}
+          </ul>
+        )}
 
-      {(isOwner || canReview) && (
-        <form onSubmit={(e) => e.preventDefault()} className="space-y-2">
-          <label className="sr-only" htmlFor="c-target">About</label>
-          <select id="c-target" className="input !w-auto" value={target} onChange={(e) => setTarget(e.target.value)}>
-            <option value="">The whole plan</option>
-            {entries.map((e) => <option key={e.id} value={e.id}>{e.name}</option>)}
-          </select>
-          <textarea className="input" rows={3} maxLength={1000} placeholder="Write a comment" aria-label="Comment" value={text} onChange={(e) => setText(e.target.value)} />
-          <Button disabled={pending || text.trim().length === 0} onClick={() => run(() => addComment({ planId, entryId: target || null, body: text }), () => { textDraft.commit(text, ""); targetDraft.commit(target); })}>Add comment</Button>
-        </form>
-      )}
+        {(isOwner || canReview) && (
+          <form onSubmit={(e) => e.preventDefault()} className="space-y-2 pt-1">
+            <label className="sr-only" htmlFor="c-target">About</label>
+            <select id="c-target" className="input" value={target} onChange={(e) => setTarget(e.target.value)}>
+              <option value="">About the whole plan</option>
+              {entries.map((e) => <option key={e.id} value={e.id}>About {e.name}</option>)}
+            </select>
+            <textarea className="input" rows={3} maxLength={1000} placeholder="Write a comment" aria-label="Comment" value={text} onChange={(e) => setText(e.target.value)} />
+            <Button disabled={pending || text.trim().length === 0} onClick={() => run(() => addComment({ planId, entryId: target || null, body: text }), () => { textDraft.commit(text, ""); targetDraft.commit(target); })}>Add comment</Button>
+          </form>
+        )}
+      </div>
       <DraftNotice drafts={[textDraft, targetDraft, noteDraft]} />
       {error && <p role="alert" className="text-[13px] text-red">{error}</p>}
     </section>

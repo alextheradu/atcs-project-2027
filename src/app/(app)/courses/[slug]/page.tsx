@@ -77,7 +77,7 @@ export default async function CoursePage({ params }: { params: Promise<{ slug: s
   const leadsTo = course.edgesFrom.filter((e) => !e.to.archived);
 
   return (
-    <article className="max-w-[880px]">
+    <article>
       <Link href="/courses" className="mb-3 inline-block text-[14px] text-muted transition-colors hover:text-fg">← Classes</Link>
       <header className={cn("mb-6", `subject-${row.key}`)}>
         <p className="ink text-[14px] font-semibold">{DEPT_LABEL[course.department]}</p>
@@ -91,6 +91,8 @@ export default async function CoursePage({ params }: { params: Promise<{ slug: s
         </p>
       </header>
 
+      <div className="grid gap-10 lg:grid-cols-[minmax(0,1fr)_300px] lg:gap-16">
+      <div className="min-w-0">
       {student && !plan && (
         <p className="mb-6 text-[15px] text-muted">
           <Link href="/board" className="font-medium text-accent-ink hover:underline">Start your board</Link> to see if you can take this.
@@ -128,26 +130,8 @@ export default async function CoursePage({ params }: { params: Promise<{ slug: s
         </div>
       )}
 
-      <div className="grid gap-10 md:grid-cols-[1fr_260px]">
         <div className="space-y-8">
           {course.description && <p className="max-w-[65ch] text-[15px] leading-relaxed">{course.description}</p>}
-
-          {course.requirements.length > 0 && (
-            <section>
-              <h2 className="eyebrow mb-2">Counts toward graduation</h2>
-              <ul className="flex flex-wrap gap-2">
-                {course.requirements.map((r) => {
-                  const key = ROWS.find((x) => x.kinds.includes(r.kind as RequirementKind))?.key ?? "elective";
-                  return (
-                    <li key={r.id} className={cn("rounded-full bg-[var(--tile-fill)] px-3 py-1.5 text-[14px]", `subject-${key}`)}>
-                      <span className="ink font-semibold">{KIND_LABEL[r.kind]}</span> <span className="num">{fmtCredits(r.credits)}</span> cr
-                      {r.provisional && <span className="text-muted">, not confirmed yet</span>}
-                    </li>
-                  );
-                })}
-              </ul>
-            </section>
-          )}
 
           {(course.prereqText || rules) && (
             <section>
@@ -199,18 +183,40 @@ export default async function CoursePage({ params }: { params: Promise<{ slug: s
           )}
         </div>
 
-        <aside>
-          <Dl
-            items={[
-              { label: "Department", value: DEPT_LABEL[course.department] },
-              { label: "Level", value: LEVEL_LABEL[course.level] },
-              { label: "Length", value: course.duration === "HALF" ? "Half year" : "Full year" },
-              { label: "Credits", value: <span className="num">{fmtCredits(course.credits)}</span> },
-              { label: "Grades", value: <span className="num">{course.gradesOffered.join(", ")}</span> },
-              ...(course.sourcePage ? [{ label: "Program of Studies", value: <span className="num">p. {course.sourcePage}</span> }] : []),
-              ...(course.interests.length ? [{ label: "Interests", value: course.interests.map((i) => i.label).join(", ") }] : []),
-            ]}
-          />
+      </div>
+
+        <aside className="space-y-8 lg:sticky lg:top-24 lg:self-start">
+          {course.requirements.length > 0 && (
+            <section>
+              <h2 className="eyebrow mb-3">Counts toward graduation</h2>
+              <ul className="flex flex-wrap gap-2">
+                {course.requirements.map((r) => {
+                  const key = ROWS.find((x) => x.kinds.includes(r.kind as RequirementKind))?.key ?? "elective";
+                  return (
+                    <li key={r.id} className={cn("rounded-full bg-[var(--tile-fill)] px-3 py-1.5 text-[14px]", `subject-${key}`)}>
+                      <span className="ink font-semibold">{KIND_LABEL[r.kind]}</span> <span className="num">{fmtCredits(r.credits)}</span> cr
+                      {r.provisional && <span className="text-muted">, not confirmed yet</span>}
+                    </li>
+                  );
+                })}
+              </ul>
+            </section>
+          )}
+
+          {course.requirements.length === 0 && (
+            <section>
+              <h2 className="eyebrow mb-1">Counts toward graduation</h2>
+              <p className="text-[14px] text-muted">Total credits only, as an elective.</p>
+            </section>
+          )}
+          {(course.sourcePage || course.interests.length > 0) && (
+            <Dl
+              items={[
+                ...(course.sourcePage ? [{ label: "Program of Studies", value: <span className="num">p. {course.sourcePage}</span> }] : []),
+                ...(course.interests.length ? [{ label: "Interests", value: course.interests.map((i) => i.label).join(", ") }] : []),
+              ]}
+            />
+          )}
         </aside>
       </div>
     </article>
