@@ -1,9 +1,9 @@
 export const instant = false;
 
-import { ChevronDown } from "lucide-react";
 import Link from "next/link";
 import { PathwaysView } from "@/components/pathways/pathways-view";
 import { EmptyState } from "@/components/ui/empty-state";
+import { Fold } from "@/components/ui/fold";
 import { DEPARTMENTS } from "@/lib/admin/schemas";
 import { requirePageUser } from "@/lib/auth/page";
 import { canUseStudentWorkspace } from "@/lib/auth/student-access";
@@ -122,13 +122,8 @@ export default async function Courses({ searchParams }: { searchParams: Params }
       <p className="text-[14px] text-muted lg:pt-2.5"><span className="num">{courses.length}</span> {courses.length === 1 ? "class" : "classes"}</p>
       <div className="mt-3 flex flex-col gap-1">
         {groups.map(([dept, rows]) => (
-          <details key={dept} open={openAll} className="group">
-            <summary className="-mx-3 flex cursor-pointer list-none items-center gap-3 rounded-[10px] px-3 py-3 transition-colors hover:bg-fill [&::-webkit-details-marker]:hidden">
-              <h2 className="eyebrow flex-1">{DEPT_LABEL[dept]}</h2>
-              <span className="num text-[14px] text-muted">{rows.length}</span>
-              <ChevronDown size={16} aria-hidden className="shrink-0 text-muted transition-transform duration-150 group-open:rotate-180" />
-            </summary>
-            <ul className="list list-hover pb-4">
+          <Fold key={dept} title={DEPT_LABEL[dept]} count={rows.length} open={openAll}>
+            <ul className="list list-hover">
               {rows.map((c) => {
                 const tags = c.requirements.map((r) => ({ kind: r.kind as RequirementKind, credits: Number(r.credits), provisional: r.provisional }));
                 // Only say it when it adds information (Theater Arts counts toward Arts, not English).
@@ -150,7 +145,7 @@ export default async function Courses({ searchParams }: { searchParams: Params }
                 );
               })}
             </ul>
-          </details>
+          </Fold>
         ))}
       </div>
       {courses.length === 0 && (

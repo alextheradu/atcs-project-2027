@@ -1,6 +1,8 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
+import { z } from "zod";
+import { DEPARTMENTS } from "@/lib/admin/schemas";
 import { writeAudit } from "@/lib/audit";
 import { requireRole } from "@/lib/auth";
 import { db } from "@/lib/db";
@@ -132,6 +134,34 @@ export async function setCourseArchived(id: string, archived: boolean): Promise<
     );
   });
   revalidatePath("/courses");
+  revalidatePath("/admin/catalog");
+  return { ok: true };
+}
+
+/**
+ * Moves a course to another department, most often Other Programs when it fits no subject.
+ * Only the department changes: requirement tags, and so graduation credit and the Board row, stay put.
+ */
+export async function setCourseDepartment(id: string, department: unknown): Promise<ActionResult> {
+  const actor = await editor();
+  if (typeof id !== "string" || !id || id.length > 64) return fail("Invalid course.");
+  const parsed = z.enum(DEPARTMENTS).safeParse(department);
+  if (!parsed.success) return fail("Unknown department.");
+  const before = await db.course.findUnique({ where: { id }, select: { slug: true, department: true } });
+  if (!before) return fail("Course not found.");
+  if (before.department === parsed.data) return { ok: true };
+  await db.$transaction(async (tx) => {
+    await tx.course.update({ where: { id }, data: { department: parsed.data } });
+    await writeAudit(
+      {
+        actor, action: "course.department_changed", entityType: "Course", entityId: id,
+        before: { department: before.department }, after: { department: parsed.data },
+      },
+      tx,
+    );
+  });
+  revalidatePath("/courses");
+  revalidatePath(`/courses/${before.slug}`);
   revalidatePath("/admin/catalog");
   return { ok: true };
 }

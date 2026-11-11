@@ -62,6 +62,7 @@ const actions: [string, () => Promise<unknown>][] = [
   ["createCourse", () => catalog.createCourse(valid)],
   ["updateCourse", () => catalog.updateCourse("c1", valid)],
   ["setCourseArchived", () => catalog.setCourseArchived("c1", true)],
+  ["setCourseDepartment", () => catalog.setCourseDepartment("c1", "OTHER")],
   ["deleteCourse", () => catalog.deleteCourse("c1")],
   ["addAlias", () => catalog.addAlias({ courseId: "c1", alias: "Some Title" })],
   ["removeAlias", () => catalog.removeAlias("al1")],
@@ -179,6 +180,39 @@ describe("deleteCourse", () => {
     expect((await catalog.deleteCourse("c1")).ok).toBe(true);
     expect(fakeDb.course.delete).toHaveBeenCalled();
     expect(vi.mocked(writeAudit).mock.calls[0][0]).toMatchObject({ action: "course.deleted", before: { slug: "new-course" } });
+  });
+});
+
+describe("setCourseDepartment", () => {
+  beforeEach(() => {
+    state.user = user("COUNSELOR");
+    fakeDb.course.findUnique.mockResolvedValue(existing);
+  });
+  it("moves a course into Other Programs and audits before and after", async () => {
+    expect((await catalog.setCourseDepartment("c1", "OTHER")).ok).toBe(true);
+    expect(fakeDb.course.update).toHaveBeenCalledWith({ where: { id: "c1" }, data: { department: "OTHER" } });
+    expect(vi.mocked(writeAudit).mock.calls[0][0]).toMatchObject({
+      action: "course.department_changed", entityId: "c1", before: { department: "MATH" }, after: { department: "OTHER" },
+    });
+  });
+  it("leaves requirement tags alone", async () => {
+    await catalog.setCourseDepartment("c1", "OTHER");
+    expect(fakeDb.courseRequirement.deleteMany).not.toHaveBeenCalled();
+  });
+  it("does nothing when the course is already there", async () => {
+    expect((await catalog.setCourseDepartment("c1", "MATH")).ok).toBe(true);
+    expect(fakeDb.course.update).not.toHaveBeenCalled();
+    expect(writeAudit).not.toHaveBeenCalled();
+  });
+  it("rejects an unknown department or a bad id", async () => {
+    expect((await catalog.setCourseDepartment("c1", "NOPE")).ok).toBe(false);
+    expect((await catalog.setCourseDepartment("", "OTHER")).ok).toBe(false);
+    expect((await catalog.setCourseDepartment("x".repeat(65), "OTHER")).ok).toBe(false);
+    expect(fakeDb.course.update).not.toHaveBeenCalled();
+  });
+  it("fails for a missing course", async () => {
+    fakeDb.course.findUnique.mockResolvedValue(null);
+    expect((await catalog.setCourseDepartment("c1", "OTHER")).ok).toBe(false);
   });
 });
 
