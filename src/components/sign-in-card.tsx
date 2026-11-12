@@ -22,7 +22,7 @@ export function SignInCard() {
 
   return (
     <div className="soft w-full max-w-[400px] p-5">
-      <h2 className="text-[17px] font-bold">Sign in</h2>
+      <h2 className="text-[20px] font-bold">Sign in</h2>
       <p className="mt-0.5 text-[14px] text-muted">Use your school Google account.</p>
 
       {answer === "under13" ? (

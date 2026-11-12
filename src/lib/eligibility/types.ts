@@ -92,8 +92,12 @@ export interface EvalContext {
   names?: Record<string, string>;
 }
 
-/** met: done. pending: depends on something not finished yet or on a person. unmet: not met. */
-export type LeafState = "met" | "pending" | "manual" | "unmet";
+/**
+ * met: done. planned: covered by a class planned in an earlier year (counts as met, shown as a note).
+ * pending: needs something the student has to add or confirm. manual: a person decides (a note, never a warning).
+ * unmet: not met.
+ */
+export type LeafState = "met" | "planned" | "pending" | "manual" | "unmet";
 
 export interface LeafResult {
   rule: LeafRule;
@@ -104,7 +108,8 @@ export interface LeafResult {
   message: string;
 }
 
-export type NodeState = "met" | "pending" | "unmetAppealable" | "unmetLocked";
+/** `manual` ranks between met and pending: the student can take the course once a person signs off. */
+export type NodeState = "met" | "manual" | "pending" | "unmetAppealable" | "unmetLocked";
 
 export type NodeResult =
   | { kind: "leaf"; state: NodeState; leaf: LeafResult }
@@ -120,4 +125,8 @@ export interface EvalResult {
   viaAppeal: boolean;
   /** One sentence for the badge tooltip or the plan warning. */
   summary: string;
+  /** What a person still decides (teacher recommendation, placement exam), on the path that explains the result. */
+  notes: string[];
+  /** The student already took or is taking the course, so nothing was checked. */
+  taken?: boolean;
 }

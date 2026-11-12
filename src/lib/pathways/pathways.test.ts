@@ -4,7 +4,7 @@ import { bestFit } from "./index";
 
 const fit = (grade: number, status: Eligibility): GradeFit => ({
   grade,
-  result: { status, tree: null, leaves: [], unmet: [], viaAppeal: false, summary: "" } satisfies EvalResult,
+  result: { status, tree: null, leaves: [], unmet: [], viaAppeal: false, summary: "", notes: [] } satisfies EvalResult,
 });
 
 describe("bestFit", () => {

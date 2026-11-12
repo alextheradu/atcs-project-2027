@@ -63,12 +63,18 @@ export default async function CoursePage({ params }: { params: Promise<{ slug: s
   const approved = appeal?.status === "APPROVED";
   // Every class gets an answer once there is a Board; a class with no listed rule is checked by grade alone.
   const fits = plan ? courseFit({ slug: course.slug, gradesOffered: course.gradesOffered, rules, prereqText: course.prereqText }, placements, { prior: profile ?? {}, names, approved }) : [];
-  const answer = canTakeAnswer(fits, { approved, currentGrade: profile?.currentGrade ?? null });
-  // Offer a review when no grade qualifies outright but at least one is close enough to ask about, and none is open already.
-  const openAppeal = appeal && ["DRAFT", "SUBMITTED", "UNDER_REVIEW"].includes(appeal.status);
-  const canAsk = fits.length > 0 && !approved && !openAppeal && !fits.some((f) => f.result.status === "ELIGIBLE") && fits.some((f) => f.result.status === "NOT_ELIGIBLE_APPEALABLE" || f.result.status === "ELIGIBLE_WITH_WARNING");
-
   const onBoard = plan?.entries.find((e) => e.courseId === course.id);
+  // Agree with the Board: a class you took is not judged again, and a planned one is judged in the grade it sits in.
+  const taken = onBoard && onBoard.status !== "PLANNED" ? onBoard.status : undefined;
+  const answer = canTakeAnswer(fits, { approved, currentGrade: profile?.currentGrade ?? null, taken, plannedGrade: onBoard?.status === "PLANNED" ? onBoard.gradeLevel : undefined });
+  // Offer a review when the student is close (appealable, not just a missing partner class) or when a person decides
+  // (a recommendation they may not get), never for a class they took, and only when no review is open already.
+  const openAppeal = appeal && ["DRAFT", "SUBMITTED", "UNDER_REVIEW"].includes(appeal.status);
+  const judged = onBoard?.status === "PLANNED" ? fits.filter((f) => f.grade === onBoard.gradeLevel) : fits;
+  const coreqOnly = (f: (typeof fits)[number]) => f.result.unmet.length > 0 && f.result.unmet.every((l) => l.rule.type === "coreq");
+  const canAsk = judged.length > 0 && !taken && !approved && !openAppeal &&
+    (judged.some((f) => f.result.status === "NOT_ELIGIBLE_APPEALABLE" && !coreqOnly(f)) || judged.every((f) => f.result.status === "ELIGIBLE" && f.result.notes.length > 0));
+
   const grades = course.gradesOffered.filter((g) => g >= 9 && g <= 12);
   const canAdd = !!plan && isEditable(plan.status) && !onBoard && !course.archived && course.plannable && grades.length > 0;
   const tags = course.requirements.map((r) => ({ kind: r.kind as RequirementKind, credits: Number(r.credits), provisional: r.provisional }));
@@ -78,11 +84,11 @@ export default async function CoursePage({ params }: { params: Promise<{ slug: s
 
   return (
     <article>
-      <Link href="/courses" className="mb-3 inline-block text-[14px] text-muted transition-colors hover:text-fg">← Classes</Link>
+      <Link href="/courses" className="mb-3 inline-block text-sm text-muted transition-colors hover:text-fg">← Classes</Link>
       <header className={cn("mb-6", `subject-${row.key}`)}>
-        <p className="ink text-[14px] font-semibold">{DEPT_LABEL[course.department]}</p>
+        <p className="ink text-sm font-semibold">{DEPT_LABEL[course.department]}</p>
         <div className="flex flex-wrap items-center gap-3">
-          <h1 className="text-[30px] font-bold leading-[1.15] tracking-[-0.025em]">{course.name}</h1>
+          <h1 className="text-[28px] font-bold leading-[1.15] tracking-[-0.025em]">{course.name}</h1>
           {course.archived && <Badge tone="locked">Archived</Badge>}
         </div>
         <p className="mt-1 text-[15px] text-muted">
@@ -100,11 +106,12 @@ export default async function CoursePage({ params }: { params: Promise<{ slug: s
       )}
       {answer && (
         <div className="soft mb-6 p-5">
-          <p className="flex items-start gap-3 text-[18px] font-semibold leading-snug">
+          <p className="flex items-start gap-3 text-[17px] font-semibold leading-snug">
             <span aria-hidden className={cn("mt-[7px] size-2.5 shrink-0 rounded-full", DOT[answer.tone])} />
             {answer.text}
           </p>
           {answer.detail && <p className="mt-1.5 pl-[22px] text-[15px] text-muted">{answer.detail}</p>}
+          {answer.note && <p className="mt-1.5 pl-[22px] text-[15px] text-muted">The school also decides: {answer.note}</p>}
         </div>
       )}
 
@@ -136,14 +143,14 @@ export default async function CoursePage({ params }: { params: Promise<{ slug: s
           {(course.prereqText || rules) && (
             <section>
               <h2 className="eyebrow mb-1">What it takes</h2>
-              <p className="mb-3 text-[14px] text-muted">From the Program of Studies. The school decides placement.</p>
+              <p className="mb-3 text-sm text-muted">From the Program of Studies. The school decides placement.</p>
               <p className="max-w-[65ch] text-[15px] leading-relaxed">{course.prereqText || (rules ? describeRule(rules, names) : null)}</p>
             </section>
           )}
 
           {fits.length > 1 && (
             <details className="group">
-              <summary className="cursor-pointer list-none text-[14px] font-medium text-accent-ink hover:underline [&::-webkit-details-marker]:hidden">
+              <summary className="cursor-pointer list-none text-sm font-medium text-accent-ink hover:underline [&::-webkit-details-marker]:hidden">
                 <span className="group-open:hidden">Check each grade</span>
                 <span className="hidden group-open:inline">Hide the grade by grade check</span>
               </summary>
@@ -157,17 +164,17 @@ export default async function CoursePage({ params }: { params: Promise<{ slug: s
               <div className="grid gap-4 sm:grid-cols-2">
                 {leadsFrom.length > 0 && (
                   <div>
-                    <p className="mb-1.5 text-[14px] text-muted">Usually comes after</p>
+                    <p className="mb-1.5 text-sm text-muted">Usually comes after</p>
                     <ul className="space-y-1">
-                      {leadsFrom.map((e) => <li key={e.id}><Link href={`/courses/${e.from.slug}`} className="text-[15px] font-medium hover:text-accent-ink">{e.from.name}</Link></li>)}
+                      {leadsFrom.map((e) => <li key={e.id}><Link href={`/courses/${e.from.slug}`} className="text-[15px] font-medium text-accent-ink hover:underline">{e.from.name}</Link></li>)}
                     </ul>
                   </div>
                 )}
                 {leadsTo.length > 0 && (
                   <div>
-                    <p className="mb-1.5 text-[14px] text-muted">Leads to</p>
+                    <p className="mb-1.5 text-sm text-muted">Leads to</p>
                     <ul className="space-y-1">
-                      {leadsTo.map((e) => <li key={e.id}><Link href={`/courses/${e.to.slug}`} className="text-[15px] font-medium hover:text-accent-ink">{e.to.name}</Link></li>)}
+                      {leadsTo.map((e) => <li key={e.id}><Link href={`/courses/${e.to.slug}`} className="text-[15px] font-medium text-accent-ink hover:underline">{e.to.name}</Link></li>)}
                     </ul>
                   </div>
                 )}
@@ -193,7 +200,7 @@ export default async function CoursePage({ params }: { params: Promise<{ slug: s
                 {course.requirements.map((r) => {
                   const key = ROWS.find((x) => x.kinds.includes(r.kind as RequirementKind))?.key ?? "elective";
                   return (
-                    <li key={r.id} className={cn("rounded-full bg-[var(--tile-fill)] px-3 py-1.5 text-[14px]", `subject-${key}`)}>
+                    <li key={r.id} className={cn("rounded-full bg-[var(--tile-fill)] px-3 py-1.5 text-sm", `subject-${key}`)}>
                       <span className="ink font-semibold">{KIND_LABEL[r.kind]}</span> <span className="num">{fmtCredits(r.credits)}</span> cr
                       {r.provisional && <span className="text-muted">, not confirmed yet</span>}
                     </li>
@@ -206,7 +213,7 @@ export default async function CoursePage({ params }: { params: Promise<{ slug: s
           {course.requirements.length === 0 && (
             <section>
               <h2 className="eyebrow mb-1">Counts toward graduation</h2>
-              <p className="text-[14px] text-muted">Total credits only, as an elective.</p>
+              <p className="text-sm text-muted">Total credits only, as an elective.</p>
             </section>
           )}
           {(course.sourcePage || course.interests.length > 0) && (

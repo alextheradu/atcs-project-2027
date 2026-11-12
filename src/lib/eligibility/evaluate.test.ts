@@ -15,10 +15,11 @@ describe("completed", () => {
   it("accepts a completed course with no grade entered", () => {
     expect(evaluate(rule, ctx(10, [done("english-i", null)])).status).toBe("ELIGIBLE");
   });
-  it("warns when the prerequisite is planned in an earlier year", () => {
+  it("counts a prerequisite planned in an earlier year, and keeps it as a note", () => {
     const r = evaluate(rule, ctx(10, [planned("english-i", 9)]));
-    expect(r.status).toBe("ELIGIBLE_WITH_WARNING");
-    expect(r.summary).toContain("planned for grade 9");
+    expect(r.status).toBe("ELIGIBLE");
+    expect(r.leaves[0]).toMatchObject({ state: "planned" });
+    expect(r.leaves[0].message).toContain("planned for grade 9");
   });
   it("fails when the prerequisite is planned in the same year or later, and locks it", () => {
     expect(evaluate(rule, ctx(10, [planned("english-i", 10)])).status).toBe("NOT_ELIGIBLE_LOCKED");
@@ -56,16 +57,21 @@ describe("minGrade", () => {
     expect(r.summary).toContain("B- or higher");
   });
   it("labels the final grade as an estimate when the PDF says initial average", () => {
-    expect(evaluate(rule, ctx(11, [done("pre-calculus", "A")])).leaves[0].message).toContain("stands in for the initial test/quiz average");
+    expect(evaluate(rule, ctx(11, [done("pre-calculus", "A")])).leaves[0].message).toContain("your final grade is only an estimate");
     const fin: Rule = { ...rule, basis: "final" } as Rule;
-    expect(evaluate(fin, ctx(11, [done("pre-calculus", "A")])).leaves[0].message).not.toContain("stands in");
+    expect(evaluate(fin, ctx(11, [done("pre-calculus", "A")])).leaves[0].message).not.toContain("only an estimate");
   });
   it("locks a skipped course", () => {
     expect(evaluate(rule, ctx(11, [done("geometry", "A")])).status).toBe("NOT_ELIGIBLE_LOCKED");
   });
-  it("warns when the grade is not entered, or the course is only planned earlier", () => {
+  it("warns when the grade is not entered", () => {
     expect(evaluate(rule, ctx(11, [done("pre-calculus", null)])).status).toBe("ELIGIBLE_WITH_WARNING");
-    expect(evaluate(rule, ctx(11, [planned("pre-calculus", 10)])).status).toBe("ELIGIBLE_WITH_WARNING");
+  });
+  it("counts a course planned earlier and says what grade it will need", () => {
+    const r = evaluate(rule, ctx(11, [planned("pre-calculus", 10)]));
+    expect(r.status).toBe("ELIGIBLE");
+    expect(r.leaves[0].state).toBe("planned");
+    expect(r.leaves[0].message).toContain("B- or higher");
   });
   it("warns instead of guessing when the grade is Pass", () => {
     expect(evaluate(rule, ctx(11, [done("pre-calculus", "PASS")])).status).toBe("ELIGIBLE_WITH_WARNING");
@@ -80,7 +86,9 @@ describe("any and all", () => {
   const a: Rule = { type: "completed", courses: ["a"] };
   const b: Rule = { type: "completed", courses: ["b"] };
   it("all takes the worst leaf", () => {
-    expect(evaluate({ type: "all", rules: [a, b] }, ctx(10, [done("a", "A"), planned("b", 9)])).status).toBe("ELIGIBLE_WITH_WARNING");
+    expect(evaluate({ type: "all", rules: [a, b] }, ctx(10, [done("a", "A"), planned("b", 9)])).status).toBe("ELIGIBLE");
+    const graded: Rule = { type: "minGrade", courses: ["b"], grade: "B", basis: "final" };
+    expect(evaluate({ type: "all", rules: [a, graded] }, ctx(10, [done("a", "A"), done("b", null)])).status).toBe("ELIGIBLE_WITH_WARNING");
     expect(evaluate({ type: "all", rules: [a, b] }, ctx(10, [done("a", "A")])).status).toBe("NOT_ELIGIBLE_LOCKED");
   });
   it("any takes the best branch and only explains the closest one", () => {
@@ -98,21 +106,40 @@ describe("any and all", () => {
   });
 });
 
+describe("grade wording", () => {
+  it("uses an before A and F", () => {
+    const rule: Rule = { type: "minGrade", courses: ["x"], grade: "A_MINUS", basis: "final" };
+    expect(evaluate(rule, ctx(11, [done("x", "B")])).summary).toBe("You have a B in x. This needs an A- or higher.");
+    expect(evaluate(rule, ctx(11, [done("x", "F")])).summary).toContain("You have an F in x.");
+  });
+});
+
 describe("manual", () => {
   const manual: Rule = { type: "manual", label: "Audition" };
-  it("never passes or fails: it shows as a warning", () => {
+  it("never passes or fails: it is a note, not a warning", () => {
     const r = evaluate(manual, ctx(10));
-    expect(r.status).toBe("ELIGIBLE_WITH_WARNING");
+    expect(r.status).toBe("ELIGIBLE");
     expect(r.summary).toBe("Audition");
+    expect(r.notes).toEqual(["Audition"]);
     expect(r.unmet).toHaveLength(0);
+  });
+  it("is the fallback in an any group when the other branch fails", () => {
+    const r = evaluate({ type: "any", rules: [{ type: "completed", courses: ["x"] }, manual] }, ctx(10));
+    expect(r.status).toBe("ELIGIBLE");
+    expect(r.notes).toEqual(["Audition"]);
+  });
+  it("loses to something the student still has to add", () => {
+    const graded: Rule = { type: "minGrade", courses: ["x"], grade: "B", basis: "final" };
+    expect(evaluate({ type: "all", rules: [manual, graded] }, ctx(10, [done("x", null)])).status).toBe("ELIGIBLE_WITH_WARNING");
   });
   it("does not hide a real failure", () => {
     const r = evaluate({ type: "all", rules: [manual, { type: "completed", courses: ["x"] }] }, ctx(10));
     expect(r.status).toBe("NOT_ELIGIBLE_LOCKED");
   });
-  it("does not raise a met requirement to a failure", () => {
+  it("does not raise a met requirement to a failure, and drops the note when another branch is met", () => {
     const r = evaluate({ type: "any", rules: [{ type: "completed", courses: ["x"] }, manual] }, ctx(10, [done("x", "B")]));
     expect(r.status).toBe("ELIGIBLE");
+    expect(r.notes).toEqual([]);
   });
 });
 
@@ -209,7 +236,7 @@ describe("approved appeal", () => {
     const r = evaluate(rule, ctx(11, [done("pre-calculus", "C")], { approvedAppeal: true }));
     expect(r.status).toBe("ELIGIBLE");
     expect(r.viaAppeal).toBe(true);
-    expect(r.summary).toBe("Approved via appeal.");
+    expect(r.summary).toBe("Approved through a placement review.");
   });
   it("overrides a locked miss too", () => {
     expect(evaluate(rule, ctx(11, [], { approvedAppeal: true })).viaAppeal).toBe(true);

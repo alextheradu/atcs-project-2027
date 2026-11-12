@@ -37,20 +37,21 @@ export const LEARN_CARDS: LearnCard[] = [
   },
   {
     id: "pathways",
-    title: "Pathways: locked and appealable",
-    hint: "Locked means a step was skipped. Appealable means you are close and can ask for a placement review.",
+    title: "Pathways: missing a step, or close enough to ask",
+    hint: "Missing a prerequisite means a step was skipped. Needs placement review means you are close and can ask the school to look again.",
     body: [
-      "Many courses need an earlier course first. If you skipped a step, the course is locked.",
-      "If you took the right course but the grade is a little short, or you want to move up a level, you can appeal. A supervisor makes the decision.",
+      "Many courses need an earlier course first. If you skipped a step, the course shows Missing a prerequisite.",
+      "If you took the right course but the grade is a little short, or you want to move up a level, you can ask for a placement review. A supervisor makes the decision.",
+      "Some courses also need a teacher recommendation, an audition or a placement exam. The planner cannot check those, so it shows them in gray as something the school decides.",
     ],
   },
   {
     id: "appeals",
-    title: "Appeals",
-    hint: "An appeal asks a supervisor to place you in a course you do not automatically qualify for. It opens during a set window each year.",
+    title: "Placement reviews",
+    hint: "A placement review asks a supervisor to place you in a course you do not automatically qualify for. It opens during a set window each year.",
     body: [
-      "An appeal asks a department supervisor to place you in a course you do not automatically qualify for. You explain why, and they decide.",
-      "Appeals open during a window each year. We will tell you when it opens. To start one, open the class and choose Ask for a placement review.",
+      "A placement review asks a department supervisor to place you in a course you do not automatically qualify for. You explain why, and they decide.",
+      "Placement reviews open during a window each year. We will tell you when it opens. To start one, open the class and choose Ask for a placement review.",
     ],
   },
 ];

@@ -64,6 +64,9 @@ test("the board flags a missing or split economics pair and clears it when reuni
     await dialog.getByRole("combobox", { name: "Grade to add to", exact: true }).selectOption("11");
     await dialog.getByRole("textbox", { name: "Search courses", exact: true }).fill(name);
     await dialog.getByRole("listitem").filter({ hasText: name }).getByRole("button", { name: "Add", exact: true }).click();
+    // The panel stays open after Add so several classes can go in at once.
+    await expect(dialog.getByRole("status")).toHaveText(`Added ${name} to 11th grade`);
+    await dialog.getByRole("button", { name: "Done", exact: true }).click();
     await expect(dialog).not.toBeVisible();
     await expect(tile(11, name)).toBeEnabled();
     await expect(page.getByRole("button", { name: "Add a class", exact: true })).toBeEnabled();
@@ -89,6 +92,8 @@ test("the board flags a missing or split economics pair and clears it when reuni
   await moveTo(12, 11, "AP Macroeconomics");
   await expect(flags).toHaveCount(0);
   await tile(11, "AP Macroeconomics").click();
-  await page.getByRole("dialog", { name: "AP Macroeconomics" }).getByRole("button", { name: "Remove from board", exact: true }).click();
+  const macroSheet = page.getByRole("dialog", { name: "AP Macroeconomics" });
+  await macroSheet.getByRole("button", { name: "Remove from board", exact: true }).click();
+  await macroSheet.getByRole("button", { name: "Remove", exact: true }).click();
   await expect(flags).toHaveCount(1);
 });

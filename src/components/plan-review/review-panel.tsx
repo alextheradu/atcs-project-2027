@@ -61,8 +61,12 @@ export function ReviewPanel({ planId, status, isOwner, canReview, comments, entr
         )}
         {isOwner && (
           <div className="mt-4">
-            {(status === "DRAFT" || status === "CHANGES_REQUESTED") && (
-              <Button variant="primary" disabled={pending} onClick={() => run(() => submitPlan(planId))}>{status === "CHANGES_REQUESTED" ? "Send again for review" : "Send for review"}</Button>
+            {/* Secondary on purpose: "Add a class" is the one primary action on the Board. */}
+            {(status === "DRAFT" || status === "CHANGES_REQUESTED") && entries.length === 0 && (
+              <p className="text-sm text-muted">Add classes to your board first, then send it here.</p>
+            )}
+            {(status === "DRAFT" || status === "CHANGES_REQUESTED") && entries.length > 0 && (
+              <Button disabled={pending} onClick={() => run(() => submitPlan(planId))}>{status === "CHANGES_REQUESTED" ? "Send again for review" : "Send for review"}</Button>
             )}
             {status === "SUBMITTED" && <Button disabled={pending} onClick={() => run(() => withdrawPlan(planId))}>Take it back to edit</Button>}
             {status === "APPROVED" && <Button disabled={pending} onClick={() => run(() => reopenPlan(planId))}>Reopen to make changes</Button>}

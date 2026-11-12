@@ -42,8 +42,9 @@
   --subject-pe-ink: #ffab7a;
   --subject-arts: #2f2134;
   --subject-arts-ink: #e6a3ef;
-  --subject-life: #2d2b17;
-  --subject-life-ink: #e2d36b;
+  /* Khaki, low chroma: a saturated yellow here read as the warning color. */
+  --subject-life: #29291f;
+  --subject-life-ink: #c9c79b;
   --subject-finlit: #182a31;
   --subject-finlit-ink: #82d0ec;
   --subject-elective: #262626;
@@ -403,6 +404,11 @@ input[type="search"]::-webkit-search-decoration { appearance: none; }
     line-height: 1.25;
     text-align: left;
     transition: transform 0.15s var(--ease-out), background-color 0.15s;
+  }
+  /* A finished class steps back so the years still ahead stand out. */
+  .tile-done {
+    background: color-mix(in oklab, var(--tile-fill, var(--fill)) 50%, var(--bg));
+    color: var(--muted);
   }
   button.tile { cursor: pointer; }
   @media (hover: hover) {

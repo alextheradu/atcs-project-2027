@@ -43,6 +43,20 @@ export function buildContext(
   };
 }
 
+/** A class the student finished or is taking now. Its prerequisites no longer matter, so nothing is checked. */
+export function takenResult(status: "IN_PROGRESS" | "COMPLETED"): EvalResult {
+  return {
+    status: "ELIGIBLE",
+    tree: null,
+    leaves: [],
+    unmet: [],
+    viaAppeal: false,
+    notes: [],
+    taken: true,
+    summary: status === "COMPLETED" ? "You took this class." : "You are taking this class now.",
+  };
+}
+
 /** The result for every placement on the plan, judged against the rest of the plan. */
 export function evaluatePlan(
   courses: PlanCourse[],
@@ -50,6 +64,10 @@ export function evaluatePlan(
 ): Map<string, EvalResult> {
   const out = new Map<string, EvalResult>();
   for (const c of courses) {
+    if (c.status !== "PLANNED") {
+      out.set(c.key, takenResult(c.status));
+      continue;
+    }
     const others = courses.filter((o) => o.key !== c.key);
     const ctx = buildContext(c.gradeLevel, others, { ...opts, approvedAppeal: c.approvedAppeal });
     out.set(c.key, evaluateCourse(c, ctx));

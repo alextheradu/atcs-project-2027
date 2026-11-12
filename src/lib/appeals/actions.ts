@@ -54,9 +54,10 @@ export async function startAppeal(courseSlug: unknown): Promise<ActionResult<{ i
   if (user.role !== "INCOMING") {
     const fit = await bestFitOf(user.id, course);
     if (!fit) return fail("That course is not offered in grades 9 to 12.");
-    if (fit.status === "ELIGIBLE") return fail("You already meet the requirements for this course.");
-    if (fit.status === "NOT_ELIGIBLE_LOCKED") return fail("This course is locked. Finish the earlier course in the sequence first.");
-    unmet = snapshotUnmet(fit.unmet.length ? fit.unmet : fit.leaves.filter((l) => l.state !== "met"));
+    // A class whose only open item is a person's decision (recommendation, placement exam) can still be reviewed.
+    if (fit.status === "ELIGIBLE" && fit.notes.length === 0) return fail("You already meet the requirements for this course.");
+    if (fit.status === "NOT_ELIGIBLE_LOCKED") return fail("This course is missing a prerequisite. Finish the earlier course in the sequence first.");
+    unmet = snapshotUnmet(fit.unmet.length ? fit.unmet : fit.leaves.filter((l) => l.state !== "met" && l.state !== "planned"));
   } else if (course.prereqText) {
     unmet = [{ type: "text", message: course.prereqText.slice(0, 300) }];
   }

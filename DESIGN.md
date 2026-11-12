@@ -27,7 +27,7 @@ subjects:
   language: ["#33202a", "#f2a2c0"]
   pe: ["#33231b", "#ffab7a"]
   arts: ["#2f2134", "#e6a3ef"]
-  life: ["#2d2b17", "#e2d36b"]
+  life: ["#29291f", "#c9c79b"]
   finlit: ["#182a31", "#82d0ec"]
   elective: ["#262626", "#cfcfcf"]
 typography:
@@ -43,6 +43,21 @@ typography:
     fontWeight: 700
     lineHeight: 1.15
     letterSpacing: "-0.025em"
+  display-mobile:
+    fontFamily: "Figtree, system-ui, sans-serif"
+    fontSize: "40px"
+    fontWeight: 700
+  subtitle:
+    fontFamily: "Figtree, system-ui, sans-serif"
+    fontSize: "20px"
+    fontWeight: 700
+  lead:
+    fontFamily: "Figtree, system-ui, sans-serif"
+    fontSize: "17px"
+  wordmark:
+    fontFamily: "Figtree, system-ui, sans-serif"
+    fontSize: "16px"
+    fontWeight: 700
   section:
     fontFamily: "Figtree, system-ui, sans-serif"
     fontSize: "15px"
@@ -51,14 +66,21 @@ typography:
     fontFamily: "Figtree, system-ui, sans-serif"
     fontSize: "15px"
     lineHeight: 1.5
+  secondary:
+    fontFamily: "Figtree, system-ui, sans-serif"
+    fontSize: "14px"
   small:
     fontFamily: "Figtree, system-ui, sans-serif"
     fontSize: "13px"
+  micro:
+    fontFamily: "Figtree, system-ui, sans-serif"
+    fontSize: "12px"
 rounded:
   tile: "10px"
   block: "14px"
   input: "10px"
   pill: "999px"
+  control: "5px"
 components:
   button-primary:
     backgroundColor: "{colors.accent}"
@@ -116,10 +138,13 @@ Green done or eligible, yellow warning, orange needs a placement review, red loc
 
 Figtree from `@fontsource/figtree`, self-hosted (`src/app/fonts.ts`). Weights 400, 500, 600, 700.
 
-- **Display** 52px, 700: the landing headline only.
-- **Title** 28px, 700: page titles.
+- **Display** 52px, 700: the landing headline only (40px on phones).
+- **Title** 28px, 700: page titles, including class pages.
+- **Subtitle** 20px, 700: the title of a sheet, panel or card (class sheet, add-class panel, sign-in card).
+- **Lead** 17px: the one sentence that answers the page's question (the Board status line, the class page answer, the landing lede).
 - **Section** 15px, 600 (`.eyebrow`, kept as a class name): block headings.
-- **Body** 15px; secondary 14px muted; small 13px.
+- **Body** 15px; secondary 14px muted; small 13px; micro 12px for tile details.
+- The wordmark is 16px, 700. The drawn checkbox uses the 5px control radius.
 - Tailwind's `text-sm` is pinned to 14px and `text-xs` to 12px so small text stays readable.
 
 ## 4. Elevation

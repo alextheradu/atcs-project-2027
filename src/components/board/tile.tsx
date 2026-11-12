@@ -1,26 +1,33 @@
 "use client";
 
 import { useDraggable } from "@dnd-kit/core";
+import { Check } from "lucide-react";
 import { rowFor } from "@/lib/board";
 import { formatCredits } from "@/lib/credits";
-import { ELIGIBILITY_TONE, eligibilityLabel, type EvalResult } from "@/lib/eligibility";
+import { ELIGIBILITY_TONE, type EvalResult } from "@/lib/eligibility";
 import type { PlanWarning } from "@/lib/plan-warnings";
 import { gradeLabel, type EntryView } from "@/lib/plans/view";
 import { cn } from "@/lib/utils";
 
 const DOT: Record<string, string> = { eligible: "bg-green", warning: "bg-yellow", appeal: "bg-orange", locked: "bg-red", review: "bg-accent" };
 
+export type TileFlag = { tone: "eligible" | "warning" | "appeal" | "locked" | "note"; text: string };
+
 /**
- * The one problem worth showing on a tile, in words. A missing partner class first (its eligibility label would
- * read as locked, which is not the real problem), then eligibility, then a grade the class is not offered in.
+ * The one thing worth saying on a tile, in the engine's own words so the student sees why, not just a color.
+ * Finished and current classes are history, so nothing is checked or flagged on them. A missing partner class is
+ * something the student fixes by adding a class, so it stays yellow even though the engine calls it appealable.
+ * A `note` is what a person still decides (a recommendation): information in muted text, never a warning.
  */
-export function tileFlag(entry: EntryView, result?: EvalResult, warnings: PlanWarning[] = []): { tone: string; text: string } | null {
+export function tileFlag(entry: EntryView, result?: EvalResult, warnings: PlanWarning[] = []): TileFlag | null {
+  if (entry.status !== "PLANNED") return null;
+  if (result?.viaAppeal) return { tone: "eligible", text: "Approved by placement review" };
   if (warnings.some((w) => w.code === "MISSING_COREQ")) return { tone: "warning", text: "Needs its partner class" };
-  if (result && result.viaAppeal) return { tone: "eligible", text: "Approved via appeal" };
-  if (result && result.status !== "ELIGIBLE") return { tone: ELIGIBILITY_TONE[result.status], text: eligibilityLabel(result) };
+  if (result && result.status !== "ELIGIBLE") return { tone: ELIGIBILITY_TONE[result.status], text: result.summary };
   if (entry.gradesOffered.length > 0 && !entry.gradesOffered.includes(entry.gradeLevel)) {
-    return { tone: "warning", text: `Not offered in ${entry.gradeLevel}th` };
+    return { tone: "warning", text: `Not offered in ${entry.gradeLevel}th grade` };
   }
+  if (result?.notes[0]) return { tone: "note", text: result.notes[0] };
   return null;
 }
 
@@ -36,21 +43,22 @@ export function TileBody({ entry, result, warnings }: { entry: EntryView; result
   return (
     <>
       <span className="line-clamp-2 block">{entry.name}</span>
-      <span className="ink mt-1 flex flex-wrap items-center gap-x-2 gap-y-0.5 text-[12px] font-medium">
+      <span className="ink mt-1 flex flex-wrap items-center gap-x-2 gap-y-0.5 text-xs font-medium">
         <span className="num">{formatCredits(entry.credits)} cr</span>
-        {status && <span>{status}</span>}
+        {status && <span className="inline-flex items-center gap-1">{entry.status === "COMPLETED" && <Check aria-hidden size={12} strokeWidth={3} />}{status}</span>}
       </span>
-      {flag && (
-        <span className="mt-1 flex items-center gap-1.5 text-[12px] font-medium text-fg">
-          <span aria-hidden className={cn("size-2 shrink-0 rounded-full", DOT[flag.tone])} />
-          {flag.text}
+      {flag && flag.tone === "note" && <span className="mt-1 line-clamp-2 block text-xs text-muted">{flag.text}</span>}
+      {flag && flag.tone !== "note" && (
+        <span className="mt-1 flex items-start gap-1.5 text-xs font-medium text-fg">
+          <span aria-hidden className={cn("mt-[4px] size-2 shrink-0 rounded-full", DOT[flag.tone])} />
+          <span className="line-clamp-2">{flag.text}</span>
         </span>
       )}
     </>
   );
 }
 
-const subjectClass = (e: EntryView) => `subject-${rowFor(e.tags)}`;
+const subjectClass = (e: EntryView) => cn(`subject-${rowFor(e.tags)}`, e.status === "COMPLETED" && "tile-done");
 
 /** What a screen reader hears: the same facts the tile shows, then what clicking does. */
 function tileLabel(entry: EntryView, result?: EvalResult, warnings?: PlanWarning[]): string {

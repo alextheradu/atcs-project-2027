@@ -3,10 +3,10 @@ import type { Eligibility, EvalResult } from "./types";
 export type EligibilityTone = "eligible" | "warning" | "appeal" | "locked";
 
 export const ELIGIBILITY_LABEL: Record<Eligibility, string> = {
-  ELIGIBLE: "Eligible",
-  ELIGIBLE_WITH_WARNING: "Check details",
-  NOT_ELIGIBLE_APPEALABLE: "Needs appeal",
-  NOT_ELIGIBLE_LOCKED: "Locked",
+  ELIGIBLE: "Can take",
+  ELIGIBLE_WITH_WARNING: "Check first",
+  NOT_ELIGIBLE_APPEALABLE: "Needs placement review",
+  NOT_ELIGIBLE_LOCKED: "Missing a prerequisite",
 };
 
 export const ELIGIBILITY_TONE: Record<Eligibility, EligibilityTone> = {
@@ -17,4 +17,4 @@ export const ELIGIBILITY_TONE: Record<Eligibility, EligibilityTone> = {
 };
 
 export const eligibilityLabel = (r: Pick<EvalResult, "status" | "viaAppeal">): string =>
-  r.viaAppeal ? "Approved via appeal" : ELIGIBILITY_LABEL[r.status];
+  r.viaAppeal ? "Approved by review" : ELIGIBILITY_LABEL[r.status];

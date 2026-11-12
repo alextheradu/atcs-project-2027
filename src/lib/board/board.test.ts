@@ -130,8 +130,8 @@ describe("buildBoard", () => {
   it("says Done for a met row and how many are left otherwise", () => {
     const e = fullPlan().filter((x) => !x.tags.some((t) => t.kind === "SCI_PHYS"));
     const rows = buildBoard(e, summaryOf(e), 9);
-    expect(rows.find((r) => r.key === "english")!.status).toBe("Done");
-    expect(rows.find((r) => r.key === "science")!.status).toBe("1 more");
+    expect(rows.find((r) => r.key === "english")!.status).toBe("Covered");
+    expect(rows.find((r) => r.key === "science")!.status).toBe("1 class to add");
   });
 });
 

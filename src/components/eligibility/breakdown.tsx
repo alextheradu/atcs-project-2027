@@ -1,13 +1,15 @@
 import type { LeafResult, NodeResult } from "@/lib/eligibility";
 import { cn } from "@/lib/utils";
 
+// Planned and manual are information, not status: a neutral dot. Only things the student must fix get color.
 const DOT: Record<LeafResult["state"], string> = {
   met: "bg-green",
+  planned: "bg-muted",
   pending: "bg-yellow",
-  manual: "bg-yellow",
+  manual: "bg-muted",
   unmet: "bg-red",
 };
-const WORD: Record<LeafResult["state"], string> = { met: "Met", pending: "Check", manual: "Needs approval", unmet: "Not met" };
+const WORD: Record<LeafResult["state"], string> = { met: "Met", planned: "Planned", pending: "Check", manual: "The school decides", unmet: "Not met" };
 
 function Leaf({ leaf }: { leaf: LeafResult }) {
   return (
@@ -15,7 +17,7 @@ function Leaf({ leaf }: { leaf: LeafResult }) {
       <span aria-hidden className={cn("mt-[7px] size-1.5 shrink-0 rounded-full", DOT[leaf.state])} />
       <span className="min-w-0 flex-1">
         <span className="sr-only">{WORD[leaf.state]}: </span>
-        <span className={leaf.state === "met" ? "text-muted" : "text-fg"}>{leaf.message}</span>
+        <span className={leaf.state === "unmet" || leaf.state === "pending" ? "text-fg" : "text-muted"}>{leaf.message}</span>
         {leaf.rule.note && <span className="mt-0.5 block text-xs text-muted">{leaf.rule.note}</span>}
       </span>
     </li>
@@ -28,8 +30,8 @@ function Node({ node, depth }: { node: NodeResult; depth: number }) {
   if (single) return <Node node={node.children[0]} depth={depth} />;
   return (
     <li className="py-1">
-      <p className="text-xs text-muted">{node.kind === "all" ? "All of these" : "Any one of these"}</p>
-      <ul className={cn("mt-0.5", depth > 0 && "ml-3 border-l border-line pl-3")}>
+      <p className="text-xs text-muted">{node.kind === "all" ? "All of these" : "One of these is enough"}</p>
+      <ul className={cn("mt-0.5", depth > 0 && "ml-1 rounded-[10px] bg-fill-2 px-3 py-1")}>
         {node.children.map((c, i) => (
           <Node key={i} node={c} depth={depth + 1} />
         ))}

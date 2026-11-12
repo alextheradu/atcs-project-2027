@@ -93,17 +93,17 @@ export default function Styleguide() {
               <span className="text-[12px] text-muted">1 more</span>
             </div>
             <div className="tile subject-science">Biology<span className="ink mt-1 block text-[12px]">5 cr, Done, A</span></div>
-            <div className="tile subject-science">Chemistry<span className="ink mt-1 block text-[12px]">5 cr</span><span className="mt-1 flex items-center gap-1.5 text-[12px]"><span className="size-2 rounded-full bg-yellow" />Check details</span></div>
+            <div className="tile subject-science">Chemistry<span className="ink mt-1 block text-[12px]">5 cr</span><span className="mt-1 flex items-center gap-1.5 text-[12px]"><span className="size-2 rounded-full bg-yellow" />Add your grade for Biology.</span></div>
             <button type="button" className="tile-empty">+ Pick a physics class</button>
           </div>
         </Section>
 
         <Section title="Status" description="Always a dot and a word.">
           <div className="flex flex-wrap gap-4">
-            <Badge tone="eligible">Eligible</Badge>
-            <Badge tone="warning">Check details</Badge>
+            <Badge tone="eligible">Can take</Badge>
+            <Badge tone="warning">Check first</Badge>
             <Badge tone="appeal">Needs a review</Badge>
-            <Badge tone="locked">Locked</Badge>
+            <Badge tone="locked">Missing a prerequisite</Badge>
             <Badge tone="review">In review</Badge>
             <Badge>Draft</Badge>
           </div>

@@ -164,7 +164,7 @@ describe("starting a request", () => {
     fakeDb.appeal.findFirst.mockResolvedValue(null);
     fakeDb.appeal.create.mockResolvedValue({ id: "new" });
   });
-  const fit = (status: string) => vi.mocked(bestFitOf).mockResolvedValue({ status, unmet: [{ rule: { type: "minGrade" }, message: "Needs B-", state: "unmet" }], leaves: [] } as never);
+  const fit = (status: string) => vi.mocked(bestFitOf).mockResolvedValue({ status, unmet: [{ rule: { type: "minGrade" }, message: "Needs B-", state: "unmet" }], leaves: [], notes: [] } as never);
 
   it("admins start requests against their own eligibility with current-student rules", async () => {
     state.user = make("ADMIN", [], "admin");

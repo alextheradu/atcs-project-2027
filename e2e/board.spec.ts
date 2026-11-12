@@ -25,6 +25,10 @@ test("a new student starts a board, fills a spot, and moves the class", async ({
   const first = dialog.getByRole("listitem").first();
   const name = (await first.locator(".font-medium").first().textContent())!;
   await first.getByRole("button", { name: "Add", exact: true }).click();
+  // The panel stays open, says where the class went, and marks the row.
+  await expect(dialog.getByRole("status")).toHaveText(`Added ${name} to 9th grade`);
+  await expect(dialog.getByRole("button", { name: "Added to 9th grade", exact: true })).toBeDisabled();
+  await dialog.getByRole("button", { name: "Done", exact: true }).click();
 
   const tile = cell(page, "Math", 9).getByRole("button", { name: new RegExp(`^${name.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}, `) });
   await expect(tile).toBeVisible();
@@ -84,6 +88,8 @@ test("the class sheet keeps focus on a grade button and shows a failed save insi
   await dialog.getByRole("combobox", { name: "Grade to add to", exact: true }).selectOption("9");
   await dialog.getByRole("textbox", { name: "Search courses", exact: true }).fill("English I");
   await dialog.getByRole("listitem").filter({ has: page.getByText("English I", { exact: true }) }).getByRole("button", { name: "Add", exact: true }).click();
+  await expect(dialog.getByRole("status").filter({ hasText: "Added English I to 9th grade" })).toBeVisible();
+  await dialog.getByRole("button", { name: "Done", exact: true }).click();
   const tile = page.getByRole("group", { name: /, 9th grade$/ }).getByRole("button", { name: /^English I, / });
   await tile.click();
   const sheet = page.getByRole("dialog", { name: "English I" });

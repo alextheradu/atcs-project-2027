@@ -37,6 +37,8 @@ async function addEnglishI(page: Page) {
   const row = dialog.getByRole("listitem").filter({ has: page.getByText("English I", { exact: true }) });
   const credits = (await row.getByText(/^[\d.]+ cr$/).textContent())!.replace(" cr", "");
   await clickAndSettle(page, row.getByRole("button", { name: "Add", exact: true }));
+  await expect(dialog.getByRole("status")).toHaveText("Added English I to 9th grade");
+  await dialog.getByRole("button", { name: "Done", exact: true }).click();
   await expect(page.getByRole("group", { name: "English, 9th grade", exact: true }).getByRole("button", { name: new RegExp(`^${escape("English I")}, `) })).toBeVisible();
   // The Add button comes back once the server has saved the change.
   await expect(page.getByRole("button", { name: "Add a class", exact: true })).toBeEnabled();

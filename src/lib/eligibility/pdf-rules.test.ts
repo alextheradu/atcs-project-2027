@@ -77,7 +77,7 @@ describe("seed integrity", () => {
 describe("math (p30-34)", () => {
   it("Honors Algebra II with Trigonometry: B in Honors Geometry works, with the recommendation still to come", () => {
     const r = run("honors-algebra-ii-with-trigonometry", 10, [done("honors-geometry", "B")]);
-    expect(r.status).toBe("ELIGIBLE_WITH_WARNING");
+    expect(r.status).toBe("ELIGIBLE");
     expect(r.summary).toBe("Recommendation of teacher and supervisor");
   });
 
@@ -87,9 +87,8 @@ describe("math (p30-34)", () => {
 
   it("Honors Algebra II with Trigonometry: A in Geometry Enhanced and Algebra I Enhanced adds the placement exam", () => {
     const r = run("honors-algebra-ii-with-trigonometry", 11, [done("geometry-enhanced", "A", 9), done("algebra-i-enhanced", "A", 10)]);
-    expect(r.status).toBe("ELIGIBLE_WITH_WARNING");
-    const manuals = r.leaves.filter((l) => l.state === "manual").map((l) => l.message);
-    expect(manuals).toContain("Proficiency on a placement exam");
+    expect(r.status).toBe("ELIGIBLE");
+    expect(r.notes).toContain("Proficiency on a placement exam");
   });
 
   it("Honors Algebra II with Trigonometry: A- in Geometry Enhanced is not enough", () => {
@@ -104,7 +103,7 @@ describe("math (p30-34)", () => {
   });
 
   it("AP Calculus BC needs B+ in AP Pre-Calculus", () => {
-    expect(run("ap-calculus-bc", 12, [done("ap-pre-calculus", "B_PLUS", 11)]).status).toBe("ELIGIBLE_WITH_WARNING");
+    expect(run("ap-calculus-bc", 12, [done("ap-pre-calculus", "B_PLUS", 11)]).status).toBe("ELIGIBLE");
     expect(run("ap-calculus-bc", 12, [done("ap-pre-calculus", "B", 11)]).status).toBe("NOT_ELIGIBLE_APPEALABLE");
   });
 
@@ -126,13 +125,13 @@ describe("math (p30-34)", () => {
 
   it("Geometry Enhanced: C+ in 8th grade Algebra I or B- in 8th grade math, plus placement", () => {
     const e = (m: "ALGEBRA_I" | "PRE_ALGEBRA", g: "C_PLUS" | "C" | "B_MINUS") => run("geometry-enhanced", 9, [], { prior: { eighthMath: m, eighthMathGrade: g } });
-    expect(e("ALGEBRA_I", "C_PLUS").status).toBe("ELIGIBLE_WITH_WARNING");
-    expect(e("PRE_ALGEBRA", "B_MINUS").status).toBe("ELIGIBLE_WITH_WARNING");
+    expect(e("ALGEBRA_I", "C_PLUS").status).toBe("ELIGIBLE");
+    expect(e("PRE_ALGEBRA", "B_MINUS").status).toBe("ELIGIBLE");
     expect(e("PRE_ALGEBRA", "C_PLUS").status).toBe("NOT_ELIGIBLE_APPEALABLE");
   });
 
   it("Honors Geometry is placement only after 8th grade Algebra I", () => {
-    expect(run("honors-geometry", 9, [], { prior: { eighthMath: "ALGEBRA_I", eighthMathGrade: "A" } }).status).toBe("ELIGIBLE_WITH_WARNING");
+    expect(run("honors-geometry", 9, [], { prior: { eighthMath: "ALGEBRA_I", eighthMathGrade: "A" } }).status).toBe("ELIGIBLE");
     expect(run("honors-geometry", 9, [], { prior: { eighthMath: "PRE_ALGEBRA", eighthMathGrade: "A" } }).status).toBe("NOT_ELIGIBLE_APPEALABLE");
   });
 });
@@ -144,14 +143,14 @@ describe("computer science (p35-36)", () => {
   });
   it("Honors CS after Intro to CS still needs the recommendation", () => {
     const r = run("honors-computer-science", 10, [done("introduction-to-computer-science-and-app-development", "B")]);
-    expect(r.status).toBe("ELIGIBLE_WITH_WARNING");
+    expect(r.status).toBe("ELIGIBLE");
     expect(r.summary).toBe("Recommendation of teacher and supervisor");
   });
   it("AP CS A needs Honors CS, and Advanced Topics needs AP CS A", () => {
     expect(run("ap-computer-science-a", 11, []).status).toBe("NOT_ELIGIBLE_LOCKED");
-    expect(run("ap-computer-science-a", 11, [done("honors-computer-science", "A", 10)]).status).toBe("ELIGIBLE_WITH_WARNING");
+    expect(run("ap-computer-science-a", 11, [done("honors-computer-science", "A", 10)]).status).toBe("ELIGIBLE");
     expect(run("advanced-topics-in-computer-science-honors", 12, [done("honors-computer-science", "A", 10)]).status).toBe("NOT_ELIGIBLE_LOCKED");
-    expect(run("advanced-topics-in-computer-science-honors", 12, [done("ap-computer-science-a", "B", 11)]).status).toBe("ELIGIBLE_WITH_WARNING");
+    expect(run("advanced-topics-in-computer-science-honors", 12, [done("ap-computer-science-a", "B", 11)]).status).toBe("ELIGIBLE");
   });
 });
 
@@ -178,7 +177,7 @@ describe("science (p39-45)", () => {
   });
   it("Applied Physics lists two prerequisites in the PDF, so it is left to the supervisor", () => {
     const r = run("applied-physics-and-engineering", 11, []);
-    expect(r.status).toBe("ELIGIBLE_WITH_WARNING");
+    expect(r.status).toBe("ELIGIBLE");
     expect(r.summary).toContain("Science listing");
   });
 });
@@ -207,19 +206,19 @@ describe("English and social studies (p16-27)", () => {
     expect(run("an-introduction-to-the-analysis-of-public-policy", 12, [plan("ap-american-government-and-politics", 12)]).status).toBe("ELIGIBLE");
   });
   it("AP U.S. History I: World History plus placement", () => {
-    expect(run("ap-u-s-history-i", 10, [done("world-history", "A")]).status).toBe("ELIGIBLE_WITH_WARNING");
+    expect(run("ap-u-s-history-i", 10, [done("world-history", "A")]).status).toBe("ELIGIBLE");
   });
 });
 
 describe("world language (p47-49)", () => {
   it("AP language courses are an honors sequence plus a recommendation: always manual", () => {
     const r = run("ap-spanish-language-and-culture", 11, [done("honors-spanish-iv", "A", 10)]);
-    expect(r.status).toBe("ELIGIBLE_WITH_WARNING");
+    expect(r.status).toBe("ELIGIBLE");
     expect(r.summary).toContain("Honors language sequence");
   });
   it("AP Spanish Literature accepts AP Spanish Language or Heritage Speakers III", () => {
-    expect(run("ap-spanish-literature-and-culture", 12, [done("ap-spanish-language-and-culture", "B", 11)]).status).toBe("ELIGIBLE_WITH_WARNING");
-    expect(run("ap-spanish-literature-and-culture", 12, [done("spanish-for-heritage-speakers-iii", "B", 11)]).status).toBe("ELIGIBLE_WITH_WARNING");
+    expect(run("ap-spanish-literature-and-culture", 12, [done("ap-spanish-language-and-culture", "B", 11)]).status).toBe("ELIGIBLE");
+    expect(run("ap-spanish-literature-and-culture", 12, [done("spanish-for-heritage-speakers-iii", "B", 11)]).status).toBe("ELIGIBLE");
     expect(run("ap-spanish-literature-and-culture", 12, [done("spanish-iii", "A", 10)]).status).toBe("NOT_ELIGIBLE_LOCKED");
   });
 });
@@ -228,6 +227,6 @@ describe("approved appeals on a plan entry", () => {
   it("Calculus with a C+ in Pre-Calculus becomes Approved via appeal", () => {
     const r = run("calculus", 11, [done("pre-calculus", "C_PLUS", 10)], { approvedAppeal: true });
     expect(r.status).toBe("ELIGIBLE");
-    expect(r.summary).toBe("Approved via appeal.");
+    expect(r.summary).toBe("Approved through a placement review.");
   });
 });

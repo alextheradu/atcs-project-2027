@@ -15,6 +15,7 @@ import { DEPT_LABEL, KIND_LABEL, LEVEL_LABEL, fmtCredits } from "@/lib/catalog/l
 import { LEVELS, courseFilterSchema } from "@/lib/catalog/schemas";
 import type { RequirementKind } from "@/lib/requirements";
 import { cn } from "@/lib/utils";
+import { CourseFilterForm } from "./filter-form";
 
 type Params = Promise<Record<string, string | string[] | undefined>>;
 
@@ -91,7 +92,8 @@ export default async function Courses({ searchParams }: { searchParams: Params }
       <ViewTabs view="list" />
 
       <div className="grid gap-8 lg:grid-cols-[minmax(0,240px)_minmax(0,1fr)] lg:gap-12">
-      <form className="grid grid-cols-2 gap-2 self-start lg:sticky lg:top-24 lg:grid-cols-1" action="/courses" aria-label="Filter classes">
+      {/* Keyed by the filter so a navigation (Clear, back, forward) resets the uncontrolled fields to the URL. */}
+      <CourseFilterForm key={JSON.stringify(filter)} className="grid grid-cols-2 gap-2 self-start lg:sticky lg:top-24 lg:grid-cols-1">
         <input className="input col-span-2 lg:col-span-1" name="q" defaultValue={filter.q} placeholder="Search classes" aria-label="Search" />
         <select className={sel} name="department" defaultValue={filter.department ?? ""} aria-label="Subject">
           <option value="">Any subject</option>
@@ -118,7 +120,7 @@ export default async function Courses({ searchParams }: { searchParams: Params }
           <button className="btn flex-1" type="submit">Search</button>
           {filtered && <Link className="btn btn-ghost" href="/courses">Clear</Link>}
         </div>
-      </form>
+      </CourseFilterForm>
 
       <div className="min-w-0">
       <p className="text-[14px] text-muted lg:pt-2.5"><span className="num">{courses.length}</span> {courses.length === 1 ? "class" : "classes"}</p>
@@ -133,7 +135,7 @@ export default async function Courses({ searchParams }: { searchParams: Params }
                 return (
                   <li key={c.id}>
                     <Link href={`/courses/${c.slug}`} className={cn("flex items-center gap-3 py-2.5", `subject-${rowFor(tags)}`)}>
-                      <span aria-hidden className="size-2.5 shrink-0 rounded-full bg-[var(--tile-ink)]" />
+                      <span aria-hidden className="size-2.5 shrink-0 rounded-[3px] bg-[var(--tile-ink)]" />
                       <span className="min-w-0 flex-1">
                         <span className="block truncate text-[15px] font-medium">{c.name}</span>
                         <span className="mt-0.5 block text-[13px] text-muted">

@@ -34,6 +34,22 @@ describe("evaluatePlan", () => {
     expect(r.get("calculus")?.viaAppeal).toBe(true);
   });
 
+  it("does not check classes the student finished or is taking now", () => {
+    const geo = mk("geometry", 9, { type: "priorCoursework", field: "eighthMath", minGrade: "D" }, { status: "COMPLETED", grade: "B_PLUS" });
+    const cs = mk("honors-cs", 10, { type: "completed", courses: ["intro-cs"] }, { status: "IN_PROGRESS" });
+    const r = evaluatePlan([geo, cs]);
+    expect(r.get("geometry")).toMatchObject({ status: "ELIGIBLE", taken: true, summary: "You took this class." });
+    expect(r.get("honors-cs")).toMatchObject({ status: "ELIGIBLE", taken: true, summary: "You are taking this class now." });
+    expect(eligibilityWarnings([geo, cs], r)).toEqual([]);
+  });
+
+  it("counts a prerequisite planned in an earlier year as covered", () => {
+    const eng4 = mk("english-iv", 12, { type: "completed", courses: ["english-iii"] });
+    const r = evaluatePlan([mk("english-iii", 11, null), eng4]);
+    expect(r.get("english-iv")?.status).toBe("ELIGIBLE");
+    expect(r.get("english-iv")?.leaves[0]).toMatchObject({ state: "planned", message: "english-iii is planned for grade 11." });
+  });
+
   it("passes the student's 8th grade math through", () => {
     const geo = mk("geometry", 9, { type: "priorCoursework", field: "eighthMath", minGrade: "D" });
     const r = evaluatePlan([geo], { prior: { eighthMath: "ALGEBRA_I", eighthMathGrade: "B" } });
@@ -74,7 +90,7 @@ describe("courseFit", () => {
     const fit = courseFit(calc, [mk("pre-calculus", 11, null)]);
     expect(fit.map((f) => [f.grade, f.result.status])).toEqual([
       [11, "NOT_ELIGIBLE_LOCKED"],
-      [12, "ELIGIBLE_WITH_WARNING"],
+      [12, "ELIGIBLE"],
     ]);
   });
   it("ignores the course itself and middle school grades", () => {

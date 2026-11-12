@@ -87,7 +87,11 @@ export function buildBoard(entries: BoardEntry[], summary: GraduationSummary, cu
     for (const e of entries) if (rowFor(e.tags) === row.key) cells[toGrade(e.gradeLevel)].entryIds.push(e.id);
     const mine = spots.filter((s) => s.row === row.key);
     for (const s of mine) cells[s.gradeLevel].spots.push(s);
-    const status = row.kinds.length === 0 ? "Any class" : mine.length > 0 ? `${mine.length} more` : row.kinds.every((k) => met.get(k) ?? true) ? "Done" : "";
+    // "Covered" means the plan meets the requirement once its planned classes are finished, not that they are done.
+    const status =
+      row.kinds.length === 0 ? "Any class counts"
+        : mine.length > 0 ? `${mine.length} ${mine.length === 1 ? "class" : "classes"} to add`
+          : row.kinds.every((k) => met.get(k) ?? true) ? "Covered" : "";
     return { key: row.key, label: row.label, status, cells };
   });
 }
