@@ -10,6 +10,7 @@ import { canUseStudentWorkspace } from "@/lib/auth/student-access";
 import { rowFor } from "@/lib/board";
 import { db } from "@/lib/db";
 import { buildCourseWhere } from "@/lib/catalog/queries";
+import { rankByQuery } from "@/lib/catalog/rank";
 import { DEPT_LABEL, KIND_LABEL, LEVEL_LABEL, fmtCredits } from "@/lib/catalog/labels";
 import { LEVELS, courseFilterSchema } from "@/lib/catalog/schemas";
 import type { RequirementKind } from "@/lib/requirements";
@@ -77,8 +78,9 @@ export default async function Courses({ searchParams }: { searchParams: Params }
     db.interestTag.findMany({ orderBy: { label: "asc" } }),
   ]);
 
-  // Already sorted by department, so grouping keeps the catalog order.
-  const groups = [...Map.groupBy(courses, (c) => c.department)];
+  // Already sorted by department, so grouping keeps the catalog order. A search moves title matches
+  // (and the subjects that hold them) ahead of classes that only mention the words in their description.
+  const groups = rankByQuery(courses, filter.q ?? "");
   // A short result (about a screen and a half of rows) or a single subject shows everything. Anything longer,
   // including the whole catalog or a broad filter like "9th grade", starts with every subject closed.
   const openAll = courses.length <= OPEN_ALL_UP_TO || groups.length === 1;
