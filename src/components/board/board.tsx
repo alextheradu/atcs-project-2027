@@ -7,17 +7,15 @@ import { AddCoursePanel, type PanelCourse } from "@/components/planner/add-cours
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { GRADES, KIND_NOUN, ROWS, buildBoard, statusSentence, type BoardRow, type Grade, type Spot } from "@/lib/board";
-import { formatCredits, fromTenths, toTenths } from "@/lib/credits";
-import { TONE_MEANING, type EvalResult, type StudentPrior } from "@/lib/eligibility";
+import { formatCredits } from "@/lib/credits";
+import type { EvalResult, StudentPrior } from "@/lib/eligibility";
 import type { GuidanceConfig } from "@/lib/guidance";
 import { describeWarning, type PlanWarning } from "@/lib/plan-warnings";
 import { PLAN_STATUS_LABEL, type EntryView } from "@/lib/plans/view";
 import type { GraduationSettings, RequirementKind, RequirementRuleInput } from "@/lib/requirements";
 import { cn } from "@/lib/utils";
 import { ClassSheet } from "./class-sheet";
-import { DragGhost, DraggableTile, StaticTile, tileFlag } from "./tile";
-
-const FLAG_DOT: Record<string, string> = { eligible: "bg-green", warning: "bg-yellow", appeal: "bg-orange", locked: "bg-red" };
+import { DragGhost, DraggableTile, StaticTile } from "./tile";
 import { usePlanEditor, type PlanEditor } from "./use-plan-editor";
 
 export interface BoardProps {
@@ -36,8 +34,6 @@ export interface BoardProps {
   /** Server-rendered notes (unread notices, open reviews, dates) shown under the status line. */
   notes?: React.ReactNode;
   tour?: boolean;
-  /** Shown beside "For college" under the board, such as the review and comments. */
-  footer?: React.ReactNode;
 }
 
 const ordinal = (g: number) => `${g}th`;
@@ -57,49 +53,31 @@ function SpotTile({ spot, editable, onPick }: { spot: Spot; editable: boolean; o
   );
 }
 
-function Cell({ row, grade, children }: { row: BoardRow; grade: Grade; children: React.ReactNode }) {
+function Cell({ row, grade, isCurrent, children }: { row: BoardRow; grade: Grade; isCurrent?: boolean; children: React.ReactNode }) {
   const { setNodeRef, isOver } = useDroppable({ id: `grade-${grade}-${row.key}` });
   return (
     <div
       ref={setNodeRef}
       role="group"
       aria-label={`${row.label}, ${ordinal(grade)} grade`}
-      className={cn("flex min-h-[44px] flex-col gap-1.5 rounded-[12px] transition-colors duration-150", isOver && "bg-fill")}
+      className={cn("flex min-h-[44px] flex-col gap-1.5 rounded-[12px] transition-colors duration-150", isCurrent && "bg-[#f1c40f0d]", isOver && "bg-fill")}
     >
       {children}
     </div>
   );
 }
 
-function YearHead({ grade, ed, settings, now }: { grade: Grade; ed: PlanEditor; settings: GraduationSettings; now: boolean }) {
+function YearHead({ grade, ed, settings, isCurrent }: { grade: Grade; ed: PlanEditor; settings: GraduationSettings; isCurrent?: boolean }) {
   const year = ed.summary.years.find((y) => y.grade === grade)!;
   const count = ed.entries.filter((e) => e.gradeLevel === grade).length;
   const need = grade === 12 ? settings.minFinalYear : settings.minPerYear;
   const under = count > 0 && year.total < need;
-  // An overfull year is said here, in its own column, instead of in a list above the board.
-  const full = ed.warnings.find((w): w is Extract<PlanWarning, { code: "TOO_MANY_PERIODS" }> => w.code === "TOO_MANY_PERIODS" && w.grade === grade);
   return (
-    <div className="px-1 pb-1">
-      <div className="flex items-baseline justify-between gap-2">
-        <span className="flex items-baseline gap-2">
-          <span className="text-[15px] font-bold">{ordinal(grade)}</span>
-          {now && <span className="rounded-full bg-fill-2 px-2 py-0.5 text-xs font-semibold text-fg">This year</span>}
-        </span>
-        <span className="num text-[13px] text-muted">{formatCredits(year.total)} cr</span>
-      </div>
-      {/* Said in words where it applies, not in a tooltip a phone cannot open. */}
-      {under && (
-        <p className="mt-0.5 flex items-center gap-1.5 text-xs text-fg">
-          <span aria-hidden className="size-1.5 shrink-0 rounded-full bg-yellow" />
-          <span>Add <span className="num">{formatCredits(fromTenths(toTenths(need) - toTenths(year.total)))}</span> cr, the minimum is <span className="num">{need}</span></span>
-        </p>
-      )}
-      {full && (
-        <p className="mt-0.5 flex items-center gap-1.5 text-xs text-fg">
-          <span aria-hidden className="size-1.5 shrink-0 rounded-full bg-yellow" />
-          <span>{describeWarning(full)}</span>
-        </p>
-      )}
+    <div className={cn("flex items-baseline justify-between gap-2 rounded-t-[10px] px-1 pb-1", isCurrent && "bg-[#f1c40f1a] pt-1")}>
+      <span className={cn("text-[15px] font-bold", isCurrent && "text-yellow")}>{ordinal(grade)}{isCurrent && <span className="ml-1.5 text-[11px] font-semibold text-yellow opacity-80">Current</span>}</span>
+      <span className={cn("num text-[13px]", under ? "text-yellow" : "text-muted")} title={under ? `The minimum is ${need} credits` : undefined}>
+        {formatCredits(year.total)}{under && ` of ${need}`} cr
+      </span>
     </div>
   );
 }
@@ -107,27 +85,27 @@ function YearHead({ grade, ed, settings, now }: { grade: Grade; ed: PlanEditor; 
 function RowHead({ row }: { row: BoardRow }) {
   return (
     <div className={cn("flex flex-col justify-center pr-3", `subject-${row.key}`)}>
-      <span className="ink text-sm font-bold leading-tight">{row.label}</span>
-      <span className={cn("text-xs", row.status === "Covered" ? "text-green" : "text-muted")}>{row.status === "Covered" ? "✓ Covered" : row.status}</span>
+      <span className="ink text-[14px] font-bold leading-tight">{row.label}</span>
+      <span className={cn("text-[12px]", row.status === "Done" ? "text-green" : "text-muted")}>{row.status === "Done" ? "✓ Done" : row.status}</span>
     </div>
   );
 }
 
 /** Desktop and tablet: subjects down the side, grades across the top, drag between grades. */
-function Grid({ rows, ed, results, warns, settings, now, onOpen, onPick }: {
-  rows: BoardRow[]; ed: PlanEditor; results: Map<string, EvalResult>; warns: Map<string, PlanWarning[]>; settings: GraduationSettings; now: Grade | null; onOpen: (id: string) => void; onPick: (s: Spot) => void;
+function Grid({ rows, ed, results, warns, settings, currentGrade, onOpen, onPick }: {
+  rows: BoardRow[]; ed: PlanEditor; results: Map<string, EvalResult>; warns: Map<string, PlanWarning[]>; settings: GraduationSettings; currentGrade: number | null; onOpen: (id: string) => void; onPick: (s: Spot) => void;
 }) {
   const byId = useMemo(() => new Map(ed.entries.map((e) => [e.id, e])), [ed.entries]);
   return (
     <DndContext id="board-dnd" sensors={ed.drag.sensors} collisionDetection={collision} onDragStart={ed.drag.onDragStart} onDragEnd={ed.drag.onDragEnd} onDragCancel={ed.drag.onDragCancel}>
       <div className="hidden grid-cols-[150px_repeat(4,minmax(0,1fr))] gap-x-2 gap-y-2 md:grid">
         <div />
-        {GRADES.map((g) => <YearHead key={g} grade={g} ed={ed} settings={settings} now={g === now} />)}
+        {GRADES.map((g) => <YearHead key={g} grade={g} ed={ed} settings={settings} isCurrent={g === currentGrade} />)}
         {rows.map((row) => (
           <div key={row.key} className="contents">
             <RowHead row={row} />
             {GRADES.map((g) => (
-              <Cell key={g} row={row} grade={g}>
+              <Cell key={g} row={row} grade={g} isCurrent={g === currentGrade}>
                 {row.cells[g].entryIds.map((id) => {
                   const e = byId.get(id)!;
                   return <DraggableTile key={id} entry={e} result={results.get(id)} warnings={warns.get(id)} disabled={!ed.editable} onOpen={() => onOpen(id)} />;
@@ -146,50 +124,47 @@ function Grid({ rows, ed, results, warns, settings, now, onOpen, onPick }: {
 }
 
 /** Phones: one grade at a time, or every year as small colored blocks. */
-function PhoneBoard({ rows, ed, results, warns, settings, start, now, onOpen, onPick }: {
-  rows: BoardRow[]; ed: PlanEditor; results: Map<string, EvalResult>; warns: Map<string, PlanWarning[]>; settings: GraduationSettings; start: Grade; now: Grade | null; onOpen: (id: string) => void; onPick: (s: Spot) => void;
+function PhoneBoard({ rows, ed, results, warns, settings, start, currentGrade, onOpen, onPick }: {
+  rows: BoardRow[]; ed: PlanEditor; results: Map<string, EvalResult>; warns: Map<string, PlanWarning[]>; settings: GraduationSettings; start: Grade; currentGrade: number | null; onOpen: (id: string) => void; onPick: (s: Spot) => void;
 }) {
   const [view, setView] = useState<Grade | "all">(start);
   const byId = new Map(ed.entries.map((e) => [e.id, e]));
   return (
     <div className="md:hidden">
       <div role="tablist" aria-label="Grade" className="mb-4 grid grid-cols-5 gap-1 rounded-full bg-fill p-1">
-        {[...GRADES, "all" as const].map((v) => (
-          <button
-            key={v}
-            type="button"
-            role="tab"
-            aria-selected={view === v}
-            onClick={() => setView(v)}
-            className={cn("h-9 rounded-full text-sm font-semibold transition-colors", view === v ? "bg-fill-3 text-fg" : "text-muted")}
-          >
-            {v === "all" ? "All" : ordinal(v)}
-          </button>
-        ))}
+        {[...GRADES, "all" as const].map((v) => {
+          const isCurrentTab = v !== "all" && v === currentGrade;
+          return (
+            <button
+              key={v}
+              type="button"
+              role="tab"
+              aria-selected={view === v}
+              onClick={() => setView(v)}
+              className={cn(
+                "h-9 rounded-full text-[14px] font-semibold transition-colors",
+                view === v ? "bg-fill-3 text-fg" : "text-muted",
+                isCurrentTab && "ring-1 ring-[#f1c40f] ring-inset",
+              )}
+            >
+              {v === "all" ? "All" : ordinal(v)}
+            </button>
+          );
+        })}
       </div>
 
       {view === "all" ? (
         <div className="grid grid-cols-[96px_repeat(4,minmax(0,1fr))] gap-1.5">
           <div />
           {GRADES.map((g) => (
-            <button key={g} type="button" onClick={() => setView(g)} className="pb-1 text-[13px] font-bold">{ordinal(g)}</button>
+            <button key={g} type="button" onClick={() => setView(g)} className={cn("pb-1 text-[13px] font-bold", g === currentGrade && "text-yellow")}>{ordinal(g)}</button>
           ))}
           {rows.map((row) => (
             <div key={row.key} className="contents">
-              <span className={cn("ink truncate text-xs font-bold leading-[20px]", `subject-${row.key}`)}>{row.label}</span>
+              <span className={cn("ink truncate text-[12px] font-bold leading-[20px]", `subject-${row.key}`)}>{row.label}</span>
               {GRADES.map((g) => (
                 <button key={g} type="button" onClick={() => setView(g)} aria-label={`${row.label}, ${ordinal(g)} grade`} className={cn("flex flex-col gap-1", `subject-${row.key}`)}>
-                  {row.cells[g].entryIds.map((id) => {
-                    const e = byId.get(id)!;
-                    const flag = tileFlag(e, results.get(id), warns.get(id));
-                    return (
-                      <span key={id} className={cn("relative block h-5 rounded-[6px] bg-[var(--tile-ink)]", e.status === "COMPLETED" ? "opacity-40" : "opacity-80")}>
-                        {flag && flag.tone !== "note" && (
-                          <span aria-hidden className={cn("absolute -right-0.5 -top-0.5 size-2.5 rounded-full ring-2 ring-bg", FLAG_DOT[flag.tone])} />
-                        )}
-                      </span>
-                    );
-                  })}
+                  {row.cells[g].entryIds.map((id) => <span key={id} className="block h-5 rounded-[6px] bg-[var(--tile-ink)] opacity-80" />)}
                   {row.cells[g].spots.map((_, i) => <span key={i} className="block h-5 rounded-[6px] shadow-[inset_0_0_0_1.5px_var(--line-strong)]" />)}
                 </button>
               ))}
@@ -198,7 +173,7 @@ function PhoneBoard({ rows, ed, results, warns, settings, start, now, onOpen, on
         </div>
       ) : (
         <div className="space-y-4">
-          <YearHead grade={view} ed={ed} settings={settings} now={view === now} />
+          <YearHead grade={view} ed={ed} settings={settings} isCurrent={view === currentGrade} />
           {rows.filter((r) => r.cells[view].entryIds.length + r.cells[view].spots.length > 0).map((row) => (
             <section key={row.key} aria-label={row.label} className="space-y-1.5">
               <RowHead row={row} />
@@ -219,7 +194,7 @@ function Tour() {
   if (!open) return null;
   return (
     <aside aria-label="How the board works" className="soft mb-6 flex items-start justify-between gap-4 p-4">
-      <ul className="space-y-1 text-sm">
+      <ul className="space-y-1 text-[14px]">
         <li>Each row is a subject, each column a grade.</li>
         <li>Outlined spots are what you still need. Click one to fill it.</li>
         <li>Click a class to move it, mark it done, or remove it.</li>
@@ -230,36 +205,19 @@ function Tour() {
 }
 
 export function Board(props: BoardProps) {
-  const { title, courses, interests, settings, prior, currentGrade, readOnly = false, notes, tour, footer } = props;
+  const { title, courses, interests, settings, prior, currentGrade, readOnly = false, notes, tour } = props;
   const ed = usePlanEditor(props);
   const [openId, setOpenId] = useState<string | null>(null);
   const [add, setAdd] = useState<AddTarget | null>(null);
-  // Without a grade in the profile, the year after the last finished class is the best guess for "now".
-  const lastDone = Math.max(0, ...ed.entries.filter((e) => e.status === "COMPLETED").map((e) => e.gradeLevel));
-  const nowGrade = currentGrade ?? (lastDone > 0 ? Math.min(12, lastDone + 1) : null);
-  const now = nowGrade && nowGrade >= 9 && nowGrade <= 12 ? (nowGrade as Grade) : null;
-  const start = Math.min(12, Math.max(9, nowGrade ?? 9)) as Grade;
+  const start = Math.min(12, Math.max(9, currentGrade ?? 9)) as Grade;
 
-  const rows = useMemo(() => buildBoard(ed.entries, ed.summary, nowGrade), [ed.entries, ed.summary, nowGrade]);
+  const rows = useMemo(() => buildBoard(ed.entries, ed.summary, currentGrade), [ed.entries, ed.summary, currentGrade]);
   const spotCount = rows.reduce((n, r) => n + GRADES.reduce((m, g) => m + r.cells[g].spots.length, 0), 0);
-  // Every planned class with a colored flag, so the headline and the legend only mention what is really on the board.
-  const flags = useMemo(() => {
-    const byEntry = new Map<string, PlanWarning[]>();
-    for (const w of ed.warnings) if ("entryId" in w) byEntry.set(w.entryId, [...(byEntry.get(w.entryId) ?? []), w]);
-    return ed.entries.map((e) => tileFlag(e, ed.results.get(e.id), byEntry.get(e.id))).filter((f) => f && f.tone !== "note" && f.tone !== "eligible");
-  }, [ed.entries, ed.results, ed.warnings]);
-  const shortYears = GRADES.filter((g) => {
-    const year = ed.summary.years.find((y) => y.grade === g);
-    const count = ed.entries.filter((e) => e.gradeLevel === g).length;
-    return !!year && count > 0 && year.total < (g === 12 ? settings.minFinalYear : settings.minPerYear);
-  }).length;
-  const fullYears = ed.warnings.filter((w) => w.code === "TOO_MANY_PERIODS").length;
-  const sentence = statusSentence(ed.summary, spotCount, flags.length + shortYears + fullYears);
-  const tones = new Set<string>(flags.map((f) => f!.tone));
-  if (shortYears + fullYears > 0) tones.add("warning");
+  const sentence = statusSentence(ed.summary, spotCount);
+  // A light year already shows in its column header ("5 of 30 cr"), so only an overfull year becomes a note.
+  const yearNotes = ed.warnings.filter((w) => w.code === "TOO_MANY_PERIODS");
   const unconfirmed = ROWS.filter((r) => r.kinds.some((k) => (ed.summary.kinds.find((x) => x.kind === k)?.provisional ?? 0) > 0));
   const openEntry = ed.entries.find((e) => e.id === openId) ?? null;
-  const boardSlugs = useMemo(() => new Set(ed.placements.map((p) => p.slug)), [ed.placements]);
   const warns = useMemo(() => {
     const m = new Map<string, PlanWarning[]>();
     for (const w of ed.warnings) if ("entryId" in w) m.set(w.entryId, [...(m.get(w.entryId) ?? []), w]);
@@ -268,11 +226,11 @@ export function Board(props: BoardProps) {
   // Shown on the page, or inside the class sheet while it is open (the page behind a modal is inert).
   const saveNotice = (ed.change && !ed.pending) || ed.error ? (
     <div className="mb-6 space-y-3">
-      {ed.error && <p role="alert" className="text-sm text-red">{ed.error}</p>}
+      {ed.error && <p role="alert" className="text-[14px] text-red">{ed.error}</p>}
       {ed.change && !ed.pending && (
         <div className="soft space-y-3 bg-fill-2 p-4">
           <DraftNotice drafts={[ed.changeDraft]} />
-          <p className="text-sm text-muted">A class change has not been confirmed. Retry checks whether it was already saved.</p>
+          <p className="text-[14px] text-muted">A class change has not been confirmed. Retry checks whether it was already saved.</p>
           <div className="flex gap-2">
             <Button size="sm" onClick={ed.retry} disabled={!ed.canEdit}>Retry change</Button>
             <Button size="sm" variant="ghost" onClick={ed.discardChange}>Discard pending change</Button>
@@ -309,10 +267,10 @@ export function Board(props: BoardProps) {
         </div>
       </header>
 
-      {(tour || ed.entries.length === 0) && !readOnly && <Tour />}
+      {tour && !readOnly && <Tour />}
 
-      {(readOnly || !ed.canEdit || notes) && (
-        <ul className="mb-6 space-y-1.5 text-sm">
+      {(readOnly || !ed.canEdit || notes || yearNotes.length > 0) && (
+        <ul className="mb-6 space-y-1.5 text-[14px]">
           {readOnly ? (
             <li className="text-muted">This is a student&apos;s board. You can look but not change it.</li>
           ) : props.plan.status === "SUBMITTED" ? (
@@ -321,56 +279,46 @@ export function Board(props: BoardProps) {
             <li className="text-muted">A counselor approved this plan, so it is locked. Ask your counselor if something needs to change.</li>
           ) : null}
           {notes}
+          {yearNotes.map((w, i) => (
+            <li key={i} className="flex items-start gap-2.5">
+              <span aria-hidden className="mt-[7px] size-2 shrink-0 rounded-full bg-yellow" />
+              <span>{describeWarning(w)}</span>
+            </li>
+          ))}
         </ul>
       )}
 
       {!openEntry && saveNotice}
 
-      <Grid rows={rows} ed={ed} results={ed.results} warns={warns} settings={settings} now={now} onOpen={setOpenId} onPick={pick} />
-      <PhoneBoard rows={rows} ed={ed} results={ed.results} warns={warns} settings={settings} start={start} now={now} onOpen={setOpenId} onPick={pick} />
+      <Grid rows={rows} ed={ed} results={ed.results} warns={warns} settings={settings} currentGrade={currentGrade} onOpen={setOpenId} onPick={pick} />
+      <PhoneBoard rows={rows} ed={ed} results={ed.results} warns={warns} settings={settings} start={start} currentGrade={currentGrade} onOpen={setOpenId} onPick={pick} />
 
-      <div className="mt-6 space-y-2 text-[13px] leading-relaxed text-muted">
-        {/* Only the colors that are on the board right now, in the same words the tiles use. */}
-        <ul aria-label="What the dots mean" className="flex flex-wrap gap-x-5 gap-y-1">
-          {(["warning", "appeal", "locked"] as const).filter((t) => tones.has(t)).map((t) => (
-            <li key={t} className="flex items-center gap-1.5"><span aria-hidden className={cn("size-2 rounded-full", FLAG_DOT[t])} />{TONE_MEANING[t]}</li>
-          ))}
-          <li>Gray text is information: a grade to add, or something the school decides, like a teacher recommendation.</li>
-        </ul>
-        <p className="max-w-[90ch]">
-          {unconfirmed.length > 0 && <>Not confirmed by a counselor yet: {unconfirmed.map((r) => r.label).join(", ")}. These classes count for now, but a counselor still has to check them. </>}
-          None of this blocks your plan. The school makes the final decision.
+      {unconfirmed.length > 0 && (
+        <p className="mt-6 text-[13px] text-muted">
+          Not confirmed by a counselor yet: {unconfirmed.map((r) => r.label).join(", ")}. These classes count for now, but a counselor still has to check them.
         </p>
-      </div>
+      )}
+      <p className="mt-2 text-[13px] text-muted">Warnings never block your plan. The school makes the final decision.</p>
 
-      {(ed.advice || footer) && (
-        <div className="mt-16 grid gap-14 lg:grid-cols-2 lg:gap-16">
-          {ed.advice && (
-            <section aria-labelledby="college-h">
-              <h2 id="college-h" className="eyebrow">For college</h2>
-              <p className="mb-4 mt-1 text-sm leading-relaxed text-muted">
-                Years of each subject colleges usually look for{ed.advice.matched.length > 0 ? `, raised for ${ed.advice.matched.join(" and ").toLowerCase()} majors` : ""}. A suggestion, not a graduation rule.
-              </p>
-              <ul className="soft px-4 py-2">
-                {ed.advice.lines.map((l) => (
-                  <li key={l.subject} className="flex items-baseline justify-between py-1.5 text-sm">
-                    <span>{l.label}</span>
-                    <span className="num">
-                      <span className={l.met ? "text-green" : "text-fg"}>{Math.min(l.have, l.need)}</span>
-                      <span className="text-muted"> of {l.need} years{l.have > l.need && `, plus ${l.have - l.need} more`}</span>
-                    </span>
-                  </li>
-                ))}
-              </ul>
-            </section>
-          )}
-          {footer}
-        </div>
+      {ed.advice && (
+        <section className="mt-10 max-w-[560px]">
+          <h2 className="eyebrow">For college</h2>
+          <p className="mb-3 mt-1 text-[14px] text-muted">
+            Years of each subject colleges usually look for{ed.advice.matched.length > 0 ? `, raised for ${ed.advice.matched.join(" and ").toLowerCase()} majors` : ""}. A suggestion, not a graduation rule.
+          </p>
+          <ul className="soft px-4 py-2">
+            {ed.advice.lines.map((l) => (
+              <li key={l.subject} className="flex items-baseline justify-between py-1.5 text-[14px]">
+                <span>{l.label}</span>
+                <span className="num"><span className={l.met ? "text-green" : "text-fg"}>{l.have}</span><span className="text-muted"> of {l.need} years</span></span>
+              </li>
+            ))}
+          </ul>
+        </section>
       )}
 
       <AddCoursePanel
-        open={!!add}
-        busy={!ed.editable}
+        open={!!add && ed.editable}
         grade={add?.grade ?? start}
         onGradeChange={(g) => setAdd((a) => (a ? { ...a, grade: g } : a))}
         onClose={() => setAdd(null)}
@@ -396,14 +344,6 @@ export function Board(props: BoardProps) {
         onMove={ed.actions.move}
         onUpdate={ed.actions.update}
         onRemove={ed.actions.remove}
-        names={ed.names}
-        boardSlugs={boardSlugs}
-        prior={prior}
-        firstOpenGrade={nowGrade ?? 9}
-        onAddCourse={(slug, grade) => {
-          const c = courses.find((x) => x.slug === slug);
-          if (c && !ed.inPlan.has(c.id)) ed.actions.add(c, grade);
-        }}
       />
     </div>
   );
