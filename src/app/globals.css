@@ -307,15 +307,24 @@ input[type="search"]::-webkit-search-decoration { appearance: none; }
     padding: 0;
   }
 
+  /* The tilt is an angle, so the ends of a wide button travel further than a small one's.
+     Large and full-width buttons tilt less or not at all so they lift instead of looking crooked. */
   .btn-primary {
+    --btn-tilt: -1deg;
     background: var(--accent);
     color: var(--accent-fg);
     box-shadow: 0 4px 0 var(--accent-lip);
   }
+  .btn-primary.btn-lg {
+    --btn-tilt: -0.5deg;
+  }
+  .btn-primary.w-full {
+    --btn-tilt: 0deg;
+  }
   @media (hover: hover) {
     .btn-primary:hover:not(:disabled) {
       background: var(--accent-hover);
-      transform: translateY(-2px) rotate(-1deg);
+      transform: translateY(-2px) rotate(var(--btn-tilt));
       box-shadow: 0 6px 0 var(--accent-lip);
     }
   }
