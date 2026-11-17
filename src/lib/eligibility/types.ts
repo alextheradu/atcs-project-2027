@@ -94,10 +94,11 @@ export interface EvalContext {
 
 /**
  * met: done. planned: covered by a class planned in an earlier year (counts as met, shown as a note).
- * pending: needs something the student has to add or confirm. manual: a person decides (a note, never a warning).
+ * pending: something to check (a Pass grade, a suggested co-requisite). missing: the student has not entered a grade or
+ * their 8th grade math yet (information to add, never a warning). manual: a person decides (a note, never a warning).
  * unmet: not met.
  */
-export type LeafState = "met" | "planned" | "pending" | "manual" | "unmet";
+export type LeafState = "met" | "planned" | "pending" | "missing" | "manual" | "unmet";
 
 export interface LeafResult {
   rule: LeafRule;
@@ -127,6 +128,8 @@ export interface EvalResult {
   summary: string;
   /** What a person still decides (teacher recommendation, placement exam), on the path that explains the result. */
   notes: string[];
+  /** Information the student can add to get a real answer (a grade, 8th grade math). Never a warning. */
+  missing: string[];
   /** The student already took or is taking the course, so nothing was checked. */
   taken?: boolean;
 }

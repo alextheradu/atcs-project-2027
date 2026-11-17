@@ -1,5 +1,7 @@
 /** "Can I take this class?" in one plain sentence, from the per-grade fits. Pure. */
 import type { GradeFit } from "./course-fit";
+import { isCoreqOnly } from "./labels";
+import type { EvalResult } from "./types";
 
 export interface Answer {
   tone: "eligible" | "warning" | "appeal" | "locked";
@@ -8,6 +10,8 @@ export interface Answer {
   detail?: string;
   /** What a person still decides (a recommendation, a placement exam). Information, not a warning. */
   note?: string;
+  /** Information the student can add for a real answer (a grade, 8th grade math). Not a warning. */
+  missing?: string;
 }
 
 const ordinal = (g: number) => `${g}th`;
@@ -16,7 +20,11 @@ function gradeList(grades: number[]): string {
   return words.length === 1 ? words[0] : `${words.slice(0, -1).join(", ")} or ${words[words.length - 1]}`;
 }
 
-const withNote = (a: Answer, notes: string[]): Answer => (notes[0] ? { ...a, note: notes[0] } : a);
+const withNote = (a: Answer, r: Pick<EvalResult, "notes" | "missing">): Answer => ({
+  ...a,
+  ...(r.notes[0] ? { note: r.notes[0] } : {}),
+  ...(r.missing[0] ? { missing: r.missing[0] } : {}),
+});
 
 /**
  * `currentGrade` hides grades the student has already finished; this year still counts.
@@ -35,10 +43,10 @@ export function canTakeAnswer(
   if (planned) {
     const r = planned.result;
     const where = `${ordinal(planned.grade)} grade, where it is on your board`;
-    if (r.status === "ELIGIBLE" || r.viaAppeal) return withNote({ tone: "eligible", text: `You can take this in ${where}.` }, r.notes);
+    if (r.status === "ELIGIBLE" || r.viaAppeal) return withNote({ tone: "eligible", text: `You can take this in ${where}.` }, r);
     if (r.status === "ELIGIBLE_WITH_WARNING") return { tone: "warning", text: `You can take this in ${where}, but check the details first.`, detail: r.summary };
     // A missing partner class is fixed by adding a class, so it reads like the Board tile, not like a review.
-    if (r.unmet.length > 0 && r.unmet.every((l) => l.rule.type === "coreq")) {
+    if (isCoreqOnly(r)) {
       return { tone: "warning", text: `To take this in ${where}, add its partner class.`, detail: r.summary };
     }
     if (r.status === "NOT_ELIGIBLE_APPEALABLE") return { tone: "appeal", text: `In ${where}, you need a placement review.`, detail: r.summary };
@@ -49,11 +57,16 @@ export function canTakeAnswer(
   if (fits.length === 0) return { tone: "locked", text: "This class is offered in grades you have already finished." };
 
   const yes = fits.filter((f) => f.result.status === "ELIGIBLE" || f.result.viaAppeal);
-  if (yes.length > 0) return withNote({ tone: "eligible", text: `You can take this in ${gradeList(yes.map((f) => f.grade))} grade.` }, yes[0].result.notes);
+  if (yes.length > 0) return withNote({ tone: "eligible", text: `You can take this in ${gradeList(yes.map((f) => f.grade))} grade.` }, yes[0].result);
 
   const warned = fits.filter((f) => f.result.status === "ELIGIBLE_WITH_WARNING");
   if (warned.length > 0) {
     return { tone: "warning", text: `You can take this in ${gradeList(warned.map((f) => f.grade))} grade, but check the details first.`, detail: warned[0].result.summary };
+  }
+
+  const partner = fits.filter((f) => f.result.status !== "ELIGIBLE" && isCoreqOnly(f.result));
+  if (partner.length > 0) {
+    return { tone: "warning", text: `You can take this in ${gradeList(partner.map((f) => f.grade))} grade if you add its partner class.`, detail: partner[0].result.summary };
   }
 
   const ask = fits.find((f) => f.result.status === "NOT_ELIGIBLE_APPEALABLE");

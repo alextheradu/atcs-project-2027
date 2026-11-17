@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { PathMap } from "@/components/pathways/path-map";
+import { gradeColumn } from "@/lib/pathways";
 import { COMPACT, layoutMap } from "@/lib/pathways/layout";
 import { loadMapClasses, loadPathwayStudent, type MapStatus } from "@/lib/pathways/load";
 import {
@@ -64,6 +65,10 @@ export async function PathwaysView({ userId, student, query }: { userId: string;
   const classes = await loadMapClasses(mapSlugs(full));
   const map = pruneMap(full, new Set(Object.keys(classes)));
   const status: Record<string, MapStatus> = me?.status ?? {};
+  const compact = layoutMap(map, COMPACT);
+  // On phones the map opens on the student's own year instead of the first column.
+  const col = gradeColumn(map.columns, me?.grade ?? null);
+  const startX = col !== null && col > 0 ? compact.columns[col].x : null;
 
   return (
     <div className="space-y-12">
@@ -91,7 +96,7 @@ export async function PathwaysView({ userId, student, query }: { userId: string;
         )}
 
         <div className="pt-2">
-          <PathMap wide={layoutMap(map)} compact={layoutMap(map, COMPACT)} title={map.title} classes={classes} status={status} />
+          <PathMap wide={layoutMap(map)} compact={compact} startX={startX} title={map.title} classes={classes} status={status} />
         </div>
       </section>
 

@@ -8,7 +8,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { GRADES, KIND_NOUN, ROWS, buildBoard, statusSentence, type BoardRow, type Grade, type Spot } from "@/lib/board";
 import { formatCredits, fromTenths, toTenths } from "@/lib/credits";
-import type { EvalResult, StudentPrior } from "@/lib/eligibility";
+import { TONE_MEANING, type EvalResult, type StudentPrior } from "@/lib/eligibility";
 import type { GuidanceConfig } from "@/lib/guidance";
 import { describeWarning, type PlanWarning } from "@/lib/plan-warnings";
 import { PLAN_STATUS_LABEL, type EntryView } from "@/lib/plans/view";
@@ -242,9 +242,24 @@ export function Board(props: BoardProps) {
 
   const rows = useMemo(() => buildBoard(ed.entries, ed.summary, nowGrade), [ed.entries, ed.summary, nowGrade]);
   const spotCount = rows.reduce((n, r) => n + GRADES.reduce((m, g) => m + r.cells[g].spots.length, 0), 0);
-  const sentence = statusSentence(ed.summary, spotCount);
+  // Every planned class with a colored flag, so the headline and the legend only mention what is really on the board.
+  const flags = useMemo(() => {
+    const byEntry = new Map<string, PlanWarning[]>();
+    for (const w of ed.warnings) if ("entryId" in w) byEntry.set(w.entryId, [...(byEntry.get(w.entryId) ?? []), w]);
+    return ed.entries.map((e) => tileFlag(e, ed.results.get(e.id), byEntry.get(e.id))).filter((f) => f && f.tone !== "note" && f.tone !== "eligible");
+  }, [ed.entries, ed.results, ed.warnings]);
+  const shortYears = GRADES.filter((g) => {
+    const year = ed.summary.years.find((y) => y.grade === g);
+    const count = ed.entries.filter((e) => e.gradeLevel === g).length;
+    return !!year && count > 0 && year.total < (g === 12 ? settings.minFinalYear : settings.minPerYear);
+  }).length;
+  const fullYears = ed.warnings.filter((w) => w.code === "TOO_MANY_PERIODS").length;
+  const sentence = statusSentence(ed.summary, spotCount, flags.length + shortYears + fullYears);
+  const tones = new Set<string>(flags.map((f) => f!.tone));
+  if (shortYears + fullYears > 0) tones.add("warning");
   const unconfirmed = ROWS.filter((r) => r.kinds.some((k) => (ed.summary.kinds.find((x) => x.kind === k)?.provisional ?? 0) > 0));
   const openEntry = ed.entries.find((e) => e.id === openId) ?? null;
+  const boardSlugs = useMemo(() => new Set(ed.placements.map((p) => p.slug)), [ed.placements]);
   const warns = useMemo(() => {
     const m = new Map<string, PlanWarning[]>();
     for (const w of ed.warnings) if ("entryId" in w) m.set(w.entryId, [...(m.get(w.entryId) ?? []), w]);
@@ -294,7 +309,7 @@ export function Board(props: BoardProps) {
         </div>
       </header>
 
-      {tour && !readOnly && <Tour />}
+      {(tour || ed.entries.length === 0) && !readOnly && <Tour />}
 
       {(readOnly || !ed.canEdit || notes) && (
         <ul className="mb-6 space-y-1.5 text-sm">
@@ -315,11 +330,12 @@ export function Board(props: BoardProps) {
       <PhoneBoard rows={rows} ed={ed} results={ed.results} warns={warns} settings={settings} start={start} now={now} onOpen={setOpenId} onPick={pick} />
 
       <div className="mt-6 space-y-2 text-[13px] leading-relaxed text-muted">
+        {/* Only the colors that are on the board right now, in the same words the tiles use. */}
         <ul aria-label="What the dots mean" className="flex flex-wrap gap-x-5 gap-y-1">
-          <li className="flex items-center gap-1.5"><span aria-hidden className="size-2 rounded-full bg-yellow" />Check this first</li>
-          <li className="flex items-center gap-1.5"><span aria-hidden className="size-2 rounded-full bg-orange" />Needs a placement review</li>
-          <li className="flex items-center gap-1.5"><span aria-hidden className="size-2 rounded-full bg-red" />Missing a prerequisite</li>
-          <li>Gray text is something the school decides, like a teacher recommendation.</li>
+          {(["warning", "appeal", "locked"] as const).filter((t) => tones.has(t)).map((t) => (
+            <li key={t} className="flex items-center gap-1.5"><span aria-hidden className={cn("size-2 rounded-full", FLAG_DOT[t])} />{TONE_MEANING[t]}</li>
+          ))}
+          <li>Gray text is information: a grade to add, or something the school decides, like a teacher recommendation.</li>
         </ul>
         <p className="max-w-[90ch]">
           {unconfirmed.length > 0 && <>Not confirmed by a counselor yet: {unconfirmed.map((r) => r.label).join(", ")}. These classes count for now, but a counselor still has to check them. </>}
@@ -339,7 +355,10 @@ export function Board(props: BoardProps) {
                 {ed.advice.lines.map((l) => (
                   <li key={l.subject} className="flex items-baseline justify-between py-1.5 text-sm">
                     <span>{l.label}</span>
-                    <span className="num"><span className={l.met ? "text-green" : "text-fg"}>{l.have}</span><span className="text-muted"> of {l.need} years</span></span>
+                    <span className="num">
+                      <span className={l.met ? "text-green" : "text-fg"}>{Math.min(l.have, l.need)}</span>
+                      <span className="text-muted"> of {l.need} years{l.have > l.need && `, plus ${l.have - l.need} more`}</span>
+                    </span>
                   </li>
                 ))}
               </ul>
@@ -377,6 +396,14 @@ export function Board(props: BoardProps) {
         onMove={ed.actions.move}
         onUpdate={ed.actions.update}
         onRemove={ed.actions.remove}
+        names={ed.names}
+        boardSlugs={boardSlugs}
+        prior={prior}
+        firstOpenGrade={nowGrade ?? 9}
+        onAddCourse={(slug, grade) => {
+          const c = courses.find((x) => x.slug === slug);
+          if (c && !ed.inPlan.has(c.id)) ed.actions.add(c, grade);
+        }}
       />
     </div>
   );

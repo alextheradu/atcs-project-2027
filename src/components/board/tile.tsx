@@ -4,29 +4,32 @@ import { useDraggable } from "@dnd-kit/core";
 import { Check } from "lucide-react";
 import { rowFor } from "@/lib/board";
 import { formatCredits } from "@/lib/credits";
-import { ELIGIBILITY_TONE, type EvalResult } from "@/lib/eligibility";
+import { PARTNER_LABEL, displayStatus, type EvalResult } from "@/lib/eligibility";
 import type { PlanWarning } from "@/lib/plan-warnings";
 import { gradeLabel, type EntryView } from "@/lib/plans/view";
 import { cn } from "@/lib/utils";
 
 const DOT: Record<string, string> = { eligible: "bg-green", warning: "bg-yellow", appeal: "bg-orange", locked: "bg-red", review: "bg-accent" };
 
-export type TileFlag = { tone: "eligible" | "warning" | "appeal" | "locked" | "note"; text: string };
+export type TileFlag = { tone: "eligible" | "warning" | "appeal" | "locked" | "note"; text: string; reason?: string };
 
 /**
- * The one thing worth saying on a tile, in the engine's own words so the student sees why, not just a color.
- * Finished and current classes are history, so nothing is checked or flagged on them. A missing partner class is
- * something the student fixes by adding a class, so it stays yellow even though the engine calls it appealable.
- * A `note` is what a person still decides (a recommendation): information in muted text, never a warning.
+ * The one thing worth saying on a tile: the shared status label (the same words the sheet, badges and class page use)
+ * and the reason in the engine's own words. Finished and current classes are history, so nothing is flagged on them.
+ * A `note` is information in gray, never a warning: something to add (a grade) or something the school decides.
  */
 export function tileFlag(entry: EntryView, result?: EvalResult, warnings: PlanWarning[] = []): TileFlag | null {
   if (entry.status !== "PLANNED") return null;
-  if (result?.viaAppeal) return { tone: "eligible", text: "Approved by placement review" };
-  if (warnings.some((w) => w.code === "MISSING_COREQ")) return { tone: "warning", text: "Needs its partner class" };
-  if (result && result.status !== "ELIGIBLE") return { tone: ELIGIBILITY_TONE[result.status], text: result.summary };
+  if (result?.viaAppeal) return { tone: "eligible", text: displayStatus(result).label };
+  if (warnings.some((w) => w.code === "MISSING_COREQ")) return { tone: "warning", text: PARTNER_LABEL, reason: result?.summary };
+  if (result && result.status !== "ELIGIBLE") {
+    const s = displayStatus(result);
+    return { tone: s.tone, text: s.label, reason: result.summary };
+  }
   if (entry.gradesOffered.length > 0 && !entry.gradesOffered.includes(entry.gradeLevel)) {
     return { tone: "warning", text: `Not offered in ${entry.gradeLevel}th grade` };
   }
+  if (result?.missing[0]) return { tone: "note", text: result.missing[0] };
   if (result?.notes[0]) return { tone: "note", text: result.notes[0] };
   return null;
 }
@@ -42,16 +45,19 @@ export function TileBody({ entry, result, warnings }: { entry: EntryView; result
   const status = statusText(entry);
   return (
     <>
-      <span className="line-clamp-2 block">{entry.name}</span>
+      <span className="line-clamp-2">{entry.name}</span>
       <span className="ink mt-1 flex flex-wrap items-center gap-x-2 gap-y-0.5 text-xs font-medium">
         <span className="num">{formatCredits(entry.credits)} cr</span>
         {status && <span className="inline-flex items-center gap-1">{entry.status === "COMPLETED" && <Check aria-hidden size={12} strokeWidth={3} />}{status}</span>}
       </span>
-      {flag && flag.tone === "note" && <span className="mt-1 line-clamp-2 block text-xs text-muted">{flag.text}</span>}
+      {flag && flag.tone === "note" && <span className="mt-1 line-clamp-2 text-xs text-muted">{flag.text}</span>}
       {flag && flag.tone !== "note" && (
-        <span className="mt-1 flex items-start gap-1.5 text-xs font-medium text-fg">
-          <span aria-hidden className={cn("mt-[4px] size-2 shrink-0 rounded-full", DOT[flag.tone])} />
-          <span className="line-clamp-2">{flag.text}</span>
+        <span className="mt-1 block text-xs">
+          <span className="flex items-center gap-1.5 font-semibold text-fg">
+            <span aria-hidden className={cn("size-2 shrink-0 rounded-full", DOT[flag.tone])} />
+            {flag.text}
+          </span>
+          {flag.reason && <span className="mt-0.5 line-clamp-2 text-muted">{flag.reason}</span>}
         </span>
       )}
     </>
@@ -64,7 +70,7 @@ const subjectClass = (e: EntryView) => cn(`subject-${rowFor(e.tags)}`, e.status 
 function tileLabel(entry: EntryView, result?: EvalResult, warnings?: PlanWarning[]): string {
   const status = statusText(entry);
   const flag = tileFlag(entry, result, warnings);
-  return `${entry.name}, ${formatCredits(entry.credits)} credits${status ? `, ${status}` : ""}${flag ? `. ${flag.text}` : ""}. Open options.`;
+  return `${entry.name}, ${formatCredits(entry.credits)} credits${status ? `, ${status}` : ""}${flag ? `. ${flag.text}${flag.reason ? `. ${flag.reason}` : ""}` : ""}. Open options.`;
 }
 
 /** A class on the Board. Click to open its sheet; drag (pointer or touch) to another grade. */

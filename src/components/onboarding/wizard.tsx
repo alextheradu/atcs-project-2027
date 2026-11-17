@@ -138,15 +138,18 @@ export function Wizard({ startStep, cohort: startCohort, policies, interests, ne
           <>
             <h1 className="text-[28px] font-bold leading-tight tracking-[-0.025em]">A little about your past courses</h1>
             <p className="text-[14px] text-muted">This helps us check which math classes you can take.</p>
-            <label className="block space-y-1 text-[14px]">
-              <span className="text-muted">Math in 8th grade</span>
-              <select className="input" value={form.eighthMath} onChange={(e) => set("eighthMath", e.target.value)}>
-                <option value="">Choose one</option>
-                <option value="ALGEBRA_I">Algebra I</option>
-                <option value="PRE_ALGEBRA">Pre-Algebra</option>
-                <option value="UNSURE">Not sure</option>
-              </select>
-            </label>
+            <div className="grid gap-3 sm:grid-cols-2">
+              <label className="space-y-1 text-[14px]">
+                <span className="text-muted">Math in 8th grade</span>
+                <select className="input" value={form.eighthMath} onChange={(e) => set("eighthMath", e.target.value)}>
+                  <option value="">Choose one</option>
+                  <option value="ALGEBRA_I">Algebra I</option>
+                  <option value="PRE_ALGEBRA">Pre-Algebra</option>
+                  <option value="UNSURE">Not sure</option>
+                </select>
+              </label>
+              <GradeSelect label="Math grade" value={form.eighthMathGrade} onChange={(v) => set("eighthMathGrade", v)} />
+            </div>
             <label className="block space-y-1 text-[14px]">
               <span className="text-muted">World language you studied before high school</span>
               <select className="input" value={form.languageStudied} onChange={(e) => set("languageStudied", e.target.value)}>
@@ -159,7 +162,7 @@ export function Wizard({ startStep, cohort: startCohort, policies, interests, ne
               <label className="flex items-center gap-2"><input type="radio" name="start" checked={form.start === "blank"} onChange={() => set("start", "blank")} /> No, start with an empty board</label>
               <label className="flex items-center gap-2"><input type="radio" name="start" checked={form.start === "import"} onChange={() => set("start", "import")} /> Yes, import my transcript at the end</label>
             </fieldset>
-            <Button variant="primary" disabled={!form.eighthMath || pending} onClick={() => run(() => saveCurrentBackground({ eighthMath: form.eighthMath, languageStudied: form.languageStudied, languageLevel: lang.languageLevel, start: form.start }), 4)}>Continue</Button>
+            <Button variant="primary" disabled={!form.eighthMath || pending} onClick={() => run(() => saveCurrentBackground({ eighthMath: form.eighthMath, eighthMathGrade: form.eighthMathGrade, languageStudied: form.languageStudied, languageLevel: lang.languageLevel, start: form.start }), 4)}>Continue</Button>
           </>
         )}
 

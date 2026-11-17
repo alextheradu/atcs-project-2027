@@ -21,10 +21,10 @@ export function CourseFitList({ fits }: { fits: GradeFit[] }) {
         ))}
       </ul>
       {focus.result.tree && (
-        <details className="group">
+        <details className="group/rule">
           <summary className="cursor-pointer list-none text-[13px] font-medium text-accent-ink hover:underline [&::-webkit-details-marker]:hidden">
-            <span className="group-open:hidden">Show the full rule for grade {focus.grade}</span>
-            <span className="hidden group-open:inline">Hide the full rule</span>
+            <span className="group-open/rule:hidden">Show the full rule for grade {focus.grade}</span>
+            <span className="hidden group-open/rule:inline">Hide the full rule</span>
           </summary>
           <div className="mt-2"><Breakdown tree={focus.result.tree} /></div>
         </details>

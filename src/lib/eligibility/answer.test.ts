@@ -5,7 +5,7 @@ import type { GradeFit } from "./course-fit";
 
 const fit = (grade: number, status: Eligibility, summary = `summary ${grade}`, viaAppeal = false, notes: string[] = []): GradeFit => ({
   grade,
-  result: { status, viaAppeal, summary, tree: null, leaves: [], unmet: [], notes } as EvalResult,
+  result: { status, viaAppeal, summary, tree: null, leaves: [], unmet: [], notes, missing: [] } as EvalResult,
 });
 
 describe("canTakeAnswer", () => {
@@ -61,7 +61,7 @@ describe("canTakeAnswer", () => {
     expect(canTakeAnswer(fits, { approved: false, plannedGrade: 12 })).toEqual({ tone: "eligible", text: "You can take this in 12th grade, where it is on your board." });
   });
   it("treats a missing partner class as something to add, the same as the Board tile", () => {
-    const coreq = { grade: 11, result: { status: "NOT_ELIGIBLE_APPEALABLE", viaAppeal: false, summary: "Take Algebra II in grade 11 too.", tree: null, leaves: [], notes: [],
+    const coreq = { grade: 11, result: { status: "NOT_ELIGIBLE_APPEALABLE", viaAppeal: false, summary: "Take Algebra II in grade 11 too.", tree: null, leaves: [], notes: [], missing: [],
       unmet: [{ rule: { type: "coreq", courses: ["algebra-ii"] }, state: "unmet", appealable: true, message: "Take Algebra II in grade 11 too." }] } as unknown as EvalResult };
     expect(canTakeAnswer([coreq], { approved: false, plannedGrade: 11 })).toEqual({
       tone: "warning", text: "To take this in 11th grade, where it is on your board, add its partner class.", detail: "Take Algebra II in grade 11 too.",

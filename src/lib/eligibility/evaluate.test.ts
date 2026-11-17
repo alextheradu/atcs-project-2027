@@ -64,8 +64,11 @@ describe("minGrade", () => {
   it("locks a skipped course", () => {
     expect(evaluate(rule, ctx(11, [done("geometry", "A")])).status).toBe("NOT_ELIGIBLE_LOCKED");
   });
-  it("warns when the grade is not entered", () => {
-    expect(evaluate(rule, ctx(11, [done("pre-calculus", null)])).status).toBe("ELIGIBLE_WITH_WARNING");
+  it("asks for a grade that is not entered, as missing information rather than a warning", () => {
+    const r = evaluate(rule, ctx(11, [done("pre-calculus", null)]));
+    expect(r.status).toBe("ELIGIBLE");
+    expect(r.leaves[0].state).toBe("missing");
+    expect(r.missing).toEqual(["Add your grade for pre-calculus to check this. It needs a B- or higher. The school looks at your first tests and quizzes, so your final grade is only an estimate."]);
   });
   it("counts a course planned earlier and says what grade it will need", () => {
     const r = evaluate(rule, ctx(11, [planned("pre-calculus", 10)]));
@@ -88,7 +91,7 @@ describe("any and all", () => {
   it("all takes the worst leaf", () => {
     expect(evaluate({ type: "all", rules: [a, b] }, ctx(10, [done("a", "A"), planned("b", 9)])).status).toBe("ELIGIBLE");
     const graded: Rule = { type: "minGrade", courses: ["b"], grade: "B", basis: "final" };
-    expect(evaluate({ type: "all", rules: [a, graded] }, ctx(10, [done("a", "A"), done("b", null)])).status).toBe("ELIGIBLE_WITH_WARNING");
+    expect(evaluate({ type: "all", rules: [a, graded] }, ctx(10, [done("a", "A"), done("b", "PASS")])).status).toBe("ELIGIBLE_WITH_WARNING");
     expect(evaluate({ type: "all", rules: [a, b] }, ctx(10, [done("a", "A")])).status).toBe("NOT_ELIGIBLE_LOCKED");
   });
   it("any takes the best branch and only explains the closest one", () => {
@@ -103,6 +106,15 @@ describe("any and all", () => {
   });
   it("no rule means no prerequisites", () => {
     expect(evaluate(null, ctx(10)).status).toBe("ELIGIBLE");
+  });
+});
+
+describe("near misses", () => {
+  it("says when the student took a similar but different course", () => {
+    const rule: Rule = { type: "coreq", courses: ["honors-algebra-ii-with-trigonometry", "algebra-ii-with-trigonometry-enhanced"] };
+    const names = { "honors-algebra-ii-with-trigonometry": "Honors Algebra II with Trigonometry", "algebra-ii-with-trigonometry-enhanced": "Algebra II with Trigonometry Enhanced", "algebra-ii-with-trigonometry": "Algebra II with Trigonometry" };
+    const r = evaluate(rule, ctx(11, [done("algebra-ii-with-trigonometry", "B", 10)], { names }));
+    expect(r.summary).toBe("You took Algebra II with Trigonometry, but this needs Honors Algebra II with Trigonometry or Algebra II with Trigonometry Enhanced in grade 11 or earlier.");
   });
 });
 
@@ -128,9 +140,9 @@ describe("manual", () => {
     expect(r.status).toBe("ELIGIBLE");
     expect(r.notes).toEqual(["Audition"]);
   });
-  it("loses to something the student still has to add", () => {
+  it("loses to something that needs checking", () => {
     const graded: Rule = { type: "minGrade", courses: ["x"], grade: "B", basis: "final" };
-    expect(evaluate({ type: "all", rules: [manual, graded] }, ctx(10, [done("x", null)])).status).toBe("ELIGIBLE_WITH_WARNING");
+    expect(evaluate({ type: "all", rules: [manual, graded] }, ctx(10, [done("x", "PASS")])).status).toBe("ELIGIBLE_WITH_WARNING");
   });
   it("does not hide a real failure", () => {
     const r = evaluate({ type: "all", rules: [manual, { type: "completed", courses: ["x"] }] }, ctx(10));
@@ -208,15 +220,17 @@ describe("same-year co-requisites", () => {
 
 describe("priorCoursework and gradeLevel", () => {
   const algI: Rule = { type: "priorCoursework", field: "eighthMath", value: "ALGEBRA_I", minGrade: "C_PLUS" };
-  it("asks for the profile when 8th grade math is unknown", () => {
-    expect(evaluate(algI, ctx(9)).status).toBe("ELIGIBLE_WITH_WARNING");
-    expect(evaluate(algI, ctx(9, [], { prior: { eighthMath: "UNSURE" } })).status).toBe("ELIGIBLE_WITH_WARNING");
+  it("asks for 8th grade math as missing information, not a warning", () => {
+    const r = evaluate(algI, ctx(9));
+    expect(r.status).toBe("ELIGIBLE");
+    expect(r.missing).toEqual(["Add your 8th grade math to check this."]);
+    expect(evaluate(algI, ctx(9, [], { prior: { eighthMath: "UNSURE" } })).leaves[0].state).toBe("missing");
   });
   it("checks the course and the grade", () => {
     expect(evaluate(algI, ctx(9, [], { prior: { eighthMath: "ALGEBRA_I", eighthMathGrade: "C_PLUS" } })).status).toBe("ELIGIBLE");
     expect(evaluate(algI, ctx(9, [], { prior: { eighthMath: "ALGEBRA_I", eighthMathGrade: "C" } })).status).toBe("NOT_ELIGIBLE_APPEALABLE");
     expect(evaluate(algI, ctx(9, [], { prior: { eighthMath: "PRE_ALGEBRA", eighthMathGrade: "A" } })).status).toBe("NOT_ELIGIBLE_LOCKED");
-    expect(evaluate(algI, ctx(9, [], { prior: { eighthMath: "ALGEBRA_I" } })).status).toBe("ELIGIBLE_WITH_WARNING");
+    expect(evaluate(algI, ctx(9, [], { prior: { eighthMath: "ALGEBRA_I" } })).missing).toEqual(["Add your 8th grade Algebra I grade to check this."]);
   });
   it("accepts any 8th grade math when no value is set", () => {
     const any: Rule = { type: "priorCoursework", field: "eighthMath", minGrade: "D" };

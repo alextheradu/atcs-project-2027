@@ -42,6 +42,18 @@ describe("sortByFit", () => {
     expect(rows).toEqual(["a", "b"]);
   });
 
+  it("can order each tier by level, College prep first, so Honors is not presented as the default", () => {
+    const level: Record<string, string> = { b: "HONORS", e: "AP", f: "CP" };
+    expect(sortByFit(["b", "e", "f"], (r) => fits[r], (r) => level[r])).toEqual(["f", "b", "e"]);
+  });
+
+  it("ranks a class that only needs its partner class with the warnings, not with placement reviews", () => {
+    const partner = { status: "NOT_ELIGIBLE_APPEALABLE" as const, viaAppeal: false, unmet: [{ rule: { type: "coreq" as const, courses: ["x"] } }] };
+    const review = { status: "NOT_ELIGIBLE_APPEALABLE" as const, viaAppeal: false, unmet: [{ rule: { type: "minGrade" as const, courses: ["x"] } }] };
+    const all: Record<string, unknown> = { p: partner, r: review, w: fit("ELIGIBLE_WITH_WARNING") };
+    expect(sortByFit(["r", "p", "w"], (k) => all[k] as never)).toEqual(["p", "w", "r"]);
+  });
+
   it("handles an empty list", () => {
     expect(sortByFit([], () => undefined)).toEqual([]);
   });

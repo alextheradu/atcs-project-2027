@@ -13,7 +13,7 @@ const ROWS: { key: string; label: string; cells: (string | null | "gap")[] }[] =
 export function MiniBoard() {
   return (
     <figure aria-label="An example board, made up" className="soft p-4 sm:p-5">
-      <div aria-hidden className="grid grid-cols-[88px_repeat(4,minmax(0,1fr))] gap-1.5 text-[11px] sm:grid-cols-[104px_repeat(4,minmax(0,1fr))] sm:text-[12px]">
+      <div aria-hidden className="grid grid-cols-[88px_repeat(4,minmax(0,1fr))] gap-1 text-[12px] sm:grid-cols-[104px_repeat(4,minmax(0,1fr))] sm:gap-1.5">
         <span />
         {["9th", "10th", "11th", "12th"].map((g) => <span key={g} className="px-1 pb-1 text-[12px] font-bold">{g}</span>)}
         {ROWS.map((r) => (
@@ -21,9 +21,9 @@ export function MiniBoard() {
             <span className="ink flex items-center truncate text-[12px] font-bold">{r.label}</span>
             {r.cells.map((c, i) =>
               c === "gap" ? (
-                <span key={i} className="flex h-8 items-center truncate rounded-[8px] px-2 text-muted shadow-[inset_0_0_0_1.5px_var(--line-strong)]">+ Pick</span>
+                <span key={i} className="flex h-8 items-center truncate rounded-[8px] px-1.5 text-muted sm:px-2 shadow-[inset_0_0_0_1.5px_var(--line-strong)]">+ Pick</span>
               ) : c ? (
-                <span key={i} className="flex h-8 items-center truncate rounded-[8px] bg-[var(--tile-fill)] px-2 font-medium">{c}</span>
+                <span key={i} className="flex h-8 items-center truncate rounded-[8px] bg-[var(--tile-fill)] px-1.5 font-medium sm:px-2">{c}</span>
               ) : (
                 <span key={i} />
               ),

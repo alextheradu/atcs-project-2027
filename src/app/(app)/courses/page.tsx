@@ -9,10 +9,12 @@ import { requirePageUser } from "@/lib/auth/page";
 import { canUseStudentWorkspace } from "@/lib/auth/student-access";
 import { rowFor } from "@/lib/board";
 import { db } from "@/lib/db";
+import { boardMarks, openGroups } from "@/lib/catalog/board-marks";
 import { buildCourseWhere } from "@/lib/catalog/queries";
 import { rankByQuery } from "@/lib/catalog/rank";
 import { DEPT_LABEL, KIND_LABEL, LEVEL_LABEL, fmtCredits } from "@/lib/catalog/labels";
 import { LEVELS, courseFilterSchema } from "@/lib/catalog/schemas";
+import { boardPlanId } from "@/lib/plans/load";
 import type { RequirementKind } from "@/lib/requirements";
 import { cn } from "@/lib/utils";
 import { CourseFilterForm } from "./filter-form";
@@ -69,7 +71,9 @@ export default async function Courses({ searchParams }: { searchParams: Params }
   const filter = parsed.success ? parsed.data : {};
   const filtered = Object.values(filter).some((v) => v !== undefined && v !== "");
 
-  const [courses, interests] = await Promise.all([
+  // Students see which classes are already on their own Board. Staff have no Board, so no markers.
+  const planId = canUseStudentWorkspace(user.role) ? await boardPlanId(user.id) : null;
+  const [courses, interests, entries] = await Promise.all([
     db.course.findMany({
       where: buildCourseWhere(filter),
       orderBy: [{ department: "asc" }, { name: "asc" }],
@@ -77,14 +81,19 @@ export default async function Courses({ searchParams }: { searchParams: Params }
       take: 400,
     }),
     db.interestTag.findMany({ orderBy: { label: "asc" } }),
+    planId
+      ? db.planEntry.findMany({ where: { planId, plan: { ownerId: user.id } }, select: { courseId: true, status: true, gradeLevel: true } })
+      : Promise.resolve([]),
   ]);
+  const marks = boardMarks(entries);
 
   // Already sorted by department, so grouping keeps the catalog order. A search moves title matches
   // (and the subjects that hold them) ahead of classes that only mention the words in their description.
   const groups = rankByQuery(courses, filter.q ?? "");
   // A short result (about a screen and a half of rows) or a single subject shows everything. Anything longer,
   // including the whole catalog or a broad filter like "9th grade", starts with every subject closed.
-  const openAll = courses.length <= OPEN_ALL_UP_TO || groups.length === 1;
+  // Subjects holding a class on the student's Board also start open.
+  const open = openGroups(groups, new Set(marks.keys()), courses.length <= OPEN_ALL_UP_TO || groups.length === 1);
   const sel = "input";
   return (
     <div>
@@ -126,12 +135,13 @@ export default async function Courses({ searchParams }: { searchParams: Params }
       <p className="text-[14px] text-muted lg:pt-2.5"><span className="num">{courses.length}</span> {courses.length === 1 ? "class" : "classes"}</p>
       <div className="mt-3 flex flex-col gap-1">
         {groups.map(([dept, rows]) => (
-          <Fold key={dept} title={DEPT_LABEL[dept]} count={rows.length} open={openAll}>
+          <Fold key={dept} title={DEPT_LABEL[dept]} count={rows.length} open={open.has(dept)}>
             <ul className="list list-hover">
               {rows.map((c) => {
                 const tags = c.requirements.map((r) => ({ kind: r.kind as RequirementKind, credits: Number(r.credits), provisional: r.provisional }));
                 // Only say it when it adds information (Theater Arts counts toward Arts, not English).
                 const kinds = [...new Set(c.requirements.map((r) => KIND_LABEL[r.kind]))].filter((k) => k !== DEPT_LABEL[c.department]);
+                const mark = marks.get(c.id);
                 return (
                   <li key={c.id}>
                     <Link href={`/courses/${c.slug}`} className={cn("flex items-center gap-3 py-2.5", `subject-${rowFor(tags)}`)}>
@@ -139,6 +149,7 @@ export default async function Courses({ searchParams }: { searchParams: Params }
                       <span className="min-w-0 flex-1">
                         <span className="block truncate text-[15px] font-medium">{c.name}</span>
                         <span className="mt-0.5 block text-[13px] text-muted">
+                          {mark && <><span className="font-medium text-fg">{mark}</span> · </>}
                           {LEVEL_LABEL[c.level]}, grades <span className="num">{c.gradesOffered.join(", ")}</span>
                           {kinds.length > 0 ? <>, counts toward {kinds.join(", ")}</> : tags.length === 0 ? <>, counts as an elective</> : null}
                         </span>

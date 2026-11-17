@@ -6,10 +6,12 @@ import { X } from "lucide-react";
 import { StartAppealButton } from "@/components/appeals/start-button";
 import { DraftNotice, useDraftState } from "@/components/draft-state";
 import { Breakdown } from "@/components/eligibility/breakdown";
+import { PriorMathField } from "@/components/eligibility/prior-math-field";
+import { WaysIn } from "@/components/eligibility/ways-in";
 import { Button } from "@/components/ui/button";
 import { ROWS, rowFor } from "@/lib/board";
 import { formatCredits } from "@/lib/credits";
-import type { EvalResult } from "@/lib/eligibility";
+import { waysIn, type EvalResult } from "@/lib/eligibility";
 import { describeWarning, type PlanWarning } from "@/lib/plan-warnings";
 import { ENTRY_STATUSES } from "@/lib/plans/schemas";
 import { GRADE_OPTIONS, STATUS_LABEL, type EntryView } from "@/lib/plans/view";
@@ -33,6 +35,16 @@ interface Props {
   onMove: (id: string, grade: number) => void;
   onUpdate: (id: string, patch: EntryPatch) => void;
   onRemove: (id: string) => void;
+  /** Course names by slug, for "Ways to get in". */
+  names?: Record<string, string>;
+  /** Slugs already on the board. */
+  boardSlugs?: Set<string>;
+  /** Adds a partner or earlier class straight from the sheet. */
+  onAddCourse?: (slug: string, grade: number) => void;
+  /** The student's 8th grade math, so the sheet can ask for it in place. */
+  prior?: { eighthMath?: string | null; eighthMathGrade?: string | null };
+  /** The earliest grade still ahead, so "Ways to get in" never offers to add to a finished year. */
+  firstOpenGrade?: number;
 }
 
 /** Credits are typed, so they keep a draft until the server has the same number. */
@@ -78,20 +90,14 @@ function CreditsField({ entry, disabled, onSave }: { entry: EntryView; disabled:
 }
 
 const SHEET_DOT: Record<string, string> = { eligible: "bg-green", warning: "bg-yellow", appeal: "bg-orange", locked: "bg-red" };
-const SHEET_HEADING: Record<string, string> = {
-  eligible: "Approved by placement review",
-  warning: "Check this first",
-  appeal: "Needs a placement review",
-  locked: "Missing a prerequisite",
-};
 
 /** The full rule from the Program of Studies, folded away: the sentence above already says what matters. */
 function FullRule({ tree }: { tree: NonNullable<EvalResult["tree"]> }) {
   return (
-    <details className="group pt-1">
+    <details className="group/rule pt-1">
       <summary className="cursor-pointer list-none text-[13px] font-medium text-accent-ink hover:underline [&::-webkit-details-marker]:hidden">
-        <span className="group-open:hidden">Show the full rule</span>
-        <span className="hidden group-open:inline">Hide the full rule</span>
+        <span className="group-open/rule:hidden">Show the full rule</span>
+        <span className="hidden group-open/rule:inline">Hide the full rule</span>
       </summary>
       <div className="mt-2"><Breakdown tree={tree} /></div>
     </details>
@@ -99,7 +105,7 @@ function FullRule({ tree }: { tree: NonNullable<EvalResult["tree"]> }) {
 }
 
 /** Everything you can do with one class on the Board. Moving by grade buttons is the keyboard way to drag. */
-export function ClassSheet({ entry, result, warnings = [], canEdit, busy, canAppeal, notice, onClose, onMove, onUpdate, onRemove }: Props) {
+export function ClassSheet({ entry, result, warnings = [], canEdit, busy, canAppeal, notice, onClose, onMove, onUpdate, onRemove, names = {}, boardSlugs, onAddCourse, prior, firstOpenGrade }: Props) {
   const ref = useRef<HTMLDialogElement>(null);
   const [shown, setShown] = useState<EntryView | null>(entry);
   if (entry && entry !== shown) setShown(entry);
@@ -120,8 +126,9 @@ export function ClassSheet({ entry, result, warnings = [], canEdit, busy, canApp
   const askable = canAppeal && !!e && e.status === "PLANNED" && !!result && !result.viaAppeal && coreq.length === 0;
   const canAsk = askable && result!.status === "NOT_ELIGIBLE_APPEALABLE";
   const canAskWithNote = askable && result!.status === "ELIGIBLE" && result!.notes.length > 0;
-  // The profile is under Settings; say where instead of sending the student looking for it.
-  const needsProfile = !!result?.leaves.some((l) => l.rule.type === "priorCoursework" && l.state === "pending");
+  // 8th grade math is asked right here when a math class needs it.
+  const needsPrior = !!result?.leaves.some((l) => l.rule.type === "priorCoursework" && l.state === "missing");
+  const ways = e && e.status === "PLANNED" && result && result.status !== "ELIGIBLE" ? waysIn(result.tree) : [];
   const [confirmRemove, setConfirmRemove] = useState(false);
   if (confirmRemove && entry && shown && entry.id !== shown.id) setConfirmRemove(false);
 
@@ -155,13 +162,16 @@ export function ClassSheet({ entry, result, warnings = [], canEdit, busy, canApp
               <div className="soft space-y-2 bg-fill-2 p-4">
                 <p className="flex items-start gap-2 text-[15px] font-semibold">
                   <span aria-hidden className={cn("mt-[7px] size-2 shrink-0 rounded-full", SHEET_DOT[flag.tone])} />
-                  {SHEET_HEADING[flag.tone]}
+                  {flag.text}
                 </p>
-                {coreq.length > 0
+                {/* With routes listed, they already say what is missing; the sentence would repeat the first one. */}
+                {ways.length === 0 && (coreq.length > 0
                   ? coreq.map((w, i) => <p key={i} className="text-sm text-muted">{describeWarning(w)}</p>)
-                  : <p className="text-sm text-muted">{flag.text}</p>}
-                {needsProfile && (
-                  <p className="text-sm"><Link href="/settings" className="font-medium text-accent-ink hover:underline">Add your 8th grade math in Settings</Link></p>
+                  : flag.reason && <p className="text-sm text-muted">{flag.reason}</p>)}
+                {ways.length > 0 && (
+                  <div className="pt-1">
+                    <WaysIn ways={ways} names={names} gradeLevel={e.gradeLevel} onBoard={boardSlugs} onAdd={canEdit ? onAddCourse : undefined} busy={busy} firstOpenGrade={firstOpenGrade} />
+                  </div>
                 )}
                 {canAsk && (
                   <div className="space-y-1.5 pt-1">
@@ -170,6 +180,13 @@ export function ClassSheet({ entry, result, warnings = [], canEdit, busy, canApp
                   </div>
                 )}
                 {result?.tree && <FullRule tree={result.tree} />}
+              </div>
+            )}
+            {result?.missing[0] && e.status === "PLANNED" && (
+              <div className="soft space-y-2 bg-fill-2 p-4">
+                <p className="text-[15px] font-semibold">Add your information</p>
+                {result.missing.map((m) => <p key={m} className="text-sm text-muted">{m}</p>)}
+                {needsPrior && canAppeal && <PriorMathField initial={prior} />}
               </div>
             )}
             {result?.notes[0] && e.status === "PLANNED" && (
@@ -216,13 +233,13 @@ export function ClassSheet({ entry, result, warnings = [], canEdit, busy, canApp
                     {ENTRY_STATUSES.map((s) => <option key={s} value={s}>{STATUS_LABEL[s]}</option>)}
                   </select>
                 </label>
-                <label className="block space-y-1.5">
+                {e.status === "COMPLETED" && <label className="block space-y-1.5">
                   <span className="text-sm text-muted">Grade you got</span>
                   <select className="input bg-fill-2" value={e.grade ?? ""} disabled={e.status !== "COMPLETED"} onChange={(ev) => !busy && onUpdate(e.id, { grade: ev.target.value || null })}>
                     <option value="">{e.status === "COMPLETED" ? "No grade" : "Not finished yet"}</option>
                     {GRADE_OPTIONS.map((g) => <option key={g.value} value={g.value}>{g.label}</option>)}
                   </select>
-                </label>
+                </label>}
                 <div className="sm:col-span-2">
                   <CreditsField key={e.id} entry={e} disabled={false} onSave={(c) => !busy && onUpdate(e.id, { credits: c })} />
                 </div>

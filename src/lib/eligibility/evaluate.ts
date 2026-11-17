@@ -43,6 +43,14 @@ const result = (
   return { rule, state, appealable: rule.appealable ?? defaultAppealable, message };
 };
 
+/**
+ * A finished course whose slug sits inside one of the required ones (Algebra II with Trigonometry vs its Enhanced or
+ * Honors version). Students read the names as the same class, so the message says why it does not count.
+ */
+function nearMiss(ctx: EvalContext, required: string[]): TakenCourse | undefined {
+  return ctx.taken.find((t) => t.status === "COMPLETED" && !required.includes(t.slug) && required.some((r) => r.includes(t.slug)));
+}
+
 function evalCompleted(rule: Extract<LeafRule, { type: "completed" }>, ctx: EvalContext): LeafResult {
   const hits = ctx.taken.filter((t) => rule.courses.includes(t.slug));
   const marks = hits.map((t) => ({ t, s: standing(t, ctx.gradeLevel) }));
@@ -59,6 +67,8 @@ function evalCompleted(rule: Extract<LeafRule, { type: "completed" }>, ctx: Eval
   if (late) {
     return result(rule, "unmet", `${nameOf(ctx, late.t.slug)} is planned for grade ${late.t.gradeLevel}, after this course.`, false);
   }
+  const near = nearMiss(ctx, rule.courses);
+  if (near) return result(rule, "unmet", `You took ${nameOf(ctx, near.slug)}, but this needs ${names}.`, false);
   return result(rule, "unmet", `Needs ${names}.`, false);
 }
 
@@ -88,7 +98,7 @@ function evalMinGrade(rule: Extract<LeafRule, { type: "minGrade" }>, ctx: EvalCo
   if (pend) {
     return result(rule, "planned", `${nameOf(ctx, pend.t.slug)} is planned for grade ${pend.t.gradeLevel}. You will need ${an(need)} or higher in it.${approx}`, true);
   }
-  if (noGrade) return result(rule, "pending", `Add your grade for ${nameOf(ctx, noGrade.slug)}. It needs ${an(need)} or higher.${approx}`, true);
+  if (noGrade) return result(rule, "missing", `Add your grade for ${nameOf(ctx, noGrade.slug)} to check this. It needs ${an(need)} or higher.${approx}`, true);
   if (passOnly) return result(rule, "pending", `${nameOf(ctx, passOnly.slug)} is recorded as Pass. It needs ${an(need)} or higher, so check with your supervisor.`, true);
   if (lowest) {
     return result(rule, "unmet", `You have ${an(gradeText(lowest.t.grade as Grade))} in ${nameOf(ctx, lowest.t.slug)}. This needs ${an(need)} or higher.${approx}`, true);
@@ -120,6 +130,8 @@ function evalCoreq(rule: Extract<LeafRule, { type: "coreq" }>, ctx: EvalContext)
   if (later) {
     return result(rule, "unmet", `${nameOf(ctx, later.slug)} is planned for grade ${later.gradeLevel}. Take it in grade ${ctx.gradeLevel} or earlier.`, true);
   }
+  const near = nearMiss(ctx, rule.courses);
+  if (near) return result(rule, "unmet", `You took ${nameOf(ctx, near.slug)}, but this needs ${names} in grade ${ctx.gradeLevel} or earlier.`, true);
   return result(rule, "unmet", `Take ${names} in grade ${ctx.gradeLevel} too, or finish it first.`, true);
 }
 
@@ -128,7 +140,7 @@ const EIGHTH: Record<string, string> = { ALGEBRA_I: "Algebra I", PRE_ALGEBRA: "P
 function evalPrior(rule: Extract<LeafRule, { type: "priorCoursework" }>, ctx: EvalContext): LeafResult {
   const have = ctx.prior?.eighthMath;
   if (!have || have === "UNSURE") {
-    return result(rule, "pending", "Add your 8th grade math in Settings to check this.", true);
+    return result(rule, "missing", "Add your 8th grade math to check this.", true);
   }
   if (rule.value && have !== rule.value) {
     // Your 8th grade course cannot change, so a mismatch reads as a skipped step, like a missing course.
@@ -137,7 +149,7 @@ function evalPrior(rule: Extract<LeafRule, { type: "priorCoursework" }>, ctx: Ev
   const label = `8th grade ${rule.value ? EIGHTH[rule.value] : "math"}`;
   if (rule.minGrade) {
     const g = ctx.prior?.eighthMathGrade;
-    if (!g) return result(rule, "pending", `Add your ${label} grade in Settings.`, true);
+    if (!g) return result(rule, "missing", `Add your ${label} grade to check this.`, true);
     const ok = gradeAtLeast(g, rule.minGrade);
     if (ok === null) return result(rule, "pending", `Your ${label} grade is recorded as Pass. Check with your supervisor.`, true);
     if (!ok) return result(rule, "unmet", `You have ${an(gradeText(g))} in ${label}. This needs ${an(gradeText(rule.minGrade))} or higher.`, true);
@@ -164,7 +176,7 @@ export function evaluateLeaf(rule: LeafRule, ctx: EvalContext): LeafResult {
   }
 }
 
-const LEAF_NODE: Record<Exclude<LeafResult["state"], "unmet">, NodeState> = { met: "met", planned: "met", manual: "manual", pending: "pending" };
+const LEAF_NODE: Record<Exclude<LeafResult["state"], "unmet">, NodeState> = { met: "met", planned: "met", manual: "manual", missing: "manual", pending: "pending" };
 const leafNodeState = (l: LeafResult): NodeState =>
   l.state === "unmet" ? (l.appealable ? "unmetAppealable" : "unmetLocked") : LEAF_NODE[l.state];
 
@@ -199,26 +211,27 @@ const STATUS: Record<NodeState, Eligibility> = {
 
 export function evaluate(rules: Rule | null | undefined, ctx: EvalContext): EvalResult {
   if (!rules) {
-    return { status: "ELIGIBLE", tree: null, leaves: [], unmet: [], viaAppeal: false, summary: "No prerequisites.", notes: [] };
+    return { status: "ELIGIBLE", tree: null, leaves: [], unmet: [], viaAppeal: false, summary: "No prerequisites.", notes: [], missing: [] };
   }
   const leaves: LeafResult[] = [];
   const tree = walk(rules, ctx, leaves);
   const unmet = explain(tree, (l) => l.state === "unmet");
   const open = explain(tree, (l) => l.state === "pending");
   const notes = explain(tree, (l) => l.state === "manual").map((l) => l.message);
+  const missing = explain(tree, (l) => l.state === "missing").map((l) => l.message);
 
   if (ctx.approvedAppeal && (tree.state === "unmetAppealable" || tree.state === "unmetLocked")) {
-    return { status: "ELIGIBLE", tree, leaves, unmet, viaAppeal: true, summary: "Approved through a placement review.", notes: [] };
+    return { status: "ELIGIBLE", tree, leaves, unmet, viaAppeal: true, summary: "Approved through a placement review.", notes: [], missing: [] };
   }
 
   const status = STATUS[tree.state];
   const summary =
     status === "ELIGIBLE"
-      ? (notes[0] ?? "You meet the requirements.")
+      ? (missing[0] ?? notes[0] ?? "You meet the requirements.")
       : status === "ELIGIBLE_WITH_WARNING"
         ? (open[0]?.message ?? "Some requirements need confirming.")
         : (unmet[0]?.message ?? "Requirements not met.");
-  return { status, tree, leaves, unmet, viaAppeal: false, summary, notes };
+  return { status, tree, leaves, unmet, viaAppeal: false, summary, notes, missing };
 }
 
 /**
@@ -239,6 +252,7 @@ export function evaluateCourse(
     unmet: [],
     viaAppeal: false,
     notes: [],
+    missing: [],
     summary: "The catalog lists a prerequisite that is not checked automatically. Read it before you choose this course.",
   };
 }

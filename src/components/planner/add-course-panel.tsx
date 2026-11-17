@@ -9,6 +9,7 @@ import { DEPARTMENTS } from "@/lib/admin/schemas";
 import { DEPT_LABEL, LEVEL_LABEL } from "@/lib/catalog/labels";
 import { filterCourses, type PickerCourse } from "@/lib/catalog/filter";
 import { sortByFit } from "@/lib/catalog/fit-order";
+import { PriorMathField } from "@/components/eligibility/prior-math-field";
 import { LEVELS } from "@/lib/catalog/schemas";
 import { formatCredits } from "@/lib/credits";
 
@@ -90,8 +91,17 @@ export function AddCoursePanel({ open, grade, onGradeChange, onClose, courses, i
     );
   }, [results, grade, placements, prior, names, added]);
 
-  // Classes the student can take come first. Inside a tier the search order stays.
-  const shown = useMemo(() => sortByFit(results, (c) => fit.get(c.id)).slice(0, LIMIT), [results, fit]);
+  // Classes the student can take come first. A search keeps its order inside a tier; browsing goes College prep up.
+  const browsing = q.trim() === "";
+  const shown = useMemo(
+    () => sortByFit(results, (c) => fit.get(c.id), browsing ? (c) => c.level : undefined).slice(0, LIMIT),
+    [results, fit, browsing],
+  );
+  // One question for the whole list instead of the same gray line on every math class.
+  const needsPrior = useMemo(
+    () => shown.some((c) => fit.get(c.id)?.leaves.some((l) => l.rule.type === "priorCoursework" && l.state === "missing")),
+    [shown, fit],
+  );
 
   const add = (c: PanelCourse) => {
     onAdd(c, grade);
@@ -191,11 +201,17 @@ export function AddCoursePanel({ open, grade, onGradeChange, onClose, courses, i
             {results.length} {results.length === 1 ? "class" : "classes"}
             {results.length > LIMIT && `, showing ${LIMIT}`}
           </p>
+          {needsPrior && (
+            <div className="soft mb-3 space-y-2 bg-fill-2 p-4">
+              <p className="text-sm">Add your 8th grade math to check the math classes below.</p>
+              <PriorMathField initial={prior} />
+            </div>
+          )}
           <ul className="list pb-8">
             {shown.map((c) => {
               const r = fit.get(c.id);
               // Why a class is not a clean fit, or what a person still decides. Visible, since phones have no hover.
-              const reason = !r ? null : r.status !== "ELIGIBLE" ? r.summary : (r.notes[0] ?? null);
+              const reason = !r ? null : r.status !== "ELIGIBLE" ? r.summary : (needsPrior && r.missing[0] ? null : (r.missing[0] ?? r.notes[0] ?? null));
               const addedTo = added.get(c.id);
               return (
                 <li key={c.id} className="flex items-center gap-3 py-2.5">
@@ -207,7 +223,7 @@ export function AddCoursePanel({ open, grade, onGradeChange, onClose, courses, i
                     <span className="block truncate text-[13px] text-muted">
                       {DEPT_LABEL[c.department]}, {LEVEL_LABEL[c.level]}, grades {c.gradesOffered.join(", ")}
                     </span>
-                    {reason && <span className="mt-0.5 line-clamp-2 text-[13px] text-muted">{reason}</span>}
+                    {reason && <span className="mt-0.5 block text-[13px] text-muted">{reason}</span>}
                   </span>
                   <span className="num shrink-0 text-muted">{formatCredits(c.credits)} cr</span>
                   {addedTo !== undefined ? (

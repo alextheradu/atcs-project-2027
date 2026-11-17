@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { LEVEL_LABEL } from "@/lib/catalog/labels";
 import type { MapLayout, PlacedArrow } from "@/lib/pathways/layout";
 import type { MapClass, MapStatus } from "@/lib/pathways/load";
@@ -16,11 +16,22 @@ type Shared = { title: string; classes: Record<string, MapClass>; status: Record
 /**
  * One subject's map: tiles on a fixed grid with one SVG of arrows behind them. Pointing at or focusing a class
  * lights up the arrows into and out of it, so a busy map like math reads one class at a time. Phones get the
- * compact layout, which scrolls sideways.
+ * compact layout, which scrolls sideways and opens on the student's own year (`startX`, the left edge of
+ * that year's column) when it is known.
  */
-export function PathMap({ wide, compact, ...shared }: Shared & { wide: MapLayout; compact: MapLayout }) {
+export function PathMap({ wide, compact, startX = null, ...shared }: Shared & { wide: MapLayout; compact: MapLayout; startX?: number | null }) {
   const [active, setActive] = useState<string | null>(null);
+  const scroller = useRef<HTMLDivElement>(null);
   const { title, classes } = shared;
+
+  // Runs again when the map changes (another subject), since the scroller is reused across navigations.
+  useEffect(() => {
+    const el = scroller.current;
+    if (!el) return;
+    // A map without the student's year (languages go by level) starts at its first column.
+    const still = startX === null || window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    el.scrollTo({ left: startX ?? 0, behavior: still ? "auto" : "smooth" });
+  }, [startX, title]);
   const names = (cellId: string) => wide.cells.find((c) => c.id === cellId)?.tiles.map((t) => classes[t.slug]?.name).filter(Boolean).join(" or ") ?? "";
 
   return (
@@ -29,8 +40,8 @@ export function PathMap({ wide, compact, ...shared }: Shared & { wide: MapLayout
         <Diagram id="wide" layout={wide} active={active} setActive={setActive} {...shared} />
       </div>
       <div className="md:hidden">
-        <p className="mb-3 text-[13px] text-muted">Swipe sideways to see later years.</p>
-        <div className="-mx-4 overflow-x-auto px-4 pb-2">
+        <p className="mb-3 text-[13px] text-muted">{startX === null ? "Swipe sideways to see later years." : "Swipe sideways to see other years."}</p>
+        <div ref={scroller} className="-mx-4 overflow-x-auto px-4 pb-2">
           <Diagram id="compact" layout={compact} active={active} setActive={setActive} {...shared} />
         </div>
       </div>

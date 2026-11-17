@@ -2,6 +2,7 @@ import { rowFor, type RowKey } from "@/lib/board";
 import { db } from "@/lib/db";
 import { boardPlanId } from "@/lib/plans/load";
 import type { RequirementKind } from "@/lib/requirements";
+import { studentGrade } from "./index";
 import { LANGUAGES, type Language, type MathStart } from "./maps";
 
 export interface MapClass {
@@ -37,15 +38,16 @@ const RANK: Record<MapStatus, number> = { COMPLETED: 3, IN_PROGRESS: 2, PLANNED:
 
 /**
  * What the signed-in student told us in onboarding (8th grade math, a language) and where each class sits on
- * their Board. Only their own plan, so the map can say "Done" or "In your plan" on a class.
+ * their Board. Only their own plan, so the map can say "Done" or "In your plan" on a class. `grade` is the grade
+ * they are in now, so a phone can open the map on their own year.
  */
-export async function loadPathwayStudent(userId: string): Promise<{ start: MathStart | null; lang: Language | null; status: Record<string, MapStatus> }> {
+export async function loadPathwayStudent(userId: string): Promise<{ start: MathStart | null; lang: Language | null; grade: number | null; status: Record<string, MapStatus> }> {
   const [profile, planId] = await Promise.all([
-    db.studentProfile.findUnique({ where: { userId }, select: { eighthMath: true, languageStudied: true } }),
+    db.studentProfile.findUnique({ where: { userId }, select: { eighthMath: true, languageStudied: true, currentGrade: true } }),
     boardPlanId(userId),
   ]);
   const entries = planId
-    ? await db.planEntry.findMany({ where: { planId, plan: { ownerId: userId } }, select: { status: true, course: { select: { slug: true } } } })
+    ? await db.planEntry.findMany({ where: { planId, plan: { ownerId: userId } }, select: { status: true, gradeLevel: true, course: { select: { slug: true } } } })
     : [];
 
   const status: Record<string, MapStatus> = {};
@@ -57,5 +59,5 @@ export async function loadPathwayStudent(userId: string): Promise<{ start: MathS
 
   const start = profile?.eighthMath === "PRE_ALGEBRA" ? "prealgebra" : profile?.eighthMath === "ALGEBRA_I" ? "algebra" : null;
   const lang = LANGUAGES.find((l) => l === profile?.languageStudied) ?? null;
-  return { start, lang, status };
+  return { start, lang, grade: studentGrade(profile?.currentGrade, entries), status };
 }

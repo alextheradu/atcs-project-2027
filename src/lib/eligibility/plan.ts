@@ -52,6 +52,7 @@ export function takenResult(status: "IN_PROGRESS" | "COMPLETED"): EvalResult {
     unmet: [],
     viaAppeal: false,
     notes: [],
+    missing: [],
     taken: true,
     summary: status === "COMPLETED" ? "You took this class." : "You are taking this class now.",
   };

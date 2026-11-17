@@ -162,9 +162,12 @@ describe("science (p39-45)", () => {
     expect(run("honors-chemistry", 10, [done("biology-enhanced", "A_MINUS")]).status).toBe("NOT_ELIGIBLE_APPEALABLE");
   });
   it("a suggested co-requisite warns but never blocks", () => {
-    const r = run("chemistry", 10, [done("biology", "B")]);
+    const preAlg = { prior: { eighthMath: "PRE_ALGEBRA" as const, eighthMathGrade: "B" as const } };
+    const r = run("chemistry", 10, [done("biology", "B")], preAlg);
     expect(r.status).toBe("ELIGIBLE_WITH_WARNING");
     expect(r.summary.startsWith("Suggested:")).toBe(true);
+    // Without 8th grade math on file, it asks for it instead of warning.
+    expect(run("chemistry", 10, [done("biology", "B")]).missing).toEqual(["Add your 8th grade math to check this."]);
     expect(run("chemistry", 10, [done("biology", "B"), plan("algebra-i", 10)]).status).toBe("ELIGIBLE");
   });
   it("Physics needs Algebra II with Trigonometry in the same year or before", () => {

@@ -87,7 +87,8 @@ export function ReviewPanel({ planId, status, isOwner, canReview, comments, entr
         </div>
       )}
 
-      <div className="space-y-3">
+      {/* Nothing to talk about on an empty board yet. */}
+      {(entries.length > 0 || comments.length > 0) && <div className="space-y-3">
         <h3 className="text-[14px] font-medium">Comments</h3>
         {comments.length === 0 ? (
           <p className="text-[13px] text-muted">No comments yet.</p>
@@ -116,7 +117,7 @@ export function ReviewPanel({ planId, status, isOwner, canReview, comments, entr
             <Button disabled={pending || text.trim().length === 0} onClick={() => run(() => addComment({ planId, entryId: target || null, body: text }), () => { textDraft.commit(text, ""); targetDraft.commit(target); })}>Add comment</Button>
           </form>
         )}
-      </div>
+      </div>}
       <DraftNotice drafts={[textDraft, targetDraft, noteDraft]} />
       {error && <p role="alert" className="text-[13px] text-red">{error}</p>}
     </section>

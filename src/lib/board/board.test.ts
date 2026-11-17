@@ -149,10 +149,15 @@ describe("statusSentence", () => {
     const s = summaryOf(e);
     expect(statusSentence(s, 0)).toBe(`${s.total} of 120 credits. Add ${s.missing} more credits of any classes to graduate.`);
   });
-  it("says so when everything is done", () => {
+  it("says the plan covers everything, not that it is done", () => {
     const e = [...fullPlan(), ...Array.from({ length: 10 }, () => course(12, []))];
     const s = summaryOf(e);
     expect(s.complete).toBe(true);
-    expect(statusSentence(s, 0)).toBe(`${s.total} of 120 credits. You have everything you need to graduate.`);
+    expect(statusSentence(s, 0)).toBe(`${s.total} of 120 credits. Your plan covers every graduation requirement.`);
+  });
+  it("still points at what needs a look when the plan covers everything", () => {
+    const s = summaryOf([...fullPlan(), ...Array.from({ length: 10 }, () => course(12, []))]);
+    expect(statusSentence(s, 0, 1)).toBe(`${s.total} of 120 credits. Your plan covers every graduation requirement. 1 thing to check below.`);
+    expect(statusSentence(s, 0, 3)).toBe(`${s.total} of 120 credits. Your plan covers every graduation requirement. 3 things to check below.`);
   });
 });

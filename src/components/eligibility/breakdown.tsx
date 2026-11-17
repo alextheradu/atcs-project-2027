@@ -1,20 +1,22 @@
 import type { LeafResult, NodeResult } from "@/lib/eligibility";
 import { cn } from "@/lib/utils";
 
-// Planned and manual are information, not status: a neutral dot. Only things the student must fix get color.
+// The box around the rule already carries the status color, so leaves only say met (green) or not yet (an empty ring).
+// Planned, missing and manual leaves are information: a gray dot.
 const DOT: Record<LeafResult["state"], string> = {
   met: "bg-green",
   planned: "bg-muted",
-  pending: "bg-yellow",
+  pending: "ring-[1.5px] ring-inset ring-fg",
+  missing: "bg-muted",
   manual: "bg-muted",
-  unmet: "bg-red",
+  unmet: "ring-[1.5px] ring-inset ring-fg",
 };
-const WORD: Record<LeafResult["state"], string> = { met: "Met", planned: "Planned", pending: "Check", manual: "The school decides", unmet: "Not met" };
+const WORD: Record<LeafResult["state"], string> = { met: "Met", planned: "Planned", pending: "Check", missing: "Needs your information", manual: "The school decides", unmet: "Not met yet" };
 
 function Leaf({ leaf }: { leaf: LeafResult }) {
   return (
     <li className="flex items-start gap-2.5 py-1.5 text-[13px]">
-      <span aria-hidden className={cn("mt-[7px] size-1.5 shrink-0 rounded-full", DOT[leaf.state])} />
+      <span aria-hidden className={cn("mt-[6px] size-2 shrink-0 rounded-full", DOT[leaf.state])} />
       <span className="min-w-0 flex-1">
         <span className="sr-only">{WORD[leaf.state]}: </span>
         <span className={leaf.state === "unmet" || leaf.state === "pending" ? "text-fg" : "text-muted"}>{leaf.message}</span>

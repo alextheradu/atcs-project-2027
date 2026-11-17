@@ -21,3 +21,21 @@ export const TRACK_LABEL: Record<Track, string> = {
   ENGLISH: "English",
   SOCIAL_STUDIES: "Social studies",
 };
+
+/**
+ * The grade the student is in now: the profile's grade when known, otherwise the year after their last
+ * completed class on the Board (capped at 12th). Null when neither says.
+ */
+export function studentGrade(currentGrade: number | null | undefined, entries: { status: string; gradeLevel: number }[]): number | null {
+  if (currentGrade) return currentGrade;
+  const done = entries.filter((e) => e.status === "COMPLETED").map((e) => e.gradeLevel);
+  return done.length ? Math.min(12, Math.max(...done) + 1) : null;
+}
+
+/** The map column for a grade ("11th grade", or one that starts there like "11th or 12th grade"), or null. */
+export function gradeColumn(columns: string[], grade: number | null): number | null {
+  if (grade === null) return null;
+  const exact = columns.indexOf(`${grade}th grade`);
+  const i = exact >= 0 ? exact : columns.findIndex((c) => c.startsWith(`${grade}th `));
+  return i >= 0 ? i : null;
+}

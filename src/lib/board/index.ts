@@ -82,6 +82,7 @@ export function spotsFor(summary: GraduationSummary, entries: BoardEntry[], curr
 export function buildBoard(entries: BoardEntry[], summary: GraduationSummary, currentGrade: number | null): BoardRow[] {
   const spots = spotsFor(summary, entries, currentGrade);
   const met = new Map(summary.kinds.map((k) => [k.kind, k.met]));
+  const unconfirmed = new Set(summary.kinds.filter((k) => k.provisional > 0).map((k) => k.kind));
   return ROWS.map((row) => {
     const cells = Object.fromEntries(GRADES.map((g) => [g, { entryIds: [], spots: [] } as BoardCell])) as Record<Grade, BoardCell>;
     for (const e of entries) if (rowFor(e.tags) === row.key) cells[toGrade(e.gradeLevel)].entryIds.push(e.id);
@@ -91,15 +92,17 @@ export function buildBoard(entries: BoardEntry[], summary: GraduationSummary, cu
     const status =
       row.kinds.length === 0 ? "Any class counts"
         : mine.length > 0 ? `${mine.length} ${mine.length === 1 ? "class" : "classes"} to add`
-          : row.kinds.every((k) => met.get(k) ?? true) ? "Covered" : "";
+          : row.kinds.every((k) => met.get(k) ?? true) ? (row.kinds.some((k) => unconfirmed.has(k)) ? "Covered, not confirmed" : "Covered") : "";
     return { key: row.key, label: row.label, status, cells };
   });
 }
 
 /** The one line at the top of the Board. */
-export function statusSentence(summary: GraduationSummary, spotCount: number): string {
+export function statusSentence(summary: GraduationSummary, spotCount: number, toCheck = 0): string {
   const head = `${formatCredits(summary.total)} of ${formatCredits(summary.totalRequired)} credits.`;
-  if (summary.complete) return `${head} You have everything you need to graduate.`;
+  // Most of it is usually still planned, so the sentence says the plan covers it, never that the student is done.
+  const check = toCheck > 0 ? ` ${toCheck} ${toCheck === 1 ? "thing" : "things"} to check below.` : "";
+  if (summary.complete) return `${head} Your plan covers every graduation requirement.${check}`;
   if (spotCount > 0) return `${head} ${spotCount} empty ${spotCount === 1 ? "spot" : "spots"} left to graduate.`;
   return `${head} Add ${formatCredits(summary.missing)} more credits of any classes to graduate.`;
 }

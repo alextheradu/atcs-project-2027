@@ -138,4 +138,10 @@ async function main() {
   if (failed.length) process.exit(1);
 }
 
-main().then(() => db.$disconnect()).catch(async (e) => { console.error(e); await db.$disconnect(); process.exit(1); });
+main().then(() => db.$disconnect()).catch(async (e) => {
+  console.error(e);
+  // A failed run skips the cleanup at the end of main, which left a stray "Check" interest in the filters.
+  await db.interestTag.deleteMany({ where: { slug: "check-interest" } }).catch(() => undefined);
+  await db.$disconnect();
+  process.exit(1);
+});

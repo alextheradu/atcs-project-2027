@@ -5,6 +5,8 @@ import { notFound } from "next/navigation";
 import { StartAppealButton } from "@/components/appeals/start-button";
 import { AddToBoardButton } from "@/components/catalog/add-to-board-button";
 import { CourseFitList } from "@/components/eligibility/course-fit";
+import { PriorMathField } from "@/components/eligibility/prior-math-field";
+import { WaysIn } from "@/components/eligibility/ways-in";
 import { Badge } from "@/components/ui/badge";
 import { Dl } from "@/components/ui/page";
 import { requirePageUser } from "@/lib/auth/page";
@@ -12,7 +14,8 @@ import { canUseStudentWorkspace } from "@/lib/auth/student-access";
 import { ROWS, rowFor } from "@/lib/board";
 import { DEPT_LABEL, KIND_LABEL, LEVEL_LABEL, fmtCredits } from "@/lib/catalog/labels";
 import { db } from "@/lib/db";
-import { canTakeAnswer, courseFit, parseRule, ruleSlugs, type PlanCourse } from "@/lib/eligibility";
+import { canTakeAnswer, courseFit, parseRule, ruleSlugs, waysIn, type PlanCourse } from "@/lib/eligibility";
+import { studentGrade } from "@/lib/pathways";
 import { boardPlanId } from "@/lib/plans/load";
 import { isEditable } from "@/lib/plans/schemas";
 import type { RequirementKind } from "@/lib/requirements";
@@ -23,6 +26,9 @@ const APPEAL_STATE: Record<string, string> = {
   DRAFT: "is not sent yet.", SUBMITTED: "was sent and is waiting.", UNDER_REVIEW: "is being reviewed.",
   APPROVED: "was approved.", DENIED: "was not approved. Open it to read why.",
 };
+/** The first grade the class is offered in from `from` on, or the last one offered. */
+const suggestGrade = (grades: number[], from: number) => grades.find((g) => g >= Math.min(12, Math.max(9, from))) ?? grades[grades.length - 1] ?? 9;
+
 const DOT = { eligible: "bg-green", warning: "bg-yellow", appeal: "bg-orange", locked: "bg-red" } as const;
 
 export default async function CoursePage({ params }: { params: Promise<{ slug: string }> }) {
@@ -50,7 +56,8 @@ export default async function CoursePage({ params }: { params: Promise<{ slug: s
     : null;
   const wanted = rules ? ruleSlugs(rules) : [];
   const nameRows = wanted.length ? await db.course.findMany({ where: { slug: { in: wanted } }, select: { slug: true, name: true } }) : [];
-  const names = Object.fromEntries(nameRows.map((c) => [c.slug, c.name]));
+  // Names of the rule's classes plus the student's own, so "You took X, but this needs Y" can name both.
+  const names = { ...Object.fromEntries((plan?.entries ?? []).map((e) => [e.course.slug, e.course.name])), ...Object.fromEntries(nameRows.map((c) => [c.slug, c.name])) };
   const profile = plan ? await db.studentProfile.findUnique({ where: { userId: user.id }, select: { eighthMath: true, eighthMathGrade: true, currentGrade: true } }) : null;
   const placements: PlanCourse[] = (plan?.entries ?? []).map((e) => ({
     key: e.id, slug: e.course.slug, name: e.course.name, gradeLevel: e.gradeLevel, status: e.status, grade: e.grade,
@@ -67,6 +74,12 @@ export default async function CoursePage({ params }: { params: Promise<{ slug: s
   // Agree with the Board: a class you took is not judged again, and a planned one is judged in the grade it sits in.
   const taken = onBoard && onBoard.status !== "PLANNED" ? onBoard.status : undefined;
   const answer = canTakeAnswer(fits, { approved, currentGrade: profile?.currentGrade ?? null, taken, plannedGrade: onBoard?.status === "PLANNED" ? onBoard.gradeLevel : undefined });
+  // The routes in, for the grade the answer is about: the planned grade, or the first grade still ahead.
+  const nowGrade = studentGrade(profile?.currentGrade ?? null, plan?.entries ?? []);
+  const focusFit = onBoard?.status === "PLANNED" ? fits.find((f) => f.grade === onBoard.gradeLevel) : fits.find((f) => f.grade >= (nowGrade ?? 9));
+  const ways = !taken && !approved && focusFit && focusFit.result.status !== "ELIGIBLE" ? waysIn(focusFit.result.tree) : [];
+  const boardSlugs = new Set((plan?.entries ?? []).map((e) => e.course.slug));
+  const askPrior = !!focusFit?.result.leaves.some((l) => l.rule.type === "priorCoursework" && l.state === "missing");
   // Offer a review when the student is close (appealable, not just a missing partner class) or when a person decides
   // (a recommendation they may not get), never for a class they took, and only when no review is open already.
   const openAppeal = appeal && ["DRAFT", "SUBMITTED", "UNDER_REVIEW"].includes(appeal.status);
@@ -112,6 +125,9 @@ export default async function CoursePage({ params }: { params: Promise<{ slug: s
           </p>
           {answer.detail && <p className="mt-1.5 pl-[22px] text-[15px] text-muted">{answer.detail}</p>}
           {answer.note && <p className="mt-1.5 pl-[22px] text-[15px] text-muted">The school also decides: {answer.note}</p>}
+          {answer.missing && <p className="mt-1.5 pl-[22px] text-[15px] text-muted">{answer.missing}</p>}
+          {askPrior && <div className="mt-3 pl-[22px]"><PriorMathField initial={profile ?? undefined} /></div>}
+          {focusFit && ways.length > 0 && <div className="mt-4 pl-[22px]"><WaysIn ways={ways} names={names} gradeLevel={focusFit.grade} onBoard={boardSlugs} /></div>}
         </div>
       )}
 
@@ -125,7 +141,7 @@ export default async function CoursePage({ params }: { params: Promise<{ slug: s
       {(canAdd || onBoard || canAsk || canEdit) && (
         <div className="mb-8 flex flex-wrap items-center gap-3">
           {canAdd && plan && (
-            <AddToBoardButton planId={plan.id} courseId={course.id} grades={grades} suggested={Math.max(9, Math.min(12, (profile?.currentGrade ?? 8) + 1))} />
+            <AddToBoardButton planId={plan.id} courseId={course.id} grades={grades} suggested={suggestGrade(grades, profile?.currentGrade ? profile.currentGrade + 1 : (nowGrade ?? 9))} />
           )}
           {onBoard && (
             <p className="text-[15px]">
@@ -149,10 +165,10 @@ export default async function CoursePage({ params }: { params: Promise<{ slug: s
           )}
 
           {fits.length > 1 && (
-            <details className="group">
+            <details className="group/grades">
               <summary className="cursor-pointer list-none text-sm font-medium text-accent-ink hover:underline [&::-webkit-details-marker]:hidden">
-                <span className="group-open:hidden">Check each grade</span>
-                <span className="hidden group-open:inline">Hide the grade by grade check</span>
+                <span className="group-open/grades:hidden">Check each grade</span>
+                <span className="hidden group-open/grades:inline">Hide the grade by grade check</span>
               </summary>
               <div className="mt-3"><CourseFitList fits={fits} /></div>
             </details>
@@ -196,11 +212,11 @@ export default async function CoursePage({ params }: { params: Promise<{ slug: s
           {course.requirements.length > 0 && (
             <section>
               <h2 className="eyebrow mb-3">Counts toward graduation</h2>
-              <ul className="flex flex-wrap gap-2">
+              <ul className="space-y-1">
                 {course.requirements.map((r) => {
                   const key = ROWS.find((x) => x.kinds.includes(r.kind as RequirementKind))?.key ?? "elective";
                   return (
-                    <li key={r.id} className={cn("rounded-full bg-[var(--tile-fill)] px-3 py-1.5 text-sm", `subject-${key}`)}>
+                    <li key={r.id} className={cn("text-sm", `subject-${key}`)}>
                       <span className="ink font-semibold">{KIND_LABEL[r.kind]}</span> <span className="num">{fmtCredits(r.credits)}</span> cr
                       {r.provisional && <span className="text-muted">, not confirmed yet</span>}
                     </li>

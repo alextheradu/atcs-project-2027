@@ -98,6 +98,32 @@ describe("chooseGrade", () => {
   });
 });
 
+describe("current student background", () => {
+  beforeEach(() => {
+    fakeDb.studentProfile.findUnique.mockResolvedValue({ cohort: "CURRENT" });
+  });
+  it("stores the 8th grade math grade on the student's own profile", async () => {
+    expect(await actions.saveCurrentBackground({ eighthMath: "ALGEBRA_I", eighthMathGrade: "B_PLUS" })).toEqual({ ok: true, data: { start: "blank" } });
+    expect(fakeDb.studentProfile.update).toHaveBeenCalledWith(expect.objectContaining({
+      where: { userId: "u1" },
+      data: expect.objectContaining({ eighthMath: "ALGEBRA_I", eighthMathGrade: "B_PLUS" }),
+    }));
+  });
+  it("keeps the math grade optional: blank or missing stores nothing", async () => {
+    for (const input of [{ eighthMath: "PRE_ALGEBRA" }, { eighthMath: "PRE_ALGEBRA", eighthMathGrade: "" }, { eighthMath: "PRE_ALGEBRA", eighthMathGrade: null }]) {
+      fakeDb.studentProfile.update.mockClear();
+      expect((await actions.saveCurrentBackground(input)).ok).toBe(true);
+      expect(fakeDb.studentProfile.update.mock.calls[0][0].data.eighthMathGrade).toBeNull();
+    }
+  });
+  it("rejects a math grade outside the grade list and writes nothing", async () => {
+    for (const bad of ["F", "A++", "a", 90, "E"]) {
+      expect((await actions.saveCurrentBackground({ eighthMath: "ALGEBRA_I", eighthMathGrade: bad })).ok).toBe(false);
+    }
+    expect(fakeDb.studentProfile.update).not.toHaveBeenCalled();
+  });
+});
+
 describe("8th grade background", () => {
   beforeEach(() => {
     state.user = make("INCOMING");
