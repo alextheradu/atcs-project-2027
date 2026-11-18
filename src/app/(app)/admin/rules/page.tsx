@@ -38,7 +38,7 @@ export default async function RulesAdmin({ searchParams }: { searchParams: Promi
     <div>
       <PageHeader
         title="Rules"
-        description={
+        hint={
           user.role === "SUPERVISOR"
             ? "Prerequisite rules for your departments. Every change is audited."
             : "Prerequisite rules for every course. Every change is audited."

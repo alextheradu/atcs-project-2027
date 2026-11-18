@@ -62,7 +62,7 @@ export default async function BoardPage({ searchParams }: { searchParams: Promis
         <BoardTabs />
         <EmptyState
           title="Your board is empty"
-          description="It has a row for each subject and a column for each year of high school. Empty spots show what you need to graduate."
+          description="Start one to see what you need to graduate."
           action={<StartBoard />}
         />
       </div>

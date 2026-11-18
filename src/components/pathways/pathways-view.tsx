@@ -1,3 +1,4 @@
+import { Hint } from "@/components/ui/hint";
 import Link from "next/link";
 import { PathMap } from "@/components/pathways/path-map";
 import { gradeColumn } from "@/lib/pathways";
@@ -102,10 +103,12 @@ export async function PathwaysView({ userId, student, query }: { userId: string;
 
       <div className="grid gap-12 lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)] lg:gap-16">
         <section aria-labelledby="key-title">
-          <h2 id="key-title" className="eyebrow">How levels work</h2>
-          <p className="mt-1 max-w-[52ch] text-[14px] leading-relaxed text-muted">
-            Each subject comes in levels. Higher rows on the map are harder levels. Each year you take the next class, and you can change level between years.
-          </p>
+          <div className="flex items-center gap-1.5">
+            <h2 id="key-title" className="eyebrow">How levels work</h2>
+            <Hint label="About levels">
+              Each subject comes in levels. Higher rows on the map are harder levels. Each year you take the next class, and you can change level between years.
+            </Hint>
+          </div>
           <ul className="mt-5 space-y-4">
             {KEY.map((k) => (
               <li key={k.kind} className="grid grid-cols-[48px_minmax(0,1fr)] gap-3">
@@ -120,7 +123,10 @@ export async function PathwaysView({ userId, student, query }: { userId: string;
         </section>
 
         <section aria-labelledby="rules-title">
-          <h2 id="rules-title" className="eyebrow">Moving levels in {SUBJECT_LABEL[picked.subject].toLowerCase()}</h2>
+          <div className="flex items-center gap-1.5">
+            <h2 id="rules-title" className="eyebrow">Moving levels in {SUBJECT_LABEL[picked.subject].toLowerCase()}</h2>
+            <Hint label="About these rules">From the {map.source}. Click a class for its exact prerequisites. The school decides placement.</Hint>
+          </div>
           <ul className="mt-3 max-w-[68ch] space-y-2.5">
             {map.rules.map((r) => (
               <li key={r.text} className="text-[15px] leading-relaxed">
@@ -128,7 +134,6 @@ export async function PathwaysView({ userId, student, query }: { userId: string;
               </li>
             ))}
           </ul>
-          <p className="mt-5 text-[13px] text-muted">From the {map.source}. Click a class for its exact prerequisites. The school decides placement.</p>
         </section>
       </div>
     </div>

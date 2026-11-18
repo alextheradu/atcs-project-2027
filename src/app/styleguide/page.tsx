@@ -98,6 +98,10 @@ export default function Styleguide() {
           </div>
         </Section>
 
+        <Section title="Hints" description="Short line on the page, the rest behind the i." hint="Opens on hover or focus. A tap or click keeps it open, Escape or a tap elsewhere closes it. Use it for why and how, never for a warning or a status the student must see.">
+          <p className="text-[14px] text-muted">Pass <span className="text-fg">hint</span> to PageHeader, Section or Row, or use Hint beside any label.</p>
+        </Section>
+
         <Section title="Status" description="Always a dot and a word.">
           <div className="flex flex-wrap gap-4">
             <Badge tone="eligible">Can take</Badge>

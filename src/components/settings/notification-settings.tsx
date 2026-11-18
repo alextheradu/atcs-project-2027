@@ -109,15 +109,21 @@ export function NotificationSettings({ kinds, initial, devices }: Props) {
   const pushText =
     pushState === "unsupported"
       ? ios && !standalone
-        ? "On iPhone and iPad, push works only after you tap Share, then Add to Home Screen, and open the app from there. It needs iOS 16.4 or later."
+        ? "Needs the Home Screen app."
         : "This browser does not support push."
       : pushState === "denied"
-        ? "Notifications are blocked for this site. Allow them in your browser settings, then reload."
-        : `${devices > 0 ? `${devices} ${devices === 1 ? "device" : "devices"} subscribed.` : "No device subscribed yet."}${ios && !standalone ? " On iPhone, push only works from the Home Screen app (iOS 16.4 or later)." : ""}`;
+        ? "Blocked for this site."
+        : devices > 0 ? `${devices} ${devices === 1 ? "device" : "devices"} subscribed.` : "No device subscribed yet.";
+  const pushHint =
+    pushState === "denied"
+      ? "Allow notifications for this site in your browser settings, then reload."
+      : ios && !standalone
+        ? "On iPhone and iPad, push works only after you tap Share, then Add to Home Screen, and open the app from there. It needs iOS 16.4 or later."
+        : undefined;
 
   return (
     <>
-      <Section split title="Notifications" description="Choose how you hear about reviews, plans and dates. In app messages are always on.">
+      <Section split title="Notifications" description="How you hear about reviews, plans and dates." hint="In app messages are always on. Email and push are your choice for most messages.">
         <table className="soft w-full text-left text-[14px]">
           <thead>
             <tr className="text-[13px] text-muted">
@@ -145,15 +151,16 @@ export function NotificationSettings({ kinds, initial, devices }: Props) {
         {note("save")}
       </Section>
 
-      <Section split title="This device" description="Push and the installed app work per browser, so set them up on each phone or laptop you use.">
+      <Section split title="This device" hint="Push and the installed app work per browser, so set them up on each phone or laptop you use.">
         <Rows>
-          <Row title="Push notifications" description={pushText}>
+          <Row title="Push notifications" description={pushText} hint={pushHint}>
             {pushState === "off" && <Button size="sm" disabled={pending} onClick={enablePush}>Turn on</Button>}
             {pushState === "on" && <Button size="sm" variant="danger" disabled={pending} onClick={disablePush}>Turn off</Button>}
           </Row>
           <Row
             title="Install the app"
-            description={standalone ? "You are using the installed app." : install ? "Opens like an app, with its own icon." : ios ? "Tap Share, then Add to Home Screen." : "Use your browser menu and choose Install app, or Add to Home Screen."}
+            description={standalone ? "You are using the installed app." : "Opens like an app, with its own icon."}
+            hint={standalone || install ? undefined : ios ? "Tap Share, then Add to Home Screen." : "Use your browser menu and choose Install app, or Add to Home Screen."}
           >
             {!standalone && install && <Button size="sm" disabled={pending} onClick={() => install.prompt().then(() => setInstall(null))}>Install</Button>}
           </Row>

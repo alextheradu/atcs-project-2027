@@ -1,5 +1,6 @@
 "use client";
 
+import { Hint } from "@/components/ui/hint";
 import { useId, useMemo, useState, useTransition } from "react";
 import { DraftNotice, SAVE_INTERRUPTED, useDraftState } from "@/components/draft-state";
 import { Button } from "@/components/ui/button";
@@ -95,14 +96,16 @@ function LeafFields({ rule, options, onChange }: { rule: LeafRule; options: Cour
       return (
         <div className="space-y-2">
           <CoursePicker value={rule.courses} options={options} onChange={(courses) => onChange({ ...rule, courses })} />
-          <label className="flex flex-wrap items-center gap-2 text-[13px] text-muted">
-            When to take it
-            <select className="input !w-auto" value={rule.timing ?? "sameOrEarlier"} onChange={(e) => onChange({ ...rule, timing: e.target.value as typeof rule.timing })}>
-              <option value="sameYear">Same school year</option>
-              <option value="sameOrEarlier">Same year or earlier</option>
-            </select>
-          </label>
-          <p className="text-xs text-muted">For paired courses, add a same-year co-requisite to each course. Missing co-requisites warn students without blocking their plan.</p>
+          <div className="flex flex-wrap items-center gap-2">
+            <label className="flex flex-wrap items-center gap-2 text-[13px] text-muted">
+              When to take it
+              <select className="input !w-auto" value={rule.timing ?? "sameOrEarlier"} onChange={(e) => onChange({ ...rule, timing: e.target.value as typeof rule.timing })}>
+                <option value="sameYear">Same school year</option>
+                <option value="sameOrEarlier">Same year or earlier</option>
+              </select>
+            </label>
+            <Hint label="About co-requisites">For paired courses, add a same-year co-requisite to each course. Missing co-requisites warn students without blocking their plan.</Hint>
+          </div>
         </div>
       );
     case "minGrade":

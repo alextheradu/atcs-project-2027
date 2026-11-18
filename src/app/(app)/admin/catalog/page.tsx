@@ -50,7 +50,7 @@ export default async function CatalogAdmin({ searchParams }: { searchParams: Pro
     <div>
       <PageHeader
         title="Catalog"
-        description="Add, edit and archive courses. Move a course that fits no subject to Other Programs. Every change is audited."
+        hint="Add, edit and archive courses. Move a course that fits no subject to Other Programs. Every change is audited."
         actions={
           <>
             <Link className="btn btn-sm" href="/admin/catalog/requests">Import requests{waiting > 0 ? ` (${waiting})` : ""}</Link>

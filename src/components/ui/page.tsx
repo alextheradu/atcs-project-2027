@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { cn } from "@/lib/utils";
+import { Hint } from "./hint";
 
 export function PageHeader({
   title,
@@ -7,9 +8,13 @@ export function PageHeader({
   actions,
   back,
   badge,
+  hint,
 }: {
   title: string;
+  /** One short line under the title. Longer explanations go in `hint`. */
   description?: React.ReactNode;
+  /** The longer explanation, behind an "i" beside the title. */
+  hint?: React.ReactNode;
   actions?: React.ReactNode;
   back?: { href: string; label: string };
   badge?: React.ReactNode;
@@ -25,6 +30,7 @@ export function PageHeader({
         <div className="min-w-0">
           <div className="flex flex-wrap items-center gap-3">
             <h1 className="text-[28px] font-bold leading-[1.15] tracking-[-0.025em]">{title}</h1>
+            {hint && <Hint label={`About ${title}`} className="-ml-1.5">{hint}</Hint>}
             {badge}
           </div>
           {description && <p className="mt-1.5 max-w-xl text-[15px] text-muted">{description}</p>}
@@ -47,9 +53,12 @@ export function Section({
   className,
   split,
   id,
+  hint,
 }: {
   title?: string;
   description?: React.ReactNode;
+  /** The longer explanation, behind an "i" beside the title. */
+  hint?: React.ReactNode;
   children: React.ReactNode;
   className?: string;
   split?: boolean;
@@ -59,7 +68,7 @@ export function Section({
     return (
       <section id={id} className={cn("grid gap-x-12 gap-y-3 lg:grid-cols-[minmax(0,280px)_minmax(0,1fr)]", className)}>
         <div className="lg:pt-0.5">
-          {title && <h2 className="eyebrow">{title}</h2>}
+          {title && <SectionTitle title={title} hint={hint} />}
           {description && <p className="mt-1 max-w-[36ch] text-[14px] leading-relaxed text-muted">{description}</p>}
         </div>
         <div className="min-w-0">{children}</div>
@@ -70,12 +79,22 @@ export function Section({
     <section id={id} className={cn("pt-2", className)}>
       {title && (
         <div className="mb-3">
-          <h2 className="eyebrow">{title}</h2>
+          <SectionTitle title={title} hint={hint} />
           {description && <p className="mt-1 max-w-xl text-[14px] text-muted">{description}</p>}
         </div>
       )}
       {children}
     </section>
+  );
+}
+
+function SectionTitle({ title, hint }: { title: string; hint?: React.ReactNode }) {
+  if (!hint) return <h2 className="eyebrow">{title}</h2>;
+  return (
+    <div className="flex items-center gap-1.5">
+      <h2 className="eyebrow">{title}</h2>
+      <Hint label={`About ${title}`}>{hint}</Hint>
+    </div>
   );
 }
 
@@ -85,11 +104,14 @@ export function Rows({ children, className }: { children: React.ReactNode; class
 }
 
 /** One setting or action: what it is on the left, its control on the right. Stacks on phones. */
-export function Row({ title, description, children }: { title: string; description?: React.ReactNode; children?: React.ReactNode }) {
+export function Row({ title, description, hint, children }: { title: string; description?: React.ReactNode; hint?: React.ReactNode; children?: React.ReactNode }) {
   return (
     <div className="flex flex-col gap-3 px-4 py-3 sm:flex-row sm:items-center sm:justify-between sm:gap-8">
       <div className="min-w-0">
-        <p className="text-[14px] font-medium">{title}</p>
+        <div className="flex items-center gap-1.5">
+          <p className="text-[14px] font-medium">{title}</p>
+          {hint && <Hint label={`About ${title}`}>{hint}</Hint>}
+        </div>
         {description && <div className="mt-0.5 max-w-[60ch] text-[13px] leading-relaxed text-muted">{description}</div>}
       </div>
       {children && <div className="flex shrink-0 flex-wrap items-center gap-2">{children}</div>}

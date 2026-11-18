@@ -12,38 +12,45 @@ export function SpecialCases({ studentName }: { studentName: string | null }) {
       <Section
         split
         title="Special cases"
-        description="Planning options and details that the 2026–2027 Program of Studies only partly covers. Confirm current availability and graduation credit with your counselor."
+        description="Options the Program of Studies only partly covers."
+        hint="Planning options and details that the 2026–2027 Program of Studies only partly covers. Confirm current availability and graduation credit with your counselor."
       >
         <Rows>
           <Row
             title="Financial Literacy"
+            hint="Ask your counselor about registration for the summer format."
             description={
               <ul className="space-y-1">
                 <li><Link className={link} href="/courses/financial-literacy">Half-year elective</Link> · No final exam</li>
                 <li><Link className={link} href="/courses/financial-literacy-hybrid">Hybrid</Link> · Final exam required</li>
-                <li>Summer · No final exam. Ask your counselor about registration.</li>
+                <li>Summer · No final exam</li>
               </ul>
             }
           />
           <Row
             title="Zero Period Gym"
-            description="If you have an internship, you may be able to take PE before the school day to meet your physical education requirement. Ask your counselor whether Zero Period Gym is offered and fits your schedule."
+            description="PE before school, for students with an internship."
+            hint="If you have an internship, you may be able to take PE before the school day to meet your physical education requirement. Ask your counselor whether Zero Period Gym is offered and fits your schedule."
           />
           <Row
             title="Advanced courses over the summer"
-            description="Students may be able to get ahead in a core subject through a summer course at an outside school. These courses can be demanding and typically cost more than $500. Pascack Hills does not offer this option directly. Ask your teacher or math supervisor Dr. Jessica Nuzzi for a recommendation and confirm that the school will accept the course before enrolling."
+            description="Get ahead in a core subject at an outside school."
+            hint="These courses can be demanding and typically cost more than $500. Pascack Hills does not offer this option directly. Ask your teacher or math supervisor Dr. Jessica Nuzzi for a recommendation and confirm that the school will accept the course before enrolling."
           />
           <Row
             title="Pascack Period"
-            description="A period for independent study. You may need to schedule it alongside certain science courses."
+            description="A period for independent study."
+            hint="You may need to schedule it alongside certain science courses."
           />
           <Row
             title="Satellite School"
-            description={<>A shared-time vocational program in Paramus. Ask your counselor how it fits your schedule and how credits count. <Link className={link} href="/courses/satellite-school">View Satellite School</Link></>}
+            description={<>Shared-time vocational program in Paramus. <Link className={link} href="/courses/satellite-school" aria-label="View Satellite School">View</Link></>}
+            hint="Ask your counselor how it fits your schedule and how credits count."
           />
           <Row
             title="Virtual High School"
-            description={<>An online option for courses unavailable at your school. Ask your counselor about enrollment and credit. <Link className={link} href="/courses/virtual-high-school-vhs">View Virtual High School</Link></>}
+            description={<>Online courses your school does not offer. <Link className={link} href="/courses/virtual-high-school-vhs" aria-label="View Virtual High School">View</Link></>}
+            hint="Ask your counselor about enrollment and credit."
           />
         </Rows>
       </Section>

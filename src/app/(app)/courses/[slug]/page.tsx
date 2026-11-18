@@ -1,6 +1,7 @@
 export const instant = false;
 
 import Link from "next/link";
+import { Hint } from "@/components/ui/hint";
 import { notFound } from "next/navigation";
 import { StartAppealButton } from "@/components/appeals/start-button";
 import { AddToBoardButton } from "@/components/catalog/add-to-board-button";
@@ -125,7 +126,8 @@ export default async function CoursePage({ params }: { params: Promise<{ slug: s
             <span aria-hidden className={cn("mt-[7px] size-2.5 shrink-0 rounded-full", DOT[answer.tone])} />
             {answer.text}
           </p>
-          {answer.detail && <p className="mt-1.5 pl-[22px] text-[15px] text-muted">{answer.detail}</p>}
+          {/* With routes listed, they already say what is missing; the detail would repeat the first one. */}
+          {answer.detail && !(focusFit && ways.length > 0) && <p className="mt-1.5 pl-[22px] text-[15px] text-muted">{answer.detail}</p>}
           {answer.note && <p className="mt-1.5 pl-[22px] text-[15px] text-muted">The school also decides: {answer.note}</p>}
           {answer.missing && <p className="mt-1.5 pl-[22px] text-[15px] text-muted">{answer.missing}</p>}
           {askPrior && <div className="mt-3 pl-[22px]"><PriorMathField initial={profile ?? undefined} /></div>}
@@ -160,8 +162,10 @@ export default async function CoursePage({ params }: { params: Promise<{ slug: s
 
           {(course.prereqText || rules) && (
             <section>
-              <h2 className="eyebrow mb-1">What it takes</h2>
-              <p className="mb-3 text-sm text-muted">From the Program of Studies. The school decides placement.</p>
+              <div className="mb-2 flex items-center gap-1.5">
+                <h2 className="eyebrow">What it takes</h2>
+                <Hint label="About these requirements">From the Program of Studies. The school decides placement.</Hint>
+              </div>
               <p className="max-w-[65ch] text-[15px] leading-relaxed">{course.prereqText || (rules ? describeRule(rules, names) : null)}</p>
             </section>
           )}

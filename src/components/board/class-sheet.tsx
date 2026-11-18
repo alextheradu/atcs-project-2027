@@ -9,6 +9,7 @@ import { Breakdown } from "@/components/eligibility/breakdown";
 import { PriorMathField } from "@/components/eligibility/prior-math-field";
 import { WaysIn } from "@/components/eligibility/ways-in";
 import { Button } from "@/components/ui/button";
+import { Hint } from "@/components/ui/hint";
 import { ROWS, rowFor } from "@/lib/board";
 import { TEACHER_ASSISTANT_LENGTHS, TEACHER_ASSISTANT_SLUG } from "@/lib/catalog/teacher-assistant";
 import { formatCredits } from "@/lib/credits";
@@ -68,11 +69,14 @@ function CreditsField({ entry, disabled, onSave }: { entry: EntryView; disabled:
     );
   }
   return (
-    <label className="block space-y-1.5">
-      <span className="text-sm text-muted">Credits counted</span>
-      <span className="block text-[13px] text-muted">Only change this if your transcript shows a different number.</span>
+    <div className="space-y-1.5">
+      <span className="flex items-center gap-1.5">
+        <label htmlFor={`credits-${entry.id}`} className="text-sm text-muted">Credits counted</label>
+        <Hint label="About credits counted">Only change this if your transcript shows a different number.</Hint>
+      </span>
       <DraftNotice drafts={[draft]} />
       <input
+        id={`credits-${entry.id}`}
         className="input num bg-fill-2"
         type="number"
         step="0.5"
@@ -86,7 +90,7 @@ function CreditsField({ entry, disabled, onSave }: { entry: EntryView; disabled:
           if (Number.isFinite(v) && v !== entry.credits) onSave(v);
         }}
       />
-    </label>
+    </div>
   );
 }
 
@@ -175,9 +179,9 @@ export function ClassSheet({ entry, result, warnings = [], canEdit, busy, canApp
                   </div>
                 )}
                 {canAsk && (
-                  <div className="space-y-1.5 pt-1">
-                    <p className="text-[13px] text-muted">You are close. A placement review asks the department to look at your record.</p>
+                  <div className="flex items-center gap-2 pt-1">
                     <StartAppealButton slug={e.slug} className="btn btn-sm !bg-fill-3" />
+                    <Hint label="About placement reviews">You are close. A placement review asks the department to look at your record.</Hint>
                   </div>
                 )}
                 {result?.tree && <FullRule tree={result.tree} />}
@@ -195,9 +199,9 @@ export function ClassSheet({ entry, result, warnings = [], canEdit, busy, canApp
                 <p className="text-sm font-medium">Also decided by the school</p>
                 {result.notes.map((n) => <p key={n} className="text-sm text-muted">{n}</p>)}
                 {canAskWithNote && (
-                  <div className="space-y-1.5 pt-2">
-                    <p className="text-[13px] text-muted">If you do not get it, you can ask the department to look at your record.</p>
+                  <div className="flex items-center gap-2 pt-2">
                     <StartAppealButton slug={e.slug} className="btn btn-sm" />
+                    <Hint label="About placement reviews">If you do not get it, you can ask the department to look at your record.</Hint>
                   </div>
                 )}
               </div>

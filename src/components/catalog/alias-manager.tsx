@@ -1,5 +1,6 @@
 "use client";
 
+import { Hint } from "@/components/ui/hint";
 import { useRouter } from "next/navigation";
 import { useState, useTransition } from "react";
 import { DraftNotice, SAVE_INTERRUPTED, useDraftState } from "@/components/draft-state";
@@ -15,9 +16,9 @@ export function AliasManager({ courseId, aliases }: { courseId: string; aliases:
   return (
     <section className="space-y-4 pt-6">
       <DraftNotice drafts={[draft]} />
-      <div>
+      <div className="flex items-center gap-1.5">
         <h2 className="eyebrow">Transcript aliases</h2>
-        <p className="mt-1 text-[13px] text-muted">Other titles that should match this course when a transcript is imported. Stored in a normalized form.</p>
+        <Hint label="About transcript aliases">Other titles that should match this course when a transcript is imported. Stored in a normalized form.</Hint>
       </div>
       <ul className="list">
         {aliases.map((a) => (

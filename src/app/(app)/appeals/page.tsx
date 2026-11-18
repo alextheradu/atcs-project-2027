@@ -19,7 +19,7 @@ export default async function Appeals() {
   });
   return (
     <div>
-      <PageHeader title="Placement reviews" description="Ask a department supervisor to place you in a course you do not automatically qualify for. The supervisor decides." />
+      <PageHeader title="Placement reviews" hint="Ask a department supervisor to place you in a course you do not automatically qualify for. The supervisor decides." />
       {appeals.length === 0 ? (
         <EmptyState title="No requests yet" description="Open a class you want and choose Ask for a placement review." action={<Link className="btn btn-sm" href="/courses">Browse classes</Link>} />
       ) : (

@@ -40,7 +40,7 @@ export default async function Settings({ searchParams }: { searchParams: Promise
       <PageHeader title="Settings" />
 
       <div className="space-y-14">
-        <Section split title="Account" description="Your sign-in email and what you can do here.">
+        <Section split title="Account">
           <Dl items={[{ label: "Email", value: <span className="num">{user.email}</span> }, { label: "Role", value: <span className="num">{user.role.toLowerCase()}</span> }]} />
         </Section>
 
@@ -49,7 +49,8 @@ export default async function Settings({ searchParams }: { searchParams: Promise
         <Section
           split
           title="Linked emails"
-          description="Link a second Google account, for example a personal one from 8th grade. Signing in with either opens the same plans."
+          description="Sign in with either account."
+          hint="Link a second Google account, for example a personal one from 8th grade. Signing in with either opens the same plans."
         >
           {link && LINK_MESSAGES[link] && (
             <p role="status" className={link === "ok" ? "mb-4 text-[13px] text-green" : "mb-4 text-[13px] text-red"}>
@@ -64,7 +65,7 @@ export default async function Settings({ searchParams }: { searchParams: Promise
                 </form>
               </Row>
             ))}
-            <Row title={linked.length ? "Add another" : "No linked emails"} description="You will sign in with Google to prove you own it.">
+            <Row title={linked.length ? "Add another" : "No linked emails"} hint="You will sign in with Google to prove you own it.">
               <form action={startLinkEmail}>
                 <Button size="sm" type="submit">Link an email</Button>
               </form>
@@ -72,7 +73,7 @@ export default async function Settings({ searchParams }: { searchParams: Promise
           </Rows>
         </Section>
 
-        <Section split title="Your data" description={<>Download a copy or delete everything. The <Link href="/privacy" className="underline underline-offset-4 hover:text-fg">privacy policy</Link> says what is stored and why.</>}>
+        <Section split title="Your data" description="Download a copy or delete everything." hint={<>The <Link href="/privacy" className="underline underline-offset-4">privacy policy</Link> says what is stored and why.</>}>
           <DataControls open={open} />
         </Section>
       </div>

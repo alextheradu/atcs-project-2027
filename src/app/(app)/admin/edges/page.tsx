@@ -25,7 +25,7 @@ export default async function EdgesAdmin() {
     <div className="max-w-[760px]">
       <PageHeader
         title="Pathway steps"
-        description="The lines on the pathway graph. A next step is the normal sequence. Moving up a level can need an appeal."
+        hint="The lines on the pathway graph. A next step is the normal sequence. Moving up a level can need an appeal."
         back={{ href: "/admin/rules", label: "Rules" }}
       />
       <EdgeEditor edges={rows} options={options} />

@@ -1,5 +1,6 @@
 "use client";
 
+import { Hint } from "@/components/ui/hint";
 import { useRouter } from "next/navigation";
 import { useState, useTransition } from "react";
 import { DraftNotice, SAVE_INTERRUPTED, useDraftState } from "@/components/draft-state";
@@ -49,14 +50,15 @@ export function ReviewPanel({ planId, status, isOwner, canReview, comments, entr
   return (
     <section aria-labelledby="review-h" className="space-y-6">
       <div>
-        <h2 id="review-h" className="eyebrow">Review</h2>
-        {isOwner && (
+        <div className="flex items-center gap-1.5">
+          <h2 id="review-h" className="eyebrow">Review</h2>
+          {isOwner && status !== "SUBMITTED" && status !== "APPROVED" && (
+            <Hint label="About plan review">A counselor looks it over and can leave comments. The plan is read-only while it is in review.</Hint>
+          )}
+        </div>
+        {isOwner && (status === "SUBMITTED" || status === "APPROVED") && (
           <p className="mt-1 text-[14px] leading-relaxed text-muted">
-            {status === "SUBMITTED"
-              ? "Waiting for a counselor. You can take it back to keep editing."
-              : status === "APPROVED"
-                ? "A counselor approved this plan. Reopening clears the approval."
-                : "A counselor looks it over and can leave comments. The plan is read-only while it is in review."}
+            {status === "SUBMITTED" ? "Waiting for a counselor. You can take it back to keep editing." : "A counselor approved this plan. Reopening clears the approval."}
           </p>
         )}
         {isOwner && (

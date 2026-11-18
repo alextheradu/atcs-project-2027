@@ -57,14 +57,14 @@ export default async function AppealPage({ params }: { params: Promise<{ id: str
       />
       <div className="space-y-10">
         {unmet.length > 0 && (
-          <Section title="What you were missing" description="Saved when you started. You can still send the request.">
+          <Section title="What you were missing" hint="Saved when you started. You can still send the request.">
             <ul className="list">{unmet.map((u, i) => <li key={i} className="py-2 text-[13px]">{u.message}</li>)}</ul>
           </Section>
         )}
 
         {form ?? (
           <>
-            <Section title="Your answers" description="Self-reported. A supervisor checks these against your records.">
+            <Section title="Your answers" description="Self-reported." hint="A supervisor checks these against your records.">
               {(appeal.reportedGrade || appeal.reportedAverage !== null) && (
                 <p className="mb-3 text-[13px] text-muted">
                   {appeal.reportedGrade && <>Grade <span className="num text-fg">{gradeLabel(appeal.reportedGrade)}</span></>}

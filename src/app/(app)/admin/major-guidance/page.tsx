@@ -9,7 +9,7 @@ export default async function MajorGuidance() {
   await requirePageRole("ADMIN");
   return (
     <div className="max-w-[860px]">
-      <PageHeader title="College guidance" description="Years of each subject shown on every plan, from the Program of Studies table on college admission. A student who types an intended major in a group below sees the higher number." />
+      <PageHeader title="College guidance" hint="Years of each subject shown on every plan, from the Program of Studies table on college admission. A student who types an intended major in a group below sees the higher number." />
       <GuidanceForm initial={await loadGuidance()} />
     </div>
   );

@@ -1,7 +1,5 @@
-import { cn } from "@/lib/utils";
-
 /** A made-up board for the landing page: filled tiles are classes, outlined ones are what is still needed. */
-const ROWS: { key: string; label: string; cells: (string | null | "gap")[] }[] = [
+const ROWS = [
   { key: "english", label: "English", cells: ["English I", "English II", "English III", "gap"] },
   { key: "math", label: "Math", cells: ["Geometry", "Algebra II", "Pre-Calculus", null] },
   { key: "science", label: "Science", cells: ["Biology", "Chemistry", "gap", null] },
@@ -12,26 +10,41 @@ const ROWS: { key: string; label: string; cells: (string | null | "gap")[] }[] =
 
 export function MiniBoard() {
   return (
-    <figure aria-label="An example board, made up" className="soft p-4 sm:p-5">
-      <div aria-hidden className="grid grid-cols-[88px_repeat(4,minmax(0,1fr))] gap-1 text-[12px] sm:grid-cols-[104px_repeat(4,minmax(0,1fr))] sm:gap-1.5">
-        <span />
-        {["9th", "10th", "11th", "12th"].map((g) => <span key={g} className="px-1 pb-1 text-[12px] font-bold">{g}</span>)}
-        {ROWS.map((r) => (
-          <div key={r.key} className={cn("contents", `subject-${r.key}`)}>
-            <span className="ink flex items-center truncate text-[12px] font-bold">{r.label}</span>
-            {r.cells.map((c, i) =>
-              c === "gap" ? (
-                <span key={i} className="flex h-8 items-center truncate rounded-[8px] px-1.5 text-muted sm:px-2 shadow-[inset_0_0_0_1.5px_var(--line-strong)]">+ Pick</span>
-              ) : c ? (
-                <span key={i} className="flex h-8 items-center truncate rounded-[8px] bg-[var(--tile-fill)] px-1.5 font-medium sm:px-2">{c}</span>
-              ) : (
-                <span key={i} />
-              ),
-            )}
-          </div>
-        ))}
-      </div>
-      <figcaption className="mt-4 text-[13px] text-muted">Example board, made up. 4 empty spots left to graduate.</figcaption>
-    </figure>
+    <div className="soft min-w-0 p-3 sm:p-6">
+      <table aria-describedby="example-board-note" className="w-full table-fixed border-separate border-spacing-1 text-left text-[11px] leading-tight sm:border-spacing-1.5 sm:text-xs">
+        <caption className="eyebrow mb-3 px-1 text-left">Example Board</caption>
+        <colgroup>
+          <col className="w-[21%] sm:w-[22%]" />
+          <col span={4} />
+        </colgroup>
+        <thead>
+          <tr>
+            <td />
+            {["9th", "10th", "11th", "12th"].map((grade) => (
+              <th key={grade} scope="col" className="num px-1 pb-1 font-semibold sm:px-2">{grade}</th>
+            ))}
+          </tr>
+        </thead>
+        <tbody>
+          {ROWS.map(({ key, label, cells }) => (
+            <tr key={key} className={`subject-${key}`}>
+              <th scope="row" className="h-10 px-0.5 font-semibold wrap-break-word sm:h-12 sm:px-1">{label}</th>
+              {cells.map((cell, index) =>
+                cell === "gap" ? (
+                  <td key={index} className="tile-empty table-cell w-auto px-0.5 py-1 text-[11px] sm:px-2 sm:text-xs">Needed</td>
+                ) : cell ? (
+                  <td key={index} className="rounded-[8px] bg-(--tile-fill) px-0.5 py-1 font-medium wrap-break-word sm:px-2">{cell}</td>
+                ) : (
+                  <td key={index} />
+                ),
+              )}
+            </tr>
+          ))}
+        </tbody>
+      </table>
+      <p id="example-board-note" className="mt-3 px-1 text-sm text-muted">
+        Each outline marks a class this sample plan still needs.
+      </p>
+    </div>
   );
 }

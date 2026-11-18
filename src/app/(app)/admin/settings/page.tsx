@@ -19,12 +19,12 @@ export default async function AdminSettings() {
 
   return (
     <div>
-      <PageHeader title="Admin settings" description="Who can sign up, and which email domains map to which cohort." />
+      <PageHeader title="Admin settings" hint="Who can sign up, and which email domains map to which cohort." />
       <div className="space-y-10">
         <Section title="Signup mode">
           <SignupModeForm current={mode} />
         </Section>
-        <Section title="Allowed domains" description="Add the four sending-district domains as INCOMING_8 once you have confirmed them.">
+        <Section title="Allowed domains" hint="Add the four sending-district domains as INCOMING_8 once you have confirmed them.">
           <AddDomainForm />
           <ul className="list mt-6">
             {domains.map((d) => (
@@ -32,7 +32,7 @@ export default async function AdminSettings() {
             ))}
           </ul>
         </Section>
-        <Section title="Graduation requirements" description="Credits for each requirement and the yearly minimums. Changes apply to every plan immediately.">
+        <Section title="Graduation requirements" description="Credits per requirement and yearly minimums." hint="Changes apply to every plan immediately.">
           <GraduationForm rules={grad.rules} settings={grad.settings} />
         </Section>
       </div>

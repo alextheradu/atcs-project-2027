@@ -29,20 +29,27 @@ export function DataControls({ open }: { open: OpenDeletion | null }) {
     });
   }
 
+  // The current state stays visible; how deletion works waits behind the "i".
   const deleteText =
     open?.status === "AWAITING_CONFIRMATION"
-      ? "We sent a confirmation link to your email and to your notifications. Nothing is deleted until you open it and confirm."
+      ? "Nothing is deleted until you open it and confirm."
       : open?.status === "SCHEDULED"
         ? <>Your data will be deleted on <span className="num text-fg">{open.scheduledOn}</span>. {open.source === "guardian" ? "A parent or guardian asked for this. Only an admin can cancel it." : "You can cancel until then."}</>
+        : "Your account and everything in it.";
+  const deleteHint =
+    open?.status === "AWAITING_CONFIRMATION"
+      ? "We sent a confirmation link to your email and to your notifications."
+      : open?.status === "SCHEDULED"
+        ? undefined
         : "Deletes your account, plans, placement reviews, linked emails and push devices. We email you a link to confirm. Deletion happens 14 days after you confirm, and you can cancel until then.";
 
   return (
     <>
       <Rows>
-        <Row title="Download my data" description="A JSON file with everything this site stores about you: your profile, plans, placement reviews, messages and settings. Sign-in tokens and push keys are left out.">
+        <Row title="Download my data" description="Everything this site stores about you." hint="A JSON file with your profile, plans, placement reviews, messages and settings. Sign-in tokens and push keys are left out.">
           <a href="/api/export" download className={buttonVariants({ size: "sm" })}>Download JSON</a>
         </Row>
-        <Row title="Delete my data" description={deleteText}>
+        <Row title="Delete my data" description={deleteText} hint={deleteHint}>
           {!open && <Button variant="danger" size="sm" disabled={pending} onClick={() => run(requestDeletion, "Check your notifications and email for the confirmation link. It works for 24 hours.")}>Delete my data</Button>}
           {open?.status === "AWAITING_CONFIRMATION" && <Button size="sm" disabled={pending} onClick={() => run(cancelDeletion, "Request cancelled.")}>Cancel the request</Button>}
           {open?.status === "SCHEDULED" && open.source === "self" && <Button size="sm" disabled={pending} onClick={() => run(cancelDeletion, "Deletion cancelled. Your account stays.")}>Cancel deletion</Button>}

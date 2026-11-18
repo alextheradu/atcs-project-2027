@@ -1,5 +1,6 @@
 "use client";
 
+import { Hint } from "@/components/ui/hint";
 import { useRouter } from "next/navigation";
 import { useState, useTransition } from "react";
 import { DraftNotice, SAVE_INTERRUPTED, useDraftState } from "@/components/draft-state";
@@ -211,7 +212,7 @@ export function Wizard({ startStep, cohort: startCohort, policies, interests, ne
                 </label>
               )}
             </div>
-            <p className="text-[13px] text-muted">What you enter here is private, labeled self-reported, and deleted at the end of your first appeal cycle. See the privacy policy.</p>
+            <p className="flex items-center gap-1.5 text-[13px] text-muted">Private, and labeled self-reported.<Hint label="About this information">What you enter here is deleted at the end of your first appeal cycle. See the privacy policy.</Hint></p>
             <label className="flex items-center gap-2 text-[14px]"><input type="checkbox" checked={honest} onChange={(e) => setHonest(e.target.checked)} /> I&apos;m answering honestly</label>
             <Button variant="primary" disabled={!form.eighthMath || !honest || pending} onClick={() => run(() => saveIncomingBackground({ interests: picked, eighthMath: form.eighthMath, eighthMathGrade: form.eighthMathGrade, scienceGrade: form.scienceGrade, englishGrade: form.englishGrade, historyGrade: form.historyGrade, languageStudied: form.languageStudied, languageLevel: lang.languageLevel, honest }), 4)}>Continue</Button>
           </>
@@ -232,8 +233,10 @@ export function Wizard({ startStep, cohort: startCohort, policies, interests, ne
         {step === 5 && (
           <>
             <h1 className="text-[28px] font-bold leading-tight tracking-[-0.025em]">Notifications and install</h1>
-            <p className="text-[14px] text-muted">You can turn on email and push reminders for deadlines and placement review decisions in Settings, under your name.</p>
-            <p className="text-[14px] text-muted">You can also install this as an app. On iPhone, push only works after you tap Share, then Add to Home Screen, on iOS 16.4 or later.</p>
+            <p className="flex items-center gap-1.5 text-[14px] text-muted">
+              Turn on reminders any time in Settings, under your name.
+              <Hint label="About reminders and the app">Email and push remind you about deadlines and placement review decisions. You can also install this as an app. On iPhone, push only works after you tap Share, then Add to Home Screen, on iOS 16.4 or later.</Hint>
+            </p>
             <Button variant="primary" disabled={pending} onClick={() => run(() => setStep(6), 6)}>Continue</Button>
           </>
         )}

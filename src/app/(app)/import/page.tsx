@@ -16,7 +16,7 @@ export default async function Import() {
   ]);
   return (
     <div>
-      <PageHeader title="Import courses" description="Bring in the courses you already took, then check each one before it is added." />
+      <PageHeader title="Import courses" description="Add classes you already took." hint="Bring in the courses you already took from your transcript, then check each one before it is added." />
       <ImportFlow plans={plans.filter((p) => isEditable(p.status)).map(({ id, name, isPrimary }) => ({ id, name, isPrimary }))} courses={courses} aliases={aliases} />
     </div>
   );

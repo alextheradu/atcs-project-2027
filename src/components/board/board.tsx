@@ -6,6 +6,7 @@ import { DraftNotice } from "@/components/draft-state";
 import { AddCoursePanel, type PanelCourse } from "@/components/planner/add-course-panel";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { Hint } from "@/components/ui/hint";
 import { GRADES, KIND_NOUN, ROWS, buildBoard, statusSentence, type BoardRow, type Grade, type Spot } from "@/lib/board";
 import { formatCredits, fromTenths, toTenths } from "@/lib/credits";
 import { TONE_MEANING, type EvalResult, type StudentPrior } from "@/lib/eligibility";
@@ -273,7 +274,7 @@ export function Board(props: BoardProps) {
       {ed.change && !ed.pending && (
         <div className="soft space-y-3 bg-fill-2 p-4">
           <DraftNotice drafts={[ed.changeDraft]} />
-          <p className="text-sm text-muted">A class change has not been confirmed. Retry checks whether it was already saved.</p>
+          <p className="flex items-center gap-1.5 text-sm text-muted">A class change has not been confirmed.<Hint label="About retrying">Retry checks whether it was already saved.</Hint></p>
           <div className="flex gap-2">
             <Button size="sm" onClick={ed.retry} disabled={!ed.canEdit}>Retry change</Button>
             <Button size="sm" variant="ghost" onClick={ed.discardChange}>Discard pending change</Button>
@@ -321,7 +322,7 @@ export function Board(props: BoardProps) {
           ) : props.plan.status === "SUBMITTED" ? (
             <li className="text-muted">This plan is in review, so you can look but not change it.</li>
           ) : props.plan.status === "APPROVED" ? (
-            <li className="text-muted">A counselor approved this plan, so it is locked. Ask your counselor if something needs to change.</li>
+            <li className="flex items-center gap-1.5 text-muted">Approved by a counselor, so it is locked.<Hint label="About a locked plan">Ask your counselor if something needs to change.</Hint></li>
           ) : null}
           {notes}
         </ul>
@@ -332,28 +333,35 @@ export function Board(props: BoardProps) {
       <Grid rows={rows} ed={ed} results={ed.results} warns={warns} settings={settings} now={now} onOpen={setOpenId} onPick={pick} />
       <PhoneBoard rows={rows} ed={ed} results={ed.results} warns={warns} settings={settings} start={start} now={now} onOpen={setOpenId} onPick={pick} />
 
-      <div className="mt-6 space-y-2 text-[13px] leading-relaxed text-muted">
-        {/* Only the colors that are on the board right now, in the same words the tiles use. */}
-        <ul aria-label="What the dots mean" className="flex flex-wrap gap-x-5 gap-y-1">
-          {(["warning", "appeal", "locked"] as const).filter((t) => tones.has(t)).map((t) => (
-            <li key={t} className="flex items-center gap-1.5"><span aria-hidden className={cn("size-2 rounded-full", FLAG_DOT[t])} />{TONE_MEANING[t]}</li>
-          ))}
-          <li>Gray text is information: a grade to add, or something the school decides, like a teacher recommendation.</li>
-        </ul>
-        <p className="max-w-[90ch]">
-          {unconfirmed.length > 0 && <>Not confirmed by a counselor yet: {unconfirmed.map((r) => r.label).join(", ")}. These classes count for now, but a counselor still has to check them. </>}
-          None of this blocks your plan. The school makes the final decision.
-        </p>
-      </div>
+      {/* Only the colors that are on the board right now, in the same words the tiles use. The rest waits behind the "i". */}
+      <ul aria-label="What the dots mean" className="mt-6 flex flex-wrap items-center gap-x-5 gap-y-1.5 text-[13px] text-muted">
+        {(["warning", "appeal", "locked"] as const).filter((t) => tones.has(t)).map((t) => (
+          <li key={t} className="flex items-center gap-1.5"><span aria-hidden className={cn("size-2 rounded-full", FLAG_DOT[t])} />{TONE_MEANING[t]}</li>
+        ))}
+        {unconfirmed.length > 0 && (
+          <li className="flex items-center gap-1.5">
+            Not confirmed yet: {unconfirmed.map((r) => r.label).join(", ")}
+            <Hint label="About unconfirmed classes">These classes count for now, but a counselor still has to check them.</Hint>
+          </li>
+        )}
+        <li className="flex items-center gap-1.5">
+          How to read the board
+          <Hint label="How to read the board">
+            Gray text on a class is information: a grade to add, or something the school decides, like a teacher recommendation. None of this blocks your plan. The school makes the final decision.
+          </Hint>
+        </li>
+      </ul>
 
       {(ed.advice || footer) && (
         <div className="mt-16 grid gap-14 lg:grid-cols-2 lg:gap-16">
           {ed.advice && (
             <section aria-labelledby="college-h">
-              <h2 id="college-h" className="eyebrow">For college</h2>
-              <p className="mb-4 mt-1 text-sm leading-relaxed text-muted">
-                Years of each subject colleges usually look for{ed.advice.matched.length > 0 ? `, raised for ${ed.advice.matched.join(" and ").toLowerCase()} majors` : ""}. A suggestion, not a graduation rule.
-              </p>
+              <div className="mb-3 flex items-center gap-1.5">
+                <h2 id="college-h" className="eyebrow">For college</h2>
+                <Hint label="About college suggestions">
+                  Years of each subject colleges usually look for{ed.advice.matched.length > 0 ? `, raised for ${ed.advice.matched.join(" and ").toLowerCase()} majors` : ""}. A suggestion, not a graduation rule.
+                </Hint>
+              </div>
               <ul className="soft px-4 py-2">
                 {ed.advice.lines.map((l) => (
                   <li key={l.subject} className="flex items-baseline justify-between py-1.5 text-sm">

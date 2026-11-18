@@ -1,5 +1,6 @@
 "use client";
 
+import { Hint } from "@/components/ui/hint";
 import Link from "next/link";
 import { useMemo, useRef, useState, useTransition } from "react";
 import { DraftNotice, SAVE_INTERRUPTED, useDraftState } from "@/components/draft-state";
@@ -162,8 +163,9 @@ export function ImportFlow({ plans, courses, aliases }: Props) {
           {!parsed && (
             <section className="rounded-[14px] px-6 py-12 text-center shadow-[inset_0_0_0_1.5px_var(--line-strong)]">
               <p className="text-[15px] font-semibold">Your transcript PDF</p>
-              <p className="mx-auto mt-1 max-w-[52ch] text-[14px] leading-relaxed text-muted">
-                It is read inside this browser tab. The file is not uploaded, and your name, ID and birth date are never read or saved. You review every course before anything is added.
+              <p className="mx-auto mt-1 flex max-w-[52ch] items-center justify-center gap-1.5 text-[14px] leading-relaxed text-muted">
+                Read in this browser tab. Never uploaded.
+                <Hint label="About reading your transcript">Your name, ID and birth date are never read or saved. You review every course before anything is added.</Hint>
               </p>
               <input ref={input} type="file" accept="application/pdf" className="sr-only" id="pdf" onChange={(e) => onFile(e.target.files?.[0])} />
               <label htmlFor="pdf" className="btn btn-primary mt-5 cursor-pointer">{busy ? "Reading" : "Choose a PDF"}</label>
@@ -264,7 +266,7 @@ function ByHand({ planId, courses, onDone, onError }: { planId: string; courses:
   return (
     <section className="space-y-4">
       <DraftNotice drafts={[handDraft]} />
-      <p className="max-w-[60ch] text-sm text-muted">Search for a course, pick the year and the grade you got. Credits come from the catalog.</p>
+      <p className="flex items-center gap-1.5 text-sm text-muted">Pick a course, the year and your grade.<Hint label="About adding by hand">Credits come from the catalog.</Hint></p>
       <datalist id="hand-courses">{courses.filter((c) => !c.archived).map((c) => <option key={c.id} value={c.name} />)}</datalist>
       <ul className="space-y-3">
         {rows.map((r) => (

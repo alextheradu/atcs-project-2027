@@ -13,7 +13,7 @@ export default async function AppealQuestions() {
   const departments = admin ? [...DEPARTMENTS] : user.departments;
   return (
     <div className="max-w-[760px]">
-      <PageHeader title="Appeal questions" description={admin ? "What students answer when they ask for a placement review. Add a question for one department or for all." : "Questions for your departments. Questions for all departments are set by an admin."} />
+      <PageHeader title="Appeal questions" hint={admin ? "What students answer when they ask for a placement review. Add a question for one department or for all." : "Questions for your departments. Questions for all departments are set by an admin."} />
       <QuestionEditor
         rows={rows.filter((r) => admin || r.department === null || user.departments.includes(r.department)).map((r) => ({ id: r.id, department: r.department, prompt: r.prompt, helpText: r.helpText, type: r.type, options: Array.isArray(r.options) ? (r.options as string[]) : [], required: r.required, sortOrder: r.sortOrder, active: r.active }))}
         departments={departments}

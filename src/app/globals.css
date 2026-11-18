@@ -120,6 +120,11 @@ code, .font-mono {
   to { opacity: 1; }
 }
 
+/* Hint popovers fade in. Nothing moves. */
+.hint-pop {
+  animation: fade-only 0.12s var(--ease-out) both;
+}
+
 /* Route entrance: a short fade. Nothing moves. */
 .page-enter > * > * {
   animation: fade-only 0.2s var(--ease-out) both;

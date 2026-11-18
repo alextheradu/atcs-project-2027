@@ -19,7 +19,7 @@ export default async function AdminUsers({ searchParams }: { searchParams: Promi
 
   return (
     <div>
-      <PageHeader title="Users" description="Roles for staff only come from grants. Every change and deletion is audited." />
+      <PageHeader title="Users" hint="Roles for staff only come from grants. Every change and deletion is audited." />
 
       <div className="space-y-10">
         <Section title="Pre-approved grants">

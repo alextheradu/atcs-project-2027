@@ -50,14 +50,13 @@ export function TileBody({ entry, result, warnings }: { entry: EntryView; result
         <span className="num">{formatCredits(entry.credits)} cr</span>
         {status && <span className="inline-flex items-center gap-1">{entry.status === "COMPLETED" && <Check aria-hidden size={12} strokeWidth={3} />}{status}</span>}
       </span>
-      {flag && flag.tone === "note" && <span className="mt-1 line-clamp-2 text-xs text-muted">{flag.text}</span>}
+      {flag && flag.tone === "note" && <span className="mt-1 line-clamp-1 text-xs text-muted">{flag.text}</span>}
       {flag && flag.tone !== "note" && (
         <span className="mt-1 block text-xs">
           <span className="flex items-center gap-1.5 font-semibold text-fg">
             <span aria-hidden className={cn("size-2 shrink-0 rounded-full", DOT[flag.tone])} />
             {flag.text}
           </span>
-          {flag.reason && <span className="mt-0.5 line-clamp-2 text-muted">{flag.reason}</span>}
         </span>
       )}
     </>

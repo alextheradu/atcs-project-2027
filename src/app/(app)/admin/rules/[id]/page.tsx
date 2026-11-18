@@ -32,7 +32,7 @@ export default async function RuleEditor({ params }: { params: Promise<{ id: str
         back={{ href: "/admin/rules", label: "Rules" }}
       />
       <div className="space-y-10">
-        <Section title="Program of Studies text" description={course.sourcePage ? `Page ${course.sourcePage}. Encode only what this says. Anything else is a "checked by a person" step.` : undefined}>
+        <Section title="Program of Studies text" description={course.sourcePage ? `Page ${course.sourcePage}.` : undefined} hint={`Encode only what this says. Anything else is a "checked by a person" step.`}>
           <p className="max-w-[65ch] text-sm leading-relaxed">{course.prereqText ?? "No prerequisite listed."}</p>
         </Section>
         <Section title="Rule">

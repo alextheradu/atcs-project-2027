@@ -1,5 +1,6 @@
 "use client";
 
+import { Hint } from "@/components/ui/hint";
 import { useRouter } from "next/navigation";
 import { useState, useTransition } from "react";
 import { DraftNotice, SAVE_INTERRUPTED, useDraftState } from "@/components/draft-state";
@@ -94,7 +95,7 @@ export function AppealForm({ appealId, questions, initialAnswers, reportedGrade,
         </label>
       ))}
 
-      <p className="text-xs text-muted">Your answers and grades are self-reported. A supervisor checks them against your real records.</p>
+      <p className="flex items-center gap-1.5 text-xs text-muted">Self-reported<Hint label="About self-reported answers">Your answers and grades are self-reported. A supervisor checks them against your real records.</Hint></p>
       {blocked && <p role="status" className="soft px-4 py-3 text-[13px] text-yellow">{blocked}</p>}
       {msg && <p role={msg.tone === "error" ? "alert" : "status"} className={msg.tone === "error" ? "text-[13px] text-red" : "text-[13px] text-green"}>{msg.text}</p>}
 

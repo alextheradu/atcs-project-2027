@@ -23,7 +23,7 @@ export default async function ImportRequests() {
     <div className="max-w-[900px]">
       <PageHeader
         title="Import requests"
-        description="Course titles students could not match on their transcript. Approving one teaches the importer for everyone."
+        description="Unmatched transcript titles." hint="Course titles students could not match on their transcript. Approving one teaches the importer for everyone."
         back={{ href: "/admin/catalog", label: "Catalog" }}
         actions={<Link className="btn btn-sm" href="/admin/catalog/new">New course</Link>}
       />

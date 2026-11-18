@@ -1,6 +1,7 @@
 export const instant = false;
 
 import Link from "next/link";
+import { Hint } from "@/components/ui/hint";
 import { TONE } from "@/components/appeals/tone";
 import { UnreadNotes } from "@/components/board/notes";
 import { Badge } from "@/components/ui/badge";
@@ -146,8 +147,9 @@ export default async function Students({ searchParams }: { searchParams: Promise
       {tab === "gaps" && data && (
         <section>
           {yearFilter}
-          <p className="mb-4 max-w-[65ch] text-[14px] text-muted">
-            {data.offTrack.length} of {data.scanned} students have something open. A board counts finished and planned classes, so younger students start with gaps.
+          <p className="mb-4 flex items-center gap-1.5 text-[14px] text-muted">
+            {data.offTrack.length} of {data.scanned} students have something open.
+            <Hint label="About gaps">A board counts finished and planned classes, so younger students start with gaps.</Hint>
           </p>
           {data.offTrack.length === 0 ? <Empty>Every board covers graduation.</Empty> : (
             <ul className="list list-hover">

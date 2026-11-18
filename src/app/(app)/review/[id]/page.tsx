@@ -41,7 +41,7 @@ export default async function ReviewDetail({ params }: { params: Promise<{ id: s
             <ul className="list">{unmet.map((u, i) => <li key={i} className="py-2 text-[13px]">{u.message}</li>)}</ul>
           </Section>
         )}
-        <Section title="Their answers" description="Self-reported by the student. Check these against their records.">
+        <Section title="Their answers" description="Self-reported." hint="Self-reported by the student. Check these against their records.">
           <p className="mb-3 flex flex-wrap items-center gap-2 text-[13px] text-muted">
             <Badge tone="warning">Self-reported</Badge>
             {appeal.reportedGrade && <>Grade <span className="num text-fg">{gradeLabel(appeal.reportedGrade)}</span></>}

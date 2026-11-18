@@ -24,7 +24,7 @@ export default async function Deletions() {
 
   return (
     <div>
-      <PageHeader title="Deletion requests" description="A request waits for the student to confirm by email, then runs 14 days later. To delete an account right away, use Users. Finished requests keep only a hash of the email." />
+      <PageHeader title="Deletion requests" hint="A request waits for the student to confirm by email, then runs 14 days later. To delete an account right away, use Users. Finished requests keep only a hash of the email." />
       <div className="space-y-10">
         <Section title="Open requests">
           {pending.length === 0 ? (
@@ -47,7 +47,7 @@ export default async function Deletions() {
           )}
         </Section>
 
-        <Section title="Record a guardian request" description="A parent or guardian asked you to delete a student's data. Check who is asking first. The student is told, and the 14 days still apply. Only an admin can cancel it.">
+        <Section title="Record a guardian request" hint="A parent or guardian asked you to delete a student's data. Check who is asking first. The student is told, and the 14 days still apply. Only an admin can cancel it.">
           <GuardianForm />
         </Section>
 

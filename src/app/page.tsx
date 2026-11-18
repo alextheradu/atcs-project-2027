@@ -12,106 +12,126 @@ async function RedirectIfSignedIn() {
   return null;
 }
 
-const HOW_IT_WORKS = [
+const FRAME = "mx-auto w-full max-w-[1180px] px-5 md:px-8";
+const SPLIT = "grid gap-8 lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)] lg:gap-16";
+const SIGN_IN_LINK = "inline-flex min-h-11 items-center gap-2 text-sm font-semibold text-accent-ink underline-offset-4 hover:underline";
+
+const PLANNING_STEPS = [
   {
-    step: "1",
-    headline: "Build your four-year plan.",
-    body: "Pick courses for each grade. The board shows every subject you need to graduate and flags empty spots as you go.",
+    title: "Build your Board",
+    description: "Add classes you’ve taken and classes you want to take. The Board puts subjects in rows and grades 9 through 12 in columns, so you can see all four years together.",
   },
   {
-    step: "2",
-    headline: "See exactly what is missing.",
-    body: "Credits update live. Each subject row tells you how many more classes you still need, in plain words.",
+    title: "See what you still need to graduate",
+    description: "Your credit totals update as you edit. An outlined space in a subject row shows where you still need a class, and selecting it brings up options that count toward that requirement.",
   },
   {
-    step: "3",
-    headline: "Check if you can take a class.",
-    body: "Every course shows its prerequisites and whether you meet them. If a placement does not look right, you can file an appeal.",
+    title: "Find a class you can take next",
+    description: "Browse Classes to see prerequisites from the Program of Studies and how they apply to you. Use Pathways to see what usually comes next, or request a placement review when one is available.",
+  },
+];
+
+const QUESTIONS = [
+  {
+    question: "Do I need a transcript to get started?",
+    answer: "You can start with a blank Board and add past classes by hand. If you have a PDF transcript, you can import it later and review the classes before adding them.",
+  },
+  {
+    question: "Can I start in eighth grade?",
+    answer: "If you’re 13 or older, choose eighth grade after signing in. A few questions about your classes and interests help the planner build a starter draft for ninth grade.",
+  },
+  {
+    question: "Does the planner enroll me in classes?",
+    answer: "Use your Board to explore options and talk them through with your counselor. Your school handles course selection and makes final placement decisions.",
   },
 ];
 
 export default function Home() {
   return (
-    <main className="min-h-dvh">
+    <div className="min-h-dvh">
       <Suspense>
         <RedirectIfSignedIn />
       </Suspense>
 
-      {/* Nav */}
-      <header className="mx-auto flex h-16 max-w-[1180px] items-center justify-between px-5 md:px-8">
+      <a href="#content" className="skip-link">Skip to content</a>
+      <header className={`${FRAME} flex min-h-16 flex-wrap items-center justify-between gap-x-4`}>
         <span className="text-[16px] font-bold tracking-[-0.02em]">Course Planner</span>
-        <a
-          href="#sign-in"
-          className="text-[14px] font-medium text-muted transition-colors hover:text-fg"
-        >
-          Sign in
-        </a>
+        <nav aria-label="Main" className="flex flex-wrap items-center gap-x-4 sm:gap-x-7">
+          <a href="#how-it-works" className="inline-flex min-h-11 items-center text-sm font-medium text-muted underline-offset-4 hover:text-fg hover:underline">
+            How it works
+          </a>
+          <a href="#sign-in" className={SIGN_IN_LINK}>Sign in</a>
+        </nav>
       </header>
 
-      {/* Hero */}
-      <div className="mx-auto grid max-w-[1180px] items-start gap-10 px-5 pb-16 pt-10 md:px-8 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.1fr)] lg:items-center lg:gap-16 lg:pt-16">
-        {/* Left: headline + sign-in */}
-        <section>
-          <h1 className="max-w-[13ch] text-[40px] font-bold leading-[1.04] tracking-[-0.035em] md:text-[52px]">
-            Your whole high school plan on one board.
-          </h1>
-          <p className="mt-5 max-w-[46ch] text-[17px] leading-relaxed text-muted">
-            See every subject, every year. Empty spots show what you still need to graduate, and
-            each class tells you if you can take it.
-          </p>
+      <main id="content" tabIndex={-1}>
+        <section aria-labelledby="landing-title" className={`${FRAME} ${SPLIT} pb-16 pt-8 sm:pb-20 sm:pt-12 lg:items-center lg:pb-24 lg:pt-16`}>
+          <div>
+            <h1 id="landing-title" className="max-w-[15ch] text-[40px] font-bold leading-[1.04] tracking-[-0.035em] md:text-[52px]">
+              Your whole <span className="whitespace-nowrap">high school</span> plan on one Board.
+            </h1>
+            <p className="mt-5 max-w-[42ch] text-[17px] leading-relaxed text-muted">
+              Plan your classes at Pascack Hills or Pascack Valley. See what you still need to graduate and what you can take next.
+            </p>
 
-          <div id="sign-in" className="mt-10 scroll-mt-24">
-            <Suspense fallback={<div className="h-52" />}>
-              <SignInCard />
-            </Suspense>
+            <div id="sign-in" tabIndex={-1} className="mt-8 max-w-[400px] scroll-mt-6 rounded-[14px]">
+              <Suspense fallback={<div className="soft h-[210px]" />}>
+                <SignInCard />
+              </Suspense>
+            </div>
           </div>
+          <MiniBoard />
         </section>
 
-        {/* Right: board preview */}
-        <div className="w-full">
-          <MiniBoard />
-        </div>
-      </div>
+        <section id="how-it-works" aria-labelledby="how-it-works-title" tabIndex={-1} className={`${FRAME} ${SPLIT} scroll-mt-6 pb-16 sm:pb-20 lg:pb-24`}>
+          <h2 id="how-it-works-title" className="text-[28px] font-bold leading-[1.15] tracking-[-0.025em]">
+            How it works
+          </h2>
+          <ol className="num list-decimal space-y-7 ps-6 marker:font-semibold marker:text-muted lg:-ms-2 lg:ps-0">
+            {PLANNING_STEPS.map(({ title, description }) => (
+              <li key={title} className="ps-2">
+                <h3 className="text-[20px] font-bold leading-snug">{title}</h3>
+                <p className="mt-2 max-w-[58ch] text-base leading-relaxed text-muted">{description}</p>
+              </li>
+            ))}
+          </ol>
+        </section>
 
-      {/* How it works */}
-      <section
-        aria-label="How it works"
-        className="mx-auto max-w-[1180px] px-5 pb-20 pt-4 md:px-8"
-      >
-        <h2 className="eyebrow mb-6 text-muted">How it works</h2>
+        <section aria-labelledby="questions-title" className="bg-fill">
+          <div className={`${FRAME} ${SPLIT} py-14 sm:py-20`}>
+            <h2 id="questions-title" className="text-[28px] font-bold leading-[1.15] tracking-[-0.025em]">
+              Before you start
+            </h2>
+            <div>
+              <dl className="space-y-7">
+                {QUESTIONS.map(({ question, answer }) => (
+                  <div key={question}>
+                    <dt className="text-[20px] font-bold leading-snug">{question}</dt>
+                    <dd className="mt-2 max-w-[58ch] text-base leading-relaxed text-muted">{answer}</dd>
+                  </div>
+                ))}
+              </dl>
+              <a href="#sign-in" className={`${SIGN_IN_LINK} mt-5`}>
+                Sign in to start your Board <span aria-hidden="true">↑</span>
+              </a>
+            </div>
+          </div>
+        </section>
+      </main>
 
-        <ol className="grid gap-3 sm:grid-cols-3">
-          {HOW_IT_WORKS.map((item) => (
-            <li key={item.step} className="soft p-5">
-              <span className="num mb-3 block text-[13px] font-bold text-muted">{item.step}</span>
-              <p className="text-[15px] font-semibold leading-snug tracking-[-0.01em]">
-                {item.headline}
-              </p>
-              <p className="mt-2 text-[14px] leading-relaxed text-muted">{item.body}</p>
-            </li>
-          ))}
-        </ol>
-
-        <p className="mt-6 text-[13px] text-muted">
-          No AI, no guessing. Everything is based on the Program of Studies.
-        </p>
-      </section>
-
-      {/* Footer */}
-      <footer className="mx-auto flex max-w-[1180px] flex-wrap items-center justify-between gap-3 border-t border-[var(--line-strong)] px-5 py-8 md:px-8">
+      <footer className={`${FRAME} flex flex-wrap items-center justify-between gap-x-6 py-6`}>
         <p className="text-[13px] text-muted">
-          Unofficial. Not affiliated with the Pascack Valley Regional High School District. Plans
-          are not official placements.
+          An unofficial tool. Not affiliated with the Pascack Valley Regional High School District.
         </p>
         <nav aria-label="Legal" className="flex gap-4 text-[13px]">
-          <Link href="/privacy" className="text-muted transition-colors hover:text-fg">
+          <Link href="/privacy" className="inline-flex min-h-11 items-center text-muted underline-offset-4 hover:text-fg hover:underline">
             Privacy
           </Link>
-          <Link href="/terms" className="text-muted transition-colors hover:text-fg">
+          <Link href="/terms" className="inline-flex min-h-11 items-center text-muted underline-offset-4 hover:text-fg hover:underline">
             Terms
           </Link>
         </nav>
       </footer>
-    </main>
+    </div>
   );
 }
