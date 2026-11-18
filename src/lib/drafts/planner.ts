@@ -1,9 +1,9 @@
 import { z } from "zod";
-import { gradeLevel, id, updateEntrySchema } from "@/lib/plans/schemas";
+import { addEntrySchema, gradeLevel, id, updateEntrySchema } from "@/lib/plans/schemas";
 
 const patch = updateEntrySchema.omit({ entryId: true });
 const changeSchema = z.discriminatedUnion("kind", [
-  z.object({ kind: z.literal("add"), courseId: id, gradeLevel }),
+  addEntrySchema.omit({ planId: true }).extend({ kind: z.literal("add") }),
   z.object({ kind: z.literal("move"), courseId: id, gradeLevel }),
   z.object({ kind: z.literal("remove"), courseId: id }),
   z.object({ kind: z.literal("update"), courseId: id, patch }),
@@ -19,7 +19,9 @@ export function recoverPlanChange(raw: unknown, entries: Entry[]) {
   const entry = entries.find((e) => e.courseId === change.courseId);
   if (change.kind === "add") {
     if (!entry) return change;
-    return entry.gradeLevel === change.gradeLevel ? null : { conflict: true } as const;
+    return entry.gradeLevel === change.gradeLevel && (change.credits === undefined || entry.credits === change.credits)
+      ? null
+      : { conflict: true } as const;
   }
   if (change.kind === "remove") return entry ? { kind: "remove", entryId: entry.id } as const : null;
   if (!entry) return { conflict: true } as const;

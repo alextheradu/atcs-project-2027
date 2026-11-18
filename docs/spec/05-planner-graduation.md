@@ -5,6 +5,7 @@
 - A user can have several `Plan`s. Exactly one is primary. Enforced by the partial unique index `one_primary_plan_per_user` (already in the init migration).
 - `PlanEntry` places a course in a grade level (9 to 12). Placement is by grade level only, not by semester. A half-year course counts 2.5 credits; two half-year courses fill one slot's worth of credits.
 - Entry status: `PLANNED`, `IN_PROGRESS`, `COMPLETED`. Completed entries can store a letter grade. `credits` on the entry is the credit actually counted (defaults from the course, overridable by transcript import).
+- Teacher Assistant Program stays one course in the catalog. Students choose half year (2.5 credits) or full year (5 credits) when adding it, and can change the length on the Board. Both values come from page 56 of the 2026-2027 Program of Studies.
 - A course can appear once per plan (no retakes for now).
 - Warnings (never blocks): fewer than 30 credits in a year, fewer than 25 in senior year, more than a sensible number of full-year courses for one year (default 8 periods, configurable), missing coreqs, unmet prereqs.
 - Clone plan, rename, set primary, delete. Submitted plans are read-only.

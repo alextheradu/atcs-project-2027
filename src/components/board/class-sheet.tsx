@@ -10,6 +10,7 @@ import { PriorMathField } from "@/components/eligibility/prior-math-field";
 import { WaysIn } from "@/components/eligibility/ways-in";
 import { Button } from "@/components/ui/button";
 import { ROWS, rowFor } from "@/lib/board";
+import { TEACHER_ASSISTANT_LENGTHS, TEACHER_ASSISTANT_SLUG } from "@/lib/catalog/teacher-assistant";
 import { formatCredits } from "@/lib/credits";
 import { waysIn, type EvalResult } from "@/lib/eligibility";
 import { describeWarning, type PlanWarning } from "@/lib/plan-warnings";
@@ -241,7 +242,21 @@ export function ClassSheet({ entry, result, warnings = [], canEdit, busy, canApp
                   </select>
                 </label>}
                 <div className="sm:col-span-2">
-                  <CreditsField key={e.id} entry={e} disabled={false} onSave={(c) => !busy && onUpdate(e.id, { credits: c })} />
+                  {e.slug === TEACHER_ASSISTANT_SLUG ? (
+                    <label className="block space-y-1.5">
+                      <span className="text-sm text-muted">Program length</span>
+                      <select className="input bg-fill-2" value={e.credits} disabled={busy} onChange={(ev) => onUpdate(e.id, { credits: Number(ev.target.value) })}>
+                        {!TEACHER_ASSISTANT_LENGTHS.some(({ credits }) => credits === e.credits) && (
+                          <option value={e.credits} disabled>{formatCredits(e.credits)} credits (saved)</option>
+                        )}
+                        {TEACHER_ASSISTANT_LENGTHS.map(({ credits, label }) => (
+                          <option key={credits} value={credits}>{label} ({credits} credits)</option>
+                        ))}
+                      </select>
+                    </label>
+                  ) : (
+                    <CreditsField key={e.id} entry={e} disabled={false} onSave={(c) => !busy && onUpdate(e.id, { credits: c })} />
+                  )}
                 </div>
               </section>
             )}

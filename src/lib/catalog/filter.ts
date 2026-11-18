@@ -1,5 +1,7 @@
 /** Client-side search for the add-course panel. Pure, no framework imports. */
 
+import { TEACHER_ASSISTANT_LENGTHS, TEACHER_ASSISTANT_SLUG } from "./teacher-assistant";
+
 export interface PickerCourse {
   id: string;
   slug: string;
@@ -33,8 +35,10 @@ export function filterCourses<T extends PickerCourse>(courses: T[], f: PickerFil
     if (f.exclude?.has(c.id) || f.exclude?.has(c.name)) return false;
     if (f.department && c.department !== f.department) return false;
     if (f.level && c.level !== f.level) return false;
-    if (f.duration && c.duration !== f.duration) return false;
-    if (f.credits !== undefined && c.credits !== f.credits) return false;
+    const lengths = c.slug === TEACHER_ASSISTANT_SLUG ? TEACHER_ASSISTANT_LENGTHS : [c];
+    if (!lengths.some(({ duration, credits }) =>
+      (!f.duration || duration === f.duration) && (f.credits === undefined || credits === f.credits),
+    )) return false;
     if (f.grade && !c.gradesOffered.includes(f.grade)) return false;
     if (f.interest && !c.interests.includes(f.interest)) return false;
     if (f.requirement && !c.tags?.some((t) => t.kind === f.requirement)) return false;

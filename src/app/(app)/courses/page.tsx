@@ -14,6 +14,7 @@ import { buildCourseWhere } from "@/lib/catalog/queries";
 import { rankByQuery } from "@/lib/catalog/rank";
 import { DEPT_LABEL, KIND_LABEL, LEVEL_LABEL, fmtCredits } from "@/lib/catalog/labels";
 import { LEVELS, courseFilterSchema } from "@/lib/catalog/schemas";
+import { TEACHER_ASSISTANT_CREDITS, TEACHER_ASSISTANT_SLUG } from "@/lib/catalog/teacher-assistant";
 import { boardPlanId } from "@/lib/plans/load";
 import type { RequirementKind } from "@/lib/requirements";
 import { cn } from "@/lib/utils";
@@ -154,7 +155,7 @@ export default async function Courses({ searchParams }: { searchParams: Params }
                           {kinds.length > 0 ? <>, counts toward {kinds.join(", ")}</> : tags.length === 0 ? <>, counts as an elective</> : null}
                         </span>
                       </span>
-                      <span className="num shrink-0 text-[14px] text-muted">{fmtCredits(c.credits)} cr</span>
+                      <span className="num shrink-0 text-[14px] text-muted">{c.slug === TEACHER_ASSISTANT_SLUG ? TEACHER_ASSISTANT_CREDITS : fmtCredits(c.credits)} cr</span>
                     </Link>
                   </li>
                 );

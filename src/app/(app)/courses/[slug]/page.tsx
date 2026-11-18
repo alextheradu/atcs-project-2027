@@ -13,6 +13,7 @@ import { requirePageUser } from "@/lib/auth/page";
 import { canUseStudentWorkspace } from "@/lib/auth/student-access";
 import { ROWS, rowFor } from "@/lib/board";
 import { DEPT_LABEL, KIND_LABEL, LEVEL_LABEL, fmtCredits } from "@/lib/catalog/labels";
+import { TEACHER_ASSISTANT_CREDITS, TEACHER_ASSISTANT_SLUG } from "@/lib/catalog/teacher-assistant";
 import { db } from "@/lib/db";
 import { canTakeAnswer, courseFit, parseRule, ruleSlugs, waysIn, type PlanCourse } from "@/lib/eligibility";
 import { studentGrade } from "@/lib/pathways";
@@ -89,6 +90,7 @@ export default async function CoursePage({ params }: { params: Promise<{ slug: s
     (judged.some((f) => f.result.status === "NOT_ELIGIBLE_APPEALABLE" && !coreqOnly(f)) || judged.every((f) => f.result.status === "ELIGIBLE" && f.result.notes.length > 0));
 
   const grades = course.gradesOffered.filter((g) => g >= 9 && g <= 12);
+  const teacherAssistant = course.slug === TEACHER_ASSISTANT_SLUG;
   const canAdd = !!plan && isEditable(plan.status) && !onBoard && !course.archived && course.plannable && grades.length > 0;
   const tags = course.requirements.map((r) => ({ kind: r.kind as RequirementKind, credits: Number(r.credits), provisional: r.provisional }));
   const row = ROWS.find((r) => r.key === rowFor(tags))!;
@@ -105,7 +107,7 @@ export default async function CoursePage({ params }: { params: Promise<{ slug: s
           {course.archived && <Badge tone="locked">Archived</Badge>}
         </div>
         <p className="mt-1 text-[15px] text-muted">
-          {LEVEL_LABEL[course.level]}, <span className="num">{fmtCredits(course.credits)}</span> credits, {course.duration === "HALF" ? "half year" : "full year"}
+          {LEVEL_LABEL[course.level]}, <span className="num">{teacherAssistant ? TEACHER_ASSISTANT_CREDITS : fmtCredits(course.credits)}</span> credits, {teacherAssistant ? "half or full year" : course.duration === "HALF" ? "half year" : "full year"}
           {grades.length > 0 && <>, grades <span className="num">{grades.join(", ")}</span></>}
         </p>
       </header>
@@ -141,7 +143,7 @@ export default async function CoursePage({ params }: { params: Promise<{ slug: s
       {(canAdd || onBoard || canAsk || canEdit) && (
         <div className="mb-8 flex flex-wrap items-center gap-3">
           {canAdd && plan && (
-            <AddToBoardButton planId={plan.id} courseId={course.id} grades={grades} suggested={suggestGrade(grades, profile?.currentGrade ? profile.currentGrade + 1 : (nowGrade ?? 9))} />
+            <AddToBoardButton planId={plan.id} courseId={course.id} grades={grades} suggested={suggestGrade(grades, profile?.currentGrade ? profile.currentGrade + 1 : (nowGrade ?? 9))} teacherAssistant={teacherAssistant} />
           )}
           {onBoard && (
             <p className="text-[15px]">

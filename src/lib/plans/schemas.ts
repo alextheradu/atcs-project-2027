@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { TEACHER_ASSISTANT_LENGTHS } from "@/lib/catalog/teacher-assistant";
 
 export const MAX_PLANS = 10;
 export const MAX_ENTRIES_PER_PLAN = 60;
@@ -10,7 +11,8 @@ export const gradeLevel = z.number().int().min(9).max(12);
 export const LETTER_GRADES = ["A_PLUS", "A", "A_MINUS", "B_PLUS", "B", "B_MINUS", "C_PLUS", "C", "C_MINUS", "D_PLUS", "D", "F", "PASS"] as const;
 export const ENTRY_STATUSES = ["PLANNED", "IN_PROGRESS", "COMPLETED"] as const;
 
-export const addEntrySchema = z.object({ planId: id, courseId: id, gradeLevel });
+export const teacherAssistantCreditsSchema = z.literal(TEACHER_ASSISTANT_LENGTHS.map(({ credits }) => credits));
+export const addEntrySchema = z.object({ planId: id, courseId: id, gradeLevel, credits: teacherAssistantCreditsSchema.optional() });
 export const moveEntrySchema = z.object({ entryId: id, gradeLevel });
 export const updateEntrySchema = z.object({
   entryId: id,

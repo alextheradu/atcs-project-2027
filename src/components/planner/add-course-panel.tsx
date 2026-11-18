@@ -11,7 +11,9 @@ import { filterCourses, type PickerCourse } from "@/lib/catalog/filter";
 import { sortByFit } from "@/lib/catalog/fit-order";
 import { PriorMathField } from "@/components/eligibility/prior-math-field";
 import { LEVELS } from "@/lib/catalog/schemas";
+import { TEACHER_ASSISTANT_LENGTHS, TEACHER_ASSISTANT_SLUG, type TeacherAssistantCredits } from "@/lib/catalog/teacher-assistant";
 import { formatCredits } from "@/lib/credits";
+import { cn } from "@/lib/utils";
 
 export interface PanelCourse extends PickerCourse {
   tags: { kind: string; credits: number; provisional: boolean }[];
@@ -31,7 +33,8 @@ interface Props {
   prior: StudentPrior;
   names: Record<string, string>;
   interests: { slug: string; label: string }[];
-  onAdd: (course: PanelCourse, grade: number) => void;
+  notice?: React.ReactNode;
+  onAdd: (course: PanelCourse, grade: number, credits?: TeacherAssistantCredits) => void;
   /** Set when the panel was opened from an empty spot: only classes that count toward it. */
   requirement?: { kind: string; label: string } | null;
   onClearRequirement?: () => void;
@@ -41,7 +44,7 @@ interface Props {
 
 const LIMIT = 60;
 
-export function AddCoursePanel({ open, grade, onGradeChange, onClose, courses, inPlan, placements, prior, names, interests, onAdd, requirement, onClearRequirement, busy = false }: Props) {
+export function AddCoursePanel({ open, grade, onGradeChange, onClose, courses, inPlan, placements, prior, names, interests, notice, onAdd, requirement, onClearRequirement, busy = false }: Props) {
   const ref = useRef<HTMLDialogElement>(null);
   const [q, setQ] = useState("");
   const [department, setDepartment] = useState("");
@@ -52,8 +55,9 @@ export function AddCoursePanel({ open, grade, onGradeChange, onClose, courses, i
   const [offeredOnly, setOfferedOnly] = useState(true);
   const [filtersOpen, setFiltersOpen] = useState(false);
   // Classes added while the panel is open stay in the list, marked as added, with the grade they went to.
-  const [added, setAdded] = useState<Map<string, number>>(() => new Map());
-  const [lastAdded, setLastAdded] = useState<{ name: string; grade: number } | null>(null);
+  const [added, setAdded] = useState<Map<string, { grade: number; credits: number }>>(() => new Map());
+  const [lastAdded, setLastAdded] = useState<{ id: string; name: string; grade: number } | null>(null);
+  const addedNotice = lastAdded && inPlan.has(lastAdded.id) ? lastAdded : null;
 
   useEffect(() => {
     const d = ref.current;
@@ -103,10 +107,10 @@ export function AddCoursePanel({ open, grade, onGradeChange, onClose, courses, i
     [shown, fit],
   );
 
-  const add = (c: PanelCourse) => {
-    onAdd(c, grade);
-    setAdded((m) => new Map(m).set(c.id, grade));
-    setLastAdded({ name: c.name, grade });
+  const add = (c: PanelCourse, credits?: TeacherAssistantCredits) => {
+    onAdd(c, grade, credits);
+    setAdded((m) => new Map(m).set(c.id, { grade, credits: credits ?? c.credits }));
+    setLastAdded({ id: c.id, name: c.name, grade });
   };
 
   const handleClose = () => {
@@ -135,10 +139,11 @@ export function AddCoursePanel({ open, grade, onGradeChange, onClose, courses, i
         </header>
 
         <div className="space-y-2.5 px-5 pb-4 pt-2">
-          <p role="status" className={lastAdded ? "pb-1" : "sr-only"}>
-            {lastAdded && (
+          {notice}
+          <p role="status" className={addedNotice ? "pb-1" : "sr-only"}>
+            {addedNotice && (
               <Badge tone="eligible" className="whitespace-normal text-[14px]">
-                Added {lastAdded.name} to {lastAdded.grade}th grade
+                Added {addedNotice.name} to {addedNotice.grade}th grade
               </Badge>
             )}
           </p>
@@ -212,10 +217,13 @@ export function AddCoursePanel({ open, grade, onGradeChange, onClose, courses, i
               const r = fit.get(c.id);
               // Why a class is not a clean fit, or what a person still decides. Visible, since phones have no hover.
               const reason = !r ? null : r.status !== "ELIGIBLE" ? r.summary : (needsPrior && r.missing[0] ? null : (r.missing[0] ?? r.notes[0] ?? null));
-              const addedTo = added.get(c.id);
+              const addedTo = inPlan.has(c.id) ? added.get(c.id) : undefined;
+              const lengths = c.slug === TEACHER_ASSISTANT_SLUG && addedTo === undefined
+                ? TEACHER_ASSISTANT_LENGTHS.filter((choice) => (!duration || choice.duration === duration) && (!credits || choice.credits === Number(credits)))
+                : null;
               return (
-                <li key={c.id} className="flex items-center gap-3 py-2.5">
-                  <span className="min-w-0 flex-1">
+                <li key={c.id} className={cn("flex items-center gap-3 py-2.5", lengths && "flex-wrap gap-y-2")}>
+                  <span className={cn("min-w-0 flex-1", lengths && "basis-full")}>
                     <span className="flex items-center gap-2">
                       <span className="truncate text-[14px] font-medium">{c.name}</span>
                       {r && r.status !== "ELIGIBLE" && <EligibilityBadge result={r} className="shrink-0" />}
@@ -225,11 +233,21 @@ export function AddCoursePanel({ open, grade, onGradeChange, onClose, courses, i
                     </span>
                     {reason && <span className="mt-0.5 block text-[13px] text-muted">{reason}</span>}
                   </span>
-                  <span className="num shrink-0 text-muted">{formatCredits(c.credits)} cr</span>
-                  {addedTo !== undefined ? (
-                    <Button size="sm" variant="ghost" disabled aria-label={`Added to ${addedTo}th grade`}>Added</Button>
+                  {lengths ? (
+                    lengths.map(({ label, credits }) => (
+                      <Button key={credits} size="sm" disabled={busy} onClick={() => add(c, credits)}>
+                        Add {label.toLowerCase()} ({credits} cr)
+                      </Button>
+                    ))
                   ) : (
-                    <Button size="sm" disabled={busy} onClick={() => add(c)}>Add</Button>
+                    <>
+                      <span className="num shrink-0 text-muted">{formatCredits(addedTo?.credits ?? c.credits)} cr</span>
+                      {addedTo ? (
+                        <Button size="sm" variant="ghost" disabled aria-label={`Added to ${addedTo.grade}th grade`}>Added</Button>
+                      ) : (
+                        <Button size="sm" disabled={busy} onClick={() => add(c)}>Add</Button>
+                      )}
+                    </>
                   )}
                 </li>
               );

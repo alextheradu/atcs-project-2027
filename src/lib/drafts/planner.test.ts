@@ -9,6 +9,12 @@ describe("interrupted plan changes", () => {
   it("does not silently move a course if another edit changed its year", () => {
     expect(recoverPlanChange({ kind: "add", courseId: "course-1", gradeLevel: 10 }, [entry])).toEqual({ conflict: true });
   });
+  it("replays and recognizes a length-specific add only with the selected credits", () => {
+    const change = { kind: "add", courseId: "course-1", gradeLevel: 9, credits: 2.5 };
+    expect(recoverPlanChange(change, [])).toEqual(change);
+    expect(recoverPlanChange(change, [{ ...entry, credits: 2.5 }])).toBeNull();
+    expect(recoverPlanChange(change, [entry])).toEqual({ conflict: true });
+  });
   it("recognizes acknowledged moves, updates and removals", () => {
     expect(recoverPlanChange({ kind: "move", courseId: "course-1", gradeLevel: 9 }, [entry])).toBeNull();
     expect(recoverPlanChange({ kind: "update", courseId: "course-1", patch: { credits: 5 } }, [entry])).toBeNull();

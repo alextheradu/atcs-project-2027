@@ -6,6 +6,7 @@ const state = vi.hoisted(() => ({ user: null as unknown }));
 vi.mock("@/lib/auth", async () => {
   const guards = await import("@/lib/auth/guards");
   return {
+    requireRole: async (...roles: SessionUser["role"][]) => guards.assertRole(state.user as never, roles),
     requireUser: async () =>
       guards.assertRole(state.user as never, ["STUDENT", "INCOMING", "COUNSELOR", "SUPERVISOR", "ADMIN"]),
   };
@@ -29,8 +30,8 @@ import * as plans from "./actions";
 
 const me: SessionUser = { id: "me", role: "STUDENT", departments: [], email: "me@pascack.org", name: null };
 const plan = (over: Record<string, unknown> = {}) => ({ id: "p1", ownerId: "me", name: "Plan A", isPrimary: true, status: "DRAFT", entries: [], ...over });
-const entry = (planOver: Record<string, unknown> = {}) => ({ id: "e1", planId: "p1", courseId: "c1", gradeLevel: 9, status: "PLANNED", plan: plan(planOver) });
-const course = (over: Record<string, unknown> = {}) => ({ id: "c1", name: "Geometry", credits: 5, archived: false, plannable: true, ...over });
+const entry = (planOver: Record<string, unknown> = {}) => ({ id: "e1", planId: "p1", courseId: "c1", gradeLevel: 9, status: "PLANNED", plan: plan(planOver), course: { slug: "geometry" } });
+const course = (over: Record<string, unknown> = {}) => ({ id: "c1", slug: "geometry", name: "Geometry", credits: 5, archived: false, plannable: true, ...over });
 
 beforeEach(() => {
   vi.clearAllMocks();
@@ -234,6 +235,17 @@ describe("addEntry", () => {
     }
     expect(fakeDb.planEntry.create).not.toHaveBeenCalled();
   });
+  it.each([2.5, 5])("stores %s credits for the selected Teacher Assistant length", async (credits) => {
+    fakeDb.course.findUnique.mockResolvedValue(course({ slug: "teacher-assistant-program" }));
+    expect((await plans.addEntry({ ...input, credits })).ok).toBe(true);
+    expect(fakeDb.planEntry.create).toHaveBeenCalledWith(expect.objectContaining({ data: expect.objectContaining({ credits }) }));
+  });
+  it("rejects a length selection for other courses and invalid Teacher Assistant credits", async () => {
+    expect((await plans.addEntry({ ...input, credits: 2.5 })).ok).toBe(false);
+    fakeDb.course.findUnique.mockResolvedValue(course({ slug: "teacher-assistant-program" }));
+    expect((await plans.addEntry({ ...input, credits: 10 })).ok).toBe(false);
+    expect(fakeDb.planEntry.create).not.toHaveBeenCalled();
+  });
   it("rejects a course that is already in the plan", async () => {
     fakeDb.planEntry.findFirst.mockResolvedValue({ id: "x" });
     const r = await plans.addEntry(input);
@@ -273,6 +285,14 @@ describe("updateEntry", () => {
   it("rejects unknown statuses and grades", async () => {
     expect((await plans.updateEntry({ entryId: "e1", status: "DONE" })).ok).toBe(false);
     expect((await plans.updateEntry({ entryId: "e1", status: "COMPLETED", grade: "E" })).ok).toBe(false);
+  });
+  it("allows changing Teacher Assistant length to either supported credit value", async () => {
+    fakeDb.planEntry.findFirst.mockResolvedValue({ ...entry(), course: { slug: "teacher-assistant-program" } });
+    for (const credits of [2.5, 5]) {
+      expect((await plans.updateEntry({ entryId: "e1", credits })).ok).toBe(true);
+      expect(fakeDb.planEntry.update).toHaveBeenLastCalledWith({ where: { id: "e1" }, data: { grade: null, credits } });
+    }
+    expect((await plans.updateEntry({ entryId: "e1", credits: 10 })).ok).toBe(false);
   });
 });
 

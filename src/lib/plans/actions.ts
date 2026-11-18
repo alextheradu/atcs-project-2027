@@ -1,18 +1,20 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { requireUser } from "@/lib/auth";
+import { requireRole, requireUser } from "@/lib/auth";
+import { TEACHER_ASSISTANT_SLUG } from "@/lib/catalog/teacher-assistant";
 import { db } from "@/lib/db";
 import { RateLimitError, enforceLimit } from "@/lib/rate-limit";
 import {
   MAX_ENTRIES_PER_PLAN, MAX_PLANS, addEntrySchema, id, isEditable, moveEntrySchema, nextPlanName, planName,
-  updateEntrySchema,
+  teacherAssistantCreditsSchema, updateEntrySchema,
 } from "./schemas";
 
 export type ActionResult<T = undefined> = { ok: true; data?: T } | { ok: false; error: string };
 const fail = (error: string): ActionResult => ({ ok: false, error });
 const NOT_FOUND = "Plan not found.";
 const READ_ONLY = "This plan was submitted for review, so it cannot be changed right now.";
+const PLAN_ROLES = ["STUDENT", "INCOMING", "COUNSELOR", "SUPERVISOR", "ADMIN"] as const;
 
 function refresh(planId?: string) {
   revalidatePath("/plans");
@@ -23,7 +25,7 @@ function refresh(planId?: string) {
 /** The owner's plan or null. Ownership lives in the query, so another student's plan is just "not found". */
 const ownedPlan = (planId: string, ownerId: string) => db.plan.findFirst({ where: { id: planId, ownerId } });
 const ownedEntry = (entryId: string, ownerId: string) =>
-  db.planEntry.findFirst({ where: { id: entryId, plan: { ownerId } }, include: { plan: true } });
+  db.planEntry.findFirst({ where: { id: entryId, plan: { ownerId } }, include: { plan: true, course: { select: { slug: true } } } });
 
 function limited(userId: string): ActionResult | null {
   try {
@@ -134,10 +136,10 @@ export async function setPrimaryPlan(planId: unknown): Promise<ActionResult> {
 }
 
 export async function addEntry(input: unknown): Promise<ActionResult<{ id: string }>> {
-  const user = await requireUser();
+  const user = await requireRole(...PLAN_ROLES);
   const p = addEntrySchema.safeParse(input);
   if (!p.success) return fail("Pick a course and a grade from 9 to 12.");
-  const { planId, courseId, gradeLevel } = p.data;
+  const { planId, courseId, gradeLevel, credits } = p.data;
 
   const plan = await ownedPlan(planId, user.id);
   if (!plan) return fail(NOT_FOUND);
@@ -145,6 +147,7 @@ export async function addEntry(input: unknown): Promise<ActionResult<{ id: strin
 
   const course = await db.course.findUnique({ where: { id: courseId } });
   if (!course || course.archived || !course.plannable) return fail("That course is not available.");
+  if (credits !== undefined && course.slug !== TEACHER_ASSISTANT_SLUG) return fail("This course has a fixed length.");
 
   if (await db.planEntry.findFirst({ where: { planId, courseId }, select: { id: true } })) {
     return fail(`${course.name} is already in this plan.`);
@@ -157,7 +160,7 @@ export async function addEntry(input: unknown): Promise<ActionResult<{ id: strin
     // A course a supervisor already approved reads "Approved via appeal" from the start.
     const approved = await db.appeal.findFirst({ where: { studentId: user.id, targetCourseId: courseId, status: "APPROVED" }, select: { id: true } });
     const entry = await db.planEntry.create({
-      data: { planId, courseId, gradeLevel, credits: course.credits, status: "PLANNED", source: "MANUAL", overrideAppealId: approved?.id ?? null },
+      data: { planId, courseId, gradeLevel, credits: credits ?? course.credits, status: "PLANNED", source: "MANUAL", overrideAppealId: approved?.id ?? null },
       select: { id: true },
     });
     await db.plan.update({ where: { id: planId }, data: { updatedAt: new Date() } });
@@ -195,12 +198,15 @@ export async function removeEntry(entryId: unknown): Promise<ActionResult> {
 }
 
 export async function updateEntry(input: unknown): Promise<ActionResult> {
-  const user = await requireUser();
+  const user = await requireRole(...PLAN_ROLES);
   const p = updateEntrySchema.safeParse(input);
   if (!p.success) return fail("That value is not allowed.");
   const entry = await ownedEntry(p.data.entryId, user.id);
   if (!entry) return fail(NOT_FOUND);
   if (!isEditable(entry.plan.status)) return fail(READ_ONLY);
+  if (p.data.credits !== undefined && entry.course.slug === TEACHER_ASSISTANT_SLUG && !teacherAssistantCreditsSchema.safeParse(p.data.credits).success) {
+    return fail("Choose a half year (2.5 credits) or a full year (5 credits).");
+  }
 
   const status = p.data.status ?? entry.status;
   const data: Record<string, unknown> = {};

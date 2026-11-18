@@ -13,7 +13,7 @@ describe("buildCourseWhere", () => {
     expect(w).toMatchObject({
       department: "MATH",
       level: "AP",
-      duration: "HALF",
+      AND: { OR: [{ duration: "HALF" }, { slug: "teacher-assistant-program" }] },
       gradesOffered: { has: 11 },
       interests: { some: { slug: "coding-cs" } },
     });

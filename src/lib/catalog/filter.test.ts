@@ -39,6 +39,12 @@ describe("filterCourses", () => {
   it("can hide courses already in the plan", () => {
     expect(names(filterCourses(list, { exclude: new Set(["Biology"]) }))).not.toContain("Biology");
   });
+  it("matches Teacher Assistant only when one length satisfies the selected filters", () => {
+    const ta = c({ slug: "teacher-assistant-program" });
+    expect(filterCourses([ta], { duration: "HALF", credits: 2.5 })).toEqual([ta]);
+    expect(filterCourses([ta], { duration: "FULL", credits: 5 })).toEqual([ta]);
+    expect(filterCourses([ta], { duration: "FULL", credits: 2.5 })).toEqual([]);
+  });
   it("returns nothing for a query with no match", () => {
     expect(filterCourses(list, { q: "zzzz" })).toEqual([]);
   });

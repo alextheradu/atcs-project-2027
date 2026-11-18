@@ -35,6 +35,7 @@ export interface BoardProps {
   guidance?: { config: GuidanceConfig; intendedMajor: string | null };
   /** Server-rendered notes (unread notices, open reviews, dates) shown under the status line. */
   notes?: React.ReactNode;
+  navigation?: React.ReactNode;
   tour?: boolean;
   /** Shown beside "For college" under the board, such as the review and comments. */
   footer?: React.ReactNode;
@@ -265,7 +266,7 @@ export function Board(props: BoardProps) {
     for (const w of ed.warnings) if ("entryId" in w) m.set(w.entryId, [...(m.get(w.entryId) ?? []), w]);
     return m;
   }, [ed.warnings]);
-  // Shown on the page, or inside the class sheet while it is open (the page behind a modal is inert).
+  // Keep save feedback inside the open dialog, where the student can act on it.
   const saveNotice = (ed.change && !ed.pending) || ed.error ? (
     <div className="mb-6 space-y-3">
       {ed.error && <p role="alert" className="text-sm text-red">{ed.error}</p>}
@@ -309,6 +310,8 @@ export function Board(props: BoardProps) {
         </div>
       </header>
 
+      {props.navigation}
+
       {(tour || ed.entries.length === 0) && !readOnly && <Tour />}
 
       {(readOnly || !ed.canEdit || notes) && (
@@ -324,7 +327,7 @@ export function Board(props: BoardProps) {
         </ul>
       )}
 
-      {!openEntry && saveNotice}
+      {!openEntry && !add && saveNotice}
 
       <Grid rows={rows} ed={ed} results={ed.results} warns={warns} settings={settings} now={now} onOpen={setOpenId} onPick={pick} />
       <PhoneBoard rows={rows} ed={ed} results={ed.results} warns={warns} settings={settings} start={start} now={now} onOpen={setOpenId} onPick={pick} />
@@ -380,7 +383,8 @@ export function Board(props: BoardProps) {
         prior={prior}
         names={ed.names}
         interests={interests}
-        onAdd={(c, g) => ed.actions.add(c, g)}
+        notice={saveNotice}
+        onAdd={ed.actions.add}
         requirement={add?.requirement ?? null}
         onClearRequirement={() => setAdd((a) => (a ? { ...a, requirement: null } : a))}
       />

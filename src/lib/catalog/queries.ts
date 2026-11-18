@@ -1,5 +1,6 @@
 import type { Prisma } from "@/generated/prisma/client";
 import type { CourseFilter } from "./schemas";
+import { TEACHER_ASSISTANT_SLUG } from "./teacher-assistant";
 
 /** Builds the Prisma where clause for course search. Pure so it can be unit tested. */
 export function buildCourseWhere(f: CourseFilter): Prisma.CourseWhereInput {
@@ -10,7 +11,7 @@ export function buildCourseWhere(f: CourseFilter): Prisma.CourseWhereInput {
   }
   if (f.department) where.department = f.department;
   if (f.level) where.level = f.level;
-  if (f.duration) where.duration = f.duration;
+  if (f.duration) where.AND = { OR: [{ duration: f.duration }, { slug: TEACHER_ASSISTANT_SLUG }] };
   if (f.grade) where.gradesOffered = { has: f.grade };
   if (f.interest) where.interests = { some: { slug: f.interest } };
   if (f.q) {

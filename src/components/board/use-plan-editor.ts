@@ -4,6 +4,7 @@ import { PointerSensor, TouchSensor, useSensor, useSensors, type DragEndEvent, t
 import { useMemo, useState, useTransition } from "react";
 import { SAVE_INTERRUPTED, useDraftState } from "@/components/draft-state";
 import type { PanelCourse } from "@/components/planner/add-course-panel";
+import type { TeacherAssistantCredits } from "@/lib/catalog/teacher-assistant";
 import { eligibilityWarnings, evaluatePlan, type PlanCourse, type StudentPrior } from "@/lib/eligibility";
 import { guidanceFor, type GuidanceConfig } from "@/lib/guidance";
 import { computeWarnings } from "@/lib/plan-warnings";
@@ -86,7 +87,7 @@ export function usePlanEditor({ plan, entries: serverEntries, courses, rules, se
         if (!r.ok) {
           setError(r.error);
           setEntries(serverEntries);
-        } else changeDraft.discard();
+        } else changeDraft.commit(next, null);
       } catch { setError(SAVE_INTERRUPTED); setEntries(serverEntries); }
     });
   }
@@ -94,16 +95,16 @@ export function usePlanEditor({ plan, entries: serverEntries, courses, rules, se
   function retry() {
     if (pending || !canEdit) return;
     const action = recoverPlanChange(change, serverEntries);
-    if (!action) { changeDraft.discard(); setError(null); return; }
+    if (!action) { changeDraft.commit(change, null); setError(null); return; }
     if ("conflict" in action) { setError("This class has changed. Check the saved board, then discard this pending change and edit the class again."); return; }
     setError(null);
     startTransition(async () => {
       try {
-        const result = action.kind === "add" ? await addEntry({ planId: plan.id, courseId: action.courseId, gradeLevel: action.gradeLevel })
+        const result = action.kind === "add" ? await addEntry({ planId: plan.id, courseId: action.courseId, gradeLevel: action.gradeLevel, credits: action.credits })
           : action.kind === "move" ? await moveEntry({ entryId: action.entryId, gradeLevel: action.gradeLevel })
           : action.kind === "remove" ? await removeEntry(action.entryId)
           : await updateEntry({ entryId: action.entryId, ...action.patch });
-        if (result.ok) changeDraft.discard();
+        if (result.ok) changeDraft.commit(change, null);
         else setError(result.error);
       } catch { setError(SAVE_INTERRUPTED); }
     });
@@ -140,14 +141,15 @@ export function usePlanEditor({ plan, entries: serverEntries, courses, rules, se
           ),
         () => updateEntry({ entryId: id, ...patch }),
       ),
-    add: (course: PanelCourse, grade: number) => {
+    add: (course: PanelCourse, grade: number, credits?: TeacherAssistantCredits) => {
       const temp: EntryView = {
         id: `tmp-${crypto.randomUUID()}`, courseId: course.id, slug: course.slug, name: course.name, department: course.department,
-        level: course.level, duration: course.duration, gradeLevel: grade, status: "PLANNED", grade: null, credits: course.credits,
+        level: course.level, duration: course.duration, gradeLevel: grade, status: "PLANNED", grade: null, credits: credits ?? course.credits,
         courseCredits: course.courseCredits, gradesOffered: course.gradesOffered,
         tags: course.tags as EntryView["tags"], rules: course.rules, prereqText: course.prereqText, approvedAppeal: false,
       };
-      run({ kind: "add", courseId: course.id, gradeLevel: grade }, () => setEntries((es) => [...es, temp]), () => addEntry({ planId: plan.id, courseId: course.id, gradeLevel: grade }));
+      const selection = { courseId: course.id, gradeLevel: grade, credits };
+      run({ kind: "add", ...selection }, () => setEntries((es) => [...es, temp]), () => addEntry({ planId: plan.id, ...selection }));
     },
   };
 

@@ -79,6 +79,63 @@ test("a class with no listed requirements still answers first", async ({ page })
   await expect(page.getByText(/^You can take this in 9th grade\.$/)).toBeVisible();
 });
 
+test("special cases are available on a phone before starting a board", async ({ page }) => {
+  await page.setViewportSize({ width: 360, height: 780 });
+  await signIn(page);
+  await page.goto("/board");
+  const views = page.getByRole("navigation", { name: "Board view" });
+  await views.getByRole("link", { name: "Special cases" }).click();
+  await expect(page).toHaveURL(/\/board\?view=special-cases$/);
+  await expect(views.getByRole("link", { name: "Special cases" })).toHaveAttribute("aria-current", "page");
+  for (const name of ["Financial Literacy", "Zero Period Gym", "Advanced courses over the summer", "Pascack Period", "Satellite School", "Virtual High School"]) {
+    await expect(page.getByText(name, { exact: true })).toBeVisible();
+  }
+  await expect(page.getByRole("link", { name: "Pascack Hills counselor directory" })).toBeVisible();
+  await expect(page.getByRole("link", { name: "Pascack Valley counselor directory" })).toBeVisible();
+  expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(360);
+  await views.getByRole("link", { name: "Plan" }).click();
+  await expect(page.getByRole("button", { name: "Start your board", exact: true })).toBeVisible();
+});
+
+test("Teacher Assistant length changes the saved credit total", async ({ page }) => {
+  await signIn(page);
+  await page.goto("/board");
+  await page.getByRole("button", { name: "Start your board", exact: true }).click();
+  await page.getByRole("button", { name: "Add a class", exact: true }).click();
+  const picker = page.getByRole("dialog", { name: "Add a course" });
+  await picker.getByRole("combobox", { name: "Grade to add to" }).selectOption("11");
+  await picker.getByRole("textbox", { name: "Search courses" }).fill("Teacher Assistant Program");
+  await picker.getByRole("button", { name: "Add half year (2.5 cr)", exact: true }).click();
+  await picker.getByRole("button", { name: "Done" }).click();
+  await expect(page.getByRole("button", { name: "Add a class", exact: true })).toBeEnabled();
+  await page.reload();
+  await expect(status(page)).toHaveText(/^2\.5 of 120 credits\./);
+  await cell(page, "Electives", 11).getByRole("button", { name: /^Teacher Assistant Program, / }).click();
+  const sheet = page.getByRole("dialog", { name: "Teacher Assistant Program" });
+  const length = sheet.getByRole("combobox", { name: "Program length" });
+  await expect(length).toHaveValue("2.5");
+  await length.selectOption("5");
+  await expect(length).toBeEnabled();
+  await page.reload();
+  await expect(status(page)).toHaveText(/^5 of 120 credits\./);
+});
+
+test("the Teacher Assistant course page keeps the chosen length until it is added", async ({ page }) => {
+  await signIn(page);
+  await page.goto("/board");
+  await page.getByRole("button", { name: "Start your board", exact: true }).click();
+  await expect(status(page)).toBeVisible();
+  await page.goto("/courses/teacher-assistant-program");
+  const length = page.getByRole("combobox", { name: "Program length" });
+  await length.selectOption("2.5");
+  await page.reload();
+  await expect(length).toHaveValue("2.5");
+  await page.getByRole("button", { name: "Add to my board", exact: true }).click();
+  await expect(page.getByRole("link", { name: "Open my board" })).toBeVisible();
+  await page.getByRole("link", { name: "Open my board" }).click();
+  await expect(status(page)).toHaveText(/^2\.5 of 120 credits\./);
+});
+
 test("the class sheet keeps focus on a grade button and shows a failed save inside it", async ({ page }) => {
   await signIn(page);
   await page.goto("/board");

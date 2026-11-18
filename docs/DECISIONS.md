@@ -2,6 +2,12 @@
 
 Settled choices and deviations from the original spec. Add a dated entry when you make a new one. Do not re-litigate without the owner.
 
+## 2026-11-18 (special cases and course length)
+
+- The Board's Special cases tab documents scheduling options with details outside the 2026-2027 Program of Studies. Existing catalog entries are linked where available. The tab is available before a student starts a plan.
+- Counselor contact uses the owner-confirmed P assignment to Marin Donnelly at Pascack Hills. Both school directories are available in the tab for other students. The contact link does not control staff access or plan review.
+- Teacher Assistant Program uses its existing catalog record and stores the student's length as 2.5 or 5 credits on the plan entry. The choices come from page 56 of the Program of Studies.
+
 ## 2026-11-10 (Pathways redo)
 
 - **The owner found the pathway graph too complex for an average student.** What it should teach is how the school's levels work: the usual next class, and moving up or down a level between years. Supersedes the Phase 4 React Flow graph.
